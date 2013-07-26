@@ -43,11 +43,11 @@
             <artifactId>android</artifactId>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.google.android.maps</groupId>
-            <artifactId>maps</artifactId>
-            <scope>provided</scope>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.google.android.maps</groupId>-->
+            <!--<artifactId>maps</artifactId>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
 
 
         <!-- Compatibility -->
@@ -102,6 +102,19 @@
             <version>${jackson.version}</version>
         </dependency>
 
+        <!--Guava -->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>1.3.9</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+            <scope>provided</scope>
+        </dependency>
 
         <!-- Sql cipher -->
         <dependency>
