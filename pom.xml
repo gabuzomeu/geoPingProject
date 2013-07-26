@@ -163,23 +163,25 @@
 	<modules> 
 		<module>geoPing-encoder</module>
 		<module>geoPing</module>
-		<module>geoPing-AppEngine</module> 
 		<module>geoPing-Endpoints</module>
+<!--
+		<module>geoPing-AppEngine</module> 
                <module>geoPing-cloud-server</module>
+-->
     </modules>
  
 
 
     <build>
         <plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven-compiler-plugin.version}</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-        </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
 
         </plugins>
 
