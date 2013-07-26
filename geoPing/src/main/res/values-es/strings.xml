@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="add_track_person">Anadir una persona</string>
+    <string name="add_pairing">Permitir un GeoPing</string>
+    
+    <string name="geoping">GeoPing</string>
+    <string name="menu_select_contact">Contactos</string>
+    <string name="menu_save">Ahorrar</string>
+    <string name="menu_edit">Edit</string>
+
+    <string name="menu_delete">Quitar</string>
+    <string name="menu_cancel">Cancelar</string> 
+    
+    <!-- Billing -->
+    <string name="send">Send</string>
+
+
+    <!-- Share -->
+    <string name="menu_share_app">Share GeoPing</string>
+    <string name="share_app_subject">Te aconseja la aplicación GeoPing</string>
+  
+    <string name="app_comment_title">Evaluar y hacer comentarios</string>
+    <string name="app_comment_summary">Gracias para sus commentarios</string>
+    
+
+    <!-- GeoTrack Notification -->
+    <string name="notif_geoping">GeoPing</string>
+    <string name="notif_click_to_accept">(Aceptar)</string>
+    <string name="notif_geoping_response">Estoy aquí</string>
+    <string name="notif_geoping_request">Donde estas ?</string>
+    <string name="notif_geoping_request_blocked">GeoPing prohibido</string> 
+    <string name="notif_pairing">Asociacion GeoPing</string>
+    <string name="notif_pairing_always">Siempre</string>
+    <string name="notif_pairing_never">Bloquear</string> 
+    <string name="notif_confirm_request_eachtime">Solicitar</string>
+    
+    <string name="toast_notif_sended_geoping_smsError">Error durante el envio del mensaje a  %s</string>
+    <string name="toast_notif_sended_geoping_pairing">GeoPing asociacion solicitada: %s</string>
+     <string name="toast_notif_sended_geoping_request">Donde estas ?: %s</string>
+    <string name="toast_notif_sended_geoping_response">Estoy aquí: %s</string>
+    <string name="toast_notif_backup_restored">Salvaguardia instalada de nuevo</string>
+    
+   
+    <!-- Widget -->
+    <string name="widget_geoping_person_title">Donde estas ?</string>
+    <string name="widget_geoping_pairing_title">Estoy aquí</string>
+    
+    
+    <!-- Sms Action -->
+    <string name="sms_action_geoping_request">GeoPing solicitud</string>
+    <string name="sms_action_geoping_response">GeoPing respuesta</string>
+    <string name="sms_action_geoping_declaration">GeoPing declaración</string>
+    <string name="sms_action_geofence_transition_unknown">Geo Fence Offense</string>
+    <string name="sms_action_geofence_transition_enter">Entered Geo Fence</string>
+    <string name="sms_action_geofence_transition_exit">Exited Geo Fence</string>
+    <string name="sms_action_geofence_transition_enter_with_name">Entered at %s</string>
+    <string name="sms_action_geofence_transition_exit_with_name">Exited of %s</string>
+
+    <string name="sms_action_pairing_request">Solicitud de asociacion</string>
+    <string name="sms_action_pairing_response">Respuesta de asociacion</string>
+    <string name="sms_action_spyevt_shutdown">Event Shutdown</string>
+    <string name="sms_action_spyevt_boot">Event Boot</string>
+    <string name="sms_action_spyevt_low_battery">Event Low Battery</string>
+    <string name="sms_action_spyevt_phone_call">Event Phone Call</string>
+    <string name="sms_action_spyevt_sim_change">Event Sim Change</string>
+    
+    
+
+    <!-- Menu -->
+    <string name="menu_map_mypositioncenter">Mi posicion</string>
+    <string name="map_mode">Typo de mapa</string>
+    <string name="menu_geoping">GeoPing</string>
+
+    <string name="menu_settings">Opciones</string>
+    <string name="menu_map">Mapa</string>
+    <string name="menu_quit">Quitar</string>
+    <string name="menu_person">Personas</string>
+    <string name="menu_person_remote_control">Remote control</string>
+    <string name="menu_pairing">Vida privada</string>
+    <string name="menu_geofence">GeoFence</string>
+    <string name="menu_smslog">Log Sms</string>
+    <string name="menu_extra_feature">Extra Features</string>
+
+
+    <string name="menu_map_geofences_show">Geofences</string>
+    <string name="menu_map_geofences_hide">Hide Geofences</string>
+    <string name="menu_map_geofence_add">Add Geofence</string>
+    
+    <string name="menu_pairing_notification">Notificacion</string>
+    <string name="person_geoping_pairing_action">Asociacion</string>
+    
+     <!-- Menu Map-->
+    <string name="menu_map_mypositon_hide">Ocultar mi posicion</string>
+    <string name="menu_map_mypositon_show">Mostrar mi posicion</string>
+
+    <string name="menu_map_track_timeline">Time Line</string>
+           
+    <!-- Prefs -->
+    <string name="prefs_sms_category">Monitoring Sms</string>
+    
+    <string name="prefs_geoping_request">GeoPing solicitud</string>
+    <string name="prefs_block_geoping_pairing">Bloquear nueva asociacion de GeoPing</string>
+    <string name="prefs_block_geoping_pairing_summaryOff">Bloquear nueva asociacion de GeoPing</string>
+    <string name="prefs_block_geoping_pairing_summaryOn">Autorizar nueva asociacion de GeoPing</string>
+    
+    <string name="prefs_show_geoping_notification">Mostrar una notificacion</string>
+    <string name="prefs_show_geoping_notification_summary">Para las nuevas asociaciones</string>
+    <string name="prefs_geoping_request_timeout_ms">Request Time Out in s</string>
+    <string name="prefs_geoping_request_accuracy_expected_m">Request expected accuracy in m</string>
+    <string name="prefs_geoping_localSave">Ahorrar en local</string>
+    <string name="prefs_geoping_localSave_summaryOn">Archivado en local</string>
+    <string name="prefs_geoping_localSave_summaryOff">Inhabilitado</string>
+
+    <string name="prefs_myLocation">Mi Posicion</string>
+    <string name="prefs_myLocation_display_LatLng">Mostrar las coordenadas</string>
+
+    <string name="prefs_geoping_geoPoint_category">GeoPoint</string>
+    <string name="prefs_geoPoint_geocoding_auto">Geocoding automatico</string>
+
+    <string name="prefs_developement">Desarrollo</string>
+    <string name="prefs_sms_delete_onMessage">Supresion de SMS</string>
+    <string name="prefs_sms_delete_onMessage_summaryOn">SMS GeoPing están invisibles</string>
+    <string name="prefs_sms_delete_onMessage_summaryOff">SMS Geoping están registrados</string>
+    
+    
+    <string name="prefs_info">Informacion</string>
+    <string name="prefs_version">Version</string>
+    <string name="prefs_help">Ayuda</string>
+    <string name="prefs_licence">Licencia</string>
+    <string name="prefs_about">Credito</string>
+    <string name="prefs_relasenotes">Que tal de nuevo ?</string> 
+    <string name="prefs_count_laught">Numero de lanzamiento</string>
+    <string name="prefs_count_laught_summary">Numero de utilizacion de la aplicacion</string>
+    
+   
+    <!-- Prefs Dev-->
+    <string name="show_dev_countdown">"Solo te quedan <xliff:g id="STEP_COUNT">%1$d</xliff:g> pasos para ser un desarrollador."</string>
+    <string name="show_dev_on">"¡Ahora están activadas las opciones de desarrollo!"</string>
+    <string name="show_dev_already">"No es necesario, están activadas las opciones de desarrollo."</string>
+
+       <!-- Prefs Infos Legale -->
+    <string name="legal_information">Legal information</string>
+    <string name="prefs_license_activity_title">Open source licenses</string>
+    
+    
+    <!-- Dialog -->
+    <string name="color_picker">Seleccionar un color</string>
+ 
+    <!-- GeoTrack -->
+    <string name="geotrack_time_dateformat">%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS</string>
+    <string name="battery_percent">Battery %s%%</string>
+
+
+    <!-- Map My Location Dialog -->
+    <string name="accuracy_separator">+/-</string> <!-- +/- &#8723; -->
+    <string name="altitude">Altitud</string>
+    
+    <!-- Person model -->
+    <string name="person_name">Nombre</string>
+    <string name="person_phone">N° Telefono</string>
+    <string name="description_contact_photo">"foto del contacto"</string>
+  
+    <!-- Pairing model -->
+    <string name="pairing_name">Nombre</string>
+    <string name="pairing_phone">N° Telefono</string>
+    <string name="pairing_show_notification">Mostrar una notificacion</string>
+    <string name="pairing_authorize_type">Autorizado</string>
+    <string name="pairing_authorize_type:never">Nunca</string>
+    <string name="pairing_authorize_type:ask">Sobre validacion</string>
+    <string name="pairing_authorize_type:always">Siempre</string>
+
+    <!-- Geofence model -->
+    <string name="geofence_name">Geofence Name</string>
+    <string name="geofence_transition">Transition Type</string>
+    <string name="geofence_transition_enter">Entered Geo Fence</string>
+    <string name="geofence_transition_exit">Exited Geo Fence</string>
+
+    <string name="add_geofence">Add a GeoFence</string>
+    <string name="geofence_help">"Create a GeoFence to get alerts when family members come and go."</string>
+
+
+    <!-- SmsLog Model -->
+	<string name="smslog_delete_all">Quitado todo</string>
+    <string name="smslog_message_size">"Message of %1$d characters"</string>
+
+    <!-- Help -->
+   <string name="person_help">Lista de las personas para quienes usted puede pedir un GeoPing.\n  \n
+        Varios pasos para asociar una persona : \n
+        <b> 1- </b> Anade una persona al ingresar su numero de telefono (o seleccionarlo a partir de la lista de contactos) \n
+        <b> 2- </b> Instala la aplicacion Geoping sobre el segundo telefono (para cual usted quiere conocer su posicion) \n
+        <b> 3- </b> Envia una solicitud de asociacion para solamente autorizar su numero de telefono\n
+        <b> 4- </b> Espera la llegada del mensaje SMS sobre el segundo telefono para aceptar la asociacion en la barra de notificacion \n
+        <b> 5- </b> Opcional : Usted puede bloquear cualquier nueva asociacion en el menu <i>opciones</i> \n
+       \n Ahora usted puede conocer la posicion del segundo telefono\n 
+    </string>
+    <string name="pairing_help">
+        La lista de las asociaciones representa la lista de las personas asociadas con quienes usted puede aceptar (o no) enviar su GeoPing.\n 
+        Su posicion geografico esta obtenida mediante su GPS o cualquier sensor que esta en su telefono. \n\n
+        3 opciones de asociacion están disponibles: \n 
+         <b>   * Bloquear : </b> Impide cualquiera solicitud de GeoPing \n 
+         <b>   * Siempre :</b> Acepta sistematicamente el GeoPing.\n 
+         <b>   * Sobre validacion :</b>  Una notificacion le preguntara sistematicamente la aceptación del GeoPing \n 
+         \n 
+         Si le gusta, usted puede recibir una notificacion para avisarle.\n 
+        </string>
+    <string name="smslog_help">Lista de los mensajes enviados o recibidos por la aplicacion GeoP
+        ing.</string>
+        
+</resources>

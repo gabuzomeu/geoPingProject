@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<view xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:geoping="http://schemas.android.com/apk/res/eu.ttbox.geoping"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    class="eu.ttbox.geoping.ui.person.PhotoEditorView"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    android:orientation="horizontal" >
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/description_contact_photo"
+            android:cropToPadding="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:gravity="left"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_contact_picture_holo_light" />
+
+        <View
+            android:id="@+id/frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:contentDescription="@string/description_contact_photo"
+            android:focusable="false"
+            android:focusableInTouchMode="false" />
+        <!-- android:background="?android:attr/selectableItemBackground" -->
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/photo_triangle_affordance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:src="@drawable/account_spinner_icon" />
+
+</view>

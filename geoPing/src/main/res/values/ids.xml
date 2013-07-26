@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="config_id_person_list_loader" type="id"/>
+    <item name="config_id_person_edit_loader" type="id"/>
+    <item name="config_id_geotrack_list_loader" type="id"/>
+    <item name="config_id_geotrack_select_person_loader" type="id"/>
+    <item name="config_id_map_geotrack_person_loader" type="id"/>
+
+    <item name="config_id_geofence_list_loader" type="id"/>
+    
+    
+    <item name="config_id_slidingmenu_person_list_loader" type="id"/>
+    
+    <!-- Master -->
+    <item name="show_notification_new_geoping_response" type="id"/>
+    <!-- Slave -->
+    <item name="show_notification_new_geoping_request_confirm" type="id"/>
+    <item name="show_pairing_request" type="id"/>
+    <item name="config_id_pairing_list_loader" type="id"/>
+    <item name="config_id_pairing_edit_loader" type="id"/>
+    <item name="config_id_pairing_notif_loader" type="id"/>
+    
+    <!-- Log -->
+    <item name="config_id_smsLog_list_loader" type="id"/>
+
+</resources>

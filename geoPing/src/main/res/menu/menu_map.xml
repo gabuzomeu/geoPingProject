@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menuMap_mypositoncenter"
+        android:icon="@drawable/ic_action_locate"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_map_mypositioncenter"/>
+    <item
+        android:id="@+id/menuMap_track_person"
+        android:icon="@drawable/ic_action_user"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_person"/>
+    <item
+        android:id="@+id/menuMap_mapmode"
+        android:icon="@android:drawable/ic_menu_mapmode"
+        android:showAsAction="ifRoom"
+        android:title="@string/map_mode">
+        <menu>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/menuMap_track_timeline"
+        android:icon="@drawable/ic_device_access_time"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_map_track_timeline"/>
+    <item
+        android:id="@+id/menuMap_mypositon_hide"
+        android:icon="@drawable/ic_device_access_location_off"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_map_mypositon_hide"/>
+    
+    
+    <item
+        android:id="@+id/menuMap_geofence_list"
+        android:icon="@drawable/ic_action_geofence"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_map_geofences_show"/>
+       
+   <item
+        android:id="@+id/menuMap_geofence_add"
+        android:icon="@drawable/ic_action_geofence_add"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_map_geofence_add"/>
+</menu>

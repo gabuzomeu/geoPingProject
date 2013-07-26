@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="PhotoEditorView">
+         <attr name="geopingType">
+            <enum name="request" value="1" />
+            <enum name="declaration" value="2" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="SlindingMenuItemView">
+         <attr name="text" format="string"/>
+         <attr name="src" format="reference"/> 
+    </declare-styleable>
+
+    <declare-styleable name="SmsLogListFragment">
+        <attr name="isDisplayContactDetail" format="boolean"/>
+    </declare-styleable>
+
+</resources>

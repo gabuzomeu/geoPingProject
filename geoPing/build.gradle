@@ -1,0 +1,43 @@
+ext {
+    jacksonVersion = '2.2.2'
+    osmLibVersion = '0.1.2'
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.4'
+    }
+}
+apply plugin: 'android'
+
+// Jackson
+List jackson = ['com.fasterxml.jackson.core:jackson-core:$jacksonVersion@jar', 'com.fasterxml.jackson.core:jackson-databind:$jacksonVersion@jar']
+// Google Apis
+List admob = ['com.google.android.admob:admob:6.4.1-r11']
+List googlePlayServices = ['com.google.android.gms:google-play-services:7@jar', 'com.google.android.gms:google-play-services:7@apklib']
+// Compatibility
+List actionbarsherlock = ['com.actionbarsherlock:actionbarsherlock:4.3.1@apklib']
+List slidingmenu = ['com.jeremyfeinstein.slidingmenu:slidingmenu:1.2.1@apklib']
+
+dependencies {
+  //  compile project(':osm-lib')
+    compile ('eu.ttbox.android.osm:osm-lib:$osmLibVersion@apklib')
+    compile ('android.support:compatibility-v13:13@jar')
+    compile ('com.google.android.analytics:analytics:3@jar')
+    compile jackson
+    compile googlePlayServices, admob
+    compile actionbarsherlock, slidingmenu
+}
+
+android {
+    compileSdkVersion 17
+    buildToolsVersion "17.0.0"
+
+    defaultConfig {
+        minSdkVersion 10
+        targetSdkVersion 17
+    }
+}
