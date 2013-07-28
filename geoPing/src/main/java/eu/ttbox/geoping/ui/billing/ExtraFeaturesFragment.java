@@ -190,6 +190,9 @@ public class ExtraFeaturesFragment extends Fragment {
   //          adapter.add(new SkuDetails("{\"productId\" : \"" + SKU_NO_AD_PER_YEAR +
    //                 "\", \"type\" : \"inapp\", \"price\" : \"$1.99\" , \"title\" : \"No add in app\", \"description\" : \"Suppress all adds during one year\"  }  "));
             adapter.add(new SkuDetails("{\"productId\" : \"SECU_HIDE_LAUNCHER\", \"type\" : \"inapp\", \"price\" : \"Free\" , \"title\" : \"No icon app launcher\", \"description\" : \"Hide the GeoPing Application in the System\"  }  "));
+            adapter.add(new SkuDetails("{\"productId\" : \"android.test.purchased\", \"type\" : \"inapp\", \"price\" : \"Free\" , \"title\" : \"android.test.purchased\", \"description\" : \"android.test.purchased\"  }  "));
+
+
         } catch (JSONException e) {
             Log.e(TAG, "Error Parsing Json : " + e.getMessage(), e);
         }

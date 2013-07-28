@@ -150,6 +150,7 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
         Intent intent = new Intent(context, GeoPingSlaveLocationService.class);
         intent.putExtra(Intents.EXTRA_SMS_PHONE, phone);
         intent.putExtra(Intents.EXTRA_SMS_PARAMS, params);
+        // FIXME Split Param from already compute values
         intent.putExtra(Intents.EXTRA_SMS_ACTION, smsAction.intentAction);
                
         intent.setAction(ACTION_FIND_LOCALISATION_AND_SEND_SMS_GEOPING);
