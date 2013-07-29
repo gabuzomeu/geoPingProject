@@ -71,7 +71,7 @@ public class PairingWidgetProvider extends AppWidgetProvider {
             // Send it
 //            Intent intentGeoPing = Intents.sendSmsGeoPingResponse(context, phoneNumber, true);
 //            context.startService(intentGeoPing);
-			 GeoPingSlaveLocationService.runFindLocationAndSendInService(context , MessageActionEnum.LOC_DECLARATION, new String[] { phoneNumber }, null);
+			 GeoPingSlaveLocationService.runFindLocationAndSendInService(context , MessageActionEnum.LOC_DECLARATION, new String[] { phoneNumber }, null, null);
              // Display Notif
             NotifToasts.showToastSendGeoPingResponse(context, phoneNumber);
          }else if (AppWidgetManager.ACTION_APPWIDGET_OPTIONS_CHANGED.equals(action)) {

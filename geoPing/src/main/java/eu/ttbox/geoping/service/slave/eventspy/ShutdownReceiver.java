@@ -39,9 +39,10 @@ public class ShutdownReceiver extends BroadcastReceiver {
 			// Search Phones 
 			String[] phones= SpyNotificationHelper.searchListPhonesForNotif(context, PairingColumns.COL_NOTIF_SHUTDOWN);
 			if (phones != null) {
+                Bundle config = new Bundle();
 			    Bundle params = new Bundle();
 			    // Send Sms
-			    SpyNotificationHelper.sendEventSpySmsMessage(context,phones,  MessageActionEnum.SPY_SHUTDOWN, params);
+			    SpyNotificationHelper.sendEventSpySmsMessage(context,phones,  MessageActionEnum.SPY_SHUTDOWN, params, config);
  				// Sleep for Send the Sms
 				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 				int sleepWantedInMs = prefs.getInt(AppConstants.PREFS_EVENT_SPY_SHUTDOWN_SLEEP_IN_MS, 5000);

@@ -303,7 +303,7 @@ public class ReceiveTransitionsIntentService extends IntentService {
             }
             // TODO saveInLocalDb
         } else {
-            GeoPingSlaveLocationService.runFindLocationAndSendInService(this, eventType, phones, extrasBundles);
+            GeoPingSlaveLocationService.runFindLocationAndSendInService(this, eventType, phones, extrasBundles, null);
         }
 
     }

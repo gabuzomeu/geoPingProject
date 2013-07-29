@@ -90,10 +90,11 @@ public class SimChangeReceiver extends BroadcastReceiver {
 	private void sendSpyNotifSms(Context context, String prefPhone,  String phoneNumber) {
 	    String[] phones = SpyNotificationHelper.searchListPhonesForNotif(context, PairingColumns.COL_NOTIF_SIM_CHANGE);
 		if (phones != null) {
+            Bundle config = new Bundle();
 		    Bundle params = new Bundle();
 		    // TODO Manage prefPhone et phoneNumber
 			// Send Sms
-			SpyNotificationHelper.sendEventSpySmsMessage(context, phones, MessageActionEnum.SPY_SIM_CHANGE, params);
+			SpyNotificationHelper.sendEventSpySmsMessage(context, phones, MessageActionEnum.SPY_SIM_CHANGE, params, config);
 		}
 	}
 
