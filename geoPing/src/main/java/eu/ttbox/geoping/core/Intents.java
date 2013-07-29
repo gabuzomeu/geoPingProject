@@ -60,6 +60,7 @@ public class Intents {
 	public static final String EXTRA_GEO_E6 = "EXTRA_GEO_E6";
 	public static final String EXTRA_SMS_PHONE = "EXTRA_SMS_PHONE";
 	public static final String EXTRA_SMS_PARAMS = "EXTRA_SMS_PARAMS";
+    public static final String EXTRA_SMS_CONFIG = "EXTRA_SMS_CONFIG";
 	public static final String EXTRA_SMS_ACTION = "EXTRA_SMS_ACTION";
 	public static final String EXTRA_SMS_USER_ID = "EXTRA_SMS_USER_ID";
 	public static final String EXTRA_NOTIFICATION_TYPE_ENUM_ORDINAL = "EXTRA_NOTIFICATION_TYPE";

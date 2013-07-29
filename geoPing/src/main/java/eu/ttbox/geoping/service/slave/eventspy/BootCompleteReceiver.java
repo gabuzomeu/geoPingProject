@@ -34,8 +34,9 @@ public class BootCompleteReceiver extends BroadcastReceiver {
             String[] phones= SpyNotificationHelper.searchListPhonesForNotif(context, PairingColumns.COL_NOTIF_SHUTDOWN);
             if (phones != null) {
                 Bundle params = new Bundle();
+                Bundle config = new Bundle();
                 // Send Sms
-                SpyNotificationHelper.sendEventSpySmsMessage(context,phones,  MessageActionEnum.SPY_BOOT, params);
+                SpyNotificationHelper.sendEventSpySmsMessage(context,phones,  MessageActionEnum.SPY_BOOT, params, config);
             } 
         } 
     }

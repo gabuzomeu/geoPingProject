@@ -265,7 +265,8 @@ public class ReceiveTransitionsIntentService extends IntentService {
 
 
 
-    public void sendEventSpySmsMessage(   CircleGeofence geofenceRequest ,  MessageActionEnum eventType, String[] phones, Bundle eventParams, Location location) {
+    public void sendEventSpySmsMessage(   CircleGeofence geofenceRequest ,  MessageActionEnum eventType, String[] phones,
+                                          Bundle eventParams, Location location) {
         if (phones == null || phones.length < 1) {
             Log.w(TAG, "Geofence violation detected but nobody to warning");
         }
@@ -278,13 +279,16 @@ public class ReceiveTransitionsIntentService extends IntentService {
         if (!extrasBundles.containsKey(SmsLogDatabase.SmsLogColumns.COL_REQUEST_ID)) {
             extrasBundles.putString(SmsLogDatabase.SmsLogColumns.COL_REQUEST_ID, geofenceRequest.requestId);
         }
+        //
         if (geofenceRequest !=null) {
+            // Geofence Refenrence
             extrasBundles.putInt(GeoFenceDatabase.GeoFenceColumns.COL_LATITUDE_E6, geofenceRequest.getLatitudeE6());
             extrasBundles.putInt(GeoFenceDatabase.GeoFenceColumns.COL_LONGITUDE_E6, geofenceRequest.getLongitudeE6() );
             extrasBundles.putInt(GeoFenceDatabase.GeoFenceColumns.COL_RADIUS, geofenceRequest.getRadiusInMeters()  );
             extrasBundles.putInt(GeoFenceDatabase.GeoFenceColumns.COL_TRANSITION, geofenceRequest.getTransitionType()  );
+            // Name
+            MessageEncoderHelper.writeToBundle(extrasBundles, MessageParamEnum.GEOFENCE_NAME, geofenceRequest.name);
         }
-        MessageEncoderHelper.writeToBundle(extrasBundles, MessageParamEnum.GEOFENCE_NAME, geofenceRequest.name);
         if (location != null) {
             // Converter Location
             GeoTrack geotrack = new GeoTrack(null, location);

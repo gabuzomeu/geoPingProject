@@ -98,7 +98,7 @@ public class SpyNotificationHelper {
         return cursor;
     }
 
-    public static void sendEventSpySmsMessage(Context context,String[] phones, MessageActionEnum eventType, Bundle eventParams) {
+    public static void sendEventSpySmsMessage(Context context,String[] phones, MessageActionEnum eventType, Bundle eventParams, Bundle config) {
         if (phones != null) {
             Log.d(TAG, "EventSpy Notification  : " + eventType + " for " + phones.length + " phones destinations");
             // Send SMS
@@ -114,7 +114,7 @@ public class SpyNotificationHelper {
                 // TODO saveInLocalDb
 
             } else { 
-                GeoPingSlaveLocationService.runFindLocationAndSendInService(context, eventType, phones, params); 
+                GeoPingSlaveLocationService.runFindLocationAndSendInService(context, eventType, phones, params, config);
             }
         }
     }

@@ -140,7 +140,7 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
     // Intent Handler
     // ===========================================================
 
-    public static void runFindLocationAndSendInService(Context context, MessageActionEnum smsAction , String[] phone, Bundle params) {
+    public static void runFindLocationAndSendInService(Context context, MessageActionEnum smsAction , String[] phone, Bundle params,  Bundle config) {
         // PowerManager.WakeLock lock = getLock(context);
         // lock.acquire();
         if (!smsAction.isConsumeMaster ) {
@@ -150,7 +150,8 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
         Intent intent = new Intent(context, GeoPingSlaveLocationService.class);
         intent.putExtra(Intents.EXTRA_SMS_PHONE, phone);
         intent.putExtra(Intents.EXTRA_SMS_PARAMS, params);
-        // FIXME Split Param from already compute values
+        intent.putExtra(Intents.EXTRA_SMS_CONFIG, config);
+
         intent.putExtra(Intents.EXTRA_SMS_ACTION, smsAction.intentAction);
                
         intent.setAction(ACTION_FIND_LOCALISATION_AND_SEND_SMS_GEOPING);
@@ -163,11 +164,12 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
         if (ACTION_FIND_LOCALISATION_AND_SEND_SMS_GEOPING.equals(action)) {
             String[] phone = intent.getStringArrayExtra(Intents.EXTRA_SMS_PHONE);
             Bundle params = intent.getBundleExtra(Intents.EXTRA_SMS_PARAMS);
+            Bundle config = intent.getBundleExtra(Intents.EXTRA_SMS_CONFIG);
             // Action
             // GeoPing Request
             String smsAction = intent.getStringExtra(Intents.EXTRA_SMS_ACTION);
             MessageActionEnum smsActionMsg = MessageActionEnum.getByIntentName(smsAction);
-            registerGeoPingRequest(smsActionMsg, phone, params);
+            registerGeoPingRequest(smsActionMsg, phone, params, config);
         }
 
     }
@@ -221,7 +223,7 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
     // Geocoding Request
     // ===========================================================
 
-    public boolean registerGeoPingRequest(MessageActionEnum smsAction ,  String[] phoneNumber, Bundle params) {
+    public boolean registerGeoPingRequest(MessageActionEnum smsAction ,  String[] phoneNumber, Bundle params,  Bundle config) {
         boolean locProviderEnabled = false;
         synchronized (multiGeoRequestListener) {
             // Acquire Lock
@@ -230,7 +232,7 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
             Log.d(TAG, "*** Lock Acquire: " + LOCK_NAME + " " + lock);
             // Register request
             Location initLastLoc = myLocation.getLastKnownLocation();
-            GeoPingRequest request = new GeoPingRequest(  smsAction, phoneNumber, params); 
+            GeoPingRequest request = new GeoPingRequest(  smsAction, phoneNumber, params, config);
             multiGeoRequestListener.add(request); 
             
             // TODO Bad for multi request
@@ -313,12 +315,13 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
             super();
         }
 
-        public GeoPingRequest(MessageActionEnum smsAction,  String[] phoneNumber, Bundle params) {
+        public GeoPingRequest(MessageActionEnum smsAction,  String[] phoneNumber, Bundle params, Bundle config) {
             super();
             this.smsAction = smsAction;
             this.smsPhoneNumber = phoneNumber;
             this.params = params;
-            this.accuracyExpected =  MessageEncoderHelper.readInt(params, MessageParamEnum.ACCURACY, -1);
+            // Read Config
+            this.accuracyExpected =  MessageEncoderHelper.readInt(config, MessageParamEnum.ACCURACY, -1);
             this.isAccuracyExpectedCheck = accuracyExpected > -1;
             // register Listener for Battery Level
             batteryLevel();
@@ -395,7 +398,11 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
         Bundle params = GeoTrackHelper.getBundleValues(geotrack); 
         // Add extrasBundles to params
         if (extrasBundles!=null && !extrasBundles.isEmpty()) {
-            params.putAll(extrasBundles);
+            Bundle completParam = new Bundle();
+            completParam.putAll(extrasBundles);
+            completParam.putAll(params);
+            // Switch Param
+            params = completParam;
         }
         for (String phone : phones) {
             SmsSenderHelper.sendSmsAndLogIt(this, SmsLogSideEnum.SLAVE,  phone, smsAction, params);

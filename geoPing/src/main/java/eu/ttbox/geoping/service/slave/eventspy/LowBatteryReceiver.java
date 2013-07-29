@@ -21,9 +21,10 @@ public class LowBatteryReceiver extends BroadcastReceiver {
 		if (ACTION_BATTERY_LOW.equals(action)) { 
 		    String[] phones= SpyNotificationHelper.searchListPhonesForNotif(context, PairingColumns.COL_NOTIF_BATTERY_LOW);
 			if (phones != null) { 
-			    Bundle params = new Bundle(); 
+			    Bundle params = new Bundle();
+                Bundle config = new Bundle();
 			    // Send Sms
-                SpyNotificationHelper.sendEventSpySmsMessage(context,phones, MessageActionEnum.SPY_LOW_BATTERY, params);
+                SpyNotificationHelper.sendEventSpySmsMessage(context,phones, MessageActionEnum.SPY_LOW_BATTERY, params, config);
 			}
 		}  
 
