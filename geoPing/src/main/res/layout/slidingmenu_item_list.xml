@@ -58,6 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" 
             geoping:src="@android:drawable/ic_menu_more"
+            android:visibility="gone"
             geoping:text="@string/menu_extra_feature" />
 
         <eu.ttbox.geoping.ui.slidingmenu.SlindingMenuItemView
@@ -65,7 +66,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 geoping:src="@android:drawable/ic_menu_more"
-                geoping:text="GCM Message" />
+                android:visibility="gone"
+                geoping:text="GCM Message"
+                />
 
 
 

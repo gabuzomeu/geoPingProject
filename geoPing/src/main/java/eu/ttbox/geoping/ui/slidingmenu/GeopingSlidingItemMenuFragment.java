@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.google.cloud.backend.android.sample.guestbook.GuestbookActivity;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivityBase;
 
+import eu.ttbox.geoping.BuildConfig;
 import eu.ttbox.geoping.MainActivity;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
@@ -100,7 +101,16 @@ public class GeopingSlidingItemMenuFragment extends Fragment {
             }
         }
         this.menuItems = menuItems;
-
+        // Dev activate screen
+        // TODO For Dev Only Activate the Code
+        if ( BuildConfig.DEBUG) {
+            for (int menuId : new int[] {R.id.menu_extra_feature, R.id.menu_gcm_message } ) {
+                SlindingMenuItemView menuItem =  menuItems.get(menuId);
+                if (menuItem!=null) {
+                    menuItem.setVisibility(View.VISIBLE);
+                }
+            }
+        }
         return v;
     }
 

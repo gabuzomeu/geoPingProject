@@ -162,6 +162,7 @@
     
 	<modules> 
 		<module>geoPing-encoder</module>
+		<module>geoPing-dbCypher</module>
 		<module>geoPing</module>
 		<module>geoPing-Endpoints</module>
 <!--

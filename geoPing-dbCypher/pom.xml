@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+        <groupId>eu.ttbox.android.geoping</groupId>
+        <artifactId>geoPingProject</artifactId>
+        <version>0.2.3</version> 
+   </parent>
+   
+   
+    <groupId>eu.ttbox.android.geoping</groupId>
+    <artifactId>geoPing-dbCypher</artifactId>
+
+    <packaging>jar</packaging>
+
+    <properties>
+        <junit.version>4.11</junit.version>
+    </properties>
+
+   <dependencies>
+
+       <!-- Test -->
+       <dependency>
+           <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+           <version>${junit.version}</version>
+           <scope>test</scope>
+       </dependency>
+
+      <!-- Android -->
+        <dependency>
+            <groupId>android</groupId>
+            <artifactId>android</artifactId>
+            <scope>provided</scope>
+        </dependency>
+ 
+
+        <!-- Sql cipher -->
+        <dependency>
+            <groupId>net.sqlcipher</groupId>
+            <artifactId>android-database-sqlcipher</artifactId>
+            <version>2.2.0</version>
+        </dependency>
+        <!-- Sql cipher  so armeabi -->
+        <dependency>
+            <groupId>net.sqlcipher</groupId>
+            <artifactId>libdatabase_sqlcipher</artifactId>
+            <version>2.2.0</version>
+            <classifier>armeabi</classifier>
+            <scope>runtime</scope>
+            <type>so</type>
+        </dependency>
+        <dependency>
+            <groupId>net.sqlcipher</groupId>
+            <artifactId>libsqlcipher_android</artifactId>
+            <version>2.2.0</version>
+            <classifier>armeabi</classifier>
+            <scope>runtime</scope>
+            <type>so</type>
+        </dependency>
+        <dependency>
+            <groupId>net.sqlcipher</groupId>
+            <artifactId>libstlport_shared</artifactId>
+            <version>2.2.0</version>
+            <classifier>armeabi</classifier>
+            <scope>runtime</scope>
+            <type>so</type>
+        </dependency>
+        <!-- Sql cipher  so x86 -->
+        <dependency>
+            <groupId>net.sqlcipher</groupId>
+            <artifactId>libdatabase_sqlcipher</artifactId>
+            <version>2.2.0</version>
+            <classifier>x86</classifier>
+            <scope>runtime</scope>
+            <type>so</type>
+        </dependency>
+        <dependency>
+            <groupId>net.sqlcipher</groupId>
+            <artifactId>libsqlcipher_android</artifactId>
+            <version>2.2.0</version>
+            <classifier>x86</classifier>
+            <scope>runtime</scope>
+            <type>so</type>
+        </dependency>
+        <dependency>
+            <groupId>net.sqlcipher</groupId>
+            <artifactId>libstlport_shared</artifactId>
+            <version>2.2.0</version>
+            <classifier>x86</classifier>
+            <scope>runtime</scope>
+            <type>so</type>
+        </dependency>
+
+   </dependencies>
+
+</project>

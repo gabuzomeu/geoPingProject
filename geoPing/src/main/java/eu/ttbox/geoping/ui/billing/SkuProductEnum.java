@@ -12,5 +12,7 @@ public enum SkuProductEnum {
     }
 
 
-
+    public String getSku() {
+        return sku;
+    }
 }
