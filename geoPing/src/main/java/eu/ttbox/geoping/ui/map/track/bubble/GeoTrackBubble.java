@@ -29,7 +29,7 @@ public class GeoTrackBubble extends FrameLayout {
 	private final static String TAG = "GeoTrackBubble";
 
 	// Config
-	private int DEFAULT_BUBBLE_WIDTH = 300;
+	private int DEFAULT_BUBBLE_WIDTH = 250;
 
 	// Datas
 	private GeoTrack geoTrack;
@@ -99,9 +99,10 @@ public class GeoTrackBubble extends FrameLayout {
 		});
 
 		// Frame
+        float densityMultiplier = context.getResources().getDisplayMetrics().density;
 		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		params.gravity = Gravity.NO_GRAVITY;
-		params.width = DEFAULT_BUBBLE_WIDTH;
+		params.width = (int)(DEFAULT_BUBBLE_WIDTH * densityMultiplier);
 		addView(layout, params);
 	}
 
