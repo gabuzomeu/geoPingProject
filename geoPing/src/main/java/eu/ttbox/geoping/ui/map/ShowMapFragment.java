@@ -29,6 +29,7 @@ import com.actionbarsherlock.view.ActionMode;
 
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.ResourceProxy;
+import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -514,7 +515,9 @@ public class ShowMapFragment extends SherlockFragment implements SharedPreferenc
     }
 
     public void setMapViewTileSource(ITileSource tileSource) {
+        IGeoPoint center =  mapView.getMapCenter();
         mapView.setTileSource(tileSource);
+        mapController.setCenter(center);
     }
 
     public ArrayList<ITileSource> getMapViewTileSources() {
@@ -531,6 +534,9 @@ public class ShowMapFragment extends SherlockFragment implements SharedPreferenc
         try {
             tileSource = TileSourceFactory.getTileSource(tileSourceName);
         } catch (final IllegalArgumentException ignore) {
+        }
+        if (tileSource==null) {
+            tileSource = TileSourceFactory.DEFAULT_TILE_SOURCE;
         }
         return tileSource;
     }
