@@ -66,12 +66,11 @@
             <type>apklib</type>
         </dependency>
 
-        <!-- Google Service
-
+        <!-- Google Service --> 
         <dependency>
             <groupId>com.google.android.gms</groupId>
             <artifactId>google-play-services</artifactId>
-        </dependency> -->
+        </dependency>
         <dependency>
             <groupId>com.google.android.gms</groupId>
             <artifactId>google-play-services</artifactId>
