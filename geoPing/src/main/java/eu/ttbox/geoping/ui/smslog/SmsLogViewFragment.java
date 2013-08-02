@@ -10,18 +10,18 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
 
 import eu.ttbox.geoping.GeoPingApplication;
 import eu.ttbox.geoping.R;
@@ -40,7 +40,7 @@ import eu.ttbox.geoping.ui.person.PhotoHeaderBinderHelper;
 import eu.ttbox.geoping.ui.person.PhotoThumbmailCache;
 
 
-public class SmsLogViewFragment extends SherlockFragment {
+public class SmsLogViewFragment extends Fragment {
 
     private static final String TAG = "SmsLogViewFragment";
     // Binding
@@ -119,7 +119,7 @@ public class SmsLogViewFragment extends SherlockFragment {
     // ===========================================================
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(Menu  menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
     }

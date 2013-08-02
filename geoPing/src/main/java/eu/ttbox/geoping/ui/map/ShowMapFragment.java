@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -22,10 +23,6 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.ActionMode;
 
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.ResourceProxy;
@@ -66,7 +63,7 @@ import eu.ttbox.osm.ui.map.mylocation.MyLocationOverlay;
  * @see <a href="http://mobiforge.com/developing/story/using-google-maps-android">using-google-maps-android</a>
  * 
  */
-public class ShowMapFragment extends SherlockFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class ShowMapFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = "ShowMapFragment";
 
@@ -117,8 +114,8 @@ public class ShowMapFragment extends SherlockFragment implements SharedPreferenc
         public void handleMessage(Message msg) {
             if (msg.what == GeofenceEditOverlay.MENU_CONTEXTUAL_EDIT) {
                 Log.i(TAG, "GeofenceEditOverlay MENU CONTEXTUAL EDIT");
-                ActionMode.Callback actionModeCallBack = geofenceListOverlay.getMenuActionCallback();
-                ActionMode actionMode =  ((SherlockFragmentActivity)getActivity()).startActionMode(actionModeCallBack);
+                android.view.ActionMode.Callback actionModeCallBack = geofenceListOverlay.getMenuActionCallback();
+                android.view.ActionMode actionMode =   getActivity().startActionMode(actionModeCallBack);;
             }
         }
     };

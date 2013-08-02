@@ -8,18 +8,18 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.google.android.gms.location.Geofence;
 
 import eu.ttbox.geoping.R;
@@ -34,7 +34,7 @@ import eu.ttbox.geoping.ui.core.validator.validator.NotEmptyValidator;
 import eu.ttbox.geoping.ui.core.validator.validator.TextCharacterLimitedValidator;
 import eu.ttbox.geoping.ui.core.validator.validator.TextSizeValidator;
 
-public class GeofenceEditFragment extends SherlockFragment {
+public class GeofenceEditFragment extends Fragment {
 
 
     private static final String TAG = "GeofenceEditFragment";

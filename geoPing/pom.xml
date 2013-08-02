@@ -43,11 +43,6 @@
             <artifactId>android</artifactId>
             <scope>provided</scope>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>com.google.android.maps</groupId>-->
-            <!--<artifactId>maps</artifactId>-->
-            <!--<scope>provided</scope>-->
-        <!--</dependency>-->
 
 
         <!-- Compatibility -->
@@ -56,8 +51,12 @@
             <artifactId>compatibility-v13</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.actionbarsherlock</groupId>
-            <artifactId>actionbarsherlock</artifactId>
+            <groupId>android.support</groupId>
+            <artifactId>compatibility-v7-appcompat</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>android.support</groupId>
+            <artifactId>compatibility-v7-appcompat</artifactId>
             <type>apklib</type>
         </dependency>
         <dependency>
@@ -66,12 +65,11 @@
             <type>apklib</type>
         </dependency>
 
-        <!-- Google Service
-
+        <!-- Google Service -->
         <dependency>
             <groupId>com.google.android.gms</groupId>
             <artifactId>google-play-services</artifactId>
-        </dependency> -->
+        </dependency>
         <dependency>
             <groupId>com.google.android.gms</groupId>
             <artifactId>google-play-services</artifactId>

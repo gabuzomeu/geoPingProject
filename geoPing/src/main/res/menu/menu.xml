@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:geoping="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/menuMap"
         android:icon="@drawable/ic_location_web_site"
-        android:showAsAction="ifRoom"
+        geoping:showAsAction="ifRoom"
         android:title="@string/menu_map"/>
     <item
         android:id="@+id/menu_track_person"
         android:icon="@drawable/ic_action_user"
-        android:showAsAction="ifRoom"
+        geoping:showAsAction="ifRoom"
         android:title="@string/menu_person"/>
     <item
         android:id="@+id/menu_pairing"
         android:icon="@drawable/ic_device_access_secure"
-        android:showAsAction="ifRoom"
+        geoping:showAsAction="ifRoom"
         android:title="@string/menu_pairing"/>
     <item
         android:id="@+id/menu_smslog"
         android:icon="@drawable/ic_collections_go_to_today"
-        android:showAsAction="ifRoom"
+        geoping:showAsAction="ifRoom"
         android:title="@string/menu_smslog"/>
 
     <item
         android:id="@+id/option"
         android:icon="@android:drawable/ic_menu_preferences"
-        android:showAsAction="never"
+        geoping:showAsAction="never"
         android:title="@string/menu_settings"/>
 <!--     <item -->
 <!--         android:id="@+id/menu_extra_feature" -->
 <!--         android:icon="@android:drawable/ic_menu_more" -->
-<!--         android:showAsAction="never" -->
+<!--         geoping:showAsAction="never" -->
 <!--         android:title="@string/menu_extra_feature"/> -->
 <!--      <item -->
 <!--         android:id="@+id/menuQuitter" -->
 <!--         android:icon="@android:drawable/ic_lock_power_off" -->
-<!--         android:showAsAction="never" -->
+<!--         geoping:showAsAction="never" -->
 <!--         android:title="@string/menu_quit"/> -->
 
       <item
         android:id="@+id/menuAppShare"
         android:icon="@android:drawable/ic_menu_share"
-        android:showAsAction="ifRoom"
-        android:actionProviderClass="com.actionbarsherlock.widget.ShareActionProvider"
+        geoping:showAsAction="ifRoom"
+        geoping:actionProviderClass="android.support.v7.widget.ShareActionProvider"
         android:title="@string/menu_share_app"/>
       <item
         android:id="@+id/menuAppComment"
         android:icon="@android:drawable/ic_menu_manage"
-        android:showAsAction="ifRoom" 
+        geoping:showAsAction="ifRoom"
         android:title="@string/app_comment_title"
        />
 </menu>
