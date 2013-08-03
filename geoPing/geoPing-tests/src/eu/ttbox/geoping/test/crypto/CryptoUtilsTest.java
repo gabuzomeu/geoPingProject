@@ -1,8 +1,9 @@
 package eu.ttbox.geoping.test.crypto;
 
-import eu.ttbox.geoping.crypto.CryptoUtils;
 import android.test.AndroidTestCase;
 import android.util.Log;
+
+import eu.ttbox.geoping.crypto.CryptoUtils;
 
 public class CryptoUtilsTest extends AndroidTestCase {
 

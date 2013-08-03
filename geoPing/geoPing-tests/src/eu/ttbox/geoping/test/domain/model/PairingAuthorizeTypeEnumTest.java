@@ -1,7 +1,8 @@
 package eu.ttbox.geoping.test.domain.model;
 
-import eu.ttbox.geoping.domain.model.PairingAuthorizeTypeEnum;
 import android.test.AndroidTestCase;
+
+import eu.ttbox.geoping.domain.model.PairingAuthorizeTypeEnum;
 
 public class PairingAuthorizeTypeEnumTest extends AndroidTestCase  {
 

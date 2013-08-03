@@ -12,7 +12,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 
-
 import com.google.analytics.tracking.android.EasyTracker;
 
 import eu.ttbox.geoping.R;

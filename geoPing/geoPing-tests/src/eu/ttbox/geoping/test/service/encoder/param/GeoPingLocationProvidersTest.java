@@ -1,10 +1,10 @@
 package eu.ttbox.geoping.test.service.encoder.param;
 
-import java.util.ArrayList;
-
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.util.Log;
+
+import java.util.ArrayList;
 
 import eu.ttbox.geoping.service.encoder.params.GeoPingLocationProviders.ProviderEnum;
 

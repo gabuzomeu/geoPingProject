@@ -17,10 +17,11 @@ import com.google.analytics.tracking.android.GAServiceManager;
 
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.core.VersionUtils;
-//import eu.ttbox.geoping.domain.crypto.SecureDatabase;
 import eu.ttbox.geoping.domain.geotrack.GeoTrackDatabase;
 import eu.ttbox.geoping.domain.smslog.SmsLogDatabase;
 import eu.ttbox.geoping.ui.person.PhotoThumbmailCache;
+
+//import eu.ttbox.geoping.domain.crypto.SecureDatabase;
 
 public class GeoPingApplication extends Application {
 

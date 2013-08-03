@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.test.ProviderTestCase2;
+
 import eu.ttbox.geoping.domain.PersonProvider;
 import eu.ttbox.geoping.domain.model.Person;
 import eu.ttbox.geoping.domain.person.PersonHelper;

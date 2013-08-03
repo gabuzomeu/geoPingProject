@@ -1,12 +1,12 @@
 package eu.ttbox.geoping.test.service.encoder;
 
+import android.util.Log;
+
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
 import eu.ttbox.geoping.crypto.encrypt.Base64EncodingTextEncryptor;
 import eu.ttbox.geoping.crypto.encrypt.RsaBytesEncryptor;
-
-import android.util.Log;
 
 public class SmsMessageEncryptedTest extends SmsMessageEncoderHelperTest  {
 

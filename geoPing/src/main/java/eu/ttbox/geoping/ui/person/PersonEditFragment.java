@@ -26,7 +26,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-
 import java.util.Random;
 
 import eu.ttbox.geoping.GeoPingApplication;

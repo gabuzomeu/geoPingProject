@@ -1,9 +1,10 @@
 package eu.ttbox.geoping.test.domain;
 
-import org.osmdroid.util.GeoPoint;
-
 import android.test.AndroidTestCase;
 import android.util.Log;
+
+import org.osmdroid.util.GeoPoint;
+
 import eu.ttbox.geoping.domain.model.GeoTrack;
 
 public class GeoTrackTest extends AndroidTestCase {

@@ -2,6 +2,7 @@ package eu.ttbox.geoping.test.core.phone;
 
 import android.test.AndroidTestCase;
 import android.util.Log;
+
 import eu.ttbox.geoping.core.PhoneNumberUtils;
 
 public class PhoneNumberUtilsTest extends AndroidTestCase {

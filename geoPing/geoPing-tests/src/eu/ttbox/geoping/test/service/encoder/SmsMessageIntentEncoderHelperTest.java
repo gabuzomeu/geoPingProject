@@ -1,13 +1,14 @@
 package eu.ttbox.geoping.test.service.encoder;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.test.AndroidTestCase;
 import android.util.Log;
+
+import java.util.Calendar;
+import java.util.Date;
+
 import eu.ttbox.geoping.domain.geotrack.GeoTrackHelper;
 import eu.ttbox.geoping.domain.model.GeoTrack;
 
