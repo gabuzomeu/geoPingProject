@@ -60,6 +60,7 @@ import eu.ttbox.geoping.ui.map.track.dialog.SelectGeoTrackDialog;
 import eu.ttbox.geoping.ui.map.track.dialog.SelectGeoTrackDialog.OnSelectPersonListener;
 import eu.ttbox.osm.ui.map.MapViewFactory;
 import eu.ttbox.osm.ui.map.mylocation.MyLocationOverlay;
+import eu.ttbox.osm.ui.map.mylocation.MyLocationOverlay2;
 
 /**
  * @see <a href="http://mobiforge.com/developing/story/using-google-maps-android">using-google-maps-android</a>
@@ -85,7 +86,7 @@ public class ShowMapFragment extends Fragment implements SharedPreferences.OnSha
     private boolean geocodingAuto = true;
 
     // Overlay
-    private MyLocationOverlay myLocation;
+    private MyLocationOverlay2 myLocation;
     // private GeoTrackOverlay geoTrackOverlay;
     private ConcurrentHashMap<String, GeoTrackOverlay> geoTrackOverlayByUser = new ConcurrentHashMap<String, GeoTrackOverlay>();
 
@@ -162,27 +163,10 @@ public class ShowMapFragment extends Fragment implements SharedPreferences.OnSha
 
         // Overlay
         // ----------
-         /* Scale Bar Overlay */
-        if (true) {
-            this.mScaleBarOverlay = new ScaleBarOverlay(getActivity(), mResourceProxy);
-            this.mScaleBarOverlay.setMetric();
-            // Scale bar tries to draw as 1-inch, so to put it in the top center, set x offset to
-            // half screen width, minus half an inch.
-            this.mScaleBarOverlay.setScaleBarOffset(getResources().getDisplayMetrics().widthPixels
-                    / 2 - getResources().getDisplayMetrics().xdpi / 2, 10);
-            this.mapView.getOverlays().add(mScaleBarOverlay);
-        }
+
         // My Location
-        this.myLocation = new MyLocationOverlay(getActivity(), this.mapView); // .getBaseContext()
+        this.myLocation = new MyLocationOverlay2(getActivity(), this.mapView); // .getBaseContext()
         mapView.getOverlays().add(myLocation);
-
-
-
-        // MiniMap
-        if (false) {
-            MinimapOverlay miniMapOverlay = new MinimapOverlay(getActivity(),  mapView.getTileRequestCompleteHandler());
-            this.mapView.getOverlays().add(miniMapOverlay);
-        }
 
         // Map Init Center
         // ----------
@@ -247,9 +231,8 @@ public class ShowMapFragment extends Fragment implements SharedPreferences.OnSha
 
     @Override
     public void onDestroy() {
-        if (Log.isLoggable(TAG, Log.INFO)) {
-            Log.i(TAG, "### ### ### ### ### onDestroy call ### ### ### ### ###");
-        }
+         Log.i(TAG, "### ### ### ### ### onDestroy call ### ### ### ### ###");
+
         myLocation.disableCompass();
         myLocation.disableMyLocation();
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
@@ -280,9 +263,9 @@ public class ShowMapFragment extends Fragment implements SharedPreferences.OnSha
 
     @Override
     public void onResume() {
-        if (Log.isLoggable(TAG, Log.INFO)) {
+
             Log.i(TAG, "### ### ### ### ### onResume call ### ### ### ### ###");
-        }
+
         super.onResume();
 
         // read preference
@@ -333,9 +316,9 @@ public class ShowMapFragment extends Fragment implements SharedPreferences.OnSha
 
     @Override
     public void onPause() {
-        if (Log.isLoggable(TAG, Log.INFO)) {
+
             Log.i(TAG, "### ### ### ### ### onPause call ### ### ### ### ###");
-        }
+
         // save Preference
         // final SharedPreferences.Editor edit = sharedPreferences.edit();
         // edit.putString(AppConstants.PREFS__KEY_TILE_SOURCE,
@@ -564,7 +547,7 @@ public class ShowMapFragment extends Fragment implements SharedPreferences.OnSha
         return tileSource.localizedName(mResourceProxy);
     }
 
-    private ITileSource getPreferenceMapViewTileSource() {
+    protected ITileSource getPreferenceMapViewTileSource() {
         final String tileSourceName = privateSharedPreferences.getString(MapConstants.PREFS_TILE_SOURCE, TileSourceFactory.DEFAULT_TILE_SOURCE.name());
         ITileSource tileSource = null;
         try {
