@@ -1,13 +1,5 @@
 package eu.ttbox.geoping.test.service.slave.receiver;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -16,6 +8,15 @@ import android.content.SharedPreferences;
 import android.telephony.PhoneNumberUtils;
 import android.test.AndroidTestCase;
 import android.test.mock.MockContext;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+
 import eu.ttbox.geoping.service.slave.receiver.SMSReceiver;
 import eu.ttbox.geoping.test.service.encoder.SmsMessageEncoderHelperTest;
 

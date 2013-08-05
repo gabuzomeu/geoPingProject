@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.test.ProviderTestCase2;
+
 import eu.ttbox.geoping.domain.SmsLogProvider;
 import eu.ttbox.geoping.domain.model.SmsLog;
 import eu.ttbox.geoping.domain.model.SmsLogTypeEnum;

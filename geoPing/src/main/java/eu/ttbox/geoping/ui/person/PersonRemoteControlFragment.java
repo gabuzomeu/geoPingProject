@@ -3,6 +3,7 @@ package eu.ttbox.geoping.ui.person;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -10,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
-
-import com.actionbarsherlock.app.SherlockFragment;
 
 import eu.ttbox.geoping.GeoPingApplication;
 import eu.ttbox.geoping.R;
@@ -23,7 +22,7 @@ import eu.ttbox.geoping.service.SmsSenderHelper;
 import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
 
 
-public class PersonRemoteControlFragment extends SherlockFragment {
+public class PersonRemoteControlFragment extends Fragment {
 
     private static final String TAG = "PersonRemoteControlFragment";
     // Constant

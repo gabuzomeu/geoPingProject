@@ -1,12 +1,12 @@
 package eu.ttbox.geoping.ui;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.MenuItem;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivityBase;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivityHelper;
@@ -14,7 +14,7 @@ import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivityHelper;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.ui.slidingmenu.SlidingMenuHelper;
 
-public class GeoPingSlidingMenuFragmentActivity extends SherlockFragmentActivity implements SlidingActivityBase {
+public class GeoPingSlidingMenuFragmentActivity extends ActionBarActivity implements SlidingActivityBase {
 
     // ===========================================================
     // Sliding fragment Activity Copy

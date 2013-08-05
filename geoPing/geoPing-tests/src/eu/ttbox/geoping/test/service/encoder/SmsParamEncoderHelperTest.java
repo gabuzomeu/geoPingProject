@@ -1,10 +1,11 @@
 package eu.ttbox.geoping.test.service.encoder;
 
-import java.util.ArrayList;
-
 import android.os.Bundle;
 import android.test.AndroidTestCase;
 import android.util.Log;
+
+import java.util.ArrayList;
+
 import eu.ttbox.geoping.domain.geotrack.GeoTrackDatabase.GeoTrackColumns;
 import eu.ttbox.geoping.domain.geotrack.GeoTrackHelper;
 import eu.ttbox.geoping.domain.model.GeoTrack;

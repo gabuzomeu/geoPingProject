@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -17,15 +18,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
-import com.actionbarsherlock.app.SherlockFragment;
-
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.core.VersionUtils.AndroidPermissions;
 import eu.ttbox.geoping.domain.pairing.PairingDatabase.PairingColumns;
 import eu.ttbox.geoping.domain.pairing.PairingHelper;
 
-public class PairingNotificationFragment extends SherlockFragment {
+public class PairingNotificationFragment extends Fragment {
 
     private static final String TAG = "PairingNotificationFragment";
 

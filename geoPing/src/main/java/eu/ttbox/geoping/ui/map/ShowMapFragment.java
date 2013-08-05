@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -23,10 +24,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.ActionMode;
-
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.api.IGeoPoint;
@@ -35,6 +32,8 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.MinimapOverlay;
+import org.osmdroid.views.overlay.ScaleBarOverlay;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -66,7 +65,7 @@ import eu.ttbox.osm.ui.map.mylocation.MyLocationOverlay;
  * @see <a href="http://mobiforge.com/developing/story/using-google-maps-android">using-google-maps-android</a>
  * 
  */
-public class ShowMapFragment extends SherlockFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class ShowMapFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = "ShowMapFragment";
 
@@ -103,9 +102,14 @@ public class ShowMapFragment extends SherlockFragment implements SharedPreferenc
 
     // Instance value
     private RangeTimelineValue rangeTimelineValue;
+    private ScaleBarOverlay mScaleBarOverlay;
 
     // Deprecated
     private ResourceProxy mResourceProxy;
+
+    // sattic
+
+    private static int MAPVIEW_ZOOM_MAX  = 505;
 
     // ===========================================================
     // Callback Handler
@@ -117,9 +121,13 @@ public class ShowMapFragment extends SherlockFragment implements SharedPreferenc
         public void handleMessage(Message msg) {
             if (msg.what == GeofenceEditOverlay.MENU_CONTEXTUAL_EDIT) {
                 Log.i(TAG, "GeofenceEditOverlay MENU CONTEXTUAL EDIT");
-                ActionMode.Callback actionModeCallBack = geofenceListOverlay.getMenuActionCallback();
-                ActionMode actionMode =  ((SherlockFragmentActivity)getActivity()).startActionMode(actionModeCallBack);
-            }
+                android.view.ActionMode.Callback actionModeCallBack = geofenceListOverlay.getMenuActionCallback();
+                android.view.ActionMode actionMode =   getActivity().startActionMode(actionModeCallBack);;
+            } else   if (msg.what == MAPVIEW_ZOOM_MAX) {
+                Integer msgObj = msg.obj!=null ? (Integer) msg.obj : mapView.getTileProvider().getMaximumZoomLevel();
+                int maxZoom =  msgObj.intValue();
+                mapController.setZoom(maxZoom);
+             }
         }
     };
 
@@ -152,8 +160,27 @@ public class ShowMapFragment extends SherlockFragment implements SharedPreferenc
 
         // Overlay
         // ----------
+         /* Scale Bar Overlay */
+        if (true) {
+            this.mScaleBarOverlay = new ScaleBarOverlay(getActivity(), mResourceProxy);
+            this.mScaleBarOverlay.setMetric();
+            // Scale bar tries to draw as 1-inch, so to put it in the top center, set x offset to
+            // half screen width, minus half an inch.
+            this.mScaleBarOverlay.setScaleBarOffset(getResources().getDisplayMetrics().widthPixels
+                    / 2 - getResources().getDisplayMetrics().xdpi / 2, 10);
+            this.mapView.getOverlays().add(mScaleBarOverlay);
+        }
+        // My Location
         this.myLocation = new MyLocationOverlay(getActivity(), this.mapView); // .getBaseContext()
         mapView.getOverlays().add(myLocation);
+
+
+
+        // MiniMap
+        if (false) {
+            MinimapOverlay miniMapOverlay = new MinimapOverlay(getActivity(),  mapView.getTileRequestCompleteHandler());
+            this.mapView.getOverlays().add(miniMapOverlay);
+        }
 
         // Map Init Center
         // ----------
@@ -564,21 +591,25 @@ public class ShowMapFragment extends SherlockFragment implements SharedPreferenc
 
     public void centerOnMyPosition() {
         Log.d(TAG, "Ask centerOnMyPosition");
-        if (!myLocation.isMyLocationEnabled()) {
-            myLocation.enableMyLocation(true);
-            Log.d(TAG, "Ask centerOnMyPosition = do enableMyLocation");
-            myLocation.animateToLastFix();
-        }
-        mapView.getScroller().forceFinished(true);
-        myLocation.enableFollowLocation();
-        myLocation.runOnFirstFix(new Runnable() {
+         if (!myLocation.isMyLocationEnabled()) {
+             myLocation.enableMyLocation(true);
+             Log.d(TAG, "Ask centerOnMyPosition = do enableMyLocation");
+         } else{
+             myLocation.enableFollowLocation();
+         }
+//        mapView.getScroller().forceFinishedforceFinished(true);
+        myLocation.animateToLastFix();
+    //    mapController.setZoom(17);
 
-            @Override
-            public void run() {
-                // myLocation.animateToLastFix();
-                mapController.setZoom(17);
-            }
-        });
+        if (false) {
+             myLocation.runOnFirstFix(new Runnable() {
+
+                @Override
+                public void run() {
+                    handler.sendEmptyMessage(MAPVIEW_ZOOM_MAX);
+                }
+            });
+        }
     }
 
     public void centerOnPersonPhone(final String phone) {
@@ -701,8 +732,10 @@ public class ShowMapFragment extends SherlockFragment implements SharedPreferenc
             geoTrackOverlayByUser.put(userId, geoTrackOverlay);
             onRangeGeoTrackValuesChangeListener.computeRangeValues();
             Log.d(TAG, String.format("Added GeoTrackOverlay for person %s", person));
-            // register
+             // register
             isDone = mapView.getOverlays().add(geoTrackOverlay);
+
+            // Invalidate
             mapView.postInvalidate();
             Log.i(TAG, String.format("Add New GeoTrack Overlay (%s) for %s", isDone, person));
         } else {

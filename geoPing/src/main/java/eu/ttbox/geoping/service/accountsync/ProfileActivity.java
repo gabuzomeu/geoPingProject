@@ -1,11 +1,12 @@
 package eu.ttbox.geoping.service.accountsync;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 
-import com.actionbarsherlock.app.SherlockActivity;
 
-public class ProfileActivity   extends SherlockActivity{
+
+public class ProfileActivity   extends ActionBarActivity {
     private static final String TAG = "ProfileActivity" ;
 
 

@@ -11,21 +11,20 @@ import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 
 import java.util.Random;
 
@@ -43,7 +42,7 @@ import eu.ttbox.geoping.ui.person.colorpicker.ColorPickerDialog;
 import eu.ttbox.geoping.ui.person.holocolorpicker.HoloColorPickerDialog;
 import eu.ttbox.geoping.ui.person.validator.ExistPersonPhoneValidator;
 
-public class PersonEditFragment extends SherlockFragment implements ColorPickerDialog.OnColorChangedListener {
+public class PersonEditFragment extends Fragment implements ColorPickerDialog.OnColorChangedListener {
 
     private static final String TAG = "PersonEditFragment";
 

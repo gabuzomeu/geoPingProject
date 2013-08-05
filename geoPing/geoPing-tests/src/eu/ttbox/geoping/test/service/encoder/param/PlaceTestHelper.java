@@ -1,8 +1,9 @@
 package eu.ttbox.geoping.test.service.encoder.param;
 
+import android.location.Location;
+
 import java.util.Calendar;
 
-import android.location.Location;
 import eu.ttbox.geoping.domain.model.GeoTrack;
 
 public class PlaceTestHelper {

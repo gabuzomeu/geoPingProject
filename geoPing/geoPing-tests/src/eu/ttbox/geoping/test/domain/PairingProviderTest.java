@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.test.ProviderTestCase2;
+
 import eu.ttbox.geoping.domain.PairingProvider;
 import eu.ttbox.geoping.domain.model.Pairing;
 import eu.ttbox.geoping.domain.model.PairingAuthorizeTypeEnum;

@@ -3,6 +3,7 @@ package eu.ttbox.geoping.test.service.encoder.param;
 import android.os.Bundle;
 import android.test.AndroidTestCase;
 import android.util.Log;
+
 import eu.ttbox.geoping.core.PhoneNumberUtils;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
 import eu.ttbox.geoping.encoder.params.ParamEncoderHelper;

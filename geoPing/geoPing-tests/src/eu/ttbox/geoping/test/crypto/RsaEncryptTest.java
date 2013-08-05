@@ -1,11 +1,12 @@
 package eu.ttbox.geoping.test.crypto;
 
+import android.test.AndroidTestCase;
+import android.util.Log;
+
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
-import android.test.AndroidTestCase;
-import android.util.Log;
 import eu.ttbox.geoping.crypto.encrypt.AesBytesEncryptor;
 import eu.ttbox.geoping.crypto.encrypt.Base64EncodingTextEncryptor;
 import eu.ttbox.geoping.crypto.encrypt.RsaBytesEncryptor;

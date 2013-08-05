@@ -7,11 +7,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.MenuItem;
 import com.google.analytics.tracking.android.EasyTracker;
 
 import eu.ttbox.geoping.R;
@@ -20,7 +20,7 @@ import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
 import eu.ttbox.geoping.domain.person.PersonDatabase.PersonColumns;
 import eu.ttbox.geoping.ui.smslog.SmsLogListFragment;
 
-public class PairingEditActivity extends SherlockFragmentActivity {
+public class PairingEditActivity extends ActionBarActivity {
 
     private static final String TAG = "PairingEditActivity";
 

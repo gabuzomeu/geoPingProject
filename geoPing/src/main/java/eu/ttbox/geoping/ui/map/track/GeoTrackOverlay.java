@@ -57,6 +57,7 @@ import eu.ttbox.geoping.domain.model.GeoTrack;
 import eu.ttbox.geoping.domain.model.Person;
 import eu.ttbox.geoping.ui.map.timeline.RangeTimelineView.OnRangeTimelineValuesChangeListener;
 import eu.ttbox.geoping.ui.map.track.bubble.GeoTrackBubble;
+import microsoft.mappoint.TileSystem;
 
 public class GeoTrackOverlay extends Overlay implements SharedPreferences.OnSharedPreferenceChangeListener, OnRangeTimelineValuesChangeListener {
 
@@ -188,7 +189,8 @@ public class GeoTrackOverlay extends Overlay implements SharedPreferences.OnShar
 		// Init
 		initDirectionPaint(person.color);
 		onResume();
-	}
+
+ 	}
 
 	// ===========================================================
 	// Life Cycle
@@ -475,7 +477,8 @@ public class GeoTrackOverlay extends Overlay implements SharedPreferences.OnShar
 			GeoPoint geoPoint = lastFix.asGeoPoint();
 			p.toMapPixels(geoPoint, myScreenCoords);
 			// Compute Radius Accuracy
-			final float groundResolutionInM = lastFix.computeGroundResolutionInMForZoomLevel(mapView.getZoomLevel());
+			//final float groundResolutionInM = lastFix.computeGroundResolutionInMForZoomLevel(mapView.getZoomLevel());
+            final float groundResolutionInM = (float) TileSystem.GroundResolution(lastFix.getLatitude(), mapView.getZoomLevel());
 			final float radius = ((float) lastFix.getAccuracy()) / groundResolutionInM;
 			canvas.drawCircle(myScreenCoords.x, myScreenCoords.y, radius, mGeoPointAccuracyCirclePaint);
 			canvas.drawCircle(myScreenCoords.x, myScreenCoords.y, radius, mGeoPointAccuracyCirclePaintBorder);
@@ -570,42 +573,83 @@ public class GeoTrackOverlay extends Overlay implements SharedPreferences.OnShar
 	// ===========================================================
 
 	private boolean openBubble(MapView mapView, GeoTrack geoTrack) {
-		boolean isRecycled = true;
+
 		if (balloonView == null) {
             Log.d(TAG, "on openBubble Create new GeoTrackBubble");
 			balloonView = new GeoTrackBubble(context);
 			balloonView.setVisibility(View.GONE);
 			balloonView.setDisplayGeoLoc(sharedPreferences.getBoolean(AppConstants.PREFS_KEY_MYLOCATION_DISPLAY_GEOLOC, false));
-			isRecycled = false;
+           // isRecycled = false;
 		}
 		boolean balloonViewNotVisible = (View.VISIBLE != balloonView.getVisibility());
         Log.d(TAG, "on openBubble : balloonViewNotVisible = " + balloonViewNotVisible);
         if (balloonViewNotVisible) {
-			// Compute Offset
-			int offsetX = 0; // 150
-			int offsetY = -20; // -20
 			// Position Layout
-			balloonViewLayoutParams = new MapView.LayoutParams(MapView.LayoutParams.WRAP_CONTENT, MapView.LayoutParams.WRAP_CONTENT,
-                    geoTrack.asGeoPoint(), MapView.LayoutParams.BOTTOM_CENTER,
-					offsetX, offsetY);
+            boolean isRecycled =  false; //balloonViewLayoutParams!=null
+			balloonViewLayoutParams = createBubbleLayoutParams( geoTrack.asGeoPoint() );
+            balloonView.setVisibility(View.VISIBLE);
 			if (isRecycled) {
 				balloonView.setLayoutParams(balloonViewLayoutParams);
                 Log.d(TAG, "on openBubble : setLayoutParams = " + balloonViewLayoutParams);
 			} else {
-				mapView.addView(balloonView, balloonViewLayoutParams);
+              //  balloonView.setLayoutParams(balloonViewLayoutParams);
+                 mapView.addView(balloonView, 0, balloonViewLayoutParams);
                 Log.d(TAG, "on openBubble : addView = " + balloonViewLayoutParams);
 			}
-			balloonView.setVisibility(View.VISIBLE);
-			// balloonView.setData(lastFix);
-			setBubbleData(geoTrack);
+            // Set Data
+            setBubbleData(geoTrack);
+            mapView.bringChildToFront(balloonView);
+            balloonView.invalidate();
+
+             printMapViewBuuble(mapView);
 			return true;
 		} else {
 			return hideBubble(mapView);
 		}
 	}
 
+    private MapView.LayoutParams createBubbleLayoutParams(  GeoPoint point  ) {
+        // Compute Offset
+        int offsetX = 0; // 150
+        int offsetY = -20; // -20
+        // Position Layout
+        MapView.LayoutParams result = balloonViewLayoutParams;
+        if (balloonViewLayoutParams==null) {
+            result = new MapView.LayoutParams(MapView.LayoutParams.WRAP_CONTENT, MapView.LayoutParams.WRAP_CONTENT,
+                    point,  MapView.LayoutParams.BOTTOM_CENTER,
+                    offsetX, offsetY);
+        } else {
+            balloonViewLayoutParams.geoPoint = point;
+        }
+
+        return result;
+    }
+
+    private synchronized boolean hideBubble(MapView mapView) {
+        boolean isHide = false;
+        if (balloonView != null && View.GONE != balloonView.getVisibility()) {
+            balloonView.setVisibility(View.GONE);
+            // Remove From Stack
+             mapView.removeView( balloonView);
+             balloonView = null;
+              balloonViewLayoutParams = null;
+            isHide = true;
+            printMapViewBuuble(mapView);
+        }
+        return isHide;
+    }
+
+    private void printMapViewBuuble(MapView mapView) {
+        int chidlCount = mapView.getChildCount();
+        Log.d(TAG, "mapView Child "  + chidlCount + " / isvisible : " + (balloonView==null ? "null" : ""+ (balloonView.getVisibility() == View.VISIBLE) ) );
+        for (int i=0; i< chidlCount ; i++) {
+            Log.d(TAG, "mapView Child " + (i+1) + "/"+chidlCount + " : " + mapView.getChildAt(i));
+        }
+    }
+
 	private void setBubbleData(final GeoTrack geoTrack) {
-		if (balloonView != null && View.VISIBLE == balloonView.getVisibility()) {
+        //if (balloonView != null && View.VISIBLE == balloonView.getVisibility()) {
+        if (balloonView != null ) {
 			Log.d(TAG, String.format("setBubbleData for %s", geoTrack));
 			balloonView.setData(person, geoTrack);
 			if (geocodingAuto) {
@@ -657,17 +701,7 @@ public class GeoTrackOverlay extends Overlay implements SharedPreferences.OnShar
 		}
 	}
 
-	private boolean hideBubble(MapView mapView) {
-		boolean isHide = false;
-		if (balloonView != null && View.GONE != balloonView.getVisibility()) {
-			balloonView.setVisibility(View.GONE);
-            // Remove From Stack
-            mapView.removeView(balloonView);
-            balloonView = null;
-			isHide = true;
-		}
-		return isHide;
-	}
+
 
 	// ===========================================================
 	// Loader
@@ -845,5 +879,7 @@ public class GeoTrackOverlay extends Overlay implements SharedPreferences.OnShar
 		public void addedLastGeoTrack(GeoTrack lastGeoTrack);
 
 	}
+
+
 
 }

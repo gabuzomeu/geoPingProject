@@ -6,12 +6,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
@@ -35,7 +38,7 @@ public class MainActivity extends GeoPingSlidingMenuFragmentActivity { //
     private static final String TAG = "MainActivity";
 
     // private SlidingMenu slidingMenu;
-    private com.actionbarsherlock.widget.ShareActionProvider mShareActionProvider;
+    private ShareActionProvider mShareActionProvider;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -120,14 +123,17 @@ public class MainActivity extends GeoPingSlidingMenuFragmentActivity { //
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getSupportMenuInflater().inflate(R.menu.menu, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+
         // Share
         MenuItem itemShare = menu.findItem(R.id.menuAppShare);
-        mShareActionProvider = (com.actionbarsherlock.widget.ShareActionProvider) itemShare.getActionProvider();
+
+        mShareActionProvider = ( ShareActionProvider) MenuItemCompat.getActionProvider(itemShare);
         // Share Intent
 
         mShareActionProvider.setShareIntent(createShareIntent(this));
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     private Intent createShareIntent(Context context) {
@@ -147,7 +153,8 @@ public class MainActivity extends GeoPingSlidingMenuFragmentActivity { //
         }
     }
 
-    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+    @Override
+    public boolean onOptionsItemSelected( MenuItem item) {
         switch (item.getItemId()) {
         
         case R.id.menu_track_person: {

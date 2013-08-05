@@ -5,16 +5,16 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.MenuItem;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.MenuItem;
 import com.google.analytics.tracking.android.EasyTracker;
 
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
 
-public class SmsLogViewActivity extends SherlockFragmentActivity {
+public class SmsLogViewActivity extends ActionBarActivity {
 
     private static final String TAG = "SmsLogViewActivity";
 

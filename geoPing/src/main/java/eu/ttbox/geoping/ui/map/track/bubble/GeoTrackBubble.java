@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,6 +23,7 @@ import eu.ttbox.geoping.service.encoder.MessageActionEnumLabelHelper;
 import eu.ttbox.geoping.service.encoder.MessageParamEnumLabelHelper;
 import eu.ttbox.geoping.ui.person.PersonColorDrawableHelper;
 import eu.ttbox.osm.core.ExternalIntents;
+import eu.ttbox.osm.core.layout.BubbleLimitLinearLayout;
 import eu.ttbox.osm.ui.map.mylocation.CompassEnum;
 
 public class GeoTrackBubble extends FrameLayout {
@@ -29,7 +31,7 @@ public class GeoTrackBubble extends FrameLayout {
 	private final static String TAG = "GeoTrackBubble";
 
 	// Config
-	private int DEFAULT_BUBBLE_WIDTH = 250;
+	private int DEFAULT_BUBBLE_WIDTH = 200;
 
 	// Datas
 	private GeoTrack geoTrack;
@@ -60,51 +62,59 @@ public class GeoTrackBubble extends FrameLayout {
 
 	public GeoTrackBubble(Context context) {
 		super(context);
-		layout = new LinearLayout(context);
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View v = inflater.inflate(R.layout.map_geotrack_bubble, layout);
+		layout =  new BubbleLimitLinearLayout(context, DEFAULT_BUBBLE_WIDTH); // new LinearLayout(context);
+        layout.setVisibility(VISIBLE);
 
-		// Init fields
-		this.nameTextView = (TextView) v.findViewById(R.id.map_geotrack_bubbleView_name);
-        this.eventTypeTextView = (TextView) v.findViewById(R.id.map_geotrack_bubbleView_eventType );
-		this.providerTextView = (TextView) v.findViewById(R.id.map_geotrack_bubbleView_provider);
-		this.timeTextView = (TextView) v.findViewById(R.id.map_geotrack_bubbleView_time);
-		this.coordTextView = (TextView) v.findViewById(R.id.map_geotrack_bubbleView_coord);
-		this.accuracyTextView = (TextView) v.findViewById(R.id.map_geotrack_bubbleView_accuracy);
-		this.addressTextView = (TextView) v.findViewById(R.id.map_geotrack_bubbleView_address);
-		this.altitudeTextView = (TextView) v.findViewById(R.id.map_geotrack_bubbleView_altitude);
-		this.altitudeBlock = v.findViewById(R.id.map_geotrack_bubbleView_block_altitude);
-		this.speedTextView = (TextView) v.findViewById(R.id.map_geotrack_bubbleView_speed);
-		this.bearingTextView = (TextView) v.findViewById(R.id.map_geotrack_bubbleView_bearing);
-		
-
-		this.batteryTextView= (TextView) v.findViewById(R.id.map_geotrack_bubbleView_battery);
-
-		// Button
-		streetviewImg = (ImageView) v.findViewById(R.id.map_geotrack_bubbleView_streetview_image);
-		streetviewImg.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				startStreetView();
-			}
-		});
-		navigationImg = (ImageView) v.findViewById(R.id.map_geotrack_bubbleView_navigation_image);
-		navigationImg.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				startNavigationTo();
-			}
-		});
+        setupView(context, layout);
 
 		// Frame
-        float densityMultiplier = context.getResources().getDisplayMetrics().density;
+       // float densityMultiplier = context.getResources().getDisplayMetrics().density;
 		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		params.gravity = Gravity.NO_GRAVITY;
-		params.width = (int)(DEFAULT_BUBBLE_WIDTH * densityMultiplier);
-		addView(layout, params);
+	//	params.width = (int)(DEFAULT_BUBBLE_WIDTH * densityMultiplier);
+
+		 addView(layout, params);
 	}
+
+    protected void setupView(Context context, final ViewGroup parent) {
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.map_geotrack_bubble, layout);
+
+        // Init fields
+        this.nameTextView = (TextView) v.findViewById(R.id.map_geotrack_bubbleView_name);
+        this.eventTypeTextView = (TextView) v.findViewById(R.id.map_geotrack_bubbleView_eventType );
+        this.providerTextView = (TextView) v.findViewById(R.id.map_geotrack_bubbleView_provider);
+        this.timeTextView = (TextView) v.findViewById(R.id.map_geotrack_bubbleView_time);
+        this.coordTextView = (TextView) v.findViewById(R.id.map_geotrack_bubbleView_coord);
+        this.accuracyTextView = (TextView) v.findViewById(R.id.map_geotrack_bubbleView_accuracy);
+        this.addressTextView = (TextView) v.findViewById(R.id.map_geotrack_bubbleView_address);
+        this.altitudeTextView = (TextView) v.findViewById(R.id.map_geotrack_bubbleView_altitude);
+        this.altitudeBlock = v.findViewById(R.id.map_geotrack_bubbleView_block_altitude);
+        this.speedTextView = (TextView) v.findViewById(R.id.map_geotrack_bubbleView_speed);
+        this.bearingTextView = (TextView) v.findViewById(R.id.map_geotrack_bubbleView_bearing);
+
+
+        this.batteryTextView= (TextView) v.findViewById(R.id.map_geotrack_bubbleView_battery);
+
+        // Button
+        streetviewImg = (ImageView) v.findViewById(R.id.map_geotrack_bubbleView_streetview_image);
+        streetviewImg.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                startStreetView();
+            }
+        });
+        navigationImg = (ImageView) v.findViewById(R.id.map_geotrack_bubbleView_navigation_image);
+        navigationImg.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                startNavigationTo();
+            }
+        });
+    }
+
 
 	private boolean isSameGeoTrack(GeoTrack location, GeoTrack other) {
 		if (location != null && other != null) {
@@ -129,6 +139,8 @@ public class GeoTrackBubble extends FrameLayout {
 	}
 
 	public void setData(Person person, GeoTrack geoTrack) {
+        layout.setVisibility(VISIBLE);
+
 		// Person
 		this.nameTextView.setText(person.displayName);
 		// Track
@@ -262,5 +274,7 @@ public class GeoTrackBubble extends FrameLayout {
 	public void setDisplayGeoLoc(boolean displayGeoLoc) {
 		this.displayGeoLoc = displayGeoLoc;
 	}
+
+
 
 }

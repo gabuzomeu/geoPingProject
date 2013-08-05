@@ -12,11 +12,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -26,11 +30,6 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 
 import eu.ttbox.geoping.GeoPingApplication;
 import eu.ttbox.geoping.R;
@@ -49,7 +48,7 @@ import eu.ttbox.geoping.ui.pairing.validator.ExistPairingPhoneValidator;
 import eu.ttbox.geoping.ui.person.PhotoEditorView;
 import eu.ttbox.geoping.ui.person.PhotoThumbmailCache;
 
-public class PairingEditFragment extends SherlockFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class PairingEditFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = "PairingEditFragment";
 

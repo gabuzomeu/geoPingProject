@@ -19,12 +19,11 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
-
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.BoundingBoxE6;
@@ -152,6 +151,7 @@ public class GeofenceEditOverlay extends Overlay {
             MenuInflater inflater = mode.getMenuInflater();
 //            mode.setTitle("XXXXXXXX");
             inflater.inflate(R.menu.geofence_mapoverlay_edit_menu, menu);
+            //return super.onCreateActionMode(mode, menu);
             return true;
         }
 
