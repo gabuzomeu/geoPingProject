@@ -20,6 +20,8 @@ import com.google.android.gms.location.LocationClient;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import eu.ttbox.geoping.MainActivity;
@@ -179,7 +181,7 @@ public class ReceiveTransitionsIntentService extends IntentService {
         if (phones!=null && phones.length>0) {
             Location lastLocation =   LocationUtils.getLastKnownLocation(locationManager);
             // TODO Compute Geofence Requests Id per User
-            CircleGeofence geofenceRequest = geofences.get(0);
+            CircleGeofence geofenceRequest = getBestCircleGeofence (geofences );
             // Distance
             Location centerLoc =  geofenceRequest.getCenterAsLocation();
             int distanceToCenter =  Math.round( centerLoc.distanceTo(lastLocation));
@@ -194,6 +196,27 @@ public class ReceiveTransitionsIntentService extends IntentService {
 
         // Display Local Notification
        //TODO  showNotification(geofences, transitionType);
+
+    }
+
+    private CircleGeofence getBestCircleGeofence( List<CircleGeofence> geofences) {
+        CircleGeofence result = null;
+        if (geofences!=null || !geofences.isEmpty()) {
+            int geofenceSize = geofences.size();
+            if (geofenceSize==1) {
+                result = geofences.get(0);
+            } else {
+                Collections.sort(geofences, new Comparator<CircleGeofence>() {
+                    @Override
+                    public int compare(CircleGeofence lhs, CircleGeofence rhs) {
+                        int lhsAccuracy = lhs!=null ? lhs.getRadiusInMeters() : -1;
+                        int rhsAccuracy = rhs!=null ? rhs.getRadiusInMeters() : -1;
+                        return lhsAccuracy < rhsAccuracy ? -1 : (lhsAccuracy == rhsAccuracy ? 0 : 1);
+                     }
+                });
+            }
+        }
+        return result;
 
     }
 

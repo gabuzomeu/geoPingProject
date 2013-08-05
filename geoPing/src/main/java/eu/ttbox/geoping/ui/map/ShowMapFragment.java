@@ -63,7 +63,7 @@ import eu.ttbox.osm.ui.map.mylocation.MyLocationOverlay;
 
 /**
  * @see <a href="http://mobiforge.com/developing/story/using-google-maps-android">using-google-maps-android</a>
- * 
+ *
  */
 public class ShowMapFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -102,7 +102,9 @@ public class ShowMapFragment extends Fragment implements SharedPreferences.OnSha
 
     // Instance value
     private RangeTimelineValue rangeTimelineValue;
-    private ScaleBarOverlay mScaleBarOverlay;
+
+    private MinimapOverlay miniMapOverlay = null;
+    private ScaleBarOverlay mScaleBarOverlay= null;
 
     // Deprecated
     private ResourceProxy mResourceProxy;
@@ -197,7 +199,8 @@ public class ShowMapFragment extends Fragment implements SharedPreferences.OnSha
         return v;
     }
 
-    @Override
+
+        @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         loadDefaultDatas();
@@ -313,8 +316,11 @@ public class ShowMapFragment extends Fragment implements SharedPreferences.OnSha
         if (privateSharedPreferences.getBoolean(MapConstants.PREFS_SHOW_COMPASS, false)) {
             this.myLocation.enableCompass(true);
         }
+        // Overlay
+        addOverlayMinimap(privateSharedPreferences.getBoolean(MapConstants.PREFS_SHOW_OVERLAY_MINIMAP, false));
+        addOverlayScaleBar(privateSharedPreferences.getBoolean(MapConstants.PREFS_SHOW_OVERLAY_SCALEBAR, false));
 
-        // Service
+         // Service
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intents.ACTION_NEW_GEOTRACK_INSERTED);
         getActivity().registerReceiver(mStatusReceiver, filter);
@@ -345,6 +351,9 @@ public class ShowMapFragment extends Fragment implements SharedPreferences.OnSha
         localEdit.putInt(MapConstants.PREFS_ZOOM_LEVEL, mapView.getZoomLevel());
         localEdit.putBoolean(MapConstants.PREFS_SHOW_LOCATION, myLocation.isMyLocationEnabled());
         localEdit.putBoolean(MapConstants.PREFS_SHOW_COMPASS, myLocation.isCompassEnabled());
+        // Overlay
+        localEdit.putBoolean(MapConstants.PREFS_SHOW_OVERLAY_MINIMAP, isOverlayMinimap());
+        localEdit.putBoolean(MapConstants.PREFS_SHOW_OVERLAY_SCALEBAR, isOverlayScaleBar());
         localEdit.commit();
 
         Log.d(TAG, "--- --- --- --- --- --- --- --- --- --- --- --- --- --- ---");
@@ -783,6 +792,56 @@ public class ShowMapFragment extends Fragment implements SharedPreferences.OnSha
         Log.d(TAG, String.format("animateToLastKnowPosition for User : %s (is done %s)", userId, isDone));
         return isDone;
     }
+
+    // ===========================================================
+    // Map Overlays
+    // ===========================================================
+
+    public void addOverlayScaleBar(boolean toAdd) {
+        if (toAdd) {
+            // Add
+            if (mScaleBarOverlay==null) {
+                this.mScaleBarOverlay = new ScaleBarOverlay(getActivity(), mResourceProxy);
+                this.mScaleBarOverlay.setMetric();
+                // Scale bar tries to draw as 1-inch, so to put it in the top center, set x offset to
+                // half screen width, minus half an inch.
+                this.mScaleBarOverlay.setScaleBarOffset(getResources().getDisplayMetrics().widthPixels
+                        / 2 - getResources().getDisplayMetrics().xdpi / 2, 10);
+            }
+            mapView.getOverlays().add(mScaleBarOverlay);
+        } else {
+            // Delete
+            if (mScaleBarOverlay!=null) {
+                mapView.getOverlays().remove(mScaleBarOverlay);
+            }
+        }
+    }
+
+    public boolean isOverlayScaleBar() {
+        boolean result = (mScaleBarOverlay!=null && mapView.getOverlays().contains(mScaleBarOverlay));
+        return result;
+    }
+
+    public void addOverlayMinimap(boolean toAdd) {
+        if (toAdd) {
+            // Add
+            if (miniMapOverlay==null) {
+                miniMapOverlay = new MinimapOverlay(getActivity(),  mapView.getTileRequestCompleteHandler());
+            }
+            mapView.getOverlays().add(miniMapOverlay);
+        } else {
+            // Delete
+            if (miniMapOverlay!=null) {
+                mapView.getOverlays().remove(miniMapOverlay);
+            }
+        }
+    }
+
+    public boolean isOverlayMinimap() {
+        boolean result = (miniMapOverlay!=null && mapView.getOverlays().contains(miniMapOverlay));
+        return result;
+    }
+
 
     // ===========================================================
     // Geofence Overlay

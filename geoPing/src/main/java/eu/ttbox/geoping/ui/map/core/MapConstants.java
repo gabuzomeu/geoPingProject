@@ -11,4 +11,8 @@ public class MapConstants {
     public static final String PREFS_SHOW_LOCATION = "showLocation";
     public static final String PREFS_SHOW_COMPASS = "showCompass";
 
+    public static final String PREFS_SHOW_OVERLAY_MINIMAP = "miniMap";
+    public static final String PREFS_SHOW_OVERLAY_SCALEBAR = "scaleBar";
+
+
 }
