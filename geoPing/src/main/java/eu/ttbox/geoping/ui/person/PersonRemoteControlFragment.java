@@ -1,10 +1,23 @@
 package eu.ttbox.geoping.ui.person;
 
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +25,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+
+import java.io.IOException;
+import java.util.Locale;
+
 import eu.ttbox.geoping.GeoPingApplication;
+import eu.ttbox.geoping.MainActivity;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
@@ -37,10 +55,8 @@ public class PersonRemoteControlFragment extends Fragment {
     // Bindings
     private SparseArray<Button> buttonsMap;
     private PhotoHeaderBinderHelper photoHeader;
-
     // Cache
     private PhotoThumbmailCache photoCache;
-
     // ===========================================================
     // OnClick Listener
     // ===========================================================
@@ -73,7 +89,6 @@ public class PersonRemoteControlFragment extends Fragment {
         return v;
     }
 
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -95,18 +110,19 @@ public class PersonRemoteControlFragment extends Fragment {
         if (agrs != null && agrs.containsKey(Intents.EXTRA_DATA_URI)) {
 //            String entityId = agrs.getString(Intents.EXTRA_PERSON_ID);
             String phone = agrs.getString(Intents.EXTRA_SMS_PHONE);
-            Uri entiyUrl = Uri.parse(  agrs.getString(Intents.EXTRA_DATA_URI));
+            Uri entiyUrl = Uri.parse(agrs.getString(Intents.EXTRA_DATA_URI));
             setEntity(entiyUrl, phone);
         }
     }
+
     public void setEntity(Uri entityUri, String phoneNumber) {
         this.entityUri = entityUri;
         this.entityPhoneNumber = phoneNumber;
         if (!TextUtils.isEmpty(phoneNumber)) {
             setButtonsVisibility(true);
             // Photo
-            if (photoCache!=null) {
-               photoCache.loadPhoto(getActivity(), photoHeader.photoImageView, null, entityPhoneNumber);
+            if (photoCache != null) {
+                photoCache.loadPhoto(getActivity(), photoHeader.photoImageView, null, entityPhoneNumber);
             }
         } else {
             setButtonsVisibility(false);
@@ -132,16 +148,16 @@ public class PersonRemoteControlFragment extends Fragment {
         Button localButton = buttonsMap.get(v.getId());
         switch (v.getId()) {
             case R.id.track_person_remote_control_pairingButton:
-               // Toast.makeText(getActivity(), "Pairing button click", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getActivity(), "Pairing button click", Toast.LENGTH_SHORT).show();
                 onPairingClick(v);
                 break;
             case R.id.track_person_remote_control_openButton: {
                 onOpenApplicationClick(v);
                 Toast.makeText(getActivity(), "Open App button click", Toast.LENGTH_SHORT).show();
-                }
-                break;
+            }
+            break;
             case R.id.track_person_remote_control_hideButton:
-                onTestLongSmsClick(v);
+                onTestPlaySoundClick(v);
                 Toast.makeText(getActivity(), "Send Test Long SMS click", Toast.LENGTH_SHORT).show();
                 break;
             default:
@@ -149,6 +165,7 @@ public class PersonRemoteControlFragment extends Fragment {
 
         }
     }
+
     // ===========================================================
     // Command
     // ===========================================================
@@ -164,14 +181,86 @@ public class PersonRemoteControlFragment extends Fragment {
         getActivity().startService(intent);
     }
 
-    public void onTestLongSmsClick(View v) {
-        Bundle params = new Bundle();
-        StringBuffer sb = new StringBuffer(300);
-        for (int i = 0; i<30; i ++) {
-            sb.append("1234567890");
+
+
+    private MediaPlayer.OnErrorListener mediOnErrorListener = new MediaPlayer.OnErrorListener() {
+
+        @Override
+        public boolean onError(MediaPlayer mp, int what, int extra) {
+            Log.e(TAG, "Media Play Error : " + what + " / extra : " + extra);
+            return false;
         }
-        MessageEncoderHelper.writeToBundle(params, MessageParamEnum.GEOFENCE_NAME, sb.toString());
-        SmsSenderHelper.sendSmsAndLogIt(getActivity(), SmsLogSideEnum.MASTER, entityPhoneNumber, MessageActionEnum.GEOFENCE_Unknown_transition, params);
+    };
+
+
+    private MediaPlayer mMediaPlayer;
+
+    private void playSound(Context context, Uri alert) {
+        Log.i(TAG, "--- -------------------------------------");
+        Log.i(TAG, "--- Request Playing Media : " + alert);
+        mMediaPlayer = new MediaPlayer();
+        try {
+            mMediaPlayer.setDataSource(context, alert);
+            final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, 10, 0);
+                 mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+              //  mMediaPlayer.setOnErrorListener(mediOnErrorListener);
+              //  mMediaPlayer.setWakeMode(getActivity().getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
+                mMediaPlayer.prepare();
+                mMediaPlayer.start();
+         //   }
+        } catch (IOException e) {
+            System.out.println("OOPS");
+        }
+        Log.i(TAG, "--- -------------------------------------");
     }
+
+
+    public void onTestPlaySoundClick(View v) {
+         Uri alert =  Settings.System.DEFAULT_ALARM_ALERT_URI;
+       playSound(getActivity(), alert);
+
+       // Intent checkIntent = new Intent();
+       // checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+        //startActivityForResult(checkIntent, MY_DATA_CHECK_CODE);
+    }
+
+    private int MY_DATA_CHECK_CODE = 332;
+    private TextToSpeech mTts;
+
+    TextToSpeech.OnInitListener textToSpeechInitListener = new TextToSpeech.OnInitListener()  {
+
+        @Override
+        public void onInit(int status) {
+            mTts.speak("Il aimait à la voir, avec ses jupes blanches,", TextToSpeech.QUEUE_FLUSH, null);
+            mTts.speak("Courir tout au travers du feuillage et des branches,", TextToSpeech.QUEUE_ADD, null);
+            mTts.speak("Gauche et pleine de grâce, alors qu’elle cachait", TextToSpeech.QUEUE_ADD, null);
+            mTts.speak("Sa jambe, si la robe aux buissons s’accrochait.", TextToSpeech.QUEUE_ADD, null);
+        //    mTts.speak("", TextToSpeech.QUEUE_ADD, null);
+        }
+    };
+
+    @Override
+    public void onActivityResult(
+            int requestCode, int resultCode, Intent data) {
+        if (requestCode == MY_DATA_CHECK_CODE) {
+            if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
+                // success, create the TTS instance
+                mTts = new TextToSpeech(getActivity(), textToSpeechInitListener);
+                mTts.setLanguage(Locale.FRANCE);
+
+
+
+
+            } else {
+                // missing data, install it
+                Intent installIntent = new Intent();
+                installIntent.setAction(
+                        TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+                startActivity(installIntent);
+            }
+        }
+    }
+
 
 }
