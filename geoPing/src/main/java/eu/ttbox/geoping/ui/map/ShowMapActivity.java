@@ -42,7 +42,7 @@ public class ShowMapActivity extends GeoPingSlidingMenuFragmentActivity {
 
     // private SlidingMenu slidingMenu;
     // Map
-    private ShowMapFragment mapFragment;
+    private ShowMapFragmentV2 mapFragment;
 
     private ActionMode mActionMode;
 
@@ -75,8 +75,8 @@ public class ShowMapActivity extends GeoPingSlidingMenuFragmentActivity {
     @Override
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
-        if (fragment instanceof ShowMapFragment) {
-            mapFragment = (ShowMapFragment) fragment;
+        if (fragment instanceof ShowMapFragmentV2) {
+            mapFragment = (ShowMapFragmentV2) fragment;
         }
     }
 
@@ -184,7 +184,7 @@ public class ShowMapActivity extends GeoPingSlidingMenuFragmentActivity {
         switch (item.getItemId()) {
 
         case R.id.menuMap_mypositoncenter: {
-            mapFragment.centerOnMyPosition();
+            mapFragment.centerOnMyLocationFix();
             return true;
         }
         case R.id.menuMap_mypositon_hide: {

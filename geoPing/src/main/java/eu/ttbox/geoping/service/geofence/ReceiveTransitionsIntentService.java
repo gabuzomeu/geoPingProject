@@ -41,7 +41,7 @@ import eu.ttbox.geoping.service.encoder.MessageActionEnumLabelHelper;
 import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
 import eu.ttbox.geoping.service.slave.GeoPingSlaveLocationService;
 import eu.ttbox.geoping.service.slave.eventspy.SpyNotificationHelper;
-import eu.ttbox.osm.ui.map.mylocation.sensor.LocationUtils;
+import eu.ttbox.osm.core.LocationUtils;
 /**
  * This class receives geofence transition events from Location Services, in the
  * form of an Intent containing the transition type and geofence id(s) that triggered

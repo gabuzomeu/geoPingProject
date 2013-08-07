@@ -593,7 +593,7 @@ public class ShowMapFragment extends Fragment implements SharedPreferences.OnSha
         myLocation.animateToLastFix();
     //    mapController.setZoom(17);
 
-        if (false) {
+        if (true) {
              myLocation.runOnFirstFix(new Runnable() {
 
                 @Override
