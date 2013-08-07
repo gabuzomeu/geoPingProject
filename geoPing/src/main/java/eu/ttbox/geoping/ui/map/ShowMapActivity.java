@@ -116,7 +116,7 @@ public class ShowMapActivity extends GeoPingSlidingMenuFragmentActivity {
         // Show My Location
         // ---------------
         MenuItem myLocationHideMenu = menu.findItem(R.id.menuMap_mypositon_hide );
-        if (mapFragment.isMyLocationEnabled()) {
+        if (mapFragment.isOverlayMyLocation()) {
             myLocationHideMenu.setTitle(R.string.menu_map_mypositon_hide);
             myLocationHideMenu.setVisible(true);
 //            myLocationHideMenu.setEnabled(true);
@@ -188,7 +188,7 @@ public class ShowMapActivity extends GeoPingSlidingMenuFragmentActivity {
             return true;
         }
         case R.id.menuMap_mypositon_hide: {
-            mapFragment.swichDisplayMyPosition();
+            mapFragment.switchOverlayMyLocation();
             return true;
         }
         case R.id.menuMap_track_person: {
