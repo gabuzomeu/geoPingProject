@@ -1,5 +1,6 @@
 package eu.ttbox.geoping.service.slave;
 
+import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -41,6 +42,8 @@ import eu.ttbox.geoping.service.SmsSenderHelper;
 import eu.ttbox.geoping.service.core.WorkerService;
 import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
 import eu.ttbox.osm.ui.map.mylocation.sensor.MyLocationListenerProxy;
+import eu.ttbox.osm.ui.map.mylocation.sensor.v2.OsmAndLocationProvider;
+import eu.ttbox.osm.ui.map.mylocation.sensor.v2.OsmLocation;
 
 public class GeoPingSlaveLocationService extends WorkerService implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -55,7 +58,7 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
     // Services
     private TelephonyManager telephonyManager;
     private LocationManager locationManager;
-    private MyLocationListenerProxy myLocation;
+    private OsmAndLocationProvider myLocation;
     private ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
     private SharedPreferences appPreferences;
 
@@ -107,7 +110,7 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
         this.appPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         this.locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         this.telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        this.myLocation = new MyLocationListenerProxy(locationManager);
+        this.myLocation = new OsmAndLocationProvider((Application)getApplicationContext());
 
         loadPrefConfig();
         // register listener
@@ -128,7 +131,7 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
     @Override
     public void onDestroy() {
         appPreferences.unregisterOnSharedPreferenceChangeListener(this);
-        this.myLocation.stopListening();
+        this.myLocation.pauseAllUpdates(); //stopListening();
         multiGeoRequestListener.clear();
         super.onDestroy();
         Log.d(TAG, "#######################################");
@@ -231,7 +234,8 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
             lock.acquire();
             Log.d(TAG, "*** Lock Acquire: " + LOCK_NAME + " " + lock);
             // Register request
-            Location initLastLoc = myLocation.getLastKnownLocation();
+            OsmLocation loc = myLocation.getLastKnownLocation();
+            Location initLastLoc = loc!=null ? loc.getLocation() : null;
             GeoPingRequest request = new GeoPingRequest(  smsAction, phoneNumber, params, config);
             multiGeoRequestListener.add(request); 
             
@@ -265,7 +269,7 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
             // Stop Service if necessary
             if (multiGeoRequestListener.isEmpty()) {
                 Log.d(TAG, "No GeoPing Request in list, do Stop Service");
-                myLocation.stopListening();
+                myLocation.pauseAllUpdates();
                 // Stop Service
                 stopSelf();
             }
@@ -331,7 +335,7 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
         public Boolean call() throws Exception {
             Boolean result = Boolean.FALSE;
             try {
-                Location lastLocation = myLocation.getLastFix();
+                Location lastLocation = myLocation.getLastFixAsLocation();
                 result = sendFoundLocation(lastLocation);
             } finally {
                 unregisterGeoPingRequest(GeoPingRequest.this);
