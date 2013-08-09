@@ -45,11 +45,15 @@ public class GeoTrackDatabase {
 		// Event
 		public static final String COL_EVT_TIME = "EVT_TIME";
 		public static final String COL_EVT_TYPE = "EVT_TYPE";
+        // Notification
+        public static final String COL_IS_NOT_READ = "IS_NOT_READ";
 
-		public static final String[] ALL_COLS = new String[] { COL_ID, COL_PERSON_ID, COL_PHONE, COL_PHONE_MIN_MATCH //
+
+        public static final String[] ALL_COLS = new String[] { COL_ID, COL_PERSON_ID, COL_PHONE, COL_PHONE_MIN_MATCH //
 				, COL_TIME, COL_PROVIDER, COL_LATITUDE_E6, COL_LONGITUDE_E6, COL_ACCURACY, COL_ALTITUDE, COL_BEARING, COL_SPEED, COL_ADDRESS //
 				, COL_BATTERY_LEVEL, COL_REQUESTER_PERSON //
 				, COL_EVT_TIME, COL_EVT_TYPE //
+                , COL_IS_NOT_READ
 		};
 
 	}

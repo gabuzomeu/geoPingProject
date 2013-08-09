@@ -237,10 +237,13 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
             OsmLocation loc = myLocation.getLastKnownLocation();
             Location initLastLoc = loc!=null ? loc.getLocation() : null;
             GeoPingRequest request = new GeoPingRequest(  smsAction, phoneNumber, params, config);
-            multiGeoRequestListener.add(request); 
-            
+            multiGeoRequestListener.add(request);
+
+//            myLocation.addLocationListener(request);
             // TODO Bad for multi request
-            locProviderEnabled = myLocation.startListening(multiGeoRequestListener);
+            myLocation.addLocationListener(multiGeoRequestListener);
+            myLocation.resumeAllUpdates();
+//            locProviderEnabled = myLocation.startListening(multiGeoRequestListener);
             // Schedule it for the time out 
             int timeOutInSeconde =  MessageEncoderHelper.readInt(params, MessageParamEnum.TIME_IN_S, 30);
             ScheduledFuture<Boolean> task = executorService.schedule(request, timeOutInSeconde, TimeUnit.SECONDS);
@@ -305,7 +308,7 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
         registerReceiver(batteryLevelReceiver, batteryLevelFilter);
     }
 
-    public class GeoPingRequest implements Callable<Boolean>, LocationListener {
+    public class GeoPingRequest implements Callable<Boolean>, LocationListener, OsmAndLocationProvider.OsmAndLocationListener {
         private MessageActionEnum smsAction;
         private  String[] smsPhoneNumber;
         private Bundle params;
@@ -355,6 +358,11 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
             return isDone;
         }
 
+        @Override
+        public void onLocationChanged(OsmLocation location) {
+            Location loc = location!=null ? location.getLocation() : null;
+            onLocationChanged(loc);
+        }
         @Override
         public void onLocationChanged(Location location) {
             if (isAccuracyExpectedCheck && location != null) {

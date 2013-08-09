@@ -10,6 +10,7 @@ import eu.ttbox.geoping.domain.geotrack.GeoTrackDatabase.GeoTrackColumns;
  * <ul>
  * <li>Db version 6 : Geoping 0.1.5 (37)</li>
  * <li>Db version 8 : Geoping 0.1.6 (39)</li>
+ * <li>Db version 9 : Geoping 0.2.3 (??) : Ajout COL_IS_NOT_READ</li>
  * </ul>
  *  
  *
@@ -19,7 +20,7 @@ public class GeoTrackOpenHelper extends SQLiteOpenHelper {
 	public static final String TAG = "GeoTrackOpenHelper";
 
 	public static final String DATABASE_NAME = "geoping.db";
-	public static final int DATABASE_VERSION = 8;
+	public static final int DATABASE_VERSION = 9;
 
 	// ===========================================================
 	// Table
@@ -46,7 +47,9 @@ public class GeoTrackOpenHelper extends SQLiteOpenHelper {
 			+ ", " + GeoTrackColumns.COL_BATTERY_LEVEL + " INTEGER " //
 			// Event
 			+ ", " + GeoTrackColumns.COL_EVT_TIME + " INTEGER " //
-			+ ", " + GeoTrackColumns.COL_EVT_TYPE + " TEXT " // 
+			+ ", " + GeoTrackColumns.COL_EVT_TYPE + " TEXT " //
+            // Notification
+            + ", " + GeoTrackColumns.COL_IS_NOT_READ + " INTEGER " //
 			+ " );";
 
 	// ===========================================================

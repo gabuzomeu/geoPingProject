@@ -7,8 +7,10 @@ import android.os.Bundle;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import eu.ttbox.geoping.service.slave.GeoPingSlaveLocationService.GeoPingRequest;
+import eu.ttbox.osm.ui.map.mylocation.sensor.v2.OsmAndLocationProvider;
+import eu.ttbox.osm.ui.map.mylocation.sensor.v2.OsmLocation;
 
-public class MultiGeoRequestLocationListener implements LocationListener {
+public class MultiGeoRequestLocationListener implements LocationListener, OsmAndLocationProvider.OsmAndLocationListener {
 
 	private ConcurrentLinkedQueue<GeoPingRequest> geoPingRequestList;
 
@@ -16,6 +18,19 @@ public class MultiGeoRequestLocationListener implements LocationListener {
 		super();
 		this.geoPingRequestList = new ConcurrentLinkedQueue<GeoPingRequest>();
 	}
+
+
+
+
+    @Override
+    public void onLocationChanged(OsmLocation location) {
+        if (!geoPingRequestList.isEmpty()) {
+            for (GeoPingRequest request : geoPingRequestList) {
+                Location loc = location!=null?location.getLocation(): null;
+                request.onLocationChanged(loc);
+            }
+        }
+    }
 
 	@Override
 	public void onLocationChanged(Location location) {
