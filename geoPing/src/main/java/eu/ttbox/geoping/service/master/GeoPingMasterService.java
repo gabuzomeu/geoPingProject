@@ -143,17 +143,17 @@ public class GeoPingMasterService extends IntentService {
                     "HandleIntent", // Action
                     "SMS_PAIRING_RESQUEST", // Label
                     0l); // Value
-        } else if (Intents.ACTION_SMS_PAIRING_RESPONSE.equals(action)) {
-            String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
-            Bundle params = intent.getBundleExtra(Intents.EXTRA_SMS_PARAMS);
-            long userId =   MessageEncoderHelper.readLong(params, MessageParamEnum.PERSON_ID, -1);
-            consumeSmsPairingResponse(phone, userId);
-            // Tracker
-            // tracker.trackPageView("/action/SMS_PAIRING_RESPONSE");
-            tracker.sendEvent("MasterService", // Category
-                    "HandleIntent", // Action
-                    "SMS_PAIRING_RESPONSE", // Label
-                    0l); // Value
+//        } else if (Intents.ACTION_SMS_PAIRING_RESPONSE.equals(action)) {
+//            String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
+//            Bundle params = intent.getBundleExtra(Intents.EXTRA_SMS_PARAMS);
+//            long userId =   MessageEncoderHelper.readLong(params, MessageParamEnum.PERSON_ID, -1);
+//            consumeSmsPairingResponse(phone, userId);
+//            // Tracker
+//            // tracker.trackPageView("/action/SMS_PAIRING_RESPONSE");
+//            tracker.sendEvent("MasterService", // Category
+//                    "HandleIntent", // Action
+//                    "SMS_PAIRING_RESPONSE", // Label
+//                    0l); // Value
         } else if (ACTION_MASTER_GEOPING_PHONE_MARK_AS_READ.equals(action)) {
             Log.i(TAG, "****************************************************");
             Log.i(TAG, "****************************************************");
@@ -169,6 +169,19 @@ public class GeoPingMasterService extends IntentService {
                         String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
                         Bundle params = intent.getBundleExtra(Intents.EXTRA_SMS_PARAMS);
                         sendSmsCommand(actionEnum, phone, params);
+                    }
+                    break;
+                    case ACTION_GEO_PAIRING_RESPONSE: {
+                        String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
+                        Bundle params = intent.getBundleExtra(Intents.EXTRA_SMS_PARAMS);
+                        long userId =   MessageEncoderHelper.readLong(params, MessageParamEnum.PERSON_ID, -1);
+                        consumeSmsPairingResponse(phone, userId);
+                        // Tracker
+                        // tracker.trackPageView("/action/SMS_PAIRING_RESPONSE");
+                        tracker.sendEvent("MasterService", // Category
+                                "HandleIntent", // Action
+                                "SMS_PAIRING_RESPONSE", // Label
+                                0l); // Value
                     }
                     break;
                     case SPY_SHUTDOWN:
@@ -421,119 +434,13 @@ public class GeoPingMasterService extends IntentService {
     // Notification
     // ===========================================================
 
-    @SuppressLint("NewApi")
+
     private void showNotificationGeoPing(MessageActionEnum actionEnum, Uri geoTrackData, ContentValues values, GeoTrack geoTrack,  Bundle params) {
-        String phone = values.getAsString(GeoTrackColumns.COL_PHONE);
-
-        // Contact Name
-        Person person = searchPersonForPhone(phone);
-        String contactDisplayName = phone;
-        Bitmap photo = null;
-        if (person != null) {
-            if (person.displayName != null && person.displayName.length() > 0) {
-                contactDisplayName = person.displayName;
-            }
-            PhotoThumbmailCache photoCache = ((GeoPingApplication) getApplication()).getPhotoThumbmailCache();
-            photo = ContactHelper.openPhotoBitmap(this, photoCache, person.contactId, phone);
-        } else {
-            // Search photo in contact database
-            ContactVo contactVo = ContactHelper.searchContactForPhone(this, phone);
-            if (contactVo != null) {
-                contactDisplayName = contactVo.displayName;
-                PhotoThumbmailCache photoCache = ((GeoPingApplication) getApplication()).getPhotoThumbmailCache();
-                photo = ContactHelper.openPhotoBitmap(this, photoCache, String.valueOf(contactVo.id), phone);
-            }
-        }
-        // --- Create Notif Intent response ---7
-        // --- ---------------------------- ---
-        // --- Create Parent
-        // Create an explicit content Intent that starts the main Activity
-        // Construct a task stack
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(MainActivity.class);
-        stackBuilder.addNextIntent(new Intent(getApplicationContext(), MainActivity.class));
-        stackBuilder.addNextIntent(Intents.showOnMap(getApplicationContext(), geoTrackData, values));
-//        stackBuilder.addNextIntent(createMarkAsReadLogIntent(phone));
-
-        // Get a PendingIntent containing the entire back stack
-        PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
-//        PendingIntent pendingIntent = null;
-//      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-//            pendingIntent = PendingIntent.getActivities(this, 0, //
-//                    new Intent[] { new Intent(this, MainActivity.class), Intents.showOnMap(this, geoTrackData, values) }, //
-//                    PendingIntent.FLAG_CANCEL_CURRENT);
-//        } else {
-//            pendingIntent = PendingIntent.getActivity(this, 0, //
-//                    Intents.showOnMap(this, geoTrackData, values), //
-//                    PendingIntent.FLAG_CANCEL_CURRENT);
-//        }
-        // Get a notification builder that's compatible with platform versions >= 4
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-
-        // Create Notifiation
-        Log.d(TAG, "----- contentTitle with Bundle : " + params);
-        String contentTitle = MessageActionEnumLabelHelper.getString(this, actionEnum);
-        if (MessageEncoderHelper.isToBundle(params, MessageParamEnum.GEOFENCE_NAME)) {
-            String geofenceName = MessageEncoderHelper.readString(params, MessageParamEnum.GEOFENCE_NAME);
-            if (MessageActionEnum.GEOFENCE_ENTER.equals(actionEnum)) {
-                contentTitle =  getString(R.string.sms_action_geofence_transition_enter_with_name, geofenceName);
-            } else if (MessageActionEnum.GEOFENCE_EXIT.equals(actionEnum)) {
-                contentTitle =  getString(R.string.sms_action_geofence_transition_exit_with_name, geofenceName);
-            }
-        }
-        builder //
-                .setDefaults(Notification.DEFAULT_ALL) //
-                .setSmallIcon(R.drawable.ic_stat_notif_icon) //
-                .setWhen(System.currentTimeMillis()) //
-                .setAutoCancel(true) //
-                .setContentIntent(pendingIntent)//
-                .setContentTitle(contentTitle) //
-                        // TODO .setContentTitle(getString(R.string.notif_geoping)) //
-                .setContentText(contactDisplayName); //
-        if (photo != null) {
-            builder.setLargeIcon(photo);
-        } else {
-            Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_stat_notif_icon);
-            builder.setLargeIcon(icon);
-        }
-//         builder.setNumber(6);
-        // Details
-        String coordString = getLatLngAsString(geoTrack);
-        if (coordString != null) {
-            NotificationCompat.InboxStyle inBoxStyle = new NotificationCompat.InboxStyle();
-            inBoxStyle.setBigContentTitle(contentTitle);
-            inBoxStyle.addLine(contactDisplayName);
-            inBoxStyle.addLine(coordString);
-            if (geoTrack.batteryLevelInPercent > -1) {
-                String batteryLabel = MessageParamEnumLabelHelper.getString(this, MessageParamEnum.BATTERY, geoTrack.batteryLevelInPercent);
-                inBoxStyle.addLine(batteryLabel);
-            }
-            if (geoTrack.hasEventTime()) {
-                String smsTypeTime = MessageParamEnumLabelHelper.getLabelHolder(this, MessageParamEnum.EVT_DATE).getString(this, geoTrack.eventTime);
-                inBoxStyle.addLine(smsTypeTime);
-            }
-
-            builder.setStyle(inBoxStyle);
-        }
-
-        // Show
-        int notifId = SHOW_ON_NOTIFICATION_ID + phone.hashCode();
-        Log.d(TAG, String.format("GeoPing Notification Id : %s for phone %s", notifId, phone));
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = builder.build();
-        mNotificationManager.notify(notifId, notification);
-
+        NotificationHelperV2 helper = new NotificationHelperV2(this);
+        helper.showNotificationGeoPing(actionEnum,   geoTrackData,   values,   geoTrack,    params);
     }
 
-    private String getLatLngAsString(GeoTrack geoTrack) {
-        String coordString = null;
 
-        if (geoTrack.hasLatLng()) {
-            coordString = String.format(Locale.US, "(%.6f, %.6f) +/- %s m", geoTrack.getLatitude(), geoTrack.getLongitude(), geoTrack.getAccuracy());
-        }
-        return coordString;
-    }
 
     public class LocalBinder extends Binder {
         public GeoPingMasterService getService() {

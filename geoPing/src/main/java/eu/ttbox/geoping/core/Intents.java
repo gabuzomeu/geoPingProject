@@ -69,6 +69,7 @@ public class Intents {
 	public static final String EXTRA_PERSON_ID = "EXTRA_PERSON_ID";
 
 	public static final String EXTRA_DATA_URI = "EXTRA_DATA_URI";
+    public static final String EXTRA_SMSLOG_URI = "EXTRA_SMSLOG_URI";
 
 //	public static final String EXTRA_INTERNAL_BOOL = "EXTRA_INTERNAL_BOOL";
 
@@ -140,20 +141,29 @@ public class Intents {
 
 	public static Intent showOnMap(Context context, Uri geoTrackData, ContentValues values) {
 		String phone = values.getAsString(GeoTrackColumns.COL_PHONE);
-		Log.d(TAG, "Create Intent action for New GeoTrack for user " + phone);
-		// create
-		Intent intent = new Intent(context, ShowMapActivity.class);
-		intent.setAction(Intent.ACTION_VIEW);
-		intent.setData(geoTrackData);//
-		intent.putExtra(EXTRA_SMS_PHONE, phone);
 		// Wsg84
-		for (String cloneKey : new String[] { GeoTrackColumns.COL_LATITUDE_E6, GeoTrackColumns.COL_LONGITUDE_E6 }) {
-			intent.putExtra(cloneKey, values.getAsInteger(cloneKey));
-		}
-		return intent;
+        int latE6 = values.getAsInteger( GeoTrackColumns.COL_LATITUDE_E6);
+        int lngE6 = values.getAsInteger(GeoTrackColumns.COL_LONGITUDE_E6 );
+        int accuracy = values.getAsInteger(GeoTrackColumns.COL_ACCURACY);
+        return showOnMap(context, geoTrackData, phone, latE6, lngE6, accuracy);
 	}
 
-	public static void startActivityShowOnMapPerson(View v, Context context, long personId, String phone) {
+    public static Intent showOnMap(Context context, Uri geoTrackData, String phone, int latE6, int lngE6, int accuracy) {
+         Log.d(TAG, "Create Intent action for New GeoTrack for user " + phone);
+        // create
+        Intent intent = new Intent(context, ShowMapActivity.class);
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setData(geoTrackData);//
+        intent.putExtra(EXTRA_SMS_PHONE, phone);
+        // Wsg84
+        intent.putExtra(GeoTrackColumns.COL_LATITUDE_E6, latE6);
+        intent.putExtra(GeoTrackColumns.COL_LONGITUDE_E6, lngE6);
+        intent.putExtra(GeoTrackColumns.COL_ACCURACY, accuracy);
+        return intent;
+    }
+
+
+    public static void startActivityShowOnMapPerson(View v, Context context, long personId, String phone) {
 		Intent intent = new Intent(context, ShowMapActivity.class);
 		intent.setAction(Intent.ACTION_VIEW);
 		intent.putExtra(EXTRA_PERSON_ID, personId);

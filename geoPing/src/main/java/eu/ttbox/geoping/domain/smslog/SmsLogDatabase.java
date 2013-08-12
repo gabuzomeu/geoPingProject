@@ -64,6 +64,11 @@ public class SmsLogDatabase {
         public static final String SELECT_BY_ENTITY_ID = String.format("%s = ?", COL_ID);
         public static final String SELECT_BY_REQUEST_ID = String.format("%s = ?", COL_REQUEST_ID );
 
+        public static final String SELECT_BY_IS_NOT_READ =  String.format("%s = 0", COL_IS_READ );
+
+        // Order
+        public static final String ORDER_BY_TIME_DESC =  String.format("ORDER BY %s DESC", COL_TIME );
+
     }
 
     private final SmsLogOpenHelper mDatabaseOpenHelper;

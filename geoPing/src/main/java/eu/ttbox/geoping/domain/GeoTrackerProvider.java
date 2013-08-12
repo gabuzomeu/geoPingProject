@@ -35,8 +35,14 @@ public class GeoTrackerProvider extends ContentProvider {
         public static String AUTHORITY = "eu.ttbox.geoping.GeoTrackerProvider";
 
         public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/geoTrackPoint");
+        public static final Uri getContentUri(String entityId) {
+            return Uri.withAppendedPath(CONTENT_URI , entityId);
+        }
+
         public static final Uri CONTENT_URI_PHONE_FILTER = Uri.withAppendedPath(CONTENT_URI, "phone_lookup");
-        
+        public static final Uri getContentUriPhoneFilter(String phoneNumber) {
+            return Uri.withAppendedPath(CONTENT_URI_PHONE_FILTER, Uri.encode(phoneNumber));
+        }
         
         // MIME types used for searching words or looking up a single definition
         public static final String COLLECTION_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/ttbox.geoping.geoTrackPoint";

@@ -57,9 +57,12 @@ public class GeoTrackDatabase {
 		};
 
 	}
+    public static final String ORDER_BY_TIME_DESC = String.format("ORDER BY %s DESC", GeoTrackColumns.COL_EVT_TIME);
+    public static final String CRITERIA_IS_NOT_READ = String.format("%s = 1", GeoTrackColumns.COL_IS_NOT_READ);
 
 	private static final String CRITERIA_BY_ENTITY_ID = String.format("%s = ?", GeoTrackColumns.COL_ID);
 	private static final String CRITERIA_BY_USER_ID = String.format("%s = ?", GeoTrackColumns.COL_PHONE);
+
 
 
     // ===========================================================

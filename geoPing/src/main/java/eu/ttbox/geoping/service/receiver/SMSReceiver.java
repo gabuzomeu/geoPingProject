@@ -1,4 +1,4 @@
-package eu.ttbox.geoping.service.slave.receiver;
+package eu.ttbox.geoping.service.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -14,6 +14,7 @@ import android.util.Log;
 import java.util.List;
 
 import eu.ttbox.geoping.core.AppConstants;
+import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
 import eu.ttbox.geoping.domain.model.SmsLogTypeEnum;
 import eu.ttbox.geoping.encoder.crypto.TextEncryptor;
@@ -76,44 +77,49 @@ public class SMSReceiver extends BroadcastReceiver {
 		final String phoneNumber = message.getDisplayOriginatingAddress();
 		Log.d(TAG, "Consume SMS Geo Action : " + phoneNumber + " / " + messageBody);
 		// Decrypt Msg
+        // --------------------------
 		TextEncryptor textEncryptor = null;
 		if (MessageEncoderHelper.isGeoPingEncodedSmsMessageEncrypted(messageBody)) {
 			// TODO Find Encryptor
 		}
-        List<BundleEncoderAdapter> geoMsg = MessageEncoderHelper.decodeSmsMessage(phoneNumber, messageBody, textEncryptor);
-		boolean isConsume = MessageEncoderHelper.startServiceGeoPingMessageAsIntent(context, geoMsg);
-		Log.d(TAG, "is Consume SMS (" + isConsume + ") Geo Action : " + phoneNumber + " / " + messageBody);
-		if (isConsume) {
-			// Log It
-			logSmsMessageReceive(context, geoMsg,    messageBody );
-		}
+        List<BundleEncoderAdapter> geoMsgs = MessageEncoderHelper.decodeSmsMessage(phoneNumber, messageBody, textEncryptor);
+        // Check Valid Conversion
+        // --------------------------
+        boolean isConsume = false;
+        if (geoMsgs == null ||  geoMsgs.isEmpty()  || geoMsgs.get(0).getAction() == null) {
+            Log.w(TAG, String.format("Ignore for No Action the GeoPingMessage : %s",  geoMsgs ));
+            return isConsume;
+        }
+        // Consume Valid Message
+        // --------------------------
+        ContentResolver cr = context.getContentResolver();
+        Uri logParentId = null;
+        for (BundleEncoderAdapter msg : geoMsgs) {
+            Intent intent = MessageEncoderHelper.convertSingleGeoPingMessageAsIntent(context, msg);
+            if (intent != null) {
+                isConsume = true;
+                // Save Log Message
+                // --------------------------
+                SmsLogSideEnum side = msg.getAction().isConsumeMaster  ? SmsLogSideEnum.MASTER : SmsLogSideEnum.SLAVE;
+                Uri insertUri = null;
+                if (logParentId==null) {
+                      insertUri = SmsSenderHelper.logSmsMessage( cr, side,   SmsLogTypeEnum.RECEIVE, msg, 1,    messageBody, null );
+                    logParentId = insertUri;
+                } else {
+                      insertUri = SmsSenderHelper.logSmsMessage( cr, side,   SmsLogTypeEnum.RECEIVE, msg, 0, messageBody, logParentId );
+                }
+                // Start Service For Message
+                // --------------------------
+                intent.putExtra(Intents.EXTRA_SMSLOG_URI, insertUri);
+                context.startService(intent);
+            }
+        }
 		return isConsume;
 	}
-
 
 	// ===========================================================
 	// Log Sms message
 	// ===========================================================
 
-	private void logSmsMessageReceive(Context context, List<BundleEncoderAdapter> geoMsgs,  String messageBody ) {
-        if (geoMsgs == null || geoMsgs.isEmpty()) {
-            return;
-        }
-		// Save
-		ContentResolver cr = context.getContentResolver();
-        int geoMsgSize= geoMsgs.size();
-        Uri logParentId = null;
-        for (int i = 0 ; i<geoMsgSize ; i++ ) {
-            BundleEncoderAdapter geoMsg = geoMsgs.get(0);
-            SmsLogSideEnum side = geoMsg.getAction().isConsumeMaster  ? SmsLogSideEnum.MASTER : SmsLogSideEnum.SLAVE;
-
-            if (logParentId==null) {
-                Uri insertUri = SmsSenderHelper.logSmsMessage( cr, side,   SmsLogTypeEnum.RECEIVE, geoMsg, 1,    messageBody, null );
-                logParentId = insertUri;
-            } else {
-                Uri insertUri = SmsSenderHelper.logSmsMessage( cr, side,   SmsLogTypeEnum.RECEIVE, geoMsg, 0, messageBody, logParentId );
-            }
-        }
-	}
 
 }

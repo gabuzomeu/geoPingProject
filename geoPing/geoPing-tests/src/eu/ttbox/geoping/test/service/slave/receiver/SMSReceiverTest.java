@@ -17,7 +17,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import eu.ttbox.geoping.service.slave.receiver.SMSReceiver;
+import eu.ttbox.geoping.service.receiver.SMSReceiver;
 import eu.ttbox.geoping.test.service.encoder.SmsMessageEncoderHelperTest;
 
 public class SMSReceiverTest extends AndroidTestCase {

@@ -52,24 +52,8 @@ public class MessageEncoderHelper {
     // GeoPing Service
     // ===========================================================
 
-    public static boolean startServiceGeoPingMessageAsIntent(Context context, List<BundleEncoderAdapter> msgs) {
-        boolean isConsume = false;
-        if (msgs == null ||  msgs.isEmpty()  || msgs.get(0).getAction() == null) {
-            Log.w(TAG, String.format("Ignore for No Action the GeoPingMessage : %s",  msgs ));
-            return isConsume;
-        }
-        for (BundleEncoderAdapter msg : msgs) {
-            Intent intent = convertSingleGeoPingMessageAsIntent(context, msg);
-            if (intent != null) {
-                isConsume = true;
-                context.startService(intent);
-            }
-        }
-        return isConsume;
-    }
 
-
-    private static Intent convertSingleGeoPingMessageAsIntent(Context context, BundleEncoderAdapter msg) {
+    public static Intent convertSingleGeoPingMessageAsIntent(Context context, BundleEncoderAdapter msg) {
         if (msg == null || msg.getAction() == null) {
             Log.w(TAG, String.format("Ignore for No Action the GeoPingMessage : %s", msg));
             return null;

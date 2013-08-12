@@ -24,18 +24,18 @@ public class SmsLogProvider extends ContentProvider {
         public static String AUTHORITY = "eu.ttbox.geoping.SmsLogProvider";
         public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/smslog");
         public static final Uri getContentUri(String entityId) {
-            return Uri.withAppendedPath(SmsLogProvider.Constants.CONTENT_URI , entityId);
+            return Uri.withAppendedPath(CONTENT_URI , entityId);
         }
 
         // Phone Filter
         public static final Uri CONTENT_URI_PHONE_FILTER = Uri.withAppendedPath(CONTENT_URI, "phone_lookup");
         public static final Uri getContentUriPhoneFilter(String phoneNumber) {
-            return Uri.withAppendedPath(SmsLogProvider.Constants.CONTENT_URI_PHONE_FILTER, Uri.encode(phoneNumber));
+            return Uri.withAppendedPath(CONTENT_URI_PHONE_FILTER, Uri.encode(phoneNumber));
         }
         // Geofence Request
         public static final Uri CONTENT_URI_REQUEST_ID = Uri.withAppendedPath(CONTENT_URI, "requestId");
         public static final Uri getContentUriRequestId(String geofenceRequestId) {
-            return Uri.withAppendedPath(Constants.CONTENT_URI_REQUEST_ID, geofenceRequestId);
+            return Uri.withAppendedPath(CONTENT_URI_REQUEST_ID, geofenceRequestId);
         }
 
      }
