@@ -8,8 +8,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
+import eu.ttbox.geoping.MainActivity;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.GeoTrackerProvider;
 import eu.ttbox.geoping.domain.SmsLogProvider;
@@ -53,6 +55,14 @@ public class NotificationReadHistoryService extends IntentService  {
             resetReadLog(logUri, Boolean.FALSE, null);
         }
         // Show Notification
+       Intent serviceIntent =  intent.getParcelableExtra(Intents.EXTRA_INTENT);
+        if (serviceIntent!=null) {
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+            stackBuilder.addParentStack(MainActivity.class);
+            stackBuilder.addNextIntent(new Intent( getApplicationContext(), MainActivity.class));
+            stackBuilder.addNextIntent(serviceIntent);
+        }
+
     }
 
     private Uri extraSmsLogUri(Intent intent) {

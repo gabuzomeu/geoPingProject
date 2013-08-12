@@ -157,9 +157,11 @@ public class PairingDatabase {
             selectionArgs = new String[] { minMatch };
         } else {
             selection = String.format("%s = ? and (%s)", PairingColumns.COL_PHONE_MIN_MATCH, pSelection);
-            int pSelectionArgSize = pSelectionArgs.length;
+            int pSelectionArgSize = pSelectionArgs!=null? pSelectionArgs.length : 0;
             selectionArgs = new String[pSelectionArgSize + 1];
-            System.arraycopy(pSelectionArgs, 0, selectionArgs, 1, pSelectionArgSize);
+            if (pSelectionArgSize>0) {
+                System.arraycopy(pSelectionArgs, 0, selectionArgs, 1, pSelectionArgSize);
+            }
             selectionArgs[0] = minMatch;
         }
         return queryEntities(projection, selection, selectionArgs, sortOrder);

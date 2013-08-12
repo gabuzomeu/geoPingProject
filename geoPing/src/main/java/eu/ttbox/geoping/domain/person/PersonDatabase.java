@@ -111,9 +111,11 @@ public class PersonDatabase {
             selectionArgs = new String[] { minMatch };
         } else {
             selection = String.format("%s = ? and (%s)", PersonColumns.COL_PHONE_MIN_MATCH, pSelection);
-            int pSelectionArgSize = pSelectionArgs.length;
+            int pSelectionArgSize = pSelectionArgs!=null? pSelectionArgs.length: 0;
             selectionArgs = new String[pSelectionArgSize + 1];
-            System.arraycopy(pSelectionArgs, 0, selectionArgs, 1, pSelectionArgSize);
+            if (pSelectionArgSize>0) {
+                System.arraycopy(pSelectionArgs, 0, selectionArgs, 1, pSelectionArgSize);
+            }
             selectionArgs[0] = minMatch;
         }
         Log.d(TAG, "searchForPhoneNumber Query : " + selection + " // Args Phone : " + selectionArgs[0] + " / Args size : " + selectionArgs.length);

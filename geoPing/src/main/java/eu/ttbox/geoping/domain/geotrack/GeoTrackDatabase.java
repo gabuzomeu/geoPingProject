@@ -57,7 +57,7 @@ public class GeoTrackDatabase {
 		};
 
 	}
-    public static final String ORDER_BY_TIME_DESC = String.format("ORDER BY %s DESC", GeoTrackColumns.COL_EVT_TIME);
+    public static final String ORDER_BY_TIME_DESC = String.format("%s DESC", GeoTrackColumns.COL_EVT_TIME);
     public static final String CRITERIA_IS_NOT_READ = String.format("%s = 1", GeoTrackColumns.COL_IS_NOT_READ);
 
 	private static final String CRITERIA_BY_ENTITY_ID = String.format("%s = ?", GeoTrackColumns.COL_ID);
@@ -127,9 +127,11 @@ public class GeoTrackDatabase {
 			selectionArgs = new String[] { minMatch };
 		} else {
 			selection = String.format("%s = ? and (%s)", GeoTrackColumns.COL_PHONE_MIN_MATCH, pSelection);
-			int pSelectionArgSize = pSelectionArgs.length;
+			int pSelectionArgSize = pSelectionArgs!=null ? pSelectionArgs.length : 0;
 			selectionArgs = new String[pSelectionArgSize + 1];
-			System.arraycopy(pSelectionArgs, 0, selectionArgs, 1, pSelectionArgSize);
+            if (pSelectionArgSize>0) {
+    			System.arraycopy(pSelectionArgs, 0, selectionArgs, 1, pSelectionArgSize);
+            }
 			selectionArgs[0] = minMatch;
 		}
 		return queryEntities(projection, selection, selectionArgs, sortOrder);

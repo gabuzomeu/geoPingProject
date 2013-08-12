@@ -43,7 +43,7 @@ import eu.ttbox.geoping.ui.person.PhotoThumbmailCache;
 
 public class NotificationHelperV2 {
 
-    private static final String TAG = "NotificationHelper";
+    private static final String TAG = "NotificationHelperV2";
 
     private static final int SHOW_ON_NOTIFICATION_ID = AppConstants.PER_PERSON_ID_MULTIPLICATOR * R.id.show_notification_new_geoping_response;
 
@@ -88,7 +88,8 @@ public class NotificationHelperV2 {
 
 
     @SuppressLint("NewApi")
-    public void showNotificationGeoPing(MessageActionEnum actionEnum, Uri geoTrackData, ContentValues values, GeoTrack geoTrack,  Bundle params) {
+    public void showNotificationGeoPing(MessageActionEnum actionEnum, Uri geoTrackData, ContentValues values
+            , GeoTrack geoTrack,  Bundle params) {
         String phone = values.getAsString(GeoTrackDatabase.GeoTrackColumns.COL_PHONE);
         // Contact Name
         NotifPersonVo person = getNotifPersonVo(phone);
@@ -98,12 +99,17 @@ public class NotificationHelperV2 {
         // --- ---------------------------- ---
         // --- Create Parent
         // Create an explicit content Intent that starts the main Activity
+        Intent mapAction = Intents.showOnMap(context.getApplicationContext(), geoTrackData, values);
+        // Intent
+        Intent readAction = new Intent(context, NotificationReadHistoryService.class);
+        readAction.putExtra(Intents.EXTRA_INTENT, mapAction);
+
         // Construct a task stack
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(new Intent(context.getApplicationContext(), MainActivity.class));
-        stackBuilder.addNextIntent(Intents.showOnMap(context.getApplicationContext(), geoTrackData, values));
-//        stackBuilder.addNextIntent(createMarkAsReadLogIntent(phone));
+     //   stackBuilder.addNextIntent(Intents.showOnMap(context.getApplicationContext(), geoTrackData, values));
+         stackBuilder.addNextIntent(readAction);
 
         // Get a PendingIntent containing the entire back stack
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -155,7 +161,6 @@ public class NotificationHelperV2 {
                 String smsTypeTime = MessageParamEnumLabelHelper.getLabelHolder(context, MessageParamEnum.EVT_DATE).getString(context, geoTrack.eventTime);
                 inBoxStyle.addLine(smsTypeTime);
             }
-
             builder.setStyle(inBoxStyle);
         }
 
@@ -182,7 +187,6 @@ public class NotificationHelperV2 {
           count = cursor.getCount();
         if (count>0) {
              inBoxStyle = new NotificationCompat.InboxStyle();
-
 //            if (cursor.moveToNext()) {
 //                GeoTrackHelper helper = new GeoTrackHelper().initWrapper(cursor);
 //            }

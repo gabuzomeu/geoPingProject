@@ -67,7 +67,7 @@ public class SmsLogDatabase {
         public static final String SELECT_BY_IS_NOT_READ =  String.format("%s = 0", COL_IS_READ );
 
         // Order
-        public static final String ORDER_BY_TIME_DESC =  String.format("ORDER BY %s DESC", COL_TIME );
+        public static final String ORDER_BY_TIME_DESC =  String.format("%s DESC", COL_TIME );
 
     }
 
@@ -142,9 +142,11 @@ public class SmsLogDatabase {
             Log.d(TAG, "selectionArgs :  " + selectionArgs[0] );
         } else {
             selection = String.format("%s = ? and (%s)", SmsLogColumns.COL_PHONE_MIN_MATCH, pSelection);
-            int pSelectionArgSize = pSelectionArgs.length;
+            int pSelectionArgSize = pSelectionArgs!=null ? pSelectionArgs.length : 0;
             selectionArgs = new String[pSelectionArgSize + 1];
-            System.arraycopy(pSelectionArgs, 0, selectionArgs, 1, pSelectionArgSize);
+            if (pSelectionArgSize>0) {
+                System.arraycopy(pSelectionArgs, 0, selectionArgs, 1, pSelectionArgSize);
+            }
             selectionArgs[0] = minMatch;
             Log.d(TAG, "selection : " + selection);
             Log.d(TAG, "selectionArgs :  " + selectionArgs[0]+ ", " +  selectionArgs[1]);
