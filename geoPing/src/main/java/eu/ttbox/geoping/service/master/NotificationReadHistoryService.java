@@ -48,7 +48,9 @@ public class NotificationReadHistoryService extends IntentService  {
     @Override
     protected void onHandleIntent(Intent intent) {
         String action = intent.getAction();
+        Log.d(TAG, "### ############################################################### ###");
         Log.d(TAG, String.format("###  onHandleIntent for action %s : %s", action, intent));
+
         // Log Uri
         Uri logUri = extraSmsLogUri(intent);
         if (logUri!=null) {
@@ -56,13 +58,16 @@ public class NotificationReadHistoryService extends IntentService  {
         }
         // Show Notification
        Intent serviceIntent =  intent.getParcelableExtra(Intents.EXTRA_INTENT);
+        Log.d(TAG, "### serviceIntent : " + serviceIntent );
         if (serviceIntent!=null) {
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
             stackBuilder.addParentStack(MainActivity.class);
             stackBuilder.addNextIntent(new Intent( getApplicationContext(), MainActivity.class));
             stackBuilder.addNextIntent(serviceIntent);
+            // Start activity
+            stackBuilder.startActivities();
         }
-
+        Log.d(TAG, "### ############################################################### ###");
     }
 
     private Uri extraSmsLogUri(Intent intent) {
@@ -94,7 +99,7 @@ public class NotificationReadHistoryService extends IntentService  {
     }
 
 
-    private static int getReadLogHistory( Context context, String phone) {
+    public static int getReadLogHistory( Context context, String phone) {
         NotificationCompat.InboxStyle inBoxStyle = null;
         Uri searchUri = SmsLogProvider.Constants.getContentUriPhoneFilter(phone);
         ContentResolver cr = context.getContentResolver();

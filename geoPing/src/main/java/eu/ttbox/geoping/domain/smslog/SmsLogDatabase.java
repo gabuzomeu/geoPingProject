@@ -11,6 +11,7 @@ import android.provider.BaseColumns;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 import eu.ttbox.geoping.core.PhoneNumberUtils;
@@ -139,7 +140,7 @@ public class SmsLogDatabase {
             selection = String.format("%s = ?", SmsLogColumns.COL_PHONE_MIN_MATCH);
             selectionArgs = new String[] { minMatch };
             Log.d(TAG, "selection : " + selection);
-            Log.d(TAG, "selectionArgs :  " + selectionArgs[0] );
+            Log.d(TAG, "selectionArgs :  " + Arrays.toString(selectionArgs));
         } else {
             selection = String.format("%s = ? and (%s)", SmsLogColumns.COL_PHONE_MIN_MATCH, pSelection);
             int pSelectionArgSize = pSelectionArgs!=null ? pSelectionArgs.length : 0;
@@ -149,7 +150,7 @@ public class SmsLogDatabase {
             }
             selectionArgs[0] = minMatch;
             Log.d(TAG, "selection : " + selection);
-            Log.d(TAG, "selectionArgs :  " + selectionArgs[0]+ ", " +  selectionArgs[1]);
+            Log.d(TAG, "selectionArgs :  " +   Arrays.toString(selectionArgs));
         }
         return queryEntities(projection, selection, selectionArgs, sortOrder);
     }

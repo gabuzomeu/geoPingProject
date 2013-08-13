@@ -105,14 +105,15 @@ public class NotificationHelperV2 {
         readAction.putExtra(Intents.EXTRA_INTENT, mapAction);
 
         // Construct a task stack
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(MainActivity.class);
-        stackBuilder.addNextIntent(new Intent(context.getApplicationContext(), MainActivity.class));
+        // TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        //stackBuilder.addParentStack(MainActivity.class);
+       // stackBuilder.addNextIntent(new Intent(context.getApplicationContext(), MainActivity.class));
      //   stackBuilder.addNextIntent(Intents.showOnMap(context.getApplicationContext(), geoTrackData, values));
-         stackBuilder.addNextIntent(readAction);
+        // stackBuilder.addNextIntent(readAction);
 
         // Get a PendingIntent containing the entire back stack
-        PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+       // PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getService(context, 0, readAction,  PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Get a notification builder that's compatible with platform versions >= 4
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
@@ -178,32 +179,10 @@ public class NotificationHelperV2 {
 
 
     private int createNotificationContent( String phone) {
-        NotificationCompat.InboxStyle inBoxStyle = null;
-        Uri searchUri = GeoTrackerProvider.Constants.getContentUriPhoneFilter(phone);
-        ContentResolver cr = context.getContentResolver();
-        Cursor cursor = cr.query(searchUri, GeoTrackDatabase.GeoTrackColumns.ALL_COLS, GeoTrackDatabase.CRITERIA_IS_NOT_READ, null, GeoTrackDatabase.ORDER_BY_TIME_DESC);
-        int count = 0;
-        try {
-          count = cursor.getCount();
-        if (count>0) {
-             inBoxStyle = new NotificationCompat.InboxStyle();
-//            if (cursor.moveToNext()) {
-//                GeoTrackHelper helper = new GeoTrackHelper().initWrapper(cursor);
-//            }
-        }
-        } finally {
-            cursor.close();
-        }
+        int count = NotificationReadHistoryService.getReadLogHistory(context, phone);
         return count;
     }
 
-    private void resetReadLog(String phone) {
-        Uri searchUri = GeoTrackerProvider.Constants.getContentUriPhoneFilter(phone);
-        ContentResolver cr = context.getContentResolver();
-        ContentValues values = new ContentValues(1);
-        values.put(GeoTrackDatabase.GeoTrackColumns.COL_IS_NOT_READ, Boolean.FALSE);
-        int count =  cr.update(searchUri, values, GeoTrackDatabase.CRITERIA_IS_NOT_READ , null );
-    }
 
     // ===========================================================
     // Person Detail
