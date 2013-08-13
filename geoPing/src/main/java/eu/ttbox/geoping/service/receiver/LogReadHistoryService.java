@@ -105,7 +105,7 @@ public class LogReadHistoryService extends IntentService {
         }
         return count;
     }
-    
+
     public static PendingIntent createClearLogPendingIntent(Context context, Intent wantedInted) {
         Intent readAction = new Intent(context, LogReadHistoryService.class);
         readAction.setAction(ACTION_MASTER_GEOPING_PHONE_MARK_AS_READ);
