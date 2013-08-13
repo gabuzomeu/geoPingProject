@@ -184,14 +184,20 @@ public class ContactHelper {
         return new NotifPersonVo(phone, contactDisplayName, photo);
     }
 
-    public static NotifPersonVo getNotifPairingVo(Context context, String phone) {
+    public static NotifPersonVo getNotifPairingVo(Context context, Pairing person) {
         PhotoThumbmailCache photoCache = getPhotoCache(context);
-        return getNotifPairingVo(context, photoCache, phone);
+        return getNotifPairingVo(context, photoCache, person);
     }
 
-    public static NotifPersonVo getNotifPairingVo(Context context,  PhotoThumbmailCache photoCache ,  String phone) {
-        // Contact Name
+    public static NotifPersonVo getNotifPairingVo(Context context, String phone) {
+        PhotoThumbmailCache photoCache = getPhotoCache(context);
         Pairing person = searchPairingForPhone(context, phone);
+        return getNotifPairingVo(context, photoCache, person);
+    }
+
+    public static NotifPersonVo getNotifPairingVo(Context context,  PhotoThumbmailCache photoCache ,   Pairing person ) {
+        // Contact Name
+        String phone =  person.phone;
         String contactDisplayName = phone;
         Bitmap photo = null;
         if (person != null) {

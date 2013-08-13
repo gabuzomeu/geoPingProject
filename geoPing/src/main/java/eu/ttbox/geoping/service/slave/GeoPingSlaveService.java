@@ -42,6 +42,7 @@ import eu.ttbox.geoping.encoder.model.MessageParamEnum;
 import eu.ttbox.geoping.service.SmsSenderHelper;
 import eu.ttbox.geoping.service.core.ContactHelper;
 import eu.ttbox.geoping.service.core.ContactVo;
+import eu.ttbox.geoping.service.core.NotifPersonVo;
 import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
 import eu.ttbox.geoping.service.slave.receiver.AuthorizePhoneTypeEnum;
 import eu.ttbox.geoping.ui.person.PhotoThumbmailCache;
@@ -445,24 +446,10 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
         // Log.d(TAG,"*****  showNotificationNewPingRequestConfirm  ****");
         // Log.d(TAG,"******************************************************");
         String phone = pairing.phone;
-        String contactDisplayName = phone;
-        String contactNewName = null;
+
         RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.notif_geoping_request_register);
         // Contact Name
-        ContactVo contact = ContactHelper.searchContactForPhone(this, phone);
-        Bitmap photo = null;
-        if (contact != null) {
-            if (contact.displayName != null && contact.displayName.length() > 0) {
-
-                contactDisplayName = contact.displayName;
-                if (TextUtils.isEmpty(pairing.displayName)) {
-                    contactNewName = contact.displayName;
-                    pairing.displayName = contact.displayName;
-                }
-            }
-            PhotoThumbmailCache photoCache = ((GeoPingApplication) getApplication()).getPhotoThumbmailCache();
-            photo = ContactHelper.openPhotoBitmap(this, photoCache, String.valueOf(contact.id), phone);
-        }
+        NotifPersonVo person = ContactHelper.getNotifPairingVo(this, pairing);
 
         // Generate Notification ID per Person
         int notifId = SHOW_GEOPING_REQUEST_NOTIFICATION_ID + phone.hashCode();
@@ -476,7 +463,7 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
         Resources r = getResources();
         // Title
         String title;
-        String contentText = contactDisplayName + r.getString(R.string.notif_click_to_accept);
+        String contentText = person.contactDisplayName + r.getString(R.string.notif_click_to_accept);
         switch (onlyPairing) {
         case PAIRING:
             notifId = SHOW_PAIRING_NOTIFICATION_ID + phone.hashCode();
@@ -487,7 +474,7 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
             contentView.setTextViewText(R.id.notif_geoping_confirm_button_yes, getText(R.string.notif_confirm_request_eachtime));
             title = getString(R.string.notif_pairing);
             contentIntent = PendingIntent.getService(this, 0, //
-                    Intents.authorizePhone(this, phone, contactNewName, params, AuthorizePhoneTypeEnum.ALWAYS, notifId, onlyPairing),//
+                    Intents.authorizePhone(this, phone, person.contactDisplayName, params, AuthorizePhoneTypeEnum.ALWAYS, notifId, onlyPairing),//
                     PendingIntent.FLAG_UPDATE_CURRENT);
             break;
         case GEOPING_REQUEST_CONFIRM:
@@ -512,19 +499,19 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
 
         // View
         contentView.setTextViewText(R.id.notif_geoping_title, title);
-        contentView.setTextViewText(R.id.notif_geoping_phone, contactDisplayName);
+        contentView.setTextViewText(R.id.notif_geoping_phone, person.contactDisplayName);
         // Pending Intent
         PendingIntent secuNo = PendingIntent.getService(this, 0, //
-                Intents.authorizePhone(this, phone, contactNewName, params, AuthorizePhoneTypeEnum.NO, notifId, onlyPairing),//
+                Intents.authorizePhone(this, phone, person.contactDisplayName, params, AuthorizePhoneTypeEnum.NO, notifId, onlyPairing),//
                 PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent secuNever = PendingIntent.getService(this, 1, //
-                Intents.authorizePhone(this, phone, contactNewName, params, AuthorizePhoneTypeEnum.NEVER, notifId, onlyPairing),//
+                Intents.authorizePhone(this, phone, person.contactDisplayName, params, AuthorizePhoneTypeEnum.NEVER, notifId, onlyPairing),//
                 PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent secuYes = PendingIntent.getService(this, 2, //
-                Intents.authorizePhone(this, phone, contactNewName, params, AuthorizePhoneTypeEnum.YES, notifId, onlyPairing),//
+                Intents.authorizePhone(this, phone, person.contactDisplayName, params, AuthorizePhoneTypeEnum.YES, notifId, onlyPairing),//
                 PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent secuAlways = PendingIntent.getService(this, 3, //
-                Intents.authorizePhone(this, phone, contactNewName, params, AuthorizePhoneTypeEnum.ALWAYS, notifId, onlyPairing),//
+                Intents.authorizePhone(this, phone, person.contactDisplayName, params, AuthorizePhoneTypeEnum.ALWAYS, notifId, onlyPairing),//
                 PendingIntent.FLAG_UPDATE_CURRENT);
         // Manage Button Confirmation
         contentView.setOnClickPendingIntent(R.id.notif_geoping_confirm_button_no, secuNo);
@@ -535,7 +522,7 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
         // Content Intent
         if (contentIntent == null) {
             contentIntent = PendingIntent.getService(this, 0, //
-                    Intents.authorizePhone(this, phone, contactNewName, params, AuthorizePhoneTypeEnum.YES, notifId, onlyPairing),//
+                    Intents.authorizePhone(this, phone, person.contactDisplayName, params, AuthorizePhoneTypeEnum.YES, notifId, onlyPairing),//
                     PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
@@ -557,7 +544,7 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
             // Jb
             NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle(notificationBuilder);
             //style.addLine(contactDisplayName) //
-            style.setSummaryText(contactDisplayName)//
+            style.setSummaryText(person.contactDisplayName)//
             ;
             notificationBuilder.setStyle(style);
             // Add Action
@@ -594,8 +581,8 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
             notificationBuilder.setContent(contentView);
         }
 
-        if (photo != null) {
-            notificationBuilder.setLargeIcon(photo);
+        if (person.photo != null) {
+            notificationBuilder.setLargeIcon(person.photo);
         } else {
             Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_stat_notif_icon);
             notificationBuilder.setLargeIcon(icon);
