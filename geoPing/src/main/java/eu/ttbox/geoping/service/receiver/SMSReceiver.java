@@ -100,13 +100,14 @@ public class SMSReceiver extends BroadcastReceiver {
                 isConsume = true;
                 // Save Log Message
                 // --------------------------
+                boolean isMarkAsUnread = msg.getAction().isConsumeMaster;
                 SmsLogSideEnum side = msg.getAction().isConsumeMaster  ? SmsLogSideEnum.MASTER : SmsLogSideEnum.SLAVE;
                 Uri insertUri = null;
                 if (logParentId==null) {
-                      insertUri = SmsSenderHelper.logSmsMessage( cr, side,   SmsLogTypeEnum.RECEIVE, msg, 1,    messageBody, null );
+                      insertUri = SmsSenderHelper.logSmsMessage( cr, side,   SmsLogTypeEnum.RECEIVE, msg, 1,    messageBody, isMarkAsUnread,  null );
                     logParentId = insertUri;
                 } else {
-                      insertUri = SmsSenderHelper.logSmsMessage( cr, side,   SmsLogTypeEnum.RECEIVE, msg, 0, messageBody, logParentId );
+                      insertUri = SmsSenderHelper.logSmsMessage( cr, side,   SmsLogTypeEnum.RECEIVE, msg, 0, messageBody, isMarkAsUnread,  logParentId );
                 }
                 // Start Service For Message
                 // --------------------------

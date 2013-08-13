@@ -1,4 +1,4 @@
-package eu.ttbox.geoping.service.master;
+package eu.ttbox.geoping.service.core;
 
 
 import android.graphics.Bitmap;

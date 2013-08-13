@@ -20,6 +20,7 @@ import eu.ttbox.geoping.domain.person.PersonDatabase.PersonColumns;
  * <li>Db version 6 : Geoping 0.1.6 (39)</li>
  * <li>Db version 7 : Geoping 0.2.0 (52)</li>
  * <li>Db version 8 : Geoping 0.2.2 (??)</li>
+ * <li>Db version 9 : Geoping 0.2.3 (??) : Ajout de contact Id</li>
  * </ul>
  *  
  *
@@ -29,7 +30,7 @@ public class PairingOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = "PairingOpenHelper";
 
     public static final String DATABASE_NAME = "pairing.db";
-    public static final int DATABASE_VERSION = 8;
+    public static final int DATABASE_VERSION = 9;
 
     // ===========================================================
     // Table
@@ -44,6 +45,7 @@ public class PairingOpenHelper extends SQLiteOpenHelper {
             + ", " + PairingColumns.COL_PHONE + " TEXT" //
             + ", " + PairingColumns.COL_PHONE_NORMALIZED + " TEXT" //
             + ", " + PairingColumns.COL_PHONE_MIN_MATCH + " TEXT" //
+            + ", " + PairingColumns.COL_CONTACT_ID + " TEXT" //
             + ", " + PairingColumns.COL_AUTHORIZE_TYPE + " INTEGER"//
             + ", " + PairingColumns.COL_SHOW_NOTIF + " INTEGER"//
             + ", " + PairingColumns.COL_PAIRING_TIME + " INTEGER"//

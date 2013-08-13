@@ -266,8 +266,8 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
         }
         // Read Pairing
         Pairing pairing = getPairingByPhone(phone);
-        if (TextUtils.isEmpty(pairing.name) && personNewName != null) {
-            pairing.name = personNewName;
+        if (TextUtils.isEmpty(pairing.displayName) && personNewName != null) {
+            pairing.displayName = personNewName;
         }
         // ### Manage Pairing Type
         // #############################
@@ -403,8 +403,8 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
         if (contact != null) {
             if (contact.displayName != null && contact.displayName.length() > 0) {
                 contactDisplayName = contact.displayName;
-                if (TextUtils.isEmpty(pairing.name)) {
-                    pairing.name = contactDisplayName;
+                if (TextUtils.isEmpty(pairing.displayName)) {
+                    pairing.displayName = contactDisplayName;
                 }
             }
             PhotoThumbmailCache photoCache = ((GeoPingApplication) getApplication()).getPhotoThumbmailCache();
@@ -455,9 +455,9 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
             if (contact.displayName != null && contact.displayName.length() > 0) {
 
                 contactDisplayName = contact.displayName;
-                if (TextUtils.isEmpty(pairing.name)) {
+                if (TextUtils.isEmpty(pairing.displayName)) {
                     contactNewName = contact.displayName;
-                    pairing.name = contact.displayName;
+                    pairing.displayName = contact.displayName;
                 }
             }
             PhotoThumbmailCache photoCache = ((GeoPingApplication) getApplication()).getPhotoThumbmailCache();
@@ -556,8 +556,8 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
         if (VersionUtils.isJb16) {
             // Jb
             NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle(notificationBuilder);
-            style.addLine(contactDisplayName) //
-            // .setSummaryText("this is the summary")//
+            //style.addLine(contactDisplayName) //
+            style.setSummaryText(contactDisplayName)//
             ;
             notificationBuilder.setStyle(style);
             // Add Action

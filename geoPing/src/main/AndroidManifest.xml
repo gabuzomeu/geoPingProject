@@ -183,7 +183,7 @@
         </receiver>
 -->
         <!-- Log Read Service -->
-        <service android:name="eu.ttbox.geoping.service.master.NotificationReadHistoryService"  android:label="@string/app_name" />
+        <service android:name=".service.receiver.LogReadHistoryService"  android:label="@string/app_name" />
 
         <!-- GCM Receiver -->
         <receiver android:name="com.google.android.gcm.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">

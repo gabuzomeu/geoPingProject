@@ -5,11 +5,13 @@ import eu.ttbox.geoping.core.AppConstants;
 public class Pairing {
 
     public long id =  AppConstants.UNSET_ID;
-    public String name;
+    public String displayName;
     public String personUuid;
     public String email;
     // Phone
     public String phone;
+    public String contactId;
+
     public PairingAuthorizeTypeEnum authorizeType;
     public boolean showNotification = false;
     public long pairingTime = AppConstants.UNSET_TIME;
@@ -25,12 +27,15 @@ public class Pairing {
         return this;
     }
 
-    public Pairing setName(String name) {
-        this.name = name;
+    public Pairing setDisplayName(String name) {
+        this.displayName = name;
         return this;
     }
 
-    
+    public void setContactId(String contactId) {
+        this.contactId = contactId;
+    }
+
     public Pairing setPersonUuid(String personUuid) {
         this.personUuid = personUuid;
         return this;
@@ -72,7 +77,7 @@ public class Pairing {
         StringBuilder sb = new StringBuilder().append("Pairing [");
         sb.append("id=").append(id)//
                 .append(", phone=").append(phone)//
-                .append(", name=").append(name)//
+                .append(", displayName=").append(displayName)//
                 .append(", authorizeType=").append(authorizeType)//
                 .append(", showNotification=").append(showNotification)//
                 // .append(", time=").append(time) //

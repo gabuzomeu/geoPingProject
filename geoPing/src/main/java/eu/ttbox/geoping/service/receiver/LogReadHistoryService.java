@@ -1,6 +1,7 @@
-package eu.ttbox.geoping.service.master;
+package eu.ttbox.geoping.service.receiver;
 
 import android.app.IntentService;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -13,15 +14,15 @@ import android.util.Log;
 
 import eu.ttbox.geoping.MainActivity;
 import eu.ttbox.geoping.core.Intents;
-import eu.ttbox.geoping.domain.GeoTrackerProvider;
 import eu.ttbox.geoping.domain.SmsLogProvider;
-import eu.ttbox.geoping.domain.geotrack.GeoTrackDatabase;
+import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
 import eu.ttbox.geoping.domain.smslog.SmsLogDatabase;
+import eu.ttbox.geoping.service.master.GeoPingMasterService;
 
 
-public class NotificationReadHistoryService extends IntentService  {
+public class LogReadHistoryService extends IntentService  {
 
-    private static final String TAG = "NotificationReadHistoryService";
+    private static final String TAG = "LogReadHistoryService";
 
 
     // ===========================================================
@@ -29,7 +30,7 @@ public class NotificationReadHistoryService extends IntentService  {
     // ===========================================================
 
 
-    public NotificationReadHistoryService() {
+    public LogReadHistoryService() {
         super(TAG);
     }
 
@@ -40,6 +41,16 @@ public class NotificationReadHistoryService extends IntentService  {
 
     }
 
+    public static PendingIntent createClearLogPendingIntent(Context context, Intent wantedInted) {
+        Intent readAction = new Intent(context, LogReadHistoryService.class);
+        readAction.setAction(GeoPingMasterService.ACTION_MASTER_GEOPING_PHONE_MARK_AS_READ);
+        if (wantedInted!=null) {
+            readAction.putExtra(Intents.EXTRA_INTENT, wantedInted);
+        }
+        readAction.putExtra(Intents.EXTRA_SMSLOG_URI, SmsLogProvider.Constants.CONTENT_URI);
+        PendingIntent pendingIntent = PendingIntent.getService(context, 0, readAction,  PendingIntent.FLAG_UPDATE_CURRENT);
+        return pendingIntent;
+    }
 
     // ===========================================================
     // Handle Message
@@ -52,9 +63,9 @@ public class NotificationReadHistoryService extends IntentService  {
         Log.d(TAG, String.format("###  onHandleIntent for action %s : %s", action, intent));
 
         // Log Uri
-        Uri logUri = extraSmsLogUri(intent);
+        Uri logUri = intent.getParcelableExtra(Intents.EXTRA_SMSLOG_URI);
         if (logUri!=null) {
-            resetReadLog(logUri, Boolean.FALSE, null);
+            markAsReadLog(this, logUri, Boolean.TRUE, null);
         }
         // Show Notification
        Intent serviceIntent =  intent.getParcelableExtra(Intents.EXTRA_INTENT);
@@ -70,27 +81,18 @@ public class NotificationReadHistoryService extends IntentService  {
         Log.d(TAG, "### ############################################################### ###");
     }
 
-    private Uri extraSmsLogUri(Intent intent) {
-        Uri logUri = null;
-        String logUriString = intent.getStringExtra(Intents.EXTRA_SMSLOG_URI);
-        if (logUriString!=null) {
-            logUri = Uri.parse(logUriString);
-        }
-        return logUri;
-    }
-
     // ===========================================================
     // Message Read History
     // ===========================================================
 
 
-    private void resetReadLog(String phone) {
-        Uri searchUri = GeoTrackerProvider.Constants.getContentUriPhoneFilter(phone);
-        resetReadLog(searchUri, Boolean.TRUE, SmsLogDatabase.SmsLogColumns.SELECT_BY_IS_NOT_READ);
+    public void markAsReadLog(Context context, String phone) {
+        Uri searchUri = SmsLogProvider.Constants.getContentUriPhoneFilter(phone);
+        markAsReadLog(context, searchUri, Boolean.TRUE, SmsLogDatabase.SmsLogColumns.SELECT_BY_IS_NOT_READ);
     }
 
-    private void resetReadLog(Uri entityUri, Boolean readStatus, String whereClase) {
-        ContentResolver cr = getContentResolver();
+    public static void markAsReadLog(Context context, Uri entityUri, Boolean readStatus, String whereClase) {
+        ContentResolver cr = context.getContentResolver();
         ContentValues values = new ContentValues(1);
         values.put(SmsLogDatabase.SmsLogColumns.COL_IS_READ, readStatus);
         long begin = System.currentTimeMillis();
@@ -99,11 +101,17 @@ public class NotificationReadHistoryService extends IntentService  {
     }
 
 
-    public static int getReadLogHistory( Context context, String phone) {
+    public static int getReadLogHistory( Context context, String phone, SmsLogSideEnum side) {
         NotificationCompat.InboxStyle inBoxStyle = null;
         Uri searchUri = SmsLogProvider.Constants.getContentUriPhoneFilter(phone);
         ContentResolver cr = context.getContentResolver();
-        Cursor cursor = cr.query(searchUri, SmsLogDatabase.SmsLogColumns.ALL_COLS, SmsLogDatabase.SmsLogColumns.SELECT_BY_IS_NOT_READ, null,
+        String selection = SmsLogDatabase.SmsLogColumns.SELECT_BY_IS_NOT_READ;
+        String[] selectionArgs = null;
+        if (side!=null) {
+            selection = SmsLogDatabase.SmsLogColumns.SELECT_BY_ISNOTREAD_SIDE;
+            selectionArgs = new String[] { String.valueOf(side.getDbCode()) };
+        }
+         Cursor cursor = cr.query(searchUri, SmsLogDatabase.SmsLogColumns.ALL_COLS, selection, selectionArgs,
                 SmsLogDatabase.SmsLogColumns.ORDER_BY_TIME_DESC);
         int count = 0;
         try {

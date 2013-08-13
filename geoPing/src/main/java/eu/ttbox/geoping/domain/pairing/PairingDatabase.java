@@ -34,6 +34,8 @@ public class PairingDatabase {
         public static final String COL_ID = BaseColumns._ID;
         public static final String COL_NAME = "NAME";
         public static final String COL_PHONE = "PHONE";
+        public static final String COL_CONTACT_ID = "CONTACT_ID";
+
         public static final String COL_EMAIL = "EMAIL";
         public static final String COL_PERSON_UUID = "PERSON_UUID";
         public static final String COL_PHONE_NORMALIZED = "PHONE_NORMALIZED";
@@ -60,7 +62,7 @@ public class PairingDatabase {
         COL_NOTIF_SHUTDOWN, COL_NOTIF_BATTERY_LOW, COL_NOTIF_SIM_CHANGE, COL_NOTIF_PHONE_CALL //
         };
         public static final String[] ALL_COLS = new String[] { //
-        COL_ID, COL_NAME, COL_PHONE//
+        COL_ID, COL_NAME, COL_PHONE, COL_CONTACT_ID//
                 , COL_EMAIL, COL_PERSON_UUID //
                 , COL_PHONE_NORMALIZED, COL_PHONE_MIN_MATCH //
                 , COL_AUTHORIZE_TYPE, COL_SHOW_NOTIF, COL_PAIRING_TIME //

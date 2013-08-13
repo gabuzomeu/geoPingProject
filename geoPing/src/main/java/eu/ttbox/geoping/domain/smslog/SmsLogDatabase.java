@@ -66,9 +66,10 @@ public class SmsLogDatabase {
         public static final String SELECT_BY_REQUEST_ID = String.format("%s = ?", COL_REQUEST_ID );
 
         public static final String SELECT_BY_IS_NOT_READ =  String.format("%s = 0", COL_IS_READ );
+        public static final String SELECT_BY_ISNOTREAD_SIDE =  String.format("%s = 0 and %s = ?", COL_IS_READ, COL_SMS_SIDE );
 
         // Order
-        public static final String ORDER_BY_TIME_DESC =  String.format("%s DESC", COL_TIME );
+        public static final String ORDER_BY_TIME_DESC =  String.format("    %s DESC", COL_TIME );
 
     }
 

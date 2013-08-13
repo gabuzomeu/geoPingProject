@@ -40,6 +40,7 @@ import eu.ttbox.geoping.domain.PairingProvider;
 import eu.ttbox.geoping.domain.model.PairingAuthorizeTypeEnum;
 import eu.ttbox.geoping.domain.pairing.PairingDatabase.PairingColumns;
 import eu.ttbox.geoping.domain.pairing.PairingHelper;
+import eu.ttbox.geoping.domain.person.PersonDatabase;
 import eu.ttbox.geoping.ui.core.BindingHelper;
 import eu.ttbox.geoping.ui.core.validator.Form;
 import eu.ttbox.geoping.ui.core.validator.validate.ValidateTextView;
@@ -98,6 +99,7 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
     // Instance
     // private String entityId;
     private Uri entityUri;
+    private String contactId;
 
     // ===========================================================
     // Interface
@@ -329,7 +331,7 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         }
 
         // Do Save
-        Uri uri = doSavePairing(name, phone, authType);
+        Uri uri = doSavePairing(name, phone, authType, contactId);
         if (uri!=null) {
             getActivity().setResult(Activity.RESULT_OK);
             getActivity().finish();
@@ -385,24 +387,22 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         String[] selectionArgs = null;
         ContentResolver cr = getActivity().getContentResolver();
         Cursor c = cr.query(contactData, new String[] { //
-                ContactsContract.CommonDataKinds.Identity.DISPLAY_NAME, // TODO
-                                                                        // Check
-                                                                        // for
-                                                                        // V10
-                                                                        // compatibility
+                ContactsContract.Data.CONTACT_ID, //
+                ContactsContract.CommonDataKinds.Identity.DISPLAY_NAME, //
                         ContactsContract.CommonDataKinds.Phone.NUMBER, //
                         ContactsContract.CommonDataKinds.Phone.TYPE }, selection, selectionArgs, null);
         try {
             // Read value
             if (c != null && c.moveToFirst()) {
-                String name = c.getString(0);
-                String phone = c.getString(1);
-                int type = c.getInt(2);
+                String contactId = c.getString(0);
+                String name = c.getString(1);
+                String phone = c.getString(2);
+                int type = c.getInt(3);
                 // Check If exist in db
                 String checkExistId = checkExistEntityId(cr, phone);
                 // Save The select person
                 if (checkExistId == null) {
-                    Uri uri = doSavePairing(name, phone, null);
+                    Uri uri = doSavePairing(name, phone, null, contactId);
                 } else {
                     Log.i(TAG, "Found existing Entity [" + checkExistId + "] for Phone : " + phone);
                     Uri checkExistUri = Uri.withAppendedPath(PairingProvider.Constants.CONTENT_URI, checkExistId);
@@ -478,10 +478,10 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
     }
 
 
-    private Uri doSavePairing(String nameDirty, String phoneDirty, PairingAuthorizeTypeEnum authorizeType) {
+    private Uri doSavePairing(String nameDirty, String phoneDirty, PairingAuthorizeTypeEnum authorizeType, String contactId) {
         String phone = cleanPhone(phoneDirty);
         String name = BindingHelper.trimToNull(nameDirty);
-        setPairing(name, phone);
+        setPairing(name, phone, contactId);
         // Validate
         if (!formValidator.validate()) {
             return null;
@@ -490,9 +490,14 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         ContentValues values = new ContentValues();
         values.put(PairingColumns.COL_NAME, name);
         values.put(PairingColumns.COL_PHONE, phone);
+        if (contactId!=null) {
+            values.put(PairingColumns.COL_CONTACT_ID, contactId);
+        }
         if (authorizeType != null) {
             authorizeType.writeTo(values);
         }
+
+        Log.d(TAG, "Save Pairing with Contact Id : " + contactId);
         // Content
         Uri uri;
         ContentResolver cr = getActivity().getContentResolver();
@@ -516,10 +521,11 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         return uri;
     }
 
-    private void setPairing(String name, String phone) {
+    private void setPairing(String name, String phone, String contactId) {
         nameEditText.setText(name);
         phoneEditText.setText(phone);
-        photoCache.loadPhoto(getActivity(), photoImageView, null, phone);
+        this.contactId = contactId;
+        photoCache.loadPhoto(getActivity(), photoImageView, contactId, phone);
     }
 
     // ===========================================================
@@ -564,6 +570,7 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
                 // Data
                 PairingHelper helper = new PairingHelper().initWrapper(cursor);
                 // Data
+                contactId = helper.getContactId(cursor);
                 String pairingPhone = helper.getPairingPhone(cursor);
                 // Binding
                 phoneEditText.setText(pairingPhone);
@@ -595,13 +602,13 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
                     onPairingSelectListener.onPersonSelect(pairingUri, pairingPhone);
                 }
                 // Photo
-                photoCache.loadPhoto(getActivity(), photoImageView,  null, pairingPhone);
+                photoCache.loadPhoto(getActivity(), photoImageView,  contactId, pairingPhone);
             }
         }
 
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
-            setPairing(null, null);
+            setPairing(null, null, null);
         }
 
     };

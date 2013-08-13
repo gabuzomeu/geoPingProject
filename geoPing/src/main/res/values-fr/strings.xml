@@ -75,7 +75,7 @@
     <string name="map_mode">Type de Carte</string>
     <string name="menu_geoping">GeoPing</string>
 
-    <string name="menu_settings">Options</string>
+    <string name="menu_settings">Paramètre</string>
     <string name="menu_map">Carte</string>
     <string name="menu_quit">Quitter</string>
     <string name="menu_person">Personnes</string>
@@ -199,7 +199,7 @@
         <b> 2- </b> Installez l\'application GeoPing sur le deuxième téléphone (pour lequel vous souhaitez obtenir sa localisation) \n
         <b> 3- </b> Envoyez une demande d\'association pour autoriser seulement votre numéro de téléphone \n
         <b> 4- </b> Attendez l\'arrivée du SMS sur le deuxième téléphone pour accepter l\'association dans la barre de notification \n
-        <b> 5- </b> Optionnel : vous pouvez empécher toute nouvelle association dans le menu <i>Options</i> \n
+        <b> 5- </b> Optionnel : vous pouvez empécher toute nouvelle association dans le menu <i>Paramètre</i> \n
        \n Vous pouvez maintenant obtenir la position de ce deuxième téléphone \n 
     </string>
     <string name="pairing_help">

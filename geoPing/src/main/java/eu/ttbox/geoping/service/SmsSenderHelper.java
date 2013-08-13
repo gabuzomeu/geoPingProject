@@ -62,7 +62,7 @@ public class SmsSenderHelper {
             int msgSplitCount = msgsplit.size();
             // Log It
             ContentResolver cr = context.getContentResolver();
-            Uri logUri = logSmsMessage(cr, side, SmsLogTypeEnum.SEND_REQ, phone, action, params, msgSplitCount, encrypedMsg, null);
+            Uri logUri = logSmsMessage(cr, side, SmsLogTypeEnum.SEND_REQ, phone, action, params, msgSplitCount, encrypedMsg, false, null);
 
             // Shot Message Send
             if (msgSplitCount==1) {
@@ -128,19 +128,22 @@ public class SmsSenderHelper {
     public static Uri logSmsMessage(ContentResolver cr, SmsLogSideEnum side, SmsLogTypeEnum type
             , BundleEncoderAdapter geoMessage
             , int smsWeight, String encrypedMsg
-            , Uri parentUri) {
-        return logSmsMessage(cr, side, type, geoMessage.getPhone(), geoMessage.getAction(), geoMessage.getMap(), smsWeight, encrypedMsg, parentUri);
+            , boolean markAsUnread , Uri parentUri) {
+        return logSmsMessage(cr, side, type, geoMessage.getPhone(), geoMessage.getAction(), geoMessage.getMap(), smsWeight, encrypedMsg, markAsUnread, parentUri);
     }
 
     public static Uri logSmsMessage(ContentResolver cr, SmsLogSideEnum side, SmsLogTypeEnum type, String phone
             , MessageActionEnum action, Bundle params
             , int smsWeight, String encrypedMsg
-            , Uri parentUri  ) {
+            , boolean markAsUnread, Uri parentUri ) {
         ContentValues values = SmsLogHelper.getContentValues(side, type, phone, action, params, encrypedMsg);
         values.put(SmsLogColumns.COL_MSG_COUNT, smsWeight);
         if (parentUri!=null) {
             String logParentId = parentUri.getLastPathSegment();
             values.put(SmsLogColumns.COL_PARENT_ID, logParentId);
+        }
+        if (markAsUnread) {
+            values.put(SmsLogColumns.COL_IS_READ, Boolean.FALSE);
         }
         Uri logUri = cr.insert(SmsLogProvider.Constants.CONTENT_URI, values);
         return logUri;

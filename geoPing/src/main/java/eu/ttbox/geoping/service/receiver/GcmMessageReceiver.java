@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-
+@Deprecated
 public class GcmMessageReceiver  extends BroadcastReceiver {
 
     private static final String TAG = "GcmMessageReceiver";

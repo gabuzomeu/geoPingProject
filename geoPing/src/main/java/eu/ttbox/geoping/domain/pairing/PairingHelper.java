@@ -23,6 +23,7 @@ public class PairingHelper {
     public int emailIdx = -1;
     // Phone
     public int phoneIdx = -1;
+    public int contactIdIdx = -1;
     public int phoneNormalizedIdx = -1;
     public int authorizeTypeIdx = -1;
     public int showNotificationIdx = -1;
@@ -39,7 +40,16 @@ public class PairingHelper {
     public int encryptionRemoteTimeIdx= -1;
 	public int encryptionRemoteWayIdx= -1;
 	
-    
+    public PairingHelper() {
+        super();
+    }
+
+    public PairingHelper(Cursor cursor) {
+        this();
+        initWrapper(cursor);
+    }
+
+
     public PairingHelper initWrapper(Cursor cursor) {
         idIdx = cursor.getColumnIndex(PairingColumns.COL_ID);
         nameIdx = cursor.getColumnIndex(PairingColumns.COL_NAME);
@@ -47,6 +57,7 @@ public class PairingHelper {
         emailIdx = cursor.getColumnIndex(PairingColumns.COL_EMAIL);
         // Phone
         phoneIdx = cursor.getColumnIndex(PairingColumns.COL_PHONE);
+        contactIdIdx =  cursor.getColumnIndex(PairingColumns.COL_CONTACT_ID);
         phoneNormalizedIdx = cursor.getColumnIndex(PairingColumns.COL_PHONE_NORMALIZED);
         authorizeTypeIdx = cursor.getColumnIndex(PairingColumns.COL_AUTHORIZE_TYPE);
         showNotificationIdx = cursor.getColumnIndex(PairingColumns.COL_SHOW_NOTIF);
@@ -73,11 +84,12 @@ public class PairingHelper {
         }
         Pairing user = new Pairing();
         user.setId(idIdx > -1 ? cursor.getLong(idIdx) : AppConstants.UNSET_ID);
-        user.setName(nameIdx > -1 ? cursor.getString(nameIdx) : null);
+        user.setDisplayName(nameIdx > -1 ? cursor.getString(nameIdx) : null);
         user.setPersonUuid(personUuidIdx > -1 ? cursor.getString(personUuidIdx) : null);
         user.setEmail(emailIdx > -1 ? cursor.getString(emailIdx) : null);
         // Phone
         user.setPhone(phoneIdx > -1 ? cursor.getString(phoneIdx) : null);
+        user.setContactId(contactIdIdx > -1 ? cursor.getString(contactIdIdx) : null);
         user.setAuthorizeType(authorizeTypeIdx > -1 ? getPairingAuthorizeTypeEnum(cursor) : null);
         user.setShowNotification(showNotificationIdx > -1 ? cursor.getInt(showNotificationIdx) == 1 ? true : false : false);
         user.setPairingTime(pairingTimeIdx > -1 ? cursor.getLong(pairingTimeIdx) : AppConstants.UNSET_TIME);
@@ -162,6 +174,11 @@ public class PairingHelper {
         return cursor.getString(phoneIdx);
     }
 
+    public String getContactId(Cursor cursor) {
+        return cursor.getString(contactIdIdx);
+    }
+
+
     public String getDisplayName(Cursor cursor) {
         return cursor.getString(nameIdx);
     }
@@ -171,11 +188,12 @@ public class PairingHelper {
         if (entity.id > -1) {
             initialValues.put(PairingColumns.COL_ID, Long.valueOf(entity.id));
         }
-        initialValues.put(PairingColumns.COL_NAME, entity.name);
+        initialValues.put(PairingColumns.COL_NAME, entity.displayName);
         initialValues.put(PairingColumns.COL_PERSON_UUID, entity.personUuid);
         initialValues.put(PairingColumns.COL_EMAIL, entity.email);
         // Phone
         initialValues.put(PairingColumns.COL_PHONE, entity.phone);
+        initialValues.put(PairingColumns.COL_CONTACT_ID, entity.contactId);
         initialValues.put(PairingColumns.COL_SHOW_NOTIF, entity.showNotification);
         initialValues.put(PairingColumns.COL_PAIRING_TIME, entity.pairingTime);
         // secu
