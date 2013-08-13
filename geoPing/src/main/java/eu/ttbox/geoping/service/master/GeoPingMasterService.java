@@ -41,8 +41,6 @@ import eu.ttbox.geoping.service.receiver.LogReadHistoryService;
 public class GeoPingMasterService extends IntentService {
 
     private static final String TAG = "GeoPingMasterService";
-    private static final int SHOW_ON_NOTIFICATION_ID = AppConstants.PER_PERSON_ID_MULTIPLICATOR * R.id.show_notification_new_geoping_response;
-    public static final String ACTION_MASTER_GEOPING_PHONE_MARK_AS_READ = "eu.ttbox.geoping.ACTION_MASTER_GEOPING_PHONE_MARK_AS_READ";
     private static final int UI_MSG_TOAST = 0;
     private final IBinder binder = new LocalBinder();
     // config
@@ -138,23 +136,6 @@ public class GeoPingMasterService extends IntentService {
 //                    "HandleIntent", // Action
 //                    "SMS_PAIRING_RESPONSE", // Label
 //                    0l); // Value
-        } else if (ACTION_MASTER_GEOPING_PHONE_MARK_AS_READ.equals(action)) {
-            // Log Uri
-            Uri logUri = intent.getParcelableExtra(Intents.EXTRA_SMSLOG_URI);
-            if (logUri!=null) {
-                LogReadHistoryService.markAsReadLog(this, logUri, Boolean.TRUE, null);
-            }
-            // Show Notification
-            Intent serviceIntent =  intent.getParcelableExtra(Intents.EXTRA_INTENT);
-            Log.d(TAG, "### serviceIntent : " + serviceIntent );
-            if (serviceIntent!=null) {
-                TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-                stackBuilder.addParentStack(MainActivity.class);
-                stackBuilder.addNextIntent(new Intent( getApplicationContext(), MainActivity.class));
-                stackBuilder.addNextIntent(serviceIntent);
-                // Start activity
-                stackBuilder.startActivities();
-            }
         } else {
             MessageActionEnum actionEnum = MessageActionEnum.getByIntentName(action);
             if (actionEnum != null) {
@@ -418,12 +399,6 @@ public class GeoPingMasterService extends IntentService {
         return person;
     }
 
-    private Intent createMarkAsReadLogIntent(String phone) {
-        Intent intent = new Intent(this, GeoPingMasterService.class);
-        intent.setAction(ACTION_MASTER_GEOPING_PHONE_MARK_AS_READ);
-        intent.putExtra(Intents.EXTRA_SMS_PHONE, phone);
-        return intent;
-    }
 
     // ===========================================================
     // Notification

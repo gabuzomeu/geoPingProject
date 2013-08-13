@@ -24,6 +24,7 @@ public class LogReadHistoryService extends IntentService  {
 
     private static final String TAG = "LogReadHistoryService";
 
+    public static final String ACTION_MASTER_GEOPING_PHONE_MARK_AS_READ = "eu.ttbox.geoping.ACTION_MASTER_GEOPING_PHONE_MARK_AS_READ";
 
     // ===========================================================
     // Constructor
@@ -43,7 +44,7 @@ public class LogReadHistoryService extends IntentService  {
 
     public static PendingIntent createClearLogPendingIntent(Context context, Intent wantedInted) {
         Intent readAction = new Intent(context, LogReadHistoryService.class);
-        readAction.setAction(GeoPingMasterService.ACTION_MASTER_GEOPING_PHONE_MARK_AS_READ);
+        readAction.setAction( ACTION_MASTER_GEOPING_PHONE_MARK_AS_READ);
         if (wantedInted!=null) {
             readAction.putExtra(Intents.EXTRA_INTENT, wantedInted);
         }
