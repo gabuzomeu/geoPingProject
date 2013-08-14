@@ -71,6 +71,7 @@ public class Intents {
 	public static final String EXTRA_DATA_URI = "EXTRA_DATA_URI";
 
     public static final String EXTRA_SMSLOG_URI = "EXTRA_SMSLOG_URI";
+    public static final String EXTRA_SMSLOG_SIDE= "EXTRA_SMSLOG_SIDE";
     public static final String EXTRA_INTENT = "EXTRA_INTENT";
 
 //	public static final String EXTRA_INTERNAL_BOOL = "EXTRA_INTERNAL_BOOL";

@@ -23,7 +23,7 @@ public class SlidingMenuHelper {
        
         slidingMenu.setMode(SlidingMenu.LEFT);
         slidingMenu.setTouchModeAbove(touchModeAbove);
-        slidingMenu.setShadowWidthRes(R.dimen.shadow_width);
+        slidingMenu.setShadowWidthRes(R.dimen.slidingmenu_shadow_width);
         slidingMenu.setShadowDrawable(R.drawable.shadow);
         slidingMenu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
         slidingMenu.setFadeDegree(0.35f);

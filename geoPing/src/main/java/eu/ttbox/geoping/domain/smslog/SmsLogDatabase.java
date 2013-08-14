@@ -15,13 +15,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import eu.ttbox.geoping.core.PhoneNumberUtils;
+import eu.ttbox.geoping.domain.core.vo.DbSelection;
 
 
 public class SmsLogDatabase {
  
     private static final String TAG = "SmsLogDatabase";
 
-    public static final String TABLE_SMSLOG_FTS = "personFTS";
+    public static final String TABLE_SMSLOG = "personFTS";
 
     public static final String SMSLOG_SORT_DEFAULT = String.format("%s DESC", SmsLogColumns.COL_TIME );
 
@@ -50,7 +51,7 @@ public class SmsLogDatabase {
 
         // Geofence
         public static final String COL_REQUEST_ID = "REQUEST_ID";
-        public static final String COL_IS_READ = "IS_READ";
+        public static final String COL_TO_READ = "TO_READ";
 
         // All Cols
         public static final String[] ALL_COLS = new String[] { //
@@ -59,14 +60,14 @@ public class SmsLogDatabase {
             , COL_MSG_COUNT, COL_MSG_ACK_SEND_MSG_COUNT, COL_MSG_ACK_DELIVERY_MSG_COUNT //Acknowledge count
             , COL_MSG_ACK_SEND_TIME_MS, COL_MSG_ACK_DELIVERY_TIME_MS //Acknowledge Time
             , COL_MSG_ACK_SEND_RESULT_MSG, COL_MSG_ACK_DELIVERY_RESULT_MSG //Acknowledge result Msg
-            , COL_IS_READ, COL_REQUEST_ID // Notif, Geofence
+            , COL_TO_READ, COL_REQUEST_ID // Notif, Geofence
         };
         // Where Clause
         public static final String SELECT_BY_ENTITY_ID = String.format("%s = ?", COL_ID);
         public static final String SELECT_BY_REQUEST_ID = String.format("%s = ?", COL_REQUEST_ID );
 
-        public static final String SELECT_BY_IS_NOT_READ =  String.format("%s = 0", COL_IS_READ );
-        public static final String SELECT_BY_ISNOTREAD_SIDE =  String.format("%s = 0 and %s = ?", COL_IS_READ, COL_SMS_SIDE );
+        public static final String SELECT_BY_TO_READ =  String.format("%s = 1", COL_TO_READ);
+        public static final String SELECT_BY_TOREAD_SIDE =  String.format("%s = 1 and %s = ?", COL_TO_READ, COL_SMS_SIDE );
 
         // Order
         public static final String ORDER_BY_TIME_DESC =  String.format("    %s DESC", COL_TIME );
@@ -122,7 +123,7 @@ public class SmsLogDatabase {
 
     public Cursor queryEntities(String[] projection, String selection, String[] selectionArgs, String order) {
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-        builder.setTables(TABLE_SMSLOG_FTS);
+        builder.setTables(TABLE_SMSLOG);
         builder.setProjectionMap(mPersonColumnMap);
         Cursor cursor = builder.query(mDatabaseOpenHelper.getReadableDatabase(), projection, selection, selectionArgs, null, null, order);
         return cursor;
@@ -131,6 +132,12 @@ public class SmsLogDatabase {
 
     public Cursor searchForPhoneNumber(String number, String[] _projection, String pSelection, String[] pSelectionArgs, String sortOrder) {
         String[] projection = _projection == null ? SmsLogColumns.ALL_COLS : _projection;
+        // Normalise For search
+        DbSelection mergeSelection = mergePhoneNumberWithCriteria(number, pSelection, pSelectionArgs);
+        return queryEntities(projection, mergeSelection.selection, mergeSelection.selectionArgs, sortOrder);
+    }
+
+    public  DbSelection mergePhoneNumberWithCriteria(String number, String pSelection, String[] pSelectionArgs) {
         // Normalise For search
         String normalizedNumber = PhoneNumberUtils.normalizeNumber(number);
         String minMatch = PhoneNumberUtils.toCallerIDMinMatch(normalizedNumber);
@@ -153,7 +160,7 @@ public class SmsLogDatabase {
             Log.d(TAG, "selection : " + selection);
             Log.d(TAG, "selectionArgs :  " +   Arrays.toString(selectionArgs));
         }
-        return queryEntities(projection, selection, selectionArgs, sortOrder);
+        return new DbSelection(selection, selectionArgs);
     }
 
     private void fillNormalizedNumber(ContentValues values) {
@@ -188,7 +195,7 @@ public class SmsLogDatabase {
             fillNormalizedNumber(values);
             db.beginTransaction();
             try {
-                result = db.insertOrThrow(TABLE_SMSLOG_FTS, null, values);
+                result = db.insertOrThrow(TABLE_SMSLOG, null, values);
                 // commit
                 db.setTransactionSuccessful();
             } finally {
@@ -212,7 +219,7 @@ public class SmsLogDatabase {
         try {
             db.beginTransaction();
             try {
-                result = db.delete(TABLE_SMSLOG_FTS, selection, selectionArgs);
+                result = db.delete(TABLE_SMSLOG, selection, selectionArgs);
                 db.setTransactionSuccessful();
             } finally {
                 db.endTransaction();
@@ -230,7 +237,7 @@ public class SmsLogDatabase {
             fillNormalizedNumber(values);
             db.beginTransaction();
             try {
-                result = db.update(TABLE_SMSLOG_FTS, values, selection, selectionArgs);
+                result = db.update(TABLE_SMSLOG, values, selection, selectionArgs);
                 db.setTransactionSuccessful();
             } finally {
                 db.endTransaction();

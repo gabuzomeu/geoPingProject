@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import eu.ttbox.geoping.GeoPingApplication;
+import eu.ttbox.geoping.domain.core.vo.DbSelection;
 import eu.ttbox.geoping.domain.smslog.SmsLogDatabase;
 import eu.ttbox.geoping.domain.smslog.SmsLogDatabase.SmsLogColumns;
 
@@ -23,22 +24,26 @@ public class SmsLogProvider extends ContentProvider {
     public static class Constants {
         public static String AUTHORITY = "eu.ttbox.geoping.SmsLogProvider";
         public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/smslog");
+
         public static final Uri getContentUri(String entityId) {
-            return Uri.withAppendedPath(CONTENT_URI , entityId);
+            return Uri.withAppendedPath(CONTENT_URI, entityId);
         }
 
         // Phone Filter
         public static final Uri CONTENT_URI_PHONE_FILTER = Uri.withAppendedPath(CONTENT_URI, "phone_lookup");
+
         public static final Uri getContentUriPhoneFilter(String phoneNumber) {
             return Uri.withAppendedPath(CONTENT_URI_PHONE_FILTER, Uri.encode(phoneNumber));
         }
+
         // Geofence Request
         public static final Uri CONTENT_URI_REQUEST_ID = Uri.withAppendedPath(CONTENT_URI, "requestId");
+
         public static final Uri getContentUriRequestId(String geofenceRequestId) {
             return Uri.withAppendedPath(CONTENT_URI_REQUEST_ID, geofenceRequestId);
         }
 
-     }
+    }
 
     private SmsLogDatabase smslogDatabase;
 
@@ -59,7 +64,7 @@ public class SmsLogProvider extends ContentProvider {
         // to get definitions...
         matcher.addURI(Constants.AUTHORITY, "smslog", SMSLOGS);
         matcher.addURI(Constants.AUTHORITY, "smslog/#", SMSLOG_ID);
-        
+
         matcher.addURI(Constants.AUTHORITY, "smslog/phone_lookup/*", PHONE_FILTER);
         matcher.addURI(Constants.AUTHORITY, "smslog/requestId/*", REQUEST_ID_FILTER);
         return matcher;
@@ -84,25 +89,25 @@ public class SmsLogProvider extends ContentProvider {
         // Use the UriMatcher to see what kind of query we have and format the
         // db query accordingly
         switch (sURIMatcher.match(uri)) {
-        case SMSLOGS:
-            return search(projection, selection, selectionArgs, sortOrder);
-        case SMSLOG_ID:
-            return getSmsLog(uri);
-        case PHONE_FILTER:{
-            String phone = uri.getLastPathSegment();
-            String phoneDecoder = Uri.decode(phone);
-            return smslogDatabase.searchForPhoneNumber(phoneDecoder, projection, selection,  selectionArgs, sortOrder);
-       }
-       case REQUEST_ID_FILTER:{
-           if (selection!=null) {
-               throw  new IllegalArgumentException("Not implemented Uri: " + uri + " with selection : ["+selection+ "]");
-           }
-           String requestId = uri.getLastPathSegment();
-           String[] args = new String[] {requestId};
-           return search(projection, SmsLogColumns.SELECT_BY_REQUEST_ID, args, sortOrder);
-        }
-        default:
-            throw new IllegalArgumentException("Unknown Uri: " + uri);
+            case SMSLOGS:
+                return search(projection, selection, selectionArgs, sortOrder);
+            case SMSLOG_ID:
+                return getSmsLog(uri);
+            case PHONE_FILTER: {
+                String phone = uri.getLastPathSegment();
+                String phoneDecoder = Uri.decode(phone);
+                return smslogDatabase.searchForPhoneNumber(phoneDecoder, projection, selection, selectionArgs, sortOrder);
+            }
+            case REQUEST_ID_FILTER: {
+                if (selection != null) {
+                    throw new IllegalArgumentException("Not implemented Uri: " + uri + " with selection : [" + selection + "]");
+                }
+                String requestId = uri.getLastPathSegment();
+                String[] args = new String[]{requestId};
+                return search(projection, SmsLogColumns.SELECT_BY_REQUEST_ID, args, sortOrder);
+            }
+            default:
+                throw new IllegalArgumentException("Unknown Uri: " + uri);
         }
     }
 
@@ -127,14 +132,14 @@ public class SmsLogProvider extends ContentProvider {
     @Override
     public String getType(Uri uri) {
         switch (sURIMatcher.match(uri)) {
-        case SMSLOGS:
-            return SMSLOGS_LIST_MIME_TYPE;
-        case REQUEST_ID_FILTER:
-            return SMSLOGS_LIST_MIME_TYPE;
-        case SMSLOG_ID:
-            return SMSLOG_MIME_TYPE;
-        default:
-            throw new IllegalArgumentException("Unknown URL " + uri);
+            case SMSLOGS:
+                return SMSLOGS_LIST_MIME_TYPE;
+            case REQUEST_ID_FILTER:
+                return SMSLOGS_LIST_MIME_TYPE;
+            case SMSLOG_ID:
+                return SMSLOG_MIME_TYPE;
+            default:
+                throw new IllegalArgumentException("Unknown URL " + uri);
         }
     }
 
@@ -143,16 +148,16 @@ public class SmsLogProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         switch (sURIMatcher.match(uri)) {
-        case SMSLOGS:
-            long smslogId = smslogDatabase.insertEntity(values);
-            Uri smslogUri = null;
-            if (smslogId > -1) {
-                smslogUri = Uri.withAppendedPath(Constants.CONTENT_URI, String.valueOf( smslogId));
-                getContext().getContentResolver().notifyChange(uri, null);
-            }
-            return smslogUri;
-        default:
-            throw new IllegalArgumentException("Unknown Uri: " + uri);
+            case SMSLOGS:
+                long smslogId = smslogDatabase.insertEntity(values);
+                Uri smslogUri = null;
+                if (smslogId > -1) {
+                    smslogUri = Uri.withAppendedPath(Constants.CONTENT_URI, String.valueOf(smslogId));
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
+                return smslogUri;
+            default:
+                throw new IllegalArgumentException("Unknown Uri: " + uri);
         }
     }
 
@@ -160,28 +165,34 @@ public class SmsLogProvider extends ContentProvider {
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         int count = 0;
         switch (sURIMatcher.match(uri)) {
-        case SMSLOG_ID: {
-            String entityId = uri.getLastPathSegment();
-            String[] args = new String[] { entityId };
-            count = smslogDatabase.deleteEntity(SmsLogColumns.SELECT_BY_ENTITY_ID, args);
-           }
+            case SMSLOG_ID: {
+                String entityId = uri.getLastPathSegment();
+                String[] args = new String[]{entityId};
+                count = smslogDatabase.deleteEntity(SmsLogColumns.SELECT_BY_ENTITY_ID, args);
+            }
             break;
-         case REQUEST_ID_FILTER: {
+            case REQUEST_ID_FILTER: {
                 String requestId = uri.getLastPathSegment();
-                String[] args = new String[] { requestId };
-                 if (selection!=null) {
-                    throw  new IllegalArgumentException("Not implemented Uri: " + uri + " with selection : ["+selection+ "]");
-                 }
-                count = smslogDatabase.deleteEntity(SmsLogColumns.SELECT_BY_REQUEST_ID, args);
+                String[] args = new String[]{requestId};
+                if (selection != null) {
+                    throw new IllegalArgumentException("Not implemented Uri: " + uri + " with selection : [" + selection + "]");
                 }
-                break;
-        case SMSLOGS:
-            count = smslogDatabase.deleteEntity(selection, selectionArgs);
+                count = smslogDatabase.deleteEntity(SmsLogColumns.SELECT_BY_REQUEST_ID, args);
+            }
             break;
-        default:
-            throw new IllegalArgumentException("Unknown Uri: " + uri);
+            case SMSLOGS:
+                count = smslogDatabase.deleteEntity(selection, selectionArgs);
+                break;
+            case PHONE_FILTER: {
+                String phone = uri.getLastPathSegment();
+                String phoneDecoder = Uri.decode(phone);
+                DbSelection mergeSelect = smslogDatabase.mergePhoneNumberWithCriteria(phoneDecoder, selection, selectionArgs);
+                count = smslogDatabase.deleteEntity( mergeSelect.selection, mergeSelect.selectionArgs);
+            }
+            default:
+                throw new IllegalArgumentException("Unknown Uri: " + uri);
         }
-        if (count>0) {
+        if (count > 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
         return count;
@@ -191,16 +202,23 @@ public class SmsLogProvider extends ContentProvider {
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         int count = 0;
         switch (sURIMatcher.match(uri)) {
-        case SMSLOG_ID:
-            String entityId = uri.getLastPathSegment();
-            String[] args = new String[] { entityId };
-            count = smslogDatabase.updateEntity(values, SmsLogColumns.SELECT_BY_ENTITY_ID, args);
+            case SMSLOG_ID:
+                String entityId = uri.getLastPathSegment();
+                String[] args = new String[]{entityId};
+                count = smslogDatabase.updateEntity(values, SmsLogColumns.SELECT_BY_ENTITY_ID, args);
+                break;
+            case SMSLOGS:
+                count = smslogDatabase.updateEntity(values, selection, selectionArgs);
+                break;
+            case PHONE_FILTER: {
+                String phone = uri.getLastPathSegment();
+                String phoneDecoder = Uri.decode(phone);
+                DbSelection mergeSelect = smslogDatabase.mergePhoneNumberWithCriteria(phoneDecoder, selection, selectionArgs);
+                count = smslogDatabase.updateEntity(values, mergeSelect.selection, mergeSelect.selectionArgs);
+            }
             break;
-        case SMSLOGS:
-            count = smslogDatabase.updateEntity(values, selection, selectionArgs);
-            break;
-        default:
-            throw new IllegalArgumentException("Unknown Uri: " + uri);
+            default:
+                throw new IllegalArgumentException("Unknown Uri: " + uri);
         }
         if (count > 0) {
             getContext().getContentResolver().notifyChange(uri, null);

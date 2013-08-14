@@ -25,7 +25,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
-import eu.ttbox.geoping.GeoPingApplication;
 import eu.ttbox.geoping.MainActivity;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.AppConstants;
@@ -41,11 +40,10 @@ import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
 import eu.ttbox.geoping.service.SmsSenderHelper;
 import eu.ttbox.geoping.service.core.ContactHelper;
-import eu.ttbox.geoping.service.core.ContactVo;
 import eu.ttbox.geoping.service.core.NotifPersonVo;
 import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
+import eu.ttbox.geoping.service.receiver.LogReadHistoryService;
 import eu.ttbox.geoping.service.slave.receiver.AuthorizePhoneTypeEnum;
-import eu.ttbox.geoping.ui.person.PhotoThumbmailCache;
 
 // http://dhimitraq.wordpress.com/tag/android-intentservice/
 // https://github.com/commonsguy/cwac-wakeful
@@ -136,7 +134,8 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
                         // GeoPing Request
                         String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
                         Bundle params = intent.getBundleExtra(Intents.EXTRA_SMS_PARAMS);
-                        manageGeopingRequest(phone, params);
+                        Uri logUri = intent.getParcelableExtra(Intents.EXTRA_SMSLOG_URI);
+                        manageGeopingRequest(phone, params, logUri);
                     }
                     break;
                     case ACTION_GEO_PAIRING: {
@@ -187,18 +186,23 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
     // ===========================================================
     // GeoPing Request
     // ===========================================================
-    private void manageGeopingRequest(String phone, Bundle config) {
+    private void manageGeopingRequest(String phone, Bundle config, Uri logUri ) {
         // Request
         // registerGeoPingRequest(phone, params);
         Pairing pairing = getPairingByPhone(phone);
         PairingAuthorizeTypeEnum authorizeType = pairing.authorizeType;
         boolean showNotification = pairing.showNotification;
+        // Mark to Read
+        if (showNotification && logUri!=null ) {
+            LogReadHistoryService.markAsToReadLog(this, logUri, Boolean.TRUE);
+        }
+        // Manage Authorize
         switch (authorizeType) {
             case AUTHORIZE_NEVER:
                 Log.i(TAG, "Ignore Geoping (Never Authorize) request from phone " + phone);
                 // Show Blocking Notification
                 if (showNotification) {
-                    showNotificationGeoPing(pairing, config, false);
+                    showGeopingRequestNotification(pairing, config, false);
                 }
                 break;
             case AUTHORIZE_ALWAYS:
@@ -206,7 +210,7 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
                 GeoPingSlaveLocationService.runFindLocationAndSendInService(this , MessageActionEnum.LOC, new String[] { phone }, null, config);
                 // Display Notification GeoPing
                 if (showNotification) {
-                    showNotificationGeoPing(pairing, config, true);
+                    showGeopingRequestNotification(pairing, config, true);
                 }
                 break;
             case AUTHORIZE_REQUEST:
@@ -395,50 +399,9 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
     // Notification
     // ===========================================================
 
-    private void showNotificationGeoPing(Pairing pairing, Bundle params, boolean authorizeIt) {
-        String phone = pairing.phone;
-        // Contact Name
-        ContactVo contact = ContactHelper.searchContactForPhone(this, phone);
-        String contactDisplayName = phone;
-        Bitmap photo = null;
-        if (contact != null) {
-            if (contact.displayName != null && contact.displayName.length() > 0) {
-                contactDisplayName = contact.displayName;
-                if (TextUtils.isEmpty(pairing.displayName)) {
-                    pairing.displayName = contactDisplayName;
-                }
-            }
-            PhotoThumbmailCache photoCache = ((GeoPingApplication) getApplication()).getPhotoThumbmailCache();
-            photo = ContactHelper.openPhotoBitmap(this, photoCache, String.valueOf(contact.id), phone);
-        }
-        // Create Notifiation
-        Builder notificationBuilder = new NotificationCompat.Builder(this) //
-                .setDefaults(Notification.DEFAULT_ALL) //
-                .setSmallIcon(R.drawable.ic_stat_notif_icon) //
-                .setWhen(System.currentTimeMillis()) //
-                .setAutoCancel(true) //
-
-                .setContentText(contactDisplayName); //
-        if (authorizeIt) {
-            notificationBuilder.setContentTitle(getString(R.string.notif_geoping_request)); //
-        } else {
-            notificationBuilder.setContentTitle(getString(R.string.notif_geoping_request_blocked)); //
-        }
-        if (photo != null) {
-            notificationBuilder.setLargeIcon(photo);
-        } else {
-            Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_stat_notif_icon);
-            notificationBuilder.setLargeIcon(icon);
-        }
-        Notification notification = notificationBuilder.build();
-        notification.contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(), 0);
-        // notification.number += 1;
-        // Show
-        // int notifId = SHOW_GEOPING_REQUEST_NOTIFICATION_ID +
-        // phone.hashCode();
-        // Log.d(TAG, String.format("GeoPing Notification Id : %s for phone %s",
-        // notifId, phone));
-        mNotificationManager.notify(SHOW_GEOPING_REQUEST_NOTIFICATION_ID, notification);
+    private void showGeopingRequestNotification(Pairing pairing, Bundle params, boolean authorizeIt) {
+        NotificationSlaveHelper notif = new NotificationSlaveHelper(this);
+        notif.showGeopingRequestNotification(pairing,   params,   authorizeIt);
     }
 
     private void showNotificationNewPingRequestConfirm(Pairing pairing, Bundle params, GeopingNotifSlaveTypeEnum onlyPairing) {

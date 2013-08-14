@@ -11,8 +11,9 @@ import eu.ttbox.geoping.domain.smslog.SmsLogDatabase.SmsLogColumns;
  * <ul>
  * <li>Db version 7  : Geoping 0.1.5 (37)</li>
  * <li>Db version 8  : Geoping 0.1.6 (39)</li>
- * <li>Db version 9  : Geoping 0.2.0 (??) : Add COL_IS_READ & COL_REQUEST_ID</li>
+ * <li>Db version 9  : Geoping 0.2.0 (??) : Add COL_TO_READ & COL_REQUEST_ID</li>
  * <li>Db version 10 : Geoping 0.2.2 (??)</li>
+ * <li>Db version 11 : Geoping 0.2.3 (??) : Rename COL_TO_READ to COL_TO_READ and ad INDEX</li>
  * </ul>
  *  
  *
@@ -22,7 +23,7 @@ public class SmsLogOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = "SmsLogOpenHelper";
 
     public static final String DATABASE_NAME = "smsLog.db";
-    public static final int DATABASE_VERSION = 10;
+    public static final int DATABASE_VERSION = 11;
 
     // ===========================================================
     // Table
@@ -34,7 +35,7 @@ public class SmsLogOpenHelper extends SQLiteOpenHelper {
      * identifier, so when making requests, we will use "_id" as an alias for
      * "rowid"
      */
-    private static final String FTS_TABLE_CREATE = "CREATE TABLE " + SmsLogDatabase.TABLE_SMSLOG_FTS   // 
+    private static final String FTS_TABLE_CREATE = "CREATE TABLE " + SmsLogDatabase.TABLE_SMSLOG   //
             + "( " + SmsLogColumns.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT"//
             + ", " + SmsLogColumns.COL_TIME + " INTEGER NOT NULL"//
             + ", " + SmsLogColumns.COL_SMSLOG_TYPE + " INTEGER"  //@see SmsLogTypeEnum
@@ -54,10 +55,27 @@ public class SmsLogOpenHelper extends SQLiteOpenHelper {
             + ", " + SmsLogColumns.COL_MSG_ACK_SEND_RESULT_MSG + " TEXT"//
             + ", " + SmsLogColumns.COL_MSG_ACK_DELIVERY_RESULT_MSG + " TEXT"//
             // Notif
-            + ", " + SmsLogColumns.COL_IS_READ + " INTEGER"//
+            + ", " + SmsLogColumns.COL_TO_READ + " INTEGER"//
             // Geofence
             + ", " + SmsLogColumns.COL_REQUEST_ID  + " TEXT"//
             + ");";
+
+    // ===========================================================
+    // Index
+    // ===========================================================
+    // Time
+
+
+    // Phone Min match
+    private static final String INDEX_PHONE_MINMATCH_AK = "IDX_SMSLOG_PHONEMINMATCH_AK";
+    private static final String CREATE_INDEX_PHONE_MINMATCH_AK = "CREATE INDEX IF NOT EXISTS " + INDEX_PHONE_MINMATCH_AK + " on " + SmsLogDatabase.TABLE_SMSLOG + "(" //
+            +  SmsLogColumns.COL_PHONE_MIN_MATCH + ");";
+
+    // To Read
+    private static final String INDEX_TOREAD_AK = "IDX_SMSLOG_TOREAD_AK";
+    private static final String CREATE_INDEX_TOREAD_AK = "CREATE INDEX IF NOT EXISTS " + INDEX_TOREAD_AK + " on " + SmsLogDatabase.TABLE_SMSLOG + "(" //
+            +  SmsLogColumns.COL_TO_READ + "," + SmsLogColumns.COL_SMS_SIDE  + ");";
+
 
     // ===========================================================
     // Constructors
@@ -73,12 +91,20 @@ public class SmsLogOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         mDatabase = db;
         mDatabase.execSQL(FTS_TABLE_CREATE);
+        // Index
+        db.execSQL(CREATE_INDEX_PHONE_MINMATCH_AK);
+        db.execSQL(CREATE_INDEX_TOREAD_AK);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion + ", which will destroy all old data");
-        db.execSQL("DROP TABLE IF EXISTS " + SmsLogDatabase.TABLE_SMSLOG_FTS);
+        // Drop Index
+        db.execSQL("DROP INDEX IF EXISTS " + INDEX_PHONE_MINMATCH_AK);
+        db.execSQL("DROP INDEX IF EXISTS " + INDEX_TOREAD_AK);
+        // Drop Table
+        db.execSQL("DROP TABLE IF EXISTS " + SmsLogDatabase.TABLE_SMSLOG);
+        // Create
         onCreate(db);
     }
 

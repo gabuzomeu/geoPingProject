@@ -135,15 +135,15 @@ public class SmsSenderHelper {
     public static Uri logSmsMessage(ContentResolver cr, SmsLogSideEnum side, SmsLogTypeEnum type, String phone
             , MessageActionEnum action, Bundle params
             , int smsWeight, String encrypedMsg
-            , boolean markAsUnread, Uri parentUri ) {
+            , boolean markAsToRead, Uri parentUri ) {
         ContentValues values = SmsLogHelper.getContentValues(side, type, phone, action, params, encrypedMsg);
         values.put(SmsLogColumns.COL_MSG_COUNT, smsWeight);
         if (parentUri!=null) {
             String logParentId = parentUri.getLastPathSegment();
             values.put(SmsLogColumns.COL_PARENT_ID, logParentId);
         }
-        if (markAsUnread) {
-            values.put(SmsLogColumns.COL_IS_READ, Boolean.FALSE);
+        if (markAsToRead) {
+            values.put(SmsLogColumns.COL_TO_READ, Boolean.TRUE);
         }
         Uri logUri = cr.insert(SmsLogProvider.Constants.CONTENT_URI, values);
         return logUri;

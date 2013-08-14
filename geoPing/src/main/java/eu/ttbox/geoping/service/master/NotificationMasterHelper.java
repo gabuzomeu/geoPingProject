@@ -34,15 +34,19 @@ import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
 import eu.ttbox.geoping.service.encoder.MessageParamEnumLabelHelper;
 import eu.ttbox.geoping.service.receiver.LogReadHistoryService;
 
-public class NotificationHelperV2 {
+public class NotificationMasterHelper {
 
-    private static final String TAG = "NotificationHelperV2";
+    private static final String TAG = "NotificationMasterHelper";
 
+    // Constant
     private static final int SHOW_ON_NOTIFICATION_ID = AppConstants.PER_PERSON_ID_MULTIPLICATOR * R.id.show_notification_new_geoping_response;
 
-    private Context context;
+    // Config
+    private final SmsLogSideEnum side = SmsLogSideEnum.MASTER;
+    private  boolean showNotificationByPerson = true;
 
     // Service
+    private Context context;
     private NotificationManager mNotificationManager;
 
     // ===========================================================
@@ -50,8 +54,9 @@ public class NotificationHelperV2 {
     // ===========================================================
 
 
-    public NotificationHelperV2(Context context) {
+    public NotificationMasterHelper(Context context) {
         this.context = context;
+        this.mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
 
@@ -92,7 +97,8 @@ public class NotificationHelperV2 {
         // Create an explicit content Intent that starts the main Activity
         Intent mapAction = Intents.showOnMap(context.getApplicationContext(), geoTrackData, values);
         // Intent
-        PendingIntent pendingIntent = LogReadHistoryService.createClearLogPendingIntent(context, mapAction);
+
+        PendingIntent pendingIntent = LogReadHistoryService.createClearLogPendingIntent(context, side, phone, mapAction);
 
         // Get a notification builder that's compatible with platform versions >= 4
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
@@ -114,7 +120,7 @@ public class NotificationHelperV2 {
                 .setWhen(System.currentTimeMillis()) //
                 .setAutoCancel(true) //
                 .setContentIntent(pendingIntent)//
-                .setDeleteIntent(LogReadHistoryService.createClearLogPendingIntent(context, null))
+                .setDeleteIntent(LogReadHistoryService.createClearLogPendingIntent(context, side, phone, null))
                 .setContentTitle(contentTitle) //
                         // TODO .setContentTitle(getString(R.string.notif_geoping)) //
                 .setContentText(person.contactDisplayName); //
@@ -125,8 +131,10 @@ public class NotificationHelperV2 {
             builder.setLargeIcon(icon);
         }
 
-        int msgUnreadCount =  LogReadHistoryService.getReadLogHistory(context, phone, SmsLogSideEnum.MASTER);
+        int msgUnreadCount =  LogReadHistoryService.getReadLogHistory(context, phone, side);
+        if (msgUnreadCount > 1) {
          builder.setNumber(msgUnreadCount);
+        }
         // Details
         String coordString = getLatLngAsString(geoTrack);
         if (coordString != null) {
@@ -147,11 +155,20 @@ public class NotificationHelperV2 {
         }
 
         // Show
-        int notifId = SHOW_ON_NOTIFICATION_ID + phone.hashCode();
+        int notifId = getNotificationId(phone);
         Log.d(TAG, String.format("GeoPing Notification Id : %s for phone %s", notifId, phone));
-        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
         Notification notification = builder.build();
         mNotificationManager.notify(notifId, notification);
+    }
+
+
+    private int getNotificationId(String  phone) {
+        int notifId = SHOW_ON_NOTIFICATION_ID;
+        if (showNotificationByPerson) {
+            notifId += phone.hashCode();
+        }
+        return notifId;
     }
 
     // ===========================================================
