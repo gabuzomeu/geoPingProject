@@ -174,6 +174,7 @@ public class PersonRemoteControlFragment extends Fragment {
         String entityId = entityUri.getLastPathSegment();
         Intent intent = Intents.commandOpenApplication(getActivity(), entityPhoneNumber, entityId);
         getActivity().startService(intent);
+
     }
 
     public void onPairingClick(View v) {

@@ -109,6 +109,20 @@ public class AlarmPlayerService extends Service implements
 //        mDummyAlbumArt = BitmapFactory.decodeResource(getResources(), R.drawable.dummy_album_art);
 
 //        mMediaButtonReceiverComponent = new ComponentName(this, MusicIntentReceiver.class);
+
+        onMusicRetrieverPrepared();
+    }
+
+    public void onMusicRetrieverPrepared() {
+        // Done retrieving!
+        mState = State.Stopped;
+
+        // If the flag indicates we should start playing after retrieving, let's do that now.
+        if (mStartPlayingAfterRetrieve) {
+            tryToGetAudioFocus();
+            playNextSong(mWhatToPlayAfterRetrieve == null ?
+                    null : mWhatToPlayAfterRetrieve.toString());
+        }
     }
 
     void createMediaPlayerIfNeeded() {
@@ -162,6 +176,7 @@ public class AlarmPlayerService extends Service implements
 
     void processPlayRequest() {
         Log.d(TAG, "processPlayRequest: State " +mState);
+
         if (mState == State.Retrieving) {
             // If we are still retrieving media, just set the flag to start playing when we're
             // ready
@@ -206,6 +221,12 @@ public class AlarmPlayerService extends Service implements
             createMediaPlayerIfNeeded();
             mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mPlayer.setDataSource(getApplicationContext(), playingItem );
+
+            mSongTitle = "Alarm";
+
+            mState = State.Preparing;
+            setUpAsForeground(mSongTitle + " (loading)");
+
 
             mPlayer.prepareAsync();
 

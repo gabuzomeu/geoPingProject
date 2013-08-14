@@ -30,7 +30,7 @@ public class KmlRenderServlet extends HttpServlet {
 
     private static final Logger log = Logger.getLogger(KmlRenderServlet.class.getName());
 
-    private static final String KEY_MESSAGE = "q";
+    private static final String KEY_MESSAGE = "g";
 
     private static final String CONTENT_TYPE_KML = "application/vnd.google-earth.kml+xml";
     private static final String CONTENT_TYPE_KMZ = "application/vnd.google-earth.kmz";
@@ -38,7 +38,7 @@ public class KmlRenderServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String message = req.getParameter(KEY_MESSAGE);
+        String message = "geoPing?" + req.getParameter(KEY_MESSAGE);
         MapEncoderAdpater msg = convertMessageAsMap(message);
 
         Kml kml = convertAsKml(msg);
@@ -56,7 +56,7 @@ public class KmlRenderServlet extends HttpServlet {
         String phone = null;
         TextEncryptor textEncryptor = null;
         MapEncoderAdpater dest = new MapEncoderAdpater();
-        SmsEncoderHelper.decodeSmsMessage(dest, message, phone,  textEncryptor);
+        SmsEncoderHelper.decodeSmsMessage(dest, phone,  message, textEncryptor);
         return dest ;
     }
 
@@ -80,10 +80,10 @@ public class KmlRenderServlet extends HttpServlet {
 
          // Create <Placemark> and set values.
         Placemark placemark = KmlFactory.createPlacemark() //
-         .withName("Java User Group Hessen - JUGH!") //
+         .withName("GeoPing - Localisation!") //
          .withVisibility(true) //
          .withOpen(true) //
-         .withDescription("die Java User Group Hessen")
+         .withDescription("The current position")
          .withGeometry(point);
 
 
