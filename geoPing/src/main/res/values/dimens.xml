@@ -16,6 +16,8 @@
 
 <resources>
 
+
+    <dimen name="slidingmenu_width">300dp</dimen>
     <dimen name="slidingmenu_shadow_width">15dp</dimen>
     <dimen name="slidingmenu_offset">60dp</dimen>
     <dimen name="list_padding">10dp</dimen>

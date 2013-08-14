@@ -38,6 +38,7 @@ import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
 import eu.ttbox.geoping.service.SmsSenderHelper;
 import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
+import eu.ttbox.geoping.service.receiver.player.AlarmPlayerService;
 
 
 public class PersonRemoteControlFragment extends Fragment {
@@ -217,9 +218,12 @@ public class PersonRemoteControlFragment extends Fragment {
 
 
     public void onTestPlaySoundClick(View v) {
-         Uri alert =  Settings.System.DEFAULT_ALARM_ALERT_URI;
-       playSound(getActivity(), alert);
-
+      //   Uri alert =  Settings.System.DEFAULT_ALARM_ALERT_URI;
+       //playSound(getActivity(), alert);
+        Log.d(TAG, "------------------ onTestPlaySoundClick");
+        Intent service = new Intent(getActivity() ,AlarmPlayerService.class);
+        service.setAction(AlarmPlayerService.ACTION_PLAY);
+        getActivity().startService(service);
        // Intent checkIntent = new Intent();
        // checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         //startActivityForResult(checkIntent, MY_DATA_CHECK_CODE);

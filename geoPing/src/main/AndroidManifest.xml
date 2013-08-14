@@ -202,9 +202,14 @@
         <service android:exported="false" android:label="@string/app_name" android:name="eu.ttbox.geoping.service.geofence.ReceiveTransitionsIntentService">
         </service>
         <!-- Activity Geofence Recognition -->
-        <service android:enabled="true" android:exported="false" android:label="@string/app_name" android:name=".service.geofence.ActivityRecognitionIntentService">
+        <service android:name=".service.geofence.ActivityRecognitionIntentService"
+                 android:enabled="true" android:exported="false" android:label="@string/app_name">
         </service>
 
+        <!-- Alarm Service -->
+        <service android:name="eu.ttbox.geoping.service.receiver.player.AlarmPlayerService"
+                 android:exported="false" android:enabled="true"
+                 android:label="@string/app_name" />
 
         <!-- Geofence Boot Initialiser Receiver -->
         <receiver android:name="eu.ttbox.geoping.service.geofence.receiver.GeofenceBootRegisterReceiver">

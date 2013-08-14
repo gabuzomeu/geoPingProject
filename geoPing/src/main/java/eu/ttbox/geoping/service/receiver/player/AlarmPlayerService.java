@@ -134,6 +134,7 @@ public class AlarmPlayerService extends Service implements
 
     public int onStartCommand(Intent intent, int flags, int startId) {
         String action = intent.getAction();
+        Log.i(TAG, "debug: onStartCommand : action="+action);
         if (action.equals(ACTION_TOGGLE_PLAYBACK)) processTogglePlaybackRequest();
         else if (action.equals(ACTION_PLAY)) processPlayRequest();
 //        else if (action.equals(ACTION_PAUSE)) processPauseRequest();
@@ -160,6 +161,7 @@ public class AlarmPlayerService extends Service implements
 
 
     void processPlayRequest() {
+        Log.d(TAG, "processPlayRequest: State " +mState);
         if (mState == State.Retrieving) {
             // If we are still retrieving media, just set the flag to start playing when we're
             // ready
@@ -225,12 +227,12 @@ public class AlarmPlayerService extends Service implements
 
 
     void processPauseRequest() {
-        if (mState == State.Retrieving) {
-            // If we are still retrieving media, clear the flag that indicates we should start
-            // playing when we're ready
-            mStartPlayingAfterRetrieve = false;
-            return;
-        }
+       // if (mState == State.Retrieving) {
+       //     // If we are still retrieving media, clear the flag that indicates we should start
+       //     // playing when we're ready
+       //     mStartPlayingAfterRetrieve = false;
+       //     return;
+       // }
 
         if (mState == State.Playing) {
             // Pause media player and cancel the 'foreground service' state.
@@ -330,7 +332,7 @@ public class AlarmPlayerService extends Service implements
 //            mPlayer.setVolume(DUCK_VOLUME, DUCK_VOLUME);  // we'll be relatively quiet
 //        else
             mPlayer.setVolume(1.0f, 1.0f); // we can be loud
-
+        Log.d(TAG, "configAndStartMediaPlayer: mPlayer.isPlaying=" + mPlayer.isPlaying());
         if (!mPlayer.isPlaying()) mPlayer.start();
     }
     // ===========================================================
@@ -341,6 +343,7 @@ public class AlarmPlayerService extends Service implements
      * Called when MediaPlayer is ready
      */
     public void onPrepared(MediaPlayer player) {
+        Log.d(TAG, "onPrepared: MediaPlayer");
         mState = State.Playing;
         updateNotification(mSongTitle + " (playing)");
         configAndStartMediaPlayer();

@@ -16,7 +16,7 @@ public class SlidingMenuHelper {
      }
    
     public static SlidingMenu newInstance(Context context) {
-          SlidingMenu slidingMenu = new SlidingMenu(context);
+        SlidingMenu slidingMenu = new SlidingMenu(context);
         return customizeSlidingInstance(context,slidingMenu,  SlidingMenu.TOUCHMODE_FULLSCREEN);
     }
     public static SlidingMenu customizeSlidingInstance(Context context, final SlidingMenu slidingMenu, int touchModeAbove) {
@@ -25,7 +25,6 @@ public class SlidingMenuHelper {
         slidingMenu.setTouchModeAbove(touchModeAbove);
         slidingMenu.setShadowWidthRes(R.dimen.slidingmenu_shadow_width);
         slidingMenu.setShadowDrawable(R.drawable.shadow);
-        slidingMenu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
         slidingMenu.setFadeDegree(0.35f);
         slidingMenu.setBehindScrollScale(0.35f);
         slidingMenu.setSlidingEnabled(true);
@@ -34,7 +33,12 @@ public class SlidingMenuHelper {
         slidingMenu.setSelectorEnabled(true);
         slidingMenu.setSelectorDrawable(R.drawable.slidingmenu_selector);
 
-
+        if ("phone".equals( context.getString(R.string.screen_type))) {
+            slidingMenu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+        } else {
+          slidingMenu.setBehindWidthRes(R.dimen.slidingmenu_width);
+        }
+        // Animation
         slidingMenu.setBehindCanvasTransformer(smTransformer);
         return slidingMenu;
     }
