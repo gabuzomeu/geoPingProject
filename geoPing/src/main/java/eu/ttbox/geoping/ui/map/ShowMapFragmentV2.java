@@ -214,6 +214,12 @@ public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferenc
 
 
     @Override
+    public void restoreMapPreference(SharedPreferences prefs) {
+        super.restoreMapPreference(prefs);
+       // long saveDateInMs = prefs.getLong(eu.ttbox.osm.ui.map.MapConstants.PREFS_SAVE_DATE_IN_MS, -1);
+    }
+
+    @Override
     public void onPause() {
         Log.d(TAG, "### ### ### ### ### onPause call ### ### ### ### ###");
         // Service
