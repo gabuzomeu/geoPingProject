@@ -13,6 +13,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.io.IOException;
@@ -30,7 +31,7 @@ public class AlarmPlayerService extends Service implements
 {
 
     private static final String TAG = "AlarmPlayerService";
-    private static final int NOTIFICATION_ID = 1;
+    private static final int NOTIFICATION_ID = 357;
 
     // Action
     public static final String ACTION_TOGGLE_PLAYBACK =   "eu.ttbox.geoping.musicplayer.ACTION_TOGGLE_PLAYBACK";
@@ -141,9 +142,9 @@ public class AlarmPlayerService extends Service implements
             mPlayer.setOnPreparedListener(this);
             mPlayer.setOnCompletionListener(this);
             mPlayer.setOnErrorListener(this);
-        }
-        else
+        } else {
             mPlayer.reset();
+        }
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -286,6 +287,7 @@ public class AlarmPlayerService extends Service implements
     }
 
     void processStopRequest(boolean force) {
+        Log.d(TAG, "processStopRequest with force " + force + " in stattus " + mState);
         if (mState == State.Playing || mState == State.Paused || force) {
             mState = State.Stopped;
 
@@ -396,12 +398,19 @@ public class AlarmPlayerService extends Service implements
      * user as a notification. That's why we create the notification here.
      */
     void setUpAsForeground(String text) {
+        Intent stopIntent = new Intent(getApplicationContext(), AlarmPlayerService.class);
+        stopIntent.setAction(ACTION_STOP);
+
         PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), 0,
-                new Intent(getApplicationContext(), MainActivity.class),
-                PendingIntent.FLAG_UPDATE_CURRENT);
+                stopIntent,   PendingIntent.FLAG_UPDATE_CURRENT);
+
+    //    NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+   //     builder.setTicker(text);
+  //      mNotification =builder.build();
+
         mNotification = new Notification();
         mNotification.tickerText = text;
-//        mNotification.icon = R.drawable.ic_stat_playing;
+        mNotification.icon = R.drawable.ic_stat_notif_icon; //ic_stat_playing;
         mNotification.flags |= Notification.FLAG_ONGOING_EVENT;
         mNotification.setLatestEventInfo(getApplicationContext(), "RandomMusicPlayer",
                 text, pi);
@@ -409,8 +418,11 @@ public class AlarmPlayerService extends Service implements
     }
 
     void updateNotification(String text) {
+        Intent stopIntent = new Intent(getApplicationContext(), AlarmPlayerService.class);
+        stopIntent.setAction(ACTION_STOP);
+
         PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), 0,
-                new Intent(getApplicationContext(), MainActivity.class),
+                stopIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         mNotification.setLatestEventInfo(getApplicationContext(), "RandomMusicPlayer", text, pi);
         mNotificationManager.notify(NOTIFICATION_ID, mNotification);

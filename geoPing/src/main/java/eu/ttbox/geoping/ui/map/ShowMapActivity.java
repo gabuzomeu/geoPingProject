@@ -86,11 +86,9 @@ public class ShowMapActivity extends GeoPingSlidingMenuFragmentActivity {
 
     @Override
     protected void onResume() {
-        if (Log.isLoggable(TAG, Log.INFO)) {
-            Log.i(TAG, "### ### ### ### ### onResume call ### ### ### ### ###");
-        }
+        Log.d(TAG, "### ### ### ### ### onResume call ### ### ### ### ###");
         super.onResume();
-        handleIntent(getIntent());
+      //  handleIntent(getIntent());
     }
 
     // ===========================================================
@@ -247,7 +245,7 @@ public class ShowMapActivity extends GeoPingSlidingMenuFragmentActivity {
     // ===========================================================
 
     protected void onNewIntent(Intent intent) {
-        Log.d(TAG, "onNewIntent Intent : " + intent);
+        Log.d(TAG, "### onNewIntent Intent : " + intent);
         handleIntent(intent);
     }
 

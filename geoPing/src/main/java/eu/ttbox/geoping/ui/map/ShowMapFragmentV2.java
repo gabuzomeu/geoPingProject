@@ -1,7 +1,6 @@
 package eu.ttbox.geoping.ui.map;
 
 
-import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,7 +22,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.util.GeoPoint;
 
@@ -46,11 +44,9 @@ import eu.ttbox.geoping.ui.map.timeline.RangeTimelineValue;
 import eu.ttbox.geoping.ui.map.timeline.RangeTimelineView;
 import eu.ttbox.geoping.ui.map.track.GeoTrackOverlay;
 import eu.ttbox.geoping.ui.map.track.dialog.SelectGeoTrackDialog;
-import eu.ttbox.osm.ui.map.MapViewFactory;
 import eu.ttbox.osm.ui.map.OsmMapFragment;
-import eu.ttbox.osm.ui.map.mylocation.MyLocationOverlay2;
 
-public class ShowMapFragmentV2  extends OsmMapFragment  implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = "ShowMapFragmentV2";
 
@@ -79,6 +75,7 @@ public class ShowMapFragmentV2  extends OsmMapFragment  implements SharedPrefere
     // Instance value
     private RangeTimelineValue rangeTimelineValue;
 
+//    private handleCenter
 
     // ===========================================================
     // Message Handler
@@ -91,11 +88,10 @@ public class ShowMapFragmentV2  extends OsmMapFragment  implements SharedPrefere
             if (msg.what == GeofenceEditOverlay.MENU_CONTEXTUAL_EDIT) {
                 Log.i(TAG, "GeofenceEditOverlay MENU CONTEXTUAL EDIT");
                 android.view.ActionMode.Callback actionModeCallBack = geofenceListOverlay.getMenuActionCallback();
-                android.view.ActionMode actionMode =   getActivity().startActionMode(actionModeCallBack);
+                android.view.ActionMode actionMode = getActivity().startActionMode(actionModeCallBack);
             }
         }
     };
-
 
 
     // ===========================================================
@@ -104,6 +100,7 @@ public class ShowMapFragmentV2  extends OsmMapFragment  implements SharedPrefere
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(TAG, "### ### ### ### ### onCreateView call ### ### ### ### ###");
         View v = inflater.inflate(R.layout.map, container, false);
 
         // Services
@@ -125,7 +122,7 @@ public class ShowMapFragmentV2  extends OsmMapFragment  implements SharedPrefere
 
         // Map Init Center
         // ----------
-    // TODO ?    onResumeCenterOnLastPosition();
+        // TODO ?    onResumeCenterOnLastPosition();
 
         // Service
         mStatusReceiver = new StatusReceiver();
@@ -141,6 +138,7 @@ public class ShowMapFragmentV2  extends OsmMapFragment  implements SharedPrefere
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        Log.d(TAG, "### ### ### ### ### onActivityCreated call ### ### ### ### ###");
         super.onActivityCreated(savedInstanceState);
         loadDefaultDatas();
     }
@@ -149,7 +147,7 @@ public class ShowMapFragmentV2  extends OsmMapFragment  implements SharedPrefere
         // Query
         getActivity().getSupportLoaderManager().initLoader(GEOTRACK_PERSON_LOADER, null, geoTrackPersonLoaderCallback);
         // Handle Intents
-        handleIntent(getActivity().getIntent());
+       // Call onResume handleIntent(getActivity().getIntent());
     }
 
 
@@ -167,21 +165,21 @@ public class ShowMapFragmentV2  extends OsmMapFragment  implements SharedPrefere
     // Life Cycle
     // ===========================================================
     public void handleIntent(Intent intent) {
-        Log.d(TAG, "handleIntent : " + intent);
-        if (intent == null) {
+         if (intent == null) {
             return;
         }
         String action = intent.getAction();
-        Log.d(TAG, String.format("Handle Intent for action %s : %s", action, intent));
+        Log.d(TAG, String.format("### Handle Intent for action %s : %s", action, intent));
         if (Intent.ACTION_VIEW.equals(action)) {
             String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
             Bundle bundle = intent.getExtras();
             if (bundle.containsKey(GeoTrackDatabase.GeoTrackColumns.COL_LATITUDE_E6) && bundle.containsKey(GeoTrackDatabase.GeoTrackColumns.COL_LONGITUDE_E6)) {
                 int latE6 = intent.getIntExtra(GeoTrackDatabase.GeoTrackColumns.COL_LATITUDE_E6, Integer.MIN_VALUE);
                 int lngE6 = intent.getIntExtra(GeoTrackDatabase.GeoTrackColumns.COL_LONGITUDE_E6, Integer.MIN_VALUE);
-                Log.w(TAG, String.format("Show on Map Phone [%s] (%s, %s) ", phone, latE6, lngE6));
+                int accuracy = intent.getIntExtra(GeoTrackDatabase.GeoTrackColumns.COL_ACCURACY, -1);
+                Log.d(TAG, String.format("handleIntent on Map Phone [%s] for center (%s, %s) ", phone, latE6, lngE6));
                 if (Integer.MIN_VALUE != latE6 && Integer.MIN_VALUE != lngE6) {
-                    centerOnPersonPhone(phone, latE6, lngE6);
+                    centerOnPersonPhone(phone, latE6, lngE6, accuracy);
                 }
             } else {
                 centerOnPersonPhone(phone);
@@ -190,19 +188,17 @@ public class ShowMapFragmentV2  extends OsmMapFragment  implements SharedPrefere
     }
 
 
-
     @Override
     public void onDestroy() {
-        Log.i(TAG, "### ### ### ### ### onDestroy call ### ### ### ### ###");
+        Log.d(TAG, "### ### ### ### ### onDestroy call ### ### ### ### ###");
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         super.onDestroy();
     }
 
 
-
     @Override
     public void onResume() {
-        Log.i(TAG, "### ### ### ### ### onResume call ### ### ### ### ###");
+        Log.d(TAG, "### ### ### ### ### onResume call ### ### ### ### ###");
 
         super.onResume();
         // read preference
@@ -212,24 +208,18 @@ public class ShowMapFragmentV2  extends OsmMapFragment  implements SharedPrefere
         filter.addAction(Intents.ACTION_NEW_GEOTRACK_INSERTED);
         getActivity().registerReceiver(mStatusReceiver, filter);
 
-
+        // Intent
+        handleIntent(getActivity().getIntent());
     }
 
 
     @Override
     public void onPause() {
-
-        Log.i(TAG, "### ### ### ### ### onPause call ### ### ### ### ###");
-
-
+        Log.d(TAG, "### ### ### ### ### onPause call ### ### ### ### ###");
         // Service
         getActivity().unregisterReceiver(mStatusReceiver);
-
-
         // save Preference
         saveMapPreference(privateSharedPreferences);
-
-
         super.onPause();
         // timer.cancel();
     }
@@ -391,9 +381,7 @@ public class ShowMapFragmentV2  extends OsmMapFragment  implements SharedPrefere
                 rangeTimelineBar.setAbsoluteValues(geotrackRangeMin, geotrackRangeMax);
             }
         }
-
     };
-
 
 
     // ===========================================================
@@ -401,32 +389,27 @@ public class ShowMapFragmentV2  extends OsmMapFragment  implements SharedPrefere
     // ===========================================================
 
 
-
     public void centerOnPersonPhone(final String phone) {
-        Log.d(TAG, "centerOnPersonPhone : " + phone);
+        Log.d(TAG, "center OnPersonPhone : " + phone);
         if (myLocation != null) {
             myLocation.disableFollowLocation();
         }
         GeoTrackOverlay geoTrackOverlay = geoTrackOverlayGetOrAddForPhone(phone);
         geoTrackOverlay.animateToLastKnowPosition(false);
-
     }
 
-    public void centerOnPersonPhone(final String phone, final int latE6, final int lngE6) {
+    public void centerOnPersonPhone(final String phone, final int latE6, final int lngE6, final int accuracy) {
+        Log.d(TAG, "center OnPersonPhone : " + phone + " with GeoPoint(" + latE6 + ", " + lngE6 +") +/- " + accuracy + "m.");
         if (myLocation != null) {
             myLocation.disableFollowLocation();
         }
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                // Animate to
-                if (Integer.MIN_VALUE != latE6 && Integer.MIN_VALUE != lngE6) {
-                    GeoPoint geoPoint = new GeoPoint(latE6, lngE6);
-                    mapController.setCenter(geoPoint);
-                }
 
-            }
-        });
+        if (Integer.MIN_VALUE != latE6 && Integer.MIN_VALUE != lngE6) {
+            GeoPoint geoPoint = new GeoPoint(latE6, lngE6);
+            centerOnLocation(geoPoint, accuracy);
+            mapController.setCenter(geoPoint);
+        }
+
         // Display GeoPoints for person
         GeoTrackOverlay geoTrackOverlay = geoTrackOverlayGetOrAddForPhone(phone);
     }
@@ -479,7 +462,7 @@ public class ShowMapFragmentV2  extends OsmMapFragment  implements SharedPrefere
         // Add person layer
         if (geoTrackOverlay == null) {
             Person person = null;
-            Cursor cursor = getActivity().getContentResolver().query(PersonProvider.Constants.CONTENT_URI, null, PersonDatabase.PersonColumns.SELECT_BY_PHONE_NUMBER, new String[] { phone }, null);
+            Cursor cursor = getActivity().getContentResolver().query(PersonProvider.Constants.CONTENT_URI, null, PersonDatabase.PersonColumns.SELECT_BY_PHONE_NUMBER, new String[]{phone}, null);
             try {
                 if (cursor.moveToFirst()) {
                     PersonHelper helper = new PersonHelper().initWrapper(cursor);
@@ -575,21 +558,19 @@ public class ShowMapFragmentV2  extends OsmMapFragment  implements SharedPrefere
     }
 
 
-
-
     // ===========================================================
     // Geofence Overlay
     // ===========================================================
 
     public boolean isGeofenceOverlays() {
-        return (geofenceListOverlay !=null &&  mapView.getOverlays().contains(geofenceListOverlay));
+        return (geofenceListOverlay != null && mapView.getOverlays().contains(geofenceListOverlay));
     }
 
     public GeofenceEditOverlay showGeofenceOverlays() {
         Log.d(TAG, "show Geofence Overlay");
         if (geofenceListOverlay == null) {
             LoaderManager loaderManager = getActivity().getSupportLoaderManager();
-            this.geofenceListOverlay = new GeofenceEditOverlay(getActivity(),mapView, loaderManager, handler);
+            this.geofenceListOverlay = new GeofenceEditOverlay(getActivity(), mapView, loaderManager, handler);
             mapView.getOverlays().add(geofenceListOverlay);
             mapView.postInvalidate();
         } else if (!mapView.getOverlays().contains(geofenceListOverlay)) {
@@ -679,7 +660,9 @@ public class ShowMapFragmentV2  extends OsmMapFragment  implements SharedPrefere
             if (Intents.ACTION_NEW_GEOTRACK_INSERTED.equals(action)) {
             }
         }
-    };
+    }
+
+    ;
 
     // ===========================================================
     // Other

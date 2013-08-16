@@ -66,6 +66,7 @@ import eu.ttbox.osm.ui.map.mylocation.MyLocationOverlay2;
  * @see <a href="http://mobiforge.com/developing/story/using-google-maps-android">using-google-maps-android</a>
  *
  */
+@Deprecated
 public class ShowMapFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = "ShowMapFragment";
