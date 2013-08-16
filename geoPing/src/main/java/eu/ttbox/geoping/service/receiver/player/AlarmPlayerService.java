@@ -107,11 +107,10 @@ public class AlarmPlayerService extends Service implements
         mState = State.Stopped;
 
         // If the flag indicates we should start playing after retrieving, let's do that now.
-        if (mStartPlayingAfterRetrieve) {
-            tryToGetAudioFocus();
-            playNextSong(mWhatToPlayAfterRetrieve == null ?
-                    null : mWhatToPlayAfterRetrieve.toString());
-        }
+        //if (mStartPlayingAfterRetrieve) {
+        //    tryToGetAudioFocus();
+        //    playNextSong(mWhatToPlayAfterRetrieve == null ?  null : mWhatToPlayAfterRetrieve.toString());
+        //}
     }
 
     void createMediaPlayerIfNeeded() {
@@ -166,7 +165,7 @@ public class AlarmPlayerService extends Service implements
         // actually play the song
         if (mState == State.Stopped) {
             // If we're stopped, just go ahead to the next song and start playing
-            playNextSong(null);
+            playNextSong(phone, side);
         } else if (mState == State.Paused) {
             // If we're paused, just continue playback and restore the 'foreground service' state.
             mState = State.Playing;
@@ -181,7 +180,7 @@ public class AlarmPlayerService extends Service implements
      * manualUrl is non-null, then it specifies the URL or path to the song that will be played
      * next.
      */
-    void playNextSong(String manualUrl) {
+    void playNextSong(String phone,  SmsLogSideEnum side) {
         mState = State.Stopped;
         relaxResources(false); // release everything except MediaPlayer
 
@@ -202,8 +201,7 @@ public class AlarmPlayerService extends Service implements
 //            if (mIsStreaming) mWifiLock.acquire();
 //            else if (mWifiLock.isHeld()) mWifiLock.release();
         } catch (IOException ex) {
-            Log.e("MusicService", "IOException playing next song: " + ex.getMessage());
-            ex.printStackTrace();
+            Log.e("MusicService", "IOException playing next song: " + ex.getMessage(), ex);
         }
     }
 
@@ -238,11 +236,11 @@ public class AlarmPlayerService extends Service implements
 //        }
     }
 
-    void processStopRequest() {
+    public void processStopRequest() {
         processStopRequest(false);
     }
 
-    void processStopRequest(boolean force) {
+    public void processStopRequest(boolean force) {
         Log.d(TAG, "processStopRequest with force " + force + " in stattus " + mState);
         if (mState == State.Playing || mState == State.Paused || force) {
             mState = State.Stopped;
@@ -339,7 +337,7 @@ public class AlarmPlayerService extends Service implements
     @Override
     public void onCompletion(MediaPlayer mp) {
         // The media player finished playing the current song, so we go ahead and start the next.
-        playNextSong(null);
+        playNextSong(null, null);
     }
 
 
@@ -348,7 +346,7 @@ public class AlarmPlayerService extends Service implements
     // Notification UI
     // ===========================================================
 
-    private NotificationCompat.Builder mBuilder;
+    private NotificationAlarmHelper alarmNotification;
 
     /**
      * Configures service as a foreground service. A foreground service is a service that's doing
@@ -356,63 +354,16 @@ public class AlarmPlayerService extends Service implements
      * user as a notification. That's why we create the notification here.
      */
     void setUpAsForeground(String text) {
-       // NotifPersonVo person = ContactHelper.getNotifPersonVo(this, phone);
-
-        Intent stopIntent = new Intent(getApplicationContext(), AlarmPlayerService.class);
-        stopIntent.setAction(ACTION_STOP);
-
-        PendingIntent pi = PendingIntent.getService(getApplicationContext(), 0,
-                stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-       mBuilder = new NotificationCompat.Builder(this)
-               .setContentTitle("Alert")
-               .setSmallIcon(R.drawable.ic_stat_notif_icon)
-               .setContentIntent(pi);
-
-       mBuilder.setContentText(text);
-       mBuilder.setTicker("Alert for person");
-       Notification mNotification = mBuilder.build();
-
-       startForeground(NOTIFICATION_ID, mNotification);
+        alarmNotification = new NotificationAlarmHelper(this, null, null);
+        alarmNotification.showNotificationAlarm();
     }
 
     void updateNotification(String text) {
-        mBuilder.setContentText(text);
-        Notification mNotification = mBuilder.build();
-        mNotificationManager.notify(NOTIFICATION_ID, mNotification);
-        // Progress
-        new Thread(new NotifProgessRunnable()).start();
+       if (alarmNotification!=null) {
+           alarmNotification.updateNotification(text);
+       }
     }
-
-    private class NotifProgessRunnable implements Runnable  {
-        @Override
-        public void run() {
-            int incr;
-            // Do the "lengthy" operation 20 times
-            for (incr = 0; incr <= 100; incr+=5) {
-                // Sets the progress indicator to a max value, the
-                // current completion percentage, and "determinate"
-                // state
-                mBuilder.setProgress(100, incr, false);
-                // Displays the progress bar for the first time.
-                mNotificationManager.notify(0, mBuilder.build());
-                // Sleeps the thread, simulating an operation
-                // that takes time
-                try {
-                    // Sleep for 5 seconds
-                    Thread.sleep(5*1000);
-                } catch (InterruptedException e) {
-                    Log.d(TAG, "sleep failure");
-                }
-            }
-            // End
-            mBuilder.setContentText("Download complete")
-                    // Removes the progress bar
-                    .setProgress(0,0,false);
-            mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-            processStopRequest();
-        }
-    };
+ 
 
     // ===========================================================
     // Binder

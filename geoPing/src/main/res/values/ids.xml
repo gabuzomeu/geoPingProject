@@ -20,7 +20,9 @@
     <item name="config_id_pairing_list_loader" type="id"/>
     <item name="config_id_pairing_edit_loader" type="id"/>
     <item name="config_id_pairing_notif_loader" type="id"/>
-    
+
+    <item name="show_notification_alarm" type="id"/>
+
     <!-- Log -->
     <item name="config_id_smsLog_list_loader" type="id"/>
 
