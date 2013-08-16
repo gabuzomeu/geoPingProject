@@ -1,19 +1,11 @@
 package eu.ttbox.geoping.ui.person;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PowerManager;
-import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -30,14 +22,9 @@ import java.io.IOException;
 import java.util.Locale;
 
 import eu.ttbox.geoping.GeoPingApplication;
-import eu.ttbox.geoping.MainActivity;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
-import eu.ttbox.geoping.encoder.model.MessageActionEnum;
-import eu.ttbox.geoping.encoder.model.MessageParamEnum;
-import eu.ttbox.geoping.service.SmsSenderHelper;
-import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
 import eu.ttbox.geoping.service.receiver.player.AlarmPlayerService;
 
 
@@ -222,9 +209,12 @@ public class PersonRemoteControlFragment extends Fragment {
       //   Uri alert =  Settings.System.DEFAULT_ALARM_ALERT_URI;
        //playSound(getActivity(), alert);
         Log.d(TAG, "------------------ onTestPlaySoundClick");
-        Intent service = new Intent(getActivity() ,AlarmPlayerService.class);
-        service.setAction(AlarmPlayerService.ACTION_PLAY);
-        getActivity().startService(service);
+        Intent intent = new Intent(getActivity() ,AlarmPlayerService.class);
+        intent.setAction(AlarmPlayerService.ACTION_PLAY);
+        intent.putExtra(Intents.EXTRA_SMS_PHONE, entityPhoneNumber);
+        intent.putExtra(Intents.EXTRA_SMSLOG_SIDE_DBCODE, SmsLogSideEnum.MASTER.getDbCode());
+
+        getActivity().startService(intent);
        // Intent checkIntent = new Intent();
        // checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         //startActivityForResult(checkIntent, MY_DATA_CHECK_CODE);

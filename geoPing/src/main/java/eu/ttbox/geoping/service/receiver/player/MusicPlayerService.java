@@ -1,10 +1,10 @@
 package eu.ttbox.geoping.service.receiver.player;
 
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -13,21 +13,16 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.provider.Settings;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.io.IOException;
-import android.app.Notification;
 
-import eu.ttbox.geoping.MainActivity;
 import eu.ttbox.geoping.R;
-import eu.ttbox.geoping.core.Intents;
-import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
 
 /**
  *  com.example.android.musicplayer.MusicService
  */
-public class AlarmPlayerService extends Service implements
+public class MusicPlayerService extends Service implements
         MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener
 //        ,MusicFocusable
 {
@@ -47,11 +42,14 @@ public class AlarmPlayerService extends Service implements
     // Service
     private AudioManager mAudioManager;
     private NotificationManager mNotificationManager;
-
+    private Notification mNotification = null;
     private final IBinder binder = new LocalBinder();
-
-     // Instance
     private MediaPlayer mPlayer = null;
+
+    AudioFocusHelper mAudioFocusHelper = null;
+
+
+    // Instance
 
     // indicates the state our service:
     enum State {
@@ -72,12 +70,16 @@ public class AlarmPlayerService extends Service implements
     // if mStartPlayingAfterRetrieve is true, this variable indicates the URL that we should
     // start playing when we are ready. If null, we should play a random song from the device
     Uri mWhatToPlayAfterRetrieve = null;
-    
+    // whether the song we are playing is streaming from the network
+    boolean mIsStreaming = false;
+
 
 
     // Config
-    private String mSongTitle = "";
+    String mSongTitle = "";
     private Uri playingItem = Settings.System.DEFAULT_ALARM_ALERT_URI;
+
+
 
 
 
@@ -92,10 +94,24 @@ public class AlarmPlayerService extends Service implements
 
     @Override
     public void onCreate() {
-        Log.i(TAG, "### onCreate service");
+        Log.i(TAG, "debug: Creating service");
+
         // Service
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mAudioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+
+        // Create the retriever and start an asynchronous task that will prepare it.
+//        mRetriever = new MusicRetriever(getContentResolver());
+//        (new PrepareMusicRetrieverTask(mRetriever,this)).execute();
+
+      //   mAudioFocusHelper = new AudioFocusHelper(getApplicationContext(), this);
+//
+// else
+//            mAudioFocus = AudioFocus.Focused; // no focus feature, so we always "have" audio focus
+
+//        mDummyAlbumArt = BitmapFactory.decodeResource(getResources(), R.drawable.dummy_album_art);
+
+//        mMediaButtonReceiverComponent = new ComponentName(this, MusicIntentReceiver.class);
 
         onMusicRetrieverPrepared();
     }
@@ -115,8 +131,16 @@ public class AlarmPlayerService extends Service implements
     void createMediaPlayerIfNeeded() {
         if (mPlayer == null) {
             mPlayer = new MediaPlayer();
+
+            // Make sure the media player will acquire a wake-lock while playing. If we don't do
+            // that, the CPU might go to sleep while the song is playing, causing playback to stop.
+            //
+            // Remember that to use this, we have to declare the android.permission.WAKE_LOCK
+            // permission in AndroidManifest.xml.
             mPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
-            // we want the media player to notify us
+
+            // we want the media player to notify us when it's ready preparing, and when it's done
+            // playing:
             mPlayer.setOnPreparedListener(this);
             mPlayer.setOnCompletionListener(this);
             mPlayer.setOnErrorListener(this);
@@ -127,15 +151,15 @@ public class AlarmPlayerService extends Service implements
 
     public int onStartCommand(Intent intent, int flags, int startId) {
         String action = intent.getAction();
-        Log.i(TAG, "onStartCommand action : "+action);
+        Log.i(TAG, "debug: onStartCommand : action="+action);
         if (action.equals(ACTION_TOGGLE_PLAYBACK)) processTogglePlaybackRequest();
-        else if (action.equals(ACTION_PLAY)) {
-            String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
-            int sideCode = intent.getIntExtra(Intents.EXTRA_SMSLOG_SIDE_DBCODE, -1);
-            SmsLogSideEnum side = sideCode>-1 ? SmsLogSideEnum.getByDbCode(sideCode) : null;
-            processPlayRequest();
-        } else if (action.equals(ACTION_PAUSE)) processPauseRequest();
+        else if (action.equals(ACTION_PLAY)) processPlayRequest();
+         else if (action.equals(ACTION_PAUSE)) processPauseRequest();
+//        else if (action.equals(ACTION_SKIP)) processSkipRequest();
         else if (action.equals(ACTION_STOP)) processStopRequest();
+//        else if (action.equals(ACTION_REWIND)) processRewindRequest();
+//        else if (action.equals(ACTION_URL)) processAddRequest(intent);
+
         return START_NOT_STICKY; // Means we started the service, but don't want it to
         // restart in case it's killed.
     }
@@ -155,22 +179,34 @@ public class AlarmPlayerService extends Service implements
 
     void processPlayRequest() {
         Log.d(TAG, "processPlayRequest: State " +mState);
-         if (mState == State.Retrieving) {
+
+        if (mState == State.Retrieving) {
+            // If we are still retrieving media, just set the flag to start playing when we're
+            // ready
             mWhatToPlayAfterRetrieve = null; // play a random song
             mStartPlayingAfterRetrieve = true;
             return;
         }
-       tryToGetAudioFocus();
+
+        tryToGetAudioFocus();
+
         // actually play the song
+
         if (mState == State.Stopped) {
             // If we're stopped, just go ahead to the next song and start playing
             playNextSong(null);
-        } else if (mState == State.Paused) {
+        }
+        else if (mState == State.Paused) {
             // If we're paused, just continue playback and restore the 'foreground service' state.
             mState = State.Playing;
             setUpAsForeground(mSongTitle + " (playing)");
             configAndStartMediaPlayer();
         }
+
+        // Tell any remote controls that our playback state is 'playing'.
+//        if (mRemoteControlClientCompat != null) {
+//            mRemoteControlClientCompat.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
+//        }
     }
 
     /**
@@ -215,12 +251,12 @@ public class AlarmPlayerService extends Service implements
 
 
     void processPauseRequest() {
-        // if (mState == State.Retrieving) {
-        //     // If we are still retrieving media, clear the flag that indicates we should start
-        //     // playing when we're ready
-        //     mStartPlayingAfterRetrieve = false;
-        //     return;
-        // }
+       // if (mState == State.Retrieving) {
+       //     // If we are still retrieving media, clear the flag that indicates we should start
+       //     // playing when we're ready
+       //     mStartPlayingAfterRetrieve = false;
+       //     return;
+       // }
 
         if (mState == State.Playing) {
             // Pause media player and cancel the 'foreground service' state.
@@ -234,6 +270,18 @@ public class AlarmPlayerService extends Service implements
 //        if (mRemoteControlClientCompat != null) {
 //            mRemoteControlClientCompat.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
 //        }
+    }
+
+    void processRewindRequest() {
+        if (mState == State.Playing || mState == State.Paused)
+            mPlayer.seekTo(0);
+    }
+
+    void processSkipRequest() {
+        if (mState == State.Playing || mState == State.Paused) {
+            tryToGetAudioFocus();
+            playNextSong(null);
+        }
     }
 
     void processStopRequest() {
@@ -346,77 +394,48 @@ public class AlarmPlayerService extends Service implements
     // Notification UI
     // ===========================================================
 
-    private NotificationCompat.Builder mBuilder;
-
     /**
      * Configures service as a foreground service. A foreground service is a service that's doing
      * something the user is actively aware of (such as playing music), and must appear to the
      * user as a notification. That's why we create the notification here.
      */
     void setUpAsForeground(String text) {
-        Intent stopIntent = new Intent(getApplicationContext(), AlarmPlayerService.class);
+        Intent stopIntent = new Intent(getApplicationContext(), MusicPlayerService.class);
         stopIntent.setAction(ACTION_STOP);
 
         PendingIntent pi = PendingIntent.getService(getApplicationContext(), 0,
                 stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-       mBuilder = new NotificationCompat.Builder(this)
-               .setContentTitle("Alert")
-               .setSmallIcon(R.drawable.ic_stat_notif_icon)
-               .setContentIntent(pi);
+    //   NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+   //     builder.setTicker(text);
+  //      mNotification =builder.build();
 
-       mBuilder.setContentText(text);
-       mBuilder.setTicker("Alert for person");
-       Notification mNotification = mBuilder.build();
-
-       startForeground(NOTIFICATION_ID, mNotification);
+        mNotification = new Notification();
+        mNotification.tickerText = text;
+        mNotification.icon = R.drawable.ic_stat_notif_icon; //ic_stat_playing;
+        mNotification.flags |= Notification.FLAG_ONGOING_EVENT;
+        mNotification.setLatestEventInfo(getApplicationContext(), "Alert",
+                text, pi);
+        startForeground(NOTIFICATION_ID, mNotification);
     }
 
     void updateNotification(String text) {
-        mBuilder.setContentText(text);
-        Notification mNotification = mBuilder.build();
-        mNotificationManager.notify(NOTIFICATION_ID, mNotification);
-        // Progress
-        new Thread(new NotifProgessRunnable()).start();
-    }
+        Intent stopIntent = new Intent(getApplicationContext(), MusicPlayerService.class);
+        stopIntent.setAction(ACTION_STOP);
 
-    private class NotifProgessRunnable implements Runnable  {
-        @Override
-        public void run() {
-            int incr;
-            // Do the "lengthy" operation 20 times
-            for (incr = 0; incr <= 100; incr+=5) {
-                // Sets the progress indicator to a max value, the
-                // current completion percentage, and "determinate"
-                // state
-                mBuilder.setProgress(100, incr, false);
-                // Displays the progress bar for the first time.
-                mNotificationManager.notify(0, mBuilder.build());
-                // Sleeps the thread, simulating an operation
-                // that takes time
-                try {
-                    // Sleep for 5 seconds
-                    Thread.sleep(5*1000);
-                } catch (InterruptedException e) {
-                    Log.d(TAG, "sleep failure");
-                }
-            }
-            // End
-            mBuilder.setContentText("Download complete")
-                    // Removes the progress bar
-                    .setProgress(0,0,false);
-            mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-            processStopRequest();
-        }
-    };
+        PendingIntent pi = PendingIntent.getService(getApplicationContext(), 0,
+                stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mNotification.setLatestEventInfo(getApplicationContext(), "Alert", text, pi);
+        mNotificationManager.notify(NOTIFICATION_ID, mNotification);
+    }
 
     // ===========================================================
     // Binder
     // ===========================================================
 
     public class LocalBinder extends Binder {
-        public AlarmPlayerService getService() {
-            return AlarmPlayerService.this;
+        public MusicPlayerService getService() {
+            return MusicPlayerService.this;
         }
     }
 

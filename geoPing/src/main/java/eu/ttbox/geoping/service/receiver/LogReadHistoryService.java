@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
 import android.util.Log;
@@ -54,7 +53,7 @@ public class LogReadHistoryService extends IntentService {
         int requestCode = baseRequestCode;
         if (side!=null) {
             requestCode += (1 + side.getDbCode()) ;
-            readAction.putExtra(Intents.EXTRA_SMSLOG_SIDE, side.getDbCode());
+            readAction.putExtra(Intents.EXTRA_SMSLOG_SIDE_DBCODE, side.getDbCode());
         }
         // Redirect Intent
         if (wantedIntent != null) {
@@ -86,7 +85,7 @@ public class LogReadHistoryService extends IntentService {
             Uri logUri = intent.getParcelableExtra(Intents.EXTRA_SMSLOG_URI);
             Log.d(TAG, "### logUri : " + logUri);
             if (logUri != null) {
-                int sideCode = intent.getIntExtra(Intents.EXTRA_SMSLOG_SIDE, -1);
+                int sideCode = intent.getIntExtra(Intents.EXTRA_SMSLOG_SIDE_DBCODE, -1);
                 SmsLogSideEnum side = sideCode!=-1 ? SmsLogSideEnum.getByDbCode(sideCode): null ;
                 Log.d(TAG, "### side : " + side);
                 markAsToReadLog(this, logUri, Boolean.FALSE, side);

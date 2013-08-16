@@ -28,26 +28,11 @@ public class Intents {
 	public static final String TAG = "Intents";
 
 	public static final String ACTION_SMS_GEOPING_ARRIVED = "eu.ttbox.geoping.ACTION_SMS_GEOPING_ARRIVED";
-	public static final String EXTRA_SMS_GEOPING_ARRIVED = "EXTRA_SMS_GEOPING_ARRIVED";
 
 	public static final String ACTION_SMS_GEOPING_REQUEST_SENDER = "eu.ttbox.geoping.ACTION_SMS_GEOPING_REQUEST_SENDER";
-	public static final String ACTION_SMS_GEOPING_REQUEST_HANDLER = "eu.ttbox.geoping.ACTION_SMS_GEOPING_REQUEST_HANDLER";
-	public static final String ACTION_SMS_GEOPING_RESPONSE_HANDLER = "eu.ttbox.geoping.ACTION_SMS_GEOPING_RESPONSE_HANDLER";
-	public static final String ACTION_SMS_GEOPING_DECLARATION_HANDLER = "eu.ttbox.geoping.ACTION_SMS_GEOPING_DECLARATION_HANDLER";
-
-    public static final String ACTION_SMS_GEOFENCE_RESPONSE_HANDLER = "eu.ttbox.geoping.ACTION_SMS_GEOFENCE_RESPONSE_HANDLER";
-    public static final String ACTION_SMS_GEOFENCE_ENTER_RESPONSE_HANDLER = "eu.ttbox.geoping.ACTION_SMS_GEOFENCE_ENTER_RESPONSE_HANDLER";
-    public static final String ACTION_SMS_GEOFENCE_EXIT_RESPONSE_HANDLER = "eu.ttbox.geoping.ACTION_SMS_GEOFENCE_EXIT_RESPONSE_HANDLER";
 
 
     public static final String ACTION_SMS_PAIRING_RESQUEST = "eu.ttbox.geoping.ACTION_SMS_PAIRING_RESQUEST";
-	public static final String ACTION_SMS_PAIRING_RESPONSE = "eu.ttbox.geoping.ACTION_SMS_PAIRING_RESPONSE";
-
-	   public static final String ACTION_SMS_EVTSPY_SHUTDOWN = "eu.ttbox.geoping.ACTION_SMS_EVTSPY_SHUTDOWN";
-	   public static final String ACTION_SMS_EVTSPY_BOOT = "eu.ttbox.geoping.ACTION_SMS_EVTSPY_BOOT";
-	   public static final String ACTION_SMS_EVTSPY_LOW_BATTERY = "eu.ttbox.geoping.ACTION_SMS_EVTSPY_LOW_BATTERY";
-	   public static final String ACTION_SMS_EVTSPY_PHONE_CALL = "eu.ttbox.geoping.ACTION_SMS_EVTSPY_PHONE_CALL";
-	   public static final String ACTION_SMS_EVTSPY_SIM_CHANGE = "eu.ttbox.geoping.ACTION_SMS_EVTSPY_SIM_CHANGE";
 
 
     public static final String ACTION_SMS_COMMAND_OPEN_APP = "eu.ttbox.geoping.ACTION_SMS_COMMAND_OPEN_APP";
@@ -71,7 +56,7 @@ public class Intents {
 	public static final String EXTRA_DATA_URI = "EXTRA_DATA_URI";
 
     public static final String EXTRA_SMSLOG_URI = "EXTRA_SMSLOG_URI";
-    public static final String EXTRA_SMSLOG_SIDE= "EXTRA_SMSLOG_SIDE";
+    public static final String EXTRA_SMSLOG_SIDE_DBCODE = "EXTRA_SMSLOG_SIDE_DBCODE";
     public static final String EXTRA_INTENT = "EXTRA_INTENT";
 
 //	public static final String EXTRA_INTERNAL_BOOL = "EXTRA_INTERNAL_BOOL";

@@ -78,13 +78,17 @@ public class NotificationSlaveHelper {
         }
 
         // Notification Count
+        PendingIntent contentIntent = null;
+        PendingIntent deleteIntent = null;
         if (pairing.showNotification) {
             String searchPhone = showNotificationByPerson ? phone : null;
             int msgUnreadCount =  LogReadHistoryService.getReadLogHistory(context, searchPhone, side);
             if (msgUnreadCount > 1) {
                 // Mark as read  Action
-                builder.setContentIntent(LogReadHistoryService.createClearLogPendingIntent(context, side, searchPhone, null));
-                builder.setDeleteIntent(LogReadHistoryService.createClearLogPendingIntent(context, side, searchPhone, null, 10));
+                contentIntent =LogReadHistoryService.createClearLogPendingIntent(context, side, searchPhone, null);
+                builder.setContentIntent(contentIntent);
+                deleteIntent= LogReadHistoryService.createClearLogPendingIntent(context, side, searchPhone, null, 10);
+                builder.setDeleteIntent(deleteIntent);
                 // Ser counter
                 builder.setNumber(msgUnreadCount);
             }
@@ -93,6 +97,14 @@ public class NotificationSlaveHelper {
         // Display Notif
         int notifId = getGeopingRequestNotificationId(phone);
         Notification notification = builder.build();
+        // It is a bug ??
+        if (contentIntent!=null) {
+            notification.contentIntent = contentIntent;
+        }
+        if (deleteIntent!=null) {
+            notification.deleteIntent = deleteIntent;
+        }
+        // Display Notification
         mNotificationManager.notify(notifId, notification);
     }
 

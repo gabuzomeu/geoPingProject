@@ -27,7 +27,7 @@
                 />
         <Button
                 android:id="@+id/track_person_remote_control_openButton"
-                android:visibility="gone"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/call_log_indent_margin"
