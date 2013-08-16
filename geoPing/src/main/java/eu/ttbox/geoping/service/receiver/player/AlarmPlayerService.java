@@ -23,6 +23,8 @@ import eu.ttbox.geoping.MainActivity;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
+import eu.ttbox.geoping.service.core.ContactHelper;
+import eu.ttbox.geoping.service.core.NotifPersonVo;
 
 /**
  *  com.example.android.musicplayer.MusicService
@@ -72,7 +74,7 @@ public class AlarmPlayerService extends Service implements
     // if mStartPlayingAfterRetrieve is true, this variable indicates the URL that we should
     // start playing when we are ready. If null, we should play a random song from the device
     Uri mWhatToPlayAfterRetrieve = null;
-    
+
 
 
     // Config
@@ -128,14 +130,14 @@ public class AlarmPlayerService extends Service implements
     public int onStartCommand(Intent intent, int flags, int startId) {
         String action = intent.getAction();
         Log.i(TAG, "onStartCommand action : "+action);
-        if (action.equals(ACTION_TOGGLE_PLAYBACK)) processTogglePlaybackRequest();
-        else if (action.equals(ACTION_PLAY)) {
+         if (action.equals(ACTION_PLAY)) {
             String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
             int sideCode = intent.getIntExtra(Intents.EXTRA_SMSLOG_SIDE_DBCODE, -1);
             SmsLogSideEnum side = sideCode>-1 ? SmsLogSideEnum.getByDbCode(sideCode) : null;
-            processPlayRequest();
+            processPlayRequest(phone, side);
         } else if (action.equals(ACTION_PAUSE)) processPauseRequest();
         else if (action.equals(ACTION_STOP)) processStopRequest();
+        // else if (action.equals(ACTION_TOGGLE_PLAYBACK)) processTogglePlaybackRequest();
         return START_NOT_STICKY; // Means we started the service, but don't want it to
         // restart in case it's killed.
     }
@@ -153,7 +155,7 @@ public class AlarmPlayerService extends Service implements
     // ===========================================================
 
 
-    void processPlayRequest() {
+    void processPlayRequest(String phone,  SmsLogSideEnum side) {
         Log.d(TAG, "processPlayRequest: State " +mState);
          if (mState == State.Retrieving) {
             mWhatToPlayAfterRetrieve = null; // play a random song
@@ -205,13 +207,13 @@ public class AlarmPlayerService extends Service implements
         }
     }
 
-    void processTogglePlaybackRequest() {
-        if (mState == State.Paused || mState == State.Stopped) {
-            processPlayRequest();
-        } else {
-            processPauseRequest();
-        }
-    }
+//    void processTogglePlaybackRequest() {
+//        if (mState == State.Paused || mState == State.Stopped) {
+//            processPlayRequest();
+//        } else {
+//            processPauseRequest();
+//        }
+//    }
 
 
     void processPauseRequest() {
@@ -354,6 +356,8 @@ public class AlarmPlayerService extends Service implements
      * user as a notification. That's why we create the notification here.
      */
     void setUpAsForeground(String text) {
+       // NotifPersonVo person = ContactHelper.getNotifPersonVo(this, phone);
+
         Intent stopIntent = new Intent(getApplicationContext(), AlarmPlayerService.class);
         stopIntent.setAction(ACTION_STOP);
 
