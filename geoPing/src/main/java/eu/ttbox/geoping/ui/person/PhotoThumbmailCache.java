@@ -8,7 +8,13 @@ import android.os.AsyncTask;
 import android.support.v4.util.LruCache;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+
+import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import eu.ttbox.geoping.service.core.ContactHelper;
 import eu.ttbox.geoping.service.core.ContactVo;
@@ -16,6 +22,10 @@ import eu.ttbox.geoping.service.core.ContactVo;
 public class PhotoThumbmailCache extends LruCache<String, Bitmap> {
 
 	private static final String TAG = "PhotoThumbmailCache";
+
+    private CopyOnWriteArraySet<String> noPhotoFor = new CopyOnWriteArraySet<String>();
+
+   // private Executor executor = Executors.newSingleThreadExecutor();
 
 	public PhotoThumbmailCache(int maxSizeBytes) {
 		super(maxSizeBytes);
@@ -104,6 +114,8 @@ public class PhotoThumbmailCache extends LruCache<String, Bitmap> {
      * @param contactId
      */
     public void loadPhoto(Context context, ImageView photoImageView,String contactId, final String phone) {
+        cancelOldPhotoLoaderAsyncTask(photoImageView);
+
         Bitmap photo = null;
         boolean isContactId = !TextUtils.isEmpty(contactId);
         boolean isContactPhone = !TextUtils.isEmpty(phone);
@@ -118,19 +130,36 @@ public class PhotoThumbmailCache extends LruCache<String, Bitmap> {
         if (photo != null) {
             photoImageView.setImageBitmap(photo);
         } else if (isContactId || isContactPhone) {
-            // Cancel previous Async
-            final PhotoLoaderAsyncTask oldTask = (PhotoLoaderAsyncTask) photoImageView.getTag();
-            if (oldTask != null) {
-                oldTask.cancel(false);
+            // Check Cache
+            if (isContactId && noPhotoFor.contains(contactId)) {
+                Log.d(TAG, "Ignore Search, No photo for Contact id : " + contactId);
+                return;
             }
+            if (isContactPhone && noPhotoFor.contains(phone)) {
+                Log.d(TAG, "Ignore Search, No photo for Phone id : " + phone);
+                return;
+            }
+
+            // Cancel previous Async
+            cancelOldPhotoLoaderAsyncTask(photoImageView);
+
             // Load photos
             PhotoLoaderAsyncTask newTask = this.getPhotoLoaderAsyncTask(context, photoImageView);
             photoImageView.setTag(newTask);
-            newTask.execute(contactId, phone);
-        }
+            // FIXME  java.util.concurrent.RejectedExecutionException: pool=128/128, queue=10/10
+             newTask.execute(contactId, phone);
+ //           newTask.executeOnExecutor(executor, contactId, phone);
+         }
 
     }
 
+    private void cancelOldPhotoLoaderAsyncTask(View photoImageView) {
+        final PhotoLoaderAsyncTask oldTask = (PhotoLoaderAsyncTask) photoImageView.getTag();
+        if (oldTask != null && !oldTask.isCancelled()) {
+            oldTask.cancel(true);
+            photoImageView.setTag(null);
+        }
+    }
     /**
      * Pour plus de details sur l'intégration dans les contacts consulter
      * <ul>
@@ -143,6 +172,7 @@ public class PhotoThumbmailCache extends LruCache<String, Bitmap> {
      * @param contactId
      */
     public void loadPhoto(Context context, PhotoEditorView photoImageView, String contactId, final String phone) {
+        cancelOldPhotoLoaderAsyncTask(photoImageView);
         Bitmap photo = null;
         boolean isContactId = !TextUtils.isEmpty(contactId);
         boolean isContactPhone = !TextUtils.isEmpty(phone);
@@ -157,15 +187,24 @@ public class PhotoThumbmailCache extends LruCache<String, Bitmap> {
         if (photo != null) {
             photoImageView.setValues(photo, true);
         } else if (isContactId || isContactPhone) {
-            // Cancel previous Async
-            final PhotoLoaderAsyncTask oldTask = (PhotoLoaderAsyncTask) photoImageView.getTag();
-            if (oldTask != null) {
-                oldTask.cancel(false);
+            // Check Cache
+            if (isContactId && noPhotoFor.contains(contactId)) {
+                Log.d(TAG, "Ignore Search, No photo for Contact id : " + contactId);
+                return;
             }
-            // Load photos
+            if (isContactPhone && noPhotoFor.contains(phone)) {
+                Log.d(TAG, "Ignore Search, No photo for Phone id : " + phone);
+                return;
+            }
+            // Cancel previous Async
+            cancelOldPhotoLoaderAsyncTask(  photoImageView );
+             // Load photos
             PhotoLoaderAsyncTask newTask = this.getPhotoLoaderAsyncTask(context, photoImageView);
             photoImageView.setTag(newTask);
-            newTask.execute(contactId, phone);
+            // FIXME  java.util.concurrent.RejectedExecutionException: pool=128/128, queue=10/10
+             newTask.execute(contactId, phone);
+            //newTask.executeOnExecutor(executor, contactId, phone);
+
         }
 
     }
@@ -242,8 +281,31 @@ public class PhotoThumbmailCache extends LruCache<String, Bitmap> {
             if (params.length > 1) {
                 phoneSearch = params[1];
             }
+            // Test For no Cache
+            boolean isContactIdSearch = !TextUtils.isEmpty(contactIdSearch);
+            boolean isPhoneSearch = !TextUtils.isEmpty(phoneSearch);
+            if (isContactIdSearch && noPhotoFor.contains(contactIdSearch)) {
+                Log.d(TAG, "No photo found before for Contact Id : " + contactIdSearch);
+                return null;
+            }
+            if (isPhoneSearch && noPhotoFor.contains(phoneSearch)) {
+                Log.d(TAG, "No photo found before for Phone : " + phoneSearch);
+                return null;
+            }
+            // Search Photos
             Bitmap result = ContactHelper.openPhotoBitmap(mContext, mCache, contactIdSearch, phoneSearch);
             Log.d(TAG, "PhotoLoaderAsyncTask load photo : " + (result != null));
+            // Test For no Cache
+            if (result==null) {
+                if (isContactIdSearch) {
+                    noPhotoFor.add(contactIdSearch);
+                    Log.w(TAG, "No photo found before for Contact Id : " + contactIdSearch);
+                }
+                if (isPhoneSearch) {
+                    noPhotoFor.add(phoneSearch);
+                    Log.w(TAG, "No photo found before for Phone : " + phoneSearch);
+                }
+            }
             return result;
         }
 

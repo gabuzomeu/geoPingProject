@@ -165,6 +165,9 @@ public class SmsLogHelper {
         return cursor.getString(phoneIdx);
     }
 
+    public String getSmsLogGeofencRequestId(Cursor cursor) {
+        return cursor.getString(requestIdIdx);
+    }
     public SmsLogTypeEnum getSmsLogType(Cursor cursor) {
         return SmsLogTypeEnum.getByCode(cursor.getInt(smsLogTypeIdx));
     }

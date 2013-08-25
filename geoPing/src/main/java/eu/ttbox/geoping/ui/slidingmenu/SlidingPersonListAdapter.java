@@ -62,10 +62,10 @@ public class SlidingPersonListAdapter extends android.support.v4.widget.Resource
         final ViewHolder holder = (ViewHolder) view.getTag();
         // Cancel any pending thumbnail task, since this view is now bound to
         // new thumbnail
-        final PhotoLoaderAsyncTask oldTask = holder.photoLoaderAsyncTask;
-        if (oldTask != null) {
-            oldTask.cancel(false);
-        }
+        //final PhotoLoaderAsyncTask oldTask = holder.photoLoaderAsyncTask;
+       // if (oldTask != null) {
+        //    oldTask.cancel(false);
+        //}
 
         // Value
         final String phoneNumber = helper.getPersonPhone(cursor);
@@ -93,16 +93,17 @@ public class SlidingPersonListAdapter extends android.support.v4.widget.Resource
             }
         });
         // Photo
-        if (!TextUtils.isEmpty(contactId)) {
-            Bitmap cachedResult = photoCache.get(contactId);
-            if (cachedResult != null) {
-                holder.pingButton.setValues(cachedResult, false);
-            } else {
-                PhotoLoaderAsyncTask newTask = new PhotoLoaderAsyncTask(holder);
-                holder.photoLoaderAsyncTask = newTask;
-                newTask.execute(contactId, phoneNumber);
-            }
-        }
+        photoCache.loadPhoto(context, holder.pingButton, contactId, phoneNumber);
+//        if (!TextUtils.isEmpty(contactId)) {
+  //          Bitmap cachedResult = photoCache.get(contactId);
+    //        if (cachedResult != null) {
+      //          holder.pingButton.setValues(cachedResult, false);
+        //    } else {
+          //      PhotoLoaderAsyncTask newTask = new PhotoLoaderAsyncTask(holder);
+            //    holder.photoLoaderAsyncTask = newTask;
+              //  newTask.execute(contactId, phoneNumber);
+           // }
+       // }
  
     }
     
@@ -125,47 +126,11 @@ public class SlidingPersonListAdapter extends android.support.v4.widget.Resource
         TextView nameText; 
         TextView phoneText; 
         PhotoEditorView pingButton;
-        PhotoLoaderAsyncTask photoLoaderAsyncTask;
+      //  PhotoLoaderAsyncTask photoLoaderAsyncTask;
     }
     
 
-    // ===========================================================
-    // Photo Loader
-    // ===========================================================
 
-    public class PhotoLoaderAsyncTask extends AsyncTask<String, Void, Bitmap> {
-
-        final ViewHolder holder;
-
-        public PhotoLoaderAsyncTask(ViewHolder holder) {
-            super();
-            this.holder = holder;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            holder.photoLoaderAsyncTask = this;
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            final String contactIdSearch = params[0];
-            Bitmap result = photoCache.loadPhotoLoaderFromContactId(context.getContentResolver(), contactIdSearch);
-            if (result == null && params.length > 1) {
-                String phoneSearch = params[1];
-                result = photoCache.loadPhotoLoaderFromContactPhone(context, phoneSearch);
-            }
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            if (holder.photoLoaderAsyncTask == this) {
-                holder.pingButton.setValues(result, true);
-                holder.photoLoaderAsyncTask = null;
-            }
-        }
-    }
     
     // ===========================================================
     // Listeners

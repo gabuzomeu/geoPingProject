@@ -16,6 +16,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import eu.ttbox.geoping.MainActivity;
@@ -105,15 +106,16 @@ public class NotificationMasterHelper {
 
         // Create Notifiation
         Log.d(TAG, "----- contentTitle with Bundle : " + params);
-        String contentTitle = MessageActionEnumLabelHelper.getString(context, actionEnum);
-        if (MessageEncoderHelper.isToBundle(params, MessageParamEnum.GEOFENCE_NAME)) {
-            String geofenceName = MessageEncoderHelper.readString(params, MessageParamEnum.GEOFENCE_NAME);
-            if (MessageActionEnum.GEOFENCE_ENTER.equals(actionEnum)) {
-                contentTitle =  context.getString(R.string.sms_action_geofence_transition_enter_with_name, geofenceName);
-            } else if (MessageActionEnum.GEOFENCE_EXIT.equals(actionEnum)) {
-                contentTitle =  context.getString(R.string.sms_action_geofence_transition_exit_with_name, geofenceName);
+        // Action Label
+        String[] actionLabelParams = null;
+        if (MessageActionEnum.GEOFENCE_ENTER.equals(actionEnum) || MessageActionEnum.GEOFENCE_EXIT.equals(actionEnum) ) {
+            if (MessageEncoderHelper.isToBundle(params, MessageParamEnum.GEOFENCE_NAME)) {
+                String geofenceName = MessageEncoderHelper.readString(params, MessageParamEnum.GEOFENCE_NAME);
+                actionLabelParams = new String[] { geofenceName};
             }
         }
+        String contentTitle = MessageActionEnumLabelHelper.getString(context, actionEnum, actionLabelParams);
+        // Notification
         builder //
                 .setDefaults(Notification.DEFAULT_ALL) //
                 .setSmallIcon(R.drawable.ic_stat_notif_icon) //
@@ -133,7 +135,7 @@ public class NotificationMasterHelper {
 
         int msgUnreadCount =  LogReadHistoryService.getReadLogHistory(context, phone, side);
         if (msgUnreadCount > 1) {
-         builder.setNumber(msgUnreadCount);
+          builder.setNumber(msgUnreadCount);
         }
         // Details
         String coordString = getLatLngAsString(geoTrack);
@@ -150,6 +152,17 @@ public class NotificationMasterHelper {
                 String smsTypeTime = MessageParamEnumLabelHelper.getLabelHolder(context, MessageParamEnum.EVT_DATE).getString(context, geoTrack.eventTime);
                 inBoxStyle.addLine(smsTypeTime);
             }
+            // Geofence
+            if (msgUnreadCount>1) {
+                // TODO Geofence Count / No Requestid
+                ArrayList<String> geofences = null;// LogReadHistoryService.getReadLogHistoryGeofenceViolation(  context,   phone,   side);
+                if (geofences!=null && !geofences.isEmpty()) {
+                    for (String geofence : geofences) {
+                        inBoxStyle.addLine(geofence);
+                    }
+                }
+            }
+            //
             inBoxStyle.setSummaryText(person.contactDisplayName);
             builder.setStyle(inBoxStyle);
         }

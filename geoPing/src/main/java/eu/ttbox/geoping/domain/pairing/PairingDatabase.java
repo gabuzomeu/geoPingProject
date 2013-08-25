@@ -266,7 +266,8 @@ public class PairingDatabase {
     private void checkSpyNotificationServiceActivator(ContentValues values) {
         for (String notif : PairingColumns.NOTIFS_COLS) {
             if (values.containsKey(notif)) {
-                boolean isWantedActif = values.getAsBoolean(notif);
+                Boolean isWantedActif = values.getAsBoolean(notif);
+                isWantedActif = isWantedActif!=null ? isWantedActif : Boolean.FALSE;
                 enabledSettingSpyNotificationService(context, notif, isWantedActif);
             }
         }

@@ -169,7 +169,7 @@ public class AlarmPlayerService extends Service implements
         } else if (mState == State.Paused) {
             // If we're paused, just continue playback and restore the 'foreground service' state.
             mState = State.Playing;
-            setUpAsForeground(mSongTitle + " (playing)");
+            setUpAsForeground(  phone,    side);
             configAndStartMediaPlayer();
         }
     }
@@ -193,7 +193,7 @@ public class AlarmPlayerService extends Service implements
             mSongTitle = "Alarm";
 
             mState = State.Preparing;
-            setUpAsForeground(mSongTitle + " (loading)");
+            setUpAsForeground(  phone,    side);
 
 
             mPlayer.prepareAsync();
@@ -353,8 +353,8 @@ public class AlarmPlayerService extends Service implements
      * something the user is actively aware of (such as playing music), and must appear to the
      * user as a notification. That's why we create the notification here.
      */
-    void setUpAsForeground(String text) {
-        alarmNotification = new NotificationAlarmHelper(this, null, null);
+    void setUpAsForeground(String phone,  SmsLogSideEnum side) {
+        alarmNotification = new NotificationAlarmHelper(this, phone, side);
         alarmNotification.showNotificationAlarm();
     }
 
@@ -363,7 +363,7 @@ public class AlarmPlayerService extends Service implements
            alarmNotification.updateNotification(text);
        }
     }
- 
+
 
     // ===========================================================
     // Binder

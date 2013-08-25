@@ -23,8 +23,8 @@ public class MessageActionEnumLabelHelper {
                 b(MessageActionEnum.ACTION_GEO_PAIRING_RESPONSE, R.string.sms_action_pairing_response), //
                 // Geofence
                 b(MessageActionEnum.GEOFENCE_Unknown_transition, R.string.sms_action_geofence_transition_unknown), //
-                b(MessageActionEnum.GEOFENCE_ENTER, R.string.sms_action_geofence_transition_enter), //
-                b(MessageActionEnum.GEOFENCE_EXIT, R.string.sms_action_geofence_transition_exit), //
+                b(MessageActionEnum.GEOFENCE_ENTER, R.string.sms_action_geofence_transition_enter, R.string.sms_action_geofence_transition_enter_with_name, 1), //
+                b(MessageActionEnum.GEOFENCE_EXIT, R.string.sms_action_geofence_transition_exit, R.string.sms_action_geofence_transition_exit_with_name, 1), //
                 // Remote Controle
                 b(MessageActionEnum.COMMAND_OPEN_APP, R.string.sms_action_command_openApp), //
                 // Spy Event Notif
@@ -45,11 +45,22 @@ public class MessageActionEnumLabelHelper {
         byMessageActionEnum = abyMessageActionEnum;
     }
 
+    public static String getString(Context context, MessageActionEnum action ) {
+        return  getString(  context,   action,  (Object[])null);
+    }
+    public static String getString(Context context, MessageActionEnum action, Object param) {
+        return  getString(  context,   action,  new Object[]{param} );
+    }
 
-    public static String getString(Context context, MessageActionEnum action) {
+    public static String getString(Context context, MessageActionEnum action, Object[]  params) {
         LabelHoder holder = byMessageActionEnum.get(action);
         if (holder!=null) {
-            return context.getString(holder.labelResourceId);
+            LabelHoder multiLabel = holder.multiParamLabelHoder;
+            if (multiLabel!=null && params!=null && params.length== multiLabel.paramCount) {
+                return context.getString(multiLabel.labelResourceId, params);
+            } else {
+                return context.getString(holder.labelResourceId);
+            }
         }
         return null;
     }
@@ -58,13 +69,34 @@ public class MessageActionEnumLabelHelper {
         return new LabelHoder(action, labelResourceId);
     }
 
+    private static LabelHoder b(MessageActionEnum action, int labelResourceId, int labelMultiResId, int multiResParamCount) {
+        LabelHoder multiLabel =  new LabelHoder(action, labelMultiResId, multiResParamCount);
+        return new LabelHoder(action, labelResourceId, multiLabel);
+    }
+
     private static class LabelHoder {
         public final MessageActionEnum action;
         public final int labelResourceId;
+        public final int paramCount;
+        public final LabelHoder multiParamLabelHoder;
 
-        private LabelHoder(MessageActionEnum action, int labelResourceId) {
+        private LabelHoder(MessageActionEnum action, int labelResourceId ) {
+            this(action, labelResourceId, 0, null);
+        }
+
+        private LabelHoder(MessageActionEnum action, int labelResourceId, int paramCount ) {
+            this(action, labelResourceId, paramCount, null);
+        }
+
+        private LabelHoder(MessageActionEnum action, int labelResourceId, LabelHoder multiParamLabelHoder) {
+            this(action, labelResourceId, 0, multiParamLabelHoder);
+        }
+
+        private LabelHoder(MessageActionEnum action, int labelResourceId, int paramCount,  LabelHoder multiParamLabelHoder) {
             this.action = action;
             this.labelResourceId = labelResourceId;
+            this.paramCount = paramCount;
+            this.multiParamLabelHoder = multiParamLabelHoder;
         }
     }
 

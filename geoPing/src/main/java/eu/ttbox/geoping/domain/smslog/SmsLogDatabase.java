@@ -51,6 +51,7 @@ public class SmsLogDatabase {
 
         // Geofence
         public static final String COL_REQUEST_ID = "REQUEST_ID";
+        // Log statistic
         public static final String COL_TO_READ = "TO_READ";
 
         // All Cols
@@ -70,7 +71,8 @@ public class SmsLogDatabase {
         public static final String SELECT_BY_TOREAD_SIDE =  String.format("%s = 1 and %s = ?", COL_TO_READ, COL_SMS_SIDE );
 
         // Order
-        public static final String ORDER_BY_TIME_DESC =  String.format("    %s DESC", COL_TIME );
+        public static final String ORDER_BY_TIME_DESC =  String.format("%s DESC", COL_TIME );
+        public static final String ORDER_BY_GEOFENCE_VIOLATION =  String.format("%s ASC,%s DESC", COL_REQUEST_ID, COL_TIME );
 
     }
 

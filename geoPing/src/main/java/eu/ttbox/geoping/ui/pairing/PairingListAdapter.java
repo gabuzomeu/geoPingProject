@@ -20,7 +20,9 @@ import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.service.slave.GeoPingSlaveLocationService;
 import eu.ttbox.geoping.ui.person.PhotoEditorView;
 import eu.ttbox.geoping.ui.person.PhotoEditorView.EditorListener;
-import eu.ttbox.geoping.ui.person.PhotoThumbmailCache;
+import eu.ttbox.geoping.ui.person.PhotoThumbmailCache;import eu.ttbox.geoping.ui.person.PhotoThumbmailCache.PhotoLoaderAsyncTask;
+
+import eu.ttbox.geoping.ui.person.PhotoThumbmailCache.PhotoLoaderAsyncTask;
 
 public class PairingListAdapter extends android.support.v4.widget.ResourceCursorAdapter {
 
@@ -64,25 +66,27 @@ public class PairingListAdapter extends android.support.v4.widget.ResourceCursor
 		ViewHolder holder = (ViewHolder) view.getTag();
 		// Cancel any pending thumbnail task, since this view is now bound to
 		// new thumbnail
-		final PhotoLoaderAsyncTask oldTask = holder.photoLoaderAsyncTask;
-		if (oldTask != null) {
-			oldTask.cancel(false);
-		}
+	//	final PhotoLoaderAsyncTask oldTask = holder.photoLoaderAsyncTask;
+	//	if (oldTask != null) {
+	//		oldTask.cancel(false);
+	//	}
 		// Bind Value
+        final String contactId = helper.getContactId(cursor);
 		final String phoneNumber = helper.getPairingPhone(cursor);
 		holder.phoneText.setText(phoneNumber);
 		helper.setTextPairingName(holder.nameText, cursor);
 		// Photo
-		if (!TextUtils.isEmpty(phoneNumber)) {
-			Bitmap cachedResult = photoCache.get(phoneNumber);
-			if (cachedResult != null) {
-				holder.pingButton.setValues(cachedResult, false);
-			} else {
-				PhotoLoaderAsyncTask newTask = new PhotoLoaderAsyncTask(holder);
-				holder.photoLoaderAsyncTask = newTask;
-				newTask.execute(phoneNumber);
-			}
-		}
+        photoCache.loadPhoto(context, holder.pingButton, contactId, phoneNumber);
+	//	if (!TextUtils.isEmpty(phoneNumber)) {
+	//		Bitmap cachedResult = photoCache.get(phoneNumber);
+	//		if (cachedResult != null) {
+	//			holder.pingButton.setValues(cachedResult, false);
+		//	} else {
+       //  		PhotoLoaderAsyncTask newTask = photoCache.getPhotoLoaderAsyncTask(context, holder.pingButton);
+		//		holder.photoLoaderAsyncTask = newTask;
+//				newTask.execute(contactId, phoneNumber);
+		//	}
+	//	}
 		// Button
 		holder.pingButton.setEditorListener(new EditorListener() {
 			@Override
@@ -143,41 +147,7 @@ public class PairingListAdapter extends android.support.v4.widget.ResourceCursor
 		TextView nameText;
 		TextView phoneText;
 		ImageView authType;
-		PhotoLoaderAsyncTask photoLoaderAsyncTask;
-	}
-
-	// ===========================================================
-	// Listeners
-	// ===========================================================
-
-	public class PhotoLoaderAsyncTask extends AsyncTask<String, Void, Bitmap> {
-
-		final ViewHolder holder;
-
-		public PhotoLoaderAsyncTask(ViewHolder holder) {
-			super();
-			this.holder = holder;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			holder.photoLoaderAsyncTask = this;
-		}
-
-		@Override
-		protected Bitmap doInBackground(String... params) {
-			final String contactPhoneSearch = params[0];
-			Bitmap result = photoCache.loadPhotoLoaderFromContactPhone(context, contactPhoneSearch);
-			return result;
-		}
-
-		@Override
-		protected void onPostExecute(Bitmap result) {
-			if (holder.photoLoaderAsyncTask == this) {
-				holder.pingButton.setValues(result, true);
-				holder.photoLoaderAsyncTask = null;
-			}
-		}
+	//	PhotoLoaderAsyncTask photoLoaderAsyncTask;
 	}
 
 	// ===========================================================
