@@ -25,6 +25,8 @@ import eu.ttbox.geoping.GeoPingApplication;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
+import eu.ttbox.geoping.encoder.model.MessageActionEnum;
+import eu.ttbox.geoping.service.master.GeoPingMasterService;
 import eu.ttbox.geoping.service.receiver.player.AlarmPlayerService;
 
 
@@ -209,8 +211,9 @@ public class PersonRemoteControlFragment extends Fragment {
       //   Uri alert =  Settings.System.DEFAULT_ALARM_ALERT_URI;
        //playSound(getActivity(), alert);
         Log.d(TAG, "------------------ onTestPlaySoundClick");
-        Intent intent = new Intent(getActivity() ,AlarmPlayerService.class);
-        intent.setAction(AlarmPlayerService.ACTION_PLAY);
+//        Intent intent = new Intent(getActivity() ,AlarmPlayerService.class);
+        Intent intent = new Intent(getActivity() , GeoPingMasterService.class);
+        intent.setAction(MessageActionEnum.COMMAND_RING.intentAction);
         intent.putExtra(Intents.EXTRA_SMS_PHONE, entityPhoneNumber);
         intent.putExtra(Intents.EXTRA_SMSLOG_SIDE_DBCODE, SmsLogSideEnum.MASTER.getDbCode());
 

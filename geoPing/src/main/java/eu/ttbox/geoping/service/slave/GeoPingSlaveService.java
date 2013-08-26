@@ -43,6 +43,7 @@ import eu.ttbox.geoping.service.core.ContactHelper;
 import eu.ttbox.geoping.service.core.NotifPersonVo;
 import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
 import eu.ttbox.geoping.service.receiver.LogReadHistoryService;
+import eu.ttbox.geoping.service.receiver.player.AlarmPlayerService;
 import eu.ttbox.geoping.service.slave.receiver.AuthorizePhoneTypeEnum;
 
 // http://dhimitraq.wordpress.com/tag/android-intentservice/
@@ -152,6 +153,13 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
                         manageCommandOpenApplication(phone, params);
                     }
                     break;
+                    case COMMAND_RING: {
+                        // GeoPing Command : Ring
+                        String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
+                        Bundle params = intent.getBundleExtra(Intents.EXTRA_SMS_PARAMS);
+                         manageCommandRing(phone, params);
+                    }
+                    break;
                     default:
                         Log.w(TAG, "Not Manage Intent for Enum Action : " + msgAction);
                         break;
@@ -181,6 +189,15 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(new Intent(getApplicationContext(), MainActivity.class));
         stackBuilder.startActivities();
+    }
+
+
+    private void manageCommandRing(String phone, Bundle params) {
+        Intent intent = new Intent(this ,AlarmPlayerService.class);
+        intent.setAction(AlarmPlayerService.ACTION_PLAY);
+        intent.putExtra(Intents.EXTRA_SMS_PHONE, phone);
+        intent.putExtra(Intents.EXTRA_SMSLOG_SIDE_DBCODE, SmsLogSideEnum.SLAVE.getDbCode());
+        startService(intent);
     }
 
     // ===========================================================
