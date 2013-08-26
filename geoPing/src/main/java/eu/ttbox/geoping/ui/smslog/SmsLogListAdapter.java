@@ -95,6 +95,7 @@ public class SmsLogListAdapter extends android.support.v4.widget.ResourceCursorA
         holder.actionText.setText(actionLabel);
 
         // Phone
+     //   String contactId = helper.getSmsLogCPhone(cursor);
         String phone = helper.getSmsLogPhone(cursor);
         if (isDisplayContactDetail) {
             SmsLogSideEnum side = helper.getSmsLogSideEnum(cursor);
@@ -146,7 +147,7 @@ public class SmsLogListAdapter extends android.support.v4.widget.ResourceCursorA
             }
 
             // Load The Phone
-            photoCache.loadPhoto(mContext ,imageViewToLoad, null, phone);
+            photoCache.loadPhoto(mContext ,imageViewToLoad, (String)null, phone);
         } else {
             holder.photoImageView.setVisibility(View.GONE);
             holder.photoImageViewSend.setVisibility(View.GONE);

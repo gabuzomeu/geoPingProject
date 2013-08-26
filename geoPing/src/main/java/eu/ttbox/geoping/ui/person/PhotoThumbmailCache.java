@@ -27,6 +27,8 @@ public class PhotoThumbmailCache extends LruCache<String, Bitmap> {
 
    // private Executor executor = Executors.newSingleThreadExecutor();
 
+    private int executionCount = 0;
+
 	public PhotoThumbmailCache(int maxSizeBytes) {
 		super(maxSizeBytes);
 	}
@@ -113,7 +115,7 @@ public class PhotoThumbmailCache extends LruCache<String, Bitmap> {
      *
      * @param contactId
      */
-    public void loadPhoto(Context context, ImageView photoImageView,String contactId, final String phone) {
+    public void loadPhoto(Context context, ImageView photoImageView,final String contactId, final String phone) {
         cancelOldPhotoLoaderAsyncTask(photoImageView);
 
         Bitmap photo = null;
@@ -148,7 +150,10 @@ public class PhotoThumbmailCache extends LruCache<String, Bitmap> {
             photoImageView.setTag(newTask);
             // FIXME  java.util.concurrent.RejectedExecutionException: pool=128/128, queue=10/10
              newTask.execute(contactId, phone);
- //           newTask.executeOnExecutor(executor, contactId, phone);
+ //           Log.d(TAG, "PhotoLoaderAsyncTask execute for view : " + photoImageView );
+             Log.d(TAG, "PhotoLoaderAsyncTask execute " + (++executionCount) +  " for view : " + photoImageView );
+
+            //           newTask.executeOnExecutor(executor, contactId, phone);
          }
 
     }
@@ -158,6 +163,7 @@ public class PhotoThumbmailCache extends LruCache<String, Bitmap> {
         if (oldTask != null && !oldTask.isCancelled()) {
             oldTask.cancel(true);
             photoImageView.setTag(null);
+            Log.d(TAG, "PhotoLoaderAsyncTask cancel Old for view : " + photoImageView );
         }
     }
     /**
@@ -202,7 +208,10 @@ public class PhotoThumbmailCache extends LruCache<String, Bitmap> {
             PhotoLoaderAsyncTask newTask = this.getPhotoLoaderAsyncTask(context, photoImageView);
             photoImageView.setTag(newTask);
             // FIXME  java.util.concurrent.RejectedExecutionException: pool=128/128, queue=10/10
-             newTask.execute(contactId, phone);
+            newTask.execute(contactId, phone);
+//            Log.d(TAG, "PhotoLoaderAsyncTask execute for view : " + photoImageView );
+            Log.d(TAG, "PhotoLoaderAsyncTask execute " + (++executionCount) +  " for view : " + photoImageView );
+
             //newTask.executeOnExecutor(executor, contactId, phone);
 
         }
