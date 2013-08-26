@@ -58,6 +58,7 @@
     <string name="sms_action_spyevt_sim_change">Event Sim Change</string>
 
     <string name="sms_action_command_openApp">Open Application</string>
+    <string name="sms_action_command_ring">Ring</string>
 
     <!-- Menu -->
     <string name="menu_map_mypositioncenter">My position</string>

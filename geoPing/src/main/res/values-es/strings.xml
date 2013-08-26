@@ -65,8 +65,10 @@
     <string name="sms_action_spyevt_low_battery">Event Low Battery</string>
     <string name="sms_action_spyevt_phone_call">Event Phone Call</string>
     <string name="sms_action_spyevt_sim_change">Event Sim Change</string>
-    
-    
+
+    <string name="sms_action_command_openApp">Open Application</string>
+    <string name="sms_action_command_ring">Ring</string>
+
 
     <!-- Menu -->
     <string name="menu_map_mypositioncenter">Mi posicion</string>

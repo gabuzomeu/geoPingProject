@@ -11,13 +11,14 @@ public enum MessageActionEnum {
     ACTION_GEO_PAIRING("PAQ", false), //
     // Remote Controle
     COMMAND_OPEN_APP ("cop", false ), //
+    COMMAND_RING ("rng", false ), //
 
     // --- Is consume Master
     // ----------------------
     LOC("LOC"), //
     LOC_DECLARATION("lod" ), //
     ACTION_GEO_PAIRING_RESPONSE("PAR"  ), //
-    // Geofence
+     // Geofence
     GEOFENCE_Unknown_transition("fen"   ), //
     GEOFENCE_ENTER("fei" ), //
     GEOFENCE_EXIT("feo"  ), //

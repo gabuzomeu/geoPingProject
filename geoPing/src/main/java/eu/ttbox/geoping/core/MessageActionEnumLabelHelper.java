@@ -1,4 +1,4 @@
-package eu.ttbox.geoping.service.encoder;
+package eu.ttbox.geoping.core;
 
 
 import android.content.Context;
@@ -27,6 +27,7 @@ public class MessageActionEnumLabelHelper {
                 b(MessageActionEnum.GEOFENCE_EXIT, R.string.sms_action_geofence_transition_exit, R.string.sms_action_geofence_transition_exit_with_name, 1), //
                 // Remote Controle
                 b(MessageActionEnum.COMMAND_OPEN_APP, R.string.sms_action_command_openApp), //
+                b(MessageActionEnum.COMMAND_RING, R.string.sms_action_command_ring), //
                 // Spy Event Notif
                 b(MessageActionEnum.SPY_SHUTDOWN, R.string.sms_action_spyevt_shutdown), //
                 b(MessageActionEnum.SPY_BOOT, R.string.sms_action_spyevt_boot), //

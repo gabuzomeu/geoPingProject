@@ -30,7 +30,7 @@ import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
 import eu.ttbox.geoping.service.core.ContactHelper;
 import eu.ttbox.geoping.service.core.NotifPersonVo;
-import eu.ttbox.geoping.service.encoder.MessageActionEnumLabelHelper;
+import eu.ttbox.geoping.core.MessageActionEnumLabelHelper;
 import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
 import eu.ttbox.geoping.service.encoder.MessageParamEnumLabelHelper;
 import eu.ttbox.geoping.service.receiver.LogReadHistoryService;
