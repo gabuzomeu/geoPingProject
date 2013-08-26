@@ -8,10 +8,17 @@
         android:summaryOff="@string/prefs_sms_delete_onMessage_summaryOff"
         android:summaryOn="@string/prefs_sms_delete_onMessage_summaryOn"
         android:title="@string/prefs_sms_delete_onMessage" />
+
     <CheckBoxPreference
         android:defaultValue="false"
         android:key="addBlocked"
         android:title="@string/prefs_add_blocked" />
+
+    <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="inAppPay"
+            android:title="In App Pay" />
+
 
     <PreferenceCategory android:title="@string/prefs_spynotif_title" >
         <eu.ttbox.geoping.ui.prefs.comp.IntEditTextPreference

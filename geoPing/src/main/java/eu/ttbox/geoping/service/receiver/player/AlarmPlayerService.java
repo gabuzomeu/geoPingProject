@@ -90,6 +90,7 @@ public class AlarmPlayerService extends Service implements
     @Override
     public void onRebind(Intent intent) {
         Log.d(TAG, "onRebind Intent : " + intent);
+        super.onRebind(intent);
     }
 
     @Override
@@ -174,6 +175,7 @@ public class AlarmPlayerService extends Service implements
         }
     }
 
+
     /**
      * Starts playing the next song. If manualUrl is null, the next song will be randomly selected
      * from our Media Retriever (that is, it will be a random song in the user's device). If
@@ -185,11 +187,17 @@ public class AlarmPlayerService extends Service implements
         relaxResources(false); // release everything except MediaPlayer
 
         try {
+            final int streamType = AudioManager.STREAM_ALARM;
 
             createMediaPlayerIfNeeded();
-            mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mPlayer.setDataSource(getApplicationContext(), playingItem );
+             mPlayer.setDataSource(getApplicationContext(), playingItem );
+           // Volume
+            final AudioManager audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+            int maxVolume = audioManager.getStreamMaxVolume(  streamType);
+            audioManager.setStreamVolume(streamType, maxVolume, 0);
+            mPlayer.setAudioStreamType(streamType);
 
+            // Title
             mSongTitle = "Alarm";
 
             mState = State.Preparing;
@@ -237,7 +245,7 @@ public class AlarmPlayerService extends Service implements
     }
 
     public void processStopRequest() {
-        processStopRequest(false);
+        processStopRequest(true);
     }
 
     public void processStopRequest(boolean force) {
@@ -254,6 +262,9 @@ public class AlarmPlayerService extends Service implements
 //                mRemoteControlClientCompat.setPlaybackState(RemoteControlClient.PLAYSTATE_STOPPED);
 //            }
 
+            if (alarmNotification !=null) {
+                alarmNotification.cancelNotification();
+            }
             // service is no longer necessary. Will be started again if needed.
             stopSelf();
         }

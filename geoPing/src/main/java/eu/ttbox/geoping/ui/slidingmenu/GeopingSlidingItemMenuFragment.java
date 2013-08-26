@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
@@ -64,6 +66,10 @@ public class GeopingSlidingItemMenuFragment extends Fragment {
       , R.id.menu_gcm_message //
      };
 
+
+    // Service
+
+    private SharedPreferences prefs;
     // ===========================================================
     // Constructors
     // ===========================================================
@@ -74,6 +80,9 @@ public class GeopingSlidingItemMenuFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.slidingmenu_item_list, null);
+        // Service
+        prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        // Binding
         slidingmenuContainer = (ScrollView) v.findViewById(R.id.slidingmenu_container);
         personListTitleTextView = (TextView) v.findViewById(R.id.slidingmenu_person_list_title);
         personListView = (ListView) v.findViewById(R.id.slidingmenu_person_list);
@@ -102,13 +111,18 @@ public class GeopingSlidingItemMenuFragment extends Fragment {
         }
         this.menuItems = menuItems;
         // Dev activate screen
-        // TODO For Dev Only Activate the Code
+        // TODO For Dev Only Activate the Code 
         if ( BuildConfig.DEBUG) {
             for (int menuId : new int[] {R.id.menu_extra_feature, R.id.menu_gcm_message } ) {
                 SlindingMenuItemView menuItem =  menuItems.get(menuId);
                 if (menuItem!=null) {
                     menuItem.setVisibility(View.VISIBLE);
                 }
+            }
+        } else  if (prefs.getBoolean( "inAppPay",false)) {
+            SlindingMenuItemView menuItem =  menuItems.get(R.id.menu_extra_feature);
+            if (menuItem!=null) {
+                menuItem.setVisibility(View.VISIBLE);
             }
         }
         return v;

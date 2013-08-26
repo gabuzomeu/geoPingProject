@@ -14,7 +14,7 @@ import android.util.Log;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.Future;
 
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.AppConstants;
@@ -36,7 +36,6 @@ public class NotificationAlarmHelper {
 
     private boolean showNotificationByPerson = true;
 
-    private int notifId;
 
     // Service
     private AlarmPlayerService context;
@@ -44,6 +43,10 @@ public class NotificationAlarmHelper {
     private NotificationCompat.Builder mBuilder;
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
+
+    // Instance
+    private int notifId;
+    private Future taskRunning;
 
     // ===========================================================
     // Constructor
@@ -72,7 +75,6 @@ public class NotificationAlarmHelper {
         }
         return notifId;
     }
-
 
 
     public void showNotificationAlarm() {
@@ -118,13 +120,24 @@ public class NotificationAlarmHelper {
         context.startForeground(notifId, mNotification);
     }
 
+    public void cancelNotification() {
+        if (taskRunning != null) {
+            Log.d(TAG, "Cancel Notification Progressbar");
+
+            taskRunning.cancel(true);
+            taskRunning = null;
+        }
+    }
+
     public void updateNotification(String text) {
         // mBuilder.setContentText(text);
         // Notification mNotification = mBuilder.build();
         //  mNotificationManager.notify(notifId, mNotification);
         // Progress
-        NotifProgessRunnable task = new NotifProgessRunnable(notifId ) ;
-        executor.submit(task);
+
+     //   NotifProgessRunnable task = new NotifProgessRunnable(notifId);
+     //   taskRunning = executor.submit(task);
+
     }
 
     private class NotifProgessCallable implements Callable<Void> {
@@ -141,19 +154,27 @@ public class NotificationAlarmHelper {
     }
 
 
-
-        private class NotifProgessRunnable implements Runnable {
+    private class NotifProgessRunnable implements Runnable {
         int notifId;
 
         private NotifProgessRunnable(int notifId) {
             this.notifId = notifId;
         }
+        public void interrupt() {
+            Log.d(TAG, "--- ------------------------------------------------- ---");
+            Log.d(TAG, "--- NotifProgessRunnable interrupt                    ---");
+            Log.d(TAG, "--- ------------------------------------------------- ---");
 
+        }
         @Override
         public void run() {
             int incr;
             // Do the "lengthy" operation 20 times
             for (incr = 0; incr <= 100; incr += 2) {
+
+                if (taskRunning == null) {
+                    break;
+                }
                 // Sets the progress indicator to a max value, the
                 // current completion percentage, and "determinate"
                 // state
@@ -173,9 +194,13 @@ public class NotificationAlarmHelper {
             mBuilder.setContentText("Download complete") // Removes the progress bar
                     .setProgress(0, 0, false);
             mNotificationManager.notify(notifId, mBuilder.build());
+            taskRunning = null;
             context.processStopRequest(true);
+
             //context.stopForeground(true);
         }
-    };
+    }
+
+    ;
 
 }
