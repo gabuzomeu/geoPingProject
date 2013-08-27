@@ -197,7 +197,7 @@ public class ContactHelper {
 
     public static NotifPersonVo getNotifPairingVo(Context context,  PhotoThumbmailCache photoCache ,   Pairing person ) {
         // Contact Name
-        String phone =  person.phone;
+        String phone =  person !=null ? person.phone : null;
         String contactDisplayName = phone;
         Bitmap photo = null;
         if (person != null) {

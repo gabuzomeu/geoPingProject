@@ -133,6 +133,9 @@ public class GeofenceEditActivity extends ActionBarActivity {
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.menu_edit:
+                mViewPager.setCurrentItem(SectionsPagerAdapter.GEOFENCE);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -63,7 +63,7 @@
 		<slf4j-android.version>1.6.1-RC1</slf4j-android.version>
 
 		<!-- Utils -->
-		<jackson.version>2.2.2</jackson.version>
+		<jackson.version>2.2.3</jackson.version>
 		
 
 		<!-- AppEngine -->

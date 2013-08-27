@@ -9,6 +9,12 @@
             android:title="@string/menu_save"/>
 
     <item
+        android:id="@+id/menu_edit"
+        android:icon="@android:drawable/ic_menu_edit"
+        geoping:showAsAction="ifRoom"
+        android:title="@string/menu_edit"/>
+
+    <item
             android:id="@+id/menuMap_mypositoncenter"
             android:icon="@drawable/ic_action_locate"
             geoping:showAsAction="ifRoom"
