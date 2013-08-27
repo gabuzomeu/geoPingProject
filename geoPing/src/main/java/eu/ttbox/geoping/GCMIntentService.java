@@ -1,144 +1,87 @@
 package eu.ttbox.geoping;
 
-import android.app.Application;
+
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+import android.app.IntentService;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.SystemClock;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.google.android.gcm.GCMBaseIntentService;
-import com.google.android.gcm.GCMRegistrar;
-import com.google.cloud.backend.android.CloudBackendAsync;
-import com.google.cloud.backend.android.Consts;
+public class GcmIntentService extends IntentService {
 
-import java.util.concurrent.CountDownLatch;
+    public static final int NOTIFICATION_ID = 1;
+    private NotificationManager mNotificationManager;
+    NotificationCompat.Builder builder;
 
-public class GCMIntentService extends GCMBaseIntentService {
-
-
-    private final static String GCM_KEY_SUBID = "subId";
-
-    private final static String GCM_TYPEID_QUERY = "query";
-
-    private final static CountDownLatch latch = new CountDownLatch(1);
-
-    protected static String regId;
-
-    /**
-     * Register the device for GCM.
-     *
-     * @param app
-     *          {@link android.app.Application} that will be used for registering on GCM.
-     */
-    public static void registerIfNeeded(Application app) {
-
-        // check if already registered
-        if (GCMRegistrar.isRegistered(app)) {
-            Log.i(Consts.TAG, "register: already registered: " + app);
-            return;
-        }
-
-        // validate project number
-        boolean hasValidProjectNumber = Consts.PROJECT_NUMBER.matches("\\d+");
-        if (!hasValidProjectNumber) {
-            Log.i(Consts.TAG, "register: invalid project number: " + Consts.PROJECT_NUMBER);
-            return;
-        }
-
-        // register the app
-        GCMRegistrar.checkDevice(app);
-        GCMRegistrar.checkManifest(app);
-        GCMRegistrar.register(app, Consts.PROJECT_NUMBER);
-        Log.i(Consts.TAG, "register: registering GCM for " + app + "...");
+    public GcmIntentService() {
+        super("GcmIntentService");
     }
+    public static final String TAG = "GCM Demo";
 
-    /**
-     * Returns registration id associated with the specified {@link Application}.
-     * This method will block the thread until regId will be available.
-     *
-     * @param app
-     *          {@link Application}
-     * @return registration id
-     */
-    public static String getRegistrationId(Application app) {
-
-        // try to get regId
-        String regId = GCMRegistrar.getRegistrationId(app);
-        if (regId != null && regId.trim().length() > 0) {
-            return regId;
-        }
-
-        // wait for regId from onRegistered
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            Log.i(Consts.TAG, "getRegistrationId: ", e);
-        }
-        regId = GCMRegistrar.getRegistrationId(app);
-        if (regId != null && regId.trim().length() > 0) {
-            return regId;
-        } else {
-            throw new IllegalStateException("getRegistrationId: Can't find regId for: " + app);
-        }
-    }
-
-    public GCMIntentService() {
-        super(Consts.PROJECT_NUMBER);
-    }
-
-    /**
-     * Called on registration error. This is called in the application of a
-     * Service - no dialog or UI.
-     *
-     * @param context
-     *          the Context
-     * @param errorId
-     *          an error message
-     */
     @Override
-    public void onError(Context context, String errorId) {
-    }
+    protected void onHandleIntent(Intent intent) {
+        Bundle extras = intent.getExtras();
+        GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
+        // The getMessageType() intent parameter must be the intent you received
+        // in your BroadcastReceiver.
+        String messageType = gcm.getMessageType(intent);
 
-    /**
-     * Handles GCM and dispatch the message based on subscription ID. SubId
-     * consists of 1) RegisterID, 2) typeId and 3) payload with delimiter ":".
-     */
-    @Override
-    public void onMessage(Context context, Intent intent) {
-
-        // decode subId in the message
-        String subId = intent.getStringExtra(GCM_KEY_SUBID);
-        Log.i(Consts.TAG, "onMessage: subId: " + subId);
-        String[] tokens = subId.split(":");
-        String typeId = tokens[1];
-
-        // dispatch message
-        if (GCM_TYPEID_QUERY.equals(typeId)) {
-            CloudBackendAsync.handleQueryMessage(tokens[2]);
+        if (!extras.isEmpty()) {  // has effect of unparcelling Bundle
+            /*
+             * Filter messages based on message type. Since it is likely that GCM will be
+             * extended in the future with new message types, just ignore any message types you're
+             * not interested in, or that you don't recognize.
+             */
+            if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
+                sendNotification("Send error: " + extras.toString());
+            } else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
+                sendNotification("Deleted messages on server: " + extras.toString());
+                // If it's a regular GCM message, do some work.
+            } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
+                // This loop represents the service doing some work.
+                for (int i = 0; i < 5; i++) {
+                    Log.i(TAG, "Working... " + (i + 1)
+                            + "/5 @ " + SystemClock.elapsedRealtime());
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                    }
+                }
+                Log.i(TAG, "Completed work @ " + SystemClock.elapsedRealtime());
+                // Post notification of received message.
+                sendNotification("Received: " + extras.toString());
+                Log.i(TAG, "Received: " + extras.toString());
+            }
         }
+        // Release the wake lock provided by the WakefulBroadcastReceiver.
+        GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    /**
-     * Called when a registration token has been received.
-     *
-     * @param context
-     *          the Context
-     */
-    @Override
-    public void onRegistered(Context context, String regId) {
-        // notify waiters
-        if (latch != null) {
-            latch.countDown();
-            Log.i(Consts.TAG, "onRegistered: for application: " + context + ", regId: " + regId);
-        }
-    }
+    // Put the message into a notification and post it.
+    // This is just one simple example of what you might choose to do with
+    // a GCM message.
+    private void sendNotification(String msg) {
+        mNotificationManager = (NotificationManager)
+                this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-    /**
-     * Called when the device has been unregistered.
-     *
-     * @param context
-     *          the Context
-     */
-    @Override
-    protected void onUnregistered(Context context, String registrationId) {
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                new Intent(this, MainActivity.class), 0);
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_stat_gcm)
+                        .setContentTitle("GCM Notification")
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(msg))
+                        .setContentText(msg);
+
+        mBuilder.setContentIntent(contentIntent);
+        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
 }

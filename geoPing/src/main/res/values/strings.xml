@@ -12,6 +12,7 @@
     <string name="menu_cancel">Cancel</string>
 
     <string name="send">Send</string>
+    <string name="clear">Clear</string>
 
     <!-- Share -->
     <string name="menu_share_app">Share GeoPing</string>

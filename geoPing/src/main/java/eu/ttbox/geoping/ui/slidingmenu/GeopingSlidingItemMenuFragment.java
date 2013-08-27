@@ -26,7 +26,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.google.cloud.backend.android.sample.guestbook.GuestbookActivity;
+
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivityBase;
 
 import eu.ttbox.geoping.BuildConfig;
@@ -37,6 +37,7 @@ import eu.ttbox.geoping.core.VersionUtils;
 import eu.ttbox.geoping.domain.PersonProvider;
 import eu.ttbox.geoping.domain.person.PersonDatabase.PersonColumns;
 import eu.ttbox.geoping.domain.person.PersonHelper;
+import eu.ttbox.geoping.ui.Gcm.GcmActivity;
 import eu.ttbox.geoping.ui.billing.ExtraFeaturesActivity;
 import eu.ttbox.geoping.ui.geofence.GeofenceListActivity;
 import eu.ttbox.geoping.ui.map.ShowMapActivity;
@@ -267,7 +268,7 @@ public class GeopingSlidingItemMenuFragment extends Fragment {
         case R.id.menu_extra_feature:
             return ExtraFeaturesActivity.class;
         case R.id.menu_gcm_message:
-             return GuestbookActivity.class;
+             return GcmActivity.class;
         default:
             return null;
         }
