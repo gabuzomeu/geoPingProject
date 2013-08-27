@@ -75,8 +75,8 @@ public class UpgradeDbHelper {
         Cursor cursor = null;
         try {
             // Init Columns Arrays
-            int columnSize = stringColums.length + intColums.length + longColums.length;
-            String[] columns = concatAllCols(columnSize, stringColums, intColums, longColums);
+          //  int columnSize = stringColums.length + intColums.length + longColums.length;
+            String[] columns = null;//concatAllCols(columnSize, stringColums, intColums, longColums);
             // Do copy Table
             cursor = db.query(oldTable, columns, null, null, null, null, null);
             // ContentResolver cr = context.getContentResolver();

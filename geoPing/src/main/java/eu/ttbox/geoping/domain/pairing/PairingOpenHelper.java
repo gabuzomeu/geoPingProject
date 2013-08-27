@@ -20,7 +20,7 @@ import eu.ttbox.geoping.domain.person.PersonDatabase.PersonColumns;
  * <li>Db version 6 : Geoping 0.1.6 (39)</li>
  * <li>Db version 7 : Geoping 0.2.0 (52)</li>
  * <li>Db version 8 : Geoping 0.2.2 (??)</li>
- * <li>Db version 9 : Geoping 0.2.3 (??) : Ajout de contact Id</li>
+ * <li>Db version 9 : Geoping 0.3.0 (??) : Ajout de contact Id</li>
  * </ul>
  *  
  *
@@ -147,6 +147,7 @@ public class PairingOpenHelper extends SQLiteOpenHelper {
         // Read previous values
         // ----------------------
         ArrayList<ContentValues> oldPairingRows = null;
+        ArrayList<ContentValues> oldGeofenceRows = null;
         if (oldVersion <= 5) {
             String[] stringColums = new String[] { //
             PairingColumns.COL_NAME, PairingColumns.COL_PHONE, PairingColumns.COL_PHONE_NORMALIZED, PairingColumns.COL_PHONE_MIN_MATCH //
@@ -159,7 +160,10 @@ public class PairingOpenHelper extends SQLiteOpenHelper {
             // Drop All Table
             db.execSQL("DROP TABLE IF EXISTS pairingFTS");
         } else {
-            oldPairingRows = UpgradeDbHelper.copyTable(db, PairingDatabase.TABLE_PAIRING_FTS, PairingColumns.ALL_COLS, new String[0], new String[0]);
+//            oldPairingRows = UpgradeDbHelper.copyTable(db, PairingDatabase.TABLE_PAIRING_FTS, PairingColumns.ALL_COLS, new String[0], new String[0]);
+//            oldGeofenceRows = UpgradeDbHelper.copyTable(db, GeoFenceDatabase.TABLE_GEOFENCE, GeoFenceColumns.ALL_COLS, new String[0], new String[0]);
+            oldPairingRows = UpgradeDbHelper.copyTable(db, PairingDatabase.TABLE_PAIRING_FTS );
+            oldGeofenceRows = UpgradeDbHelper.copyTable(db, GeoFenceDatabase.TABLE_GEOFENCE );
          }
         // Create the new Table
         // ----------------------
@@ -172,6 +176,10 @@ public class PairingOpenHelper extends SQLiteOpenHelper {
         if (oldPairingRows != null && !oldPairingRows.isEmpty()) {
             List<String> validColumns = Arrays.asList(PairingColumns.ALL_COLS);
             UpgradeDbHelper.insertOldRowInNewTable(db, oldPairingRows, PairingDatabase.TABLE_PAIRING_FTS, validColumns);
+        }
+        if (oldGeofenceRows != null && !oldGeofenceRows.isEmpty()) {
+            List<String> validColumns = Arrays.asList(GeoFenceColumns.ALL_COLS);
+            UpgradeDbHelper.insertOldRowInNewTable(db, oldGeofenceRows, GeoFenceDatabase.TABLE_GEOFENCE, validColumns);
         }
     }
 
