@@ -157,7 +157,7 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
                         // GeoPing Command : Ring
                         String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
                         Bundle params = intent.getBundleExtra(Intents.EXTRA_SMS_PARAMS);
-                         manageCommandRing(phone, params);
+                        manageCommandRing(phone, params);
                     }
                     break;
                     default:

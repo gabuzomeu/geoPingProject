@@ -215,7 +215,7 @@ public class PersonRemoteControlFragment extends Fragment {
         Intent intent = new Intent(getActivity() , GeoPingMasterService.class);
         intent.setAction(MessageActionEnum.COMMAND_RING.intentAction);
         intent.putExtra(Intents.EXTRA_SMS_PHONE, entityPhoneNumber);
-        intent.putExtra(Intents.EXTRA_SMSLOG_SIDE_DBCODE, SmsLogSideEnum.MASTER.getDbCode());
+     //   intent.putExtra(Intents.EXTRA_SMSLOG_SIDE_DBCODE, SmsLogSideEnum.MASTER.getDbCode());
 
         getActivity().startService(intent);
        // Intent checkIntent = new Intent();
