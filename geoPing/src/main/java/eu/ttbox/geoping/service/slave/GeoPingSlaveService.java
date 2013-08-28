@@ -40,6 +40,7 @@ import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
 import eu.ttbox.geoping.service.SmsSenderHelper;
 import eu.ttbox.geoping.service.core.ContactHelper;
+import eu.ttbox.geoping.service.core.ContactVo;
 import eu.ttbox.geoping.service.core.NotifPersonVo;
 import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
 import eu.ttbox.geoping.service.receiver.LogReadHistoryService;
@@ -184,6 +185,7 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
     // ===========================================================
     // Commande
     // ===========================================================
+
     private void manageCommandOpenApplication(String phone, Bundle params) {
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(MainActivity.class);
@@ -400,14 +402,25 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
         // Create It
         if (result == null) {
             // TODO Read Prefs values
-            result = new Pairing();
-            result.setPhone(phoneNumber);
-            result.setShowNotification(displayGeopingRequestNotification);
-            if (authorizeNewPairing) {
-                result.setAuthorizeType(PairingAuthorizeTypeEnum.AUTHORIZE_REQUEST);
-            } else {
-                result.setAuthorizeType(PairingAuthorizeTypeEnum.AUTHORIZE_NEVER);
-            }
+            result = createPairingByPhone(phoneNumber);
+         }
+        return result;
+    }
+
+    private Pairing createPairingByPhone(String phoneNumber) {
+        Pairing result = new Pairing();
+        result.setPhone(phoneNumber);
+        result.setShowNotification(displayGeopingRequestNotification);
+        if (authorizeNewPairing) {
+            result.setAuthorizeType(PairingAuthorizeTypeEnum.AUTHORIZE_REQUEST);
+        } else {
+            result.setAuthorizeType(PairingAuthorizeTypeEnum.AUTHORIZE_NEVER);
+        }
+        // Search Contact Data
+        ContactVo contactVo =  ContactHelper.searchContactForPhone(this, phoneNumber);
+        if (contactVo!=null) {
+            result.setContactId(String.valueOf(contactVo.id));
+            result.setDisplayName(contactVo.displayName);
         }
         return result;
     }

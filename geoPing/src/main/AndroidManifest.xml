@@ -39,7 +39,7 @@
 
     <!-- Exchange Protocol -->
     <uses-permission android:name="android.permission.SEND_SMS"/>
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/> 
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
 
     <!-- Display Contact Photo -->
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
@@ -261,7 +261,16 @@
                  <data android:scheme="package"/>
             </intent-filter>    
         </receiver> 
-          
+
+        <!-- Resnt Sms Listener -->
+        <receiver android:enabled="false"  android:name="eu.ttbox.geoping.service.slave.blocker.ReSentSmsMessageReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+            <intent-filter android:priority="100">
+                <action android:name="android.provider.Telephony.SMS_SENT"/>
+            </intent-filter>
+        </receiver>
           
         <!-- Geo Location background service Receiver-->
         <service android:enabled="false" android:exported="false" android:name=".service.slave.BackgroudLocService">
