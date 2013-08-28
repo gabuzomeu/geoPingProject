@@ -2,8 +2,10 @@ package eu.ttbox.geoping.ui.pairing;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -16,9 +18,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import eu.ttbox.geoping.R;
+import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.PairingProvider;
 import eu.ttbox.geoping.domain.pairing.PairingDatabase.PairingColumns;
@@ -37,8 +41,10 @@ public class PairingListFragment extends Fragment {
 
 	// binding
 	private ListView listView;
+    private ImageButton lockPairingButton;
 
 	// init
+    private SharedPreferences sharedPreferences;
 	private PairingListAdapter listAdapter;
 
 	private final AdapterView.OnItemClickListener mOnClickListener = new AdapterView.OnItemClickListener() {
@@ -59,6 +65,8 @@ public class PairingListFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.d(TAG, "onCreateView");
 		View v = inflater.inflate(R.layout.pairing_list, container, false);
+        // Service
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		// Bindings
 		listView = (ListView) v.findViewById(android.R.id.list);
 		listView.setEmptyView(v.findViewById(android.R.id.empty));
@@ -68,6 +76,13 @@ public class PairingListFragment extends Fragment {
 		listAdapter = new PairingListAdapter(getActivity(), null, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 		listView.setAdapter(listAdapter);
 		listView.setOnItemClickListener(mOnClickListener);
+        lockPairingButton= (ImageButton)v.findViewById(R.id.lock_pairing_button);
+        lockPairingButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onLockPairingClick(v);
+            }
+        });
 		// Listener
 		OnClickListener addPairingOnClickListener = new OnClickListener() {
 			@Override
@@ -83,13 +98,20 @@ public class PairingListFragment extends Fragment {
 		return v;
 	}
 
+
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		Log.d(TAG, "onActivityCreated");
 		// Load data
 		getActivity().getSupportLoaderManager().initLoader(PAIRING_LIST_LOADER, null, pairingLoaderCallback);
+        // Load Lock Config
+       boolean isAuthNewPairing =  sharedPreferences.getBoolean(AppConstants.PREFS_AUTHORIZE_GEOPING_PAIRING, true);
+       initLockPairingButton(isAuthNewPairing);
 	}
+
+
 
 	public void onAddEntityClick(View v) {
 		Intent intent = Intents.editPairing(getActivity(), null);
@@ -121,6 +143,23 @@ public class PairingListFragment extends Fragment {
 			}
 		}
 	}
+
+    private void onLockPairingClick(View v) {
+        boolean isAuthNewPairing = sharedPreferences.getBoolean(AppConstants.PREFS_AUTHORIZE_GEOPING_PAIRING, true);
+        isAuthNewPairing = !isAuthNewPairing;
+        final SharedPreferences.Editor localEdit = sharedPreferences.edit();
+        localEdit.putBoolean(AppConstants.PREFS_AUTHORIZE_GEOPING_PAIRING, isAuthNewPairing);
+        localEdit.commit();
+        initLockPairingButton(isAuthNewPairing);
+    }
+
+    private void initLockPairingButton(boolean isAuthNewPairing) {
+        if (isAuthNewPairing) {
+            lockPairingButton.setImageResource(R.drawable.ic_device_access_not_secure);
+        } else {
+            lockPairingButton.setImageResource(R.drawable.ic_device_access_secure);
+        }
+    }
 
 	// ===========================================================
 	// Loader

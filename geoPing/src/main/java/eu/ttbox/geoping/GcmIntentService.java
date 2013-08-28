@@ -15,6 +15,8 @@ import android.util.Log;
 
 public class GcmIntentService extends IntentService {
 
+    public static final String TAG = "GcmIntentService";
+
     public static final int NOTIFICATION_ID = 1;
     private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
@@ -22,7 +24,6 @@ public class GcmIntentService extends IntentService {
     public GcmIntentService() {
         super("GcmIntentService");
     }
-    public static final String TAG = "GCM Demo";
 
     @Override
     protected void onHandleIntent(Intent intent) {

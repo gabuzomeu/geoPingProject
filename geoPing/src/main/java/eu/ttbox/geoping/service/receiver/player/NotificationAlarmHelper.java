@@ -135,8 +135,8 @@ public class NotificationAlarmHelper {
         //  mNotificationManager.notify(notifId, mNotification);
         // Progress
 
-     //   NotifProgessRunnable task = new NotifProgessRunnable(notifId);
-     //   taskRunning = executor.submit(task);
+        NotifProgessRunnable task = new NotifProgessRunnable(notifId);
+         taskRunning = executor.submit(task);
 
     }
 
