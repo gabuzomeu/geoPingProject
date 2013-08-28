@@ -19,15 +19,27 @@
 
     <LinearLayout
             android:id="@android:id/empty"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-        <Button
-                android:id="@+id/add_pairing_button_help"
+        <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/add_pairing"/>
+                android:orientation="horizontal">
+
+            <ImageButton
+                    android:id="@+id/lock_pairing_button_help"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/ic_device_access_not_secure"
+                    android:text="Lock"/>
+            <Button
+                    android:id="@+id/add_pairing_button_help"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_pairing" />
+         </LinearLayout>
 
         <ScrollView
                 android:layout_width="wrap_content"
@@ -46,8 +58,8 @@
 
 
     <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
         <ImageButton

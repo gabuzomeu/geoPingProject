@@ -42,8 +42,10 @@ public class PairingListFragment extends Fragment {
 	// binding
 	private ListView listView;
     private ImageButton lockPairingButton;
-
-	// init
+    private ImageButton lockPairingButtonHelp;
+    private Button addEntityButton;
+    private Button addEntityButtonHelp;
+    // init
     private SharedPreferences sharedPreferences;
 	private PairingListAdapter listAdapter;
 
@@ -57,6 +59,12 @@ public class PairingListFragment extends Fragment {
 		}
 	};
 
+    private final OnClickListener mOnLockPairingClickListener =new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            onLockPairingClick(v);
+        }
+    };
     // ===========================================================
     // Constructor
     // ===========================================================
@@ -70,19 +78,16 @@ public class PairingListFragment extends Fragment {
 		// Bindings
 		listView = (ListView) v.findViewById(android.R.id.list);
 		listView.setEmptyView(v.findViewById(android.R.id.empty));
-		Button addEntityButton = (Button) v.findViewById(R.id.add_pairing_button);
-		Button addEntityButtonHelp = (Button) v.findViewById(R.id.add_pairing_button_help);
-		// init
+		addEntityButton = (Button) v.findViewById(R.id.add_pairing_button);
+		addEntityButtonHelp = (Button) v.findViewById(R.id.add_pairing_button_help);
+        lockPairingButton= (ImageButton)v.findViewById(R.id.lock_pairing_button);
+        lockPairingButton.setOnClickListener(mOnLockPairingClickListener);
+        lockPairingButtonHelp= (ImageButton)v.findViewById(R.id.lock_pairing_button_help);
+        lockPairingButtonHelp.setOnClickListener(mOnLockPairingClickListener);
+        // init
 		listAdapter = new PairingListAdapter(getActivity(), null, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 		listView.setAdapter(listAdapter);
 		listView.setOnItemClickListener(mOnClickListener);
-        lockPairingButton= (ImageButton)v.findViewById(R.id.lock_pairing_button);
-        lockPairingButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onLockPairingClick(v);
-            }
-        });
 		// Listener
 		OnClickListener addPairingOnClickListener = new OnClickListener() {
 			@Override
@@ -106,11 +111,28 @@ public class PairingListFragment extends Fragment {
 		Log.d(TAG, "onActivityCreated");
 		// Load data
 		getActivity().getSupportLoaderManager().initLoader(PAIRING_LIST_LOADER, null, pairingLoaderCallback);
-        // Load Lock Config
-       boolean isAuthNewPairing =  sharedPreferences.getBoolean(AppConstants.PREFS_AUTHORIZE_GEOPING_PAIRING, true);
-       initLockPairingButton(isAuthNewPairing);
+        loadLockPairingData();
 	}
 
+    private void loadLockPairingData() {
+        // Load Lock Config
+        boolean isAuthNewPairing =  sharedPreferences.getBoolean(AppConstants.PREFS_AUTHORIZE_GEOPING_PAIRING, true);
+        initLockPairingButton(isAuthNewPairing);
+
+    }
+    // ===========================================================
+    // LifeCycle
+    // ===========================================================
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadLockPairingData();
+    }
+
+    // ===========================================================
+    // Click Listener
+    // ===========================================================
 
 
 	public void onAddEntityClick(View v) {
@@ -156,8 +178,14 @@ public class PairingListFragment extends Fragment {
     private void initLockPairingButton(boolean isAuthNewPairing) {
         if (isAuthNewPairing) {
             lockPairingButton.setImageResource(R.drawable.ic_device_access_not_secure);
+            lockPairingButtonHelp.setImageResource(R.drawable.ic_device_access_not_secure);
+            addEntityButton.setEnabled(true);
+            addEntityButtonHelp.setEnabled(true);
         } else {
             lockPairingButton.setImageResource(R.drawable.ic_device_access_secure);
+            lockPairingButtonHelp.setImageResource(R.drawable.ic_device_access_secure);
+            addEntityButton.setEnabled(false);
+            addEntityButtonHelp.setEnabled(false);
         }
     }
 
