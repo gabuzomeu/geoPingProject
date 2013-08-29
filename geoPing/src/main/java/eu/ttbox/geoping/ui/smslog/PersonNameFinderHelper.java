@@ -8,7 +8,10 @@ import android.os.AsyncTask;
 import android.support.v4.util.LruCache;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
+
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import eu.ttbox.geoping.core.PhoneNumberUtils;
 import eu.ttbox.geoping.domain.PairingProvider;
@@ -36,6 +39,7 @@ public class PersonNameFinderHelper {
     private Context mContext;
     private LruCache<String, String> cache;
 
+    private int executionCount = 0;
 
     public PersonNameFinderHelper(Context context, boolean isDisplayPhoneAndName) {
       this(context, isDisplayPhoneAndName, 1024*1024);
@@ -47,13 +51,26 @@ public class PersonNameFinderHelper {
         this.cache = new LruCache<String, String>(cacheSize);
     }
 
+    private void cancelOldAsyncTask(View holderTask) {
+        final AsyncTask oldTask = (AsyncTask) holderTask.getTag();
+        if (oldTask != null && !oldTask.isCancelled()) {
+            oldTask.cancel(true);
+            holderTask.setTag(null);
+            Log.d(TAG, "AsyncTask cancel Old for view : " + holderTask );
+        }
+    }
+
     public void setTextViewPersonNameByPhone(TextView textView, String phone, SmsLogSideEnum smsLogSide) {
+        // Cancel previous Async
+        cancelOldAsyncTask(textView);
+
         if (TextUtils.isEmpty(phone)) {
             textView.setText(null);
             return;
         }
+       // boolean isContactPhone = !TextUtils.isEmpty(phone);
 //        Log.d(TAG, "setTextViewPersonNameByPhone for " + phone + " on " + smsLogSide);
-        // Base Uri
+        // Search In Cache
         String  cacheKey = null;
         String nameResult = null;
         switch (smsLogSide) {
@@ -75,17 +92,17 @@ public class PersonNameFinderHelper {
              String nameToDefine = getComputeTextNameAndPhone( nameResult, phone);
              textView.setText(nameToDefine);
         } else {
-            // Set Temporary Phone as Name
-            textView.setText(phone);
+
+             // Set Temporary Phone as Name
+//            textView.setText(phone);
+            textView.setText(VALUE_FOR_NOT_FOUND);
             // Cancel previous Async
-            final PersonNameFinderAsyncTask oldTask = (PersonNameFinderAsyncTask) textView.getTag();
-            if (oldTask != null) {
-                oldTask.cancel(false);
-                textView.setTag(null);
-            }
-            PersonNameFinderAsyncTask newTask = new PersonNameFinderAsyncTask(textView, smsLogSide);
+            cancelOldAsyncTask(textView);
+            // Search photos
+             PersonNameFinderAsyncTask newTask = new PersonNameFinderAsyncTask(textView, smsLogSide);
             textView.setTag(newTask);
         //    Log.d(TAG, "PersonNameFinderAsyncTask execute for " + phone + " on cacheKey " + cacheKey);
+            Log.d(TAG, "PhotoLoaderAsyncTask execute " + (++executionCount) +  " for view : " + textView );
             newTask.execute(phone, cacheKey);
         }
     }
@@ -159,22 +176,34 @@ public class PersonNameFinderHelper {
             this.smsLogSide = smsLogSid;
         }
 
-//        @Override
-//        protected void onPreExecute() {
-//            holder.setTag(this);
-//        }
+
+        @Override
+        protected void onPreExecute() {
+            if (holder!=null) {
+                Object tag = holder.getTag();
+                if (tag==null) {
+                    holder.setTag(this);
+                } else if (tag!=this) {
+                    this.cancel(true);
+                }
+            }
+        }
 
         @Override
         protected String doInBackground(String... params) {
             String phone = params[0];
             String cacheKey = params[1];
+           // boolean isContactPhone = TextUtils.isEmpty(phone);
             Log.d(TAG, "PersonNameFinderAsyncTask doInBackground Search for Phone : " + phone );
-             // Search In Cache
+
+             // Search In Cache And NoCache
             String result = cache.get(cacheKey);
+
             // Search In Db
             if (TextUtils.isEmpty(result)) {
                  result = getPersonNameByPhone(phone, smsLogSide);
             }
+
             // Search In Contact Directory
             if (TextUtils.isEmpty(result)) {
                  ContactVo contact = ContactHelper.searchContactForPhone(mContext,  phone);
@@ -187,8 +216,8 @@ public class PersonNameFinderHelper {
                   cache.put(cacheKey, result);
             } else {
                 // Nothing found, so register the Search Criteria
-                 cache.put(cacheKey, phone);
-//                cache.put(cacheKey, VALUE_FOR_NOT_FOUND);
+//                 cache.put(cacheKey, phone);
+               cache.put(cacheKey, VALUE_FOR_NOT_FOUND);
             }
             // Compute Concatenate
             result = getComputeTextNameAndPhone(result, phone);
@@ -200,6 +229,7 @@ public class PersonNameFinderHelper {
             // Define Result
             if (!TextUtils.isEmpty(result)) {
                 holder.setText(result);
+                Log.d(TAG, "PersonNameFinder onPostExecute Contact : " + (result != null));
             }
             // Clear Ref
             holder.setTag(null);
