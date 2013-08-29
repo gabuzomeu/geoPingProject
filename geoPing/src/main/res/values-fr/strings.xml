@@ -195,25 +195,21 @@
 
     <!-- Help -->
 <!--     <string name="person_help">Liste des personnes auquelles vous pouvez demander un GeoPing.\n\nLa fonction d\'appariement permet de demander à l\'application Geoping distante quels seront vos droits de demande de GeoPing</string> -->
-    <string name="person_help">Liste des personnes auquelles vous pouvez demander un GeoPing.\n  \n
-        Différentes étapes pour associer une personne : \n
+    <string name="person_help">"Liste des personnes à GeoPinger
         <b> 1- </b> Ajoutez une personne en saisissant son numéro de téléphone (ou en le sélectionnant dans la liste de contacts) \n
         <b> 2- </b> Installez l\'application GeoPing sur le deuxième téléphone (pour lequel vous souhaitez obtenir sa localisation) \n
         <b> 3- </b> Envoyez une demande d\'association pour autoriser seulement votre numéro de téléphone \n
         <b> 4- </b> Attendez l\'arrivée du SMS sur le deuxième téléphone pour accepter l\'association dans la barre de notification \n
         <b> 5- </b> Optionnel : vous pouvez empécher toute nouvelle association dans le menu <i>Paramètre</i> \n
-       \n Vous pouvez maintenant obtenir la position de ce deuxième téléphone \n 
+       \n Vous pouvez maintenant obtenir la position de ce deuxième téléphone \n"
     </string>
-    <string name="pairing_help">
-        La liste des associations représente la liste des personnes associées auquelles vous acceptez (ou pas) d\'envoyer votre GeoPing.\n
-        Votre position géographique est obtenue grâce au GPS ou tout autre capteur présent sur votre téléphone, comme la triangulation des antennes GSM. \n\n
-        3 options d\'association sont disponibles : \n 
-         <b>   * Bloquer : </b> Empêche toute demande de GeoPing \n 
-         <b>   * Toujours :</b> Accepte systématiquement la demande de Geoping.\n 
-         <b>   * Sur validation :</b>  Une notification vous demandera automatiquement l\'acceptation du GeoPing \n 
-         \n
-         Si vous le souhaitez, l\'envoi d\'une notification de demande de GeoPing est configurable\n 
-        </string>
+    <string name="pairing_help">"Seule les personnes authorisées à peuvent obtenir la position géographique par GeoPing.\n
+3 sécurités sont disponible :
+         <b>   * Bloquer : </b> Empêche toute demande de GeoPing\n
+         <b>   * Toujours :</b> Accepte systématiquement la demande de Geoping\n
+         <b>   * Sur validation :</b>  Une notification vous demandera automatiquement l\'acceptation du GeoPing"
+    </string>
+
     <string name="smslog_help">Liste des messages envoyés ou reçus par l\'application GeoPing.</string>
     
 </resources>

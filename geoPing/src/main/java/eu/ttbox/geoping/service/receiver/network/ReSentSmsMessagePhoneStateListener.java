@@ -1,4 +1,4 @@
-package eu.ttbox.geoping.service.slave.blocker;
+package eu.ttbox.geoping.service.receiver.network;
 
 
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.util.Log;
 
-
+@Deprecated
 public class ReSentSmsMessagePhoneStateListener extends PhoneStateListener {
 
     private static final String TAG = "ReSentSmsMessagePhoneStateListener";

@@ -22,27 +22,37 @@ import org.json.JSONObject;
  * Represents an in-app product's listing details.
  */
 public class SkuDetails {
-    String mItemType;
+
+ //   String mItemType;
     String mSku;
     String mType;
     String mPrice;
     String mTitle;
     String mDescription;
-    String mJson;
+  //  String mJson;
 
     public SkuDetails(String jsonSkuDetails) throws JSONException {
         this(IabHelper.ITEM_TYPE_INAPP, jsonSkuDetails);
     }
 
     public SkuDetails(String itemType, String jsonSkuDetails) throws JSONException {
-        mItemType = itemType;
-        mJson = jsonSkuDetails;
+       // mItemType = itemType;
+        // Parse Json
+        String mJson = jsonSkuDetails;
         JSONObject o = new JSONObject(mJson);
         mSku = o.optString("productId");
         mType = o.optString("type");
         mPrice = o.optString("price");
         mTitle = o.optString("title");
         mDescription = o.optString("description");
+    }
+
+    public SkuDetails(String productId, String type, String title, String price, String description) {
+        mSku = productId;
+        mType = type;
+        mPrice = price;
+        mTitle = title;
+        mDescription = description;
     }
 
     public String getSku() { return mSku; }
@@ -53,6 +63,13 @@ public class SkuDetails {
 
     @Override
     public String toString() {
-        return "SkuDetails:" + mJson;
+        return "SkuDetails{" + //
+                "productId='" + mSku + '\'' +
+             //   ", mItemType='" + mItemType + '\'' +
+                ", type='" + mType + '\'' +
+                ", title='" + mTitle + '\'' +
+                ", price='" + mPrice + '\'' +
+                ", description='" + mDescription + '\'' +
+                '}';
     }
 }

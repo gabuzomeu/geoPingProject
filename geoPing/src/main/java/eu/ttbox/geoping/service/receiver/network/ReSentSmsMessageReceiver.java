@@ -1,4 +1,4 @@
-package eu.ttbox.geoping.service.slave.blocker;
+package eu.ttbox.geoping.service.receiver.network;
 
 
 import android.content.BroadcastReceiver;

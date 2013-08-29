@@ -1,4 +1,4 @@
-package eu.ttbox.geoping;
+package eu.ttbox.geoping.service.gcm;
 
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -13,13 +13,17 @@ import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import eu.ttbox.geoping.MainActivity;
+import eu.ttbox.geoping.R;
+
 public class GcmIntentService extends IntentService {
 
     public static final String TAG = "GcmIntentService";
 
     public static final int NOTIFICATION_ID = 1;
+
     private NotificationManager mNotificationManager;
-    NotificationCompat.Builder builder;
+    private NotificationCompat.Builder builder;
 
     public GcmIntentService() {
         super("GcmIntentService");

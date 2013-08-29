@@ -195,14 +195,9 @@ public class ExtraFeaturesActivity extends GeoPingSlidingMenuFragmentActivity   
 
     private SkuDetailsListAdapter createListItems() {
         SkuDetailsListAdapter adapter = new SkuDetailsListAdapter(this);
-        try {
-            //          adapter.add(new SkuDetails("{\"productId\" : \"" + SKU_NO_AD_PER_YEAR +
-            //                 "\", \"type\" : \"inapp\", \"price\" : \"$1.99\" , \"title\" : \"No add in app\", \"description\" : \"Suppress all adds during one year\"  }  "));
-            adapter.add(new SkuDetails("{\"productId\" : \"SECU_HIDE_LAUNCHER\", \"type\" : \"inapp\", \"price\" : \"Free\" , \"title\" : \"No icon app launcher\", \"description\" : \"Hide the GeoPing Application in the System\"  }  "));
-            adapter.add(new SkuDetails("{\"productId\" : \"android.test.purchased\", \"type\" : \"inapp\", \"price\" : \"Free\" , \"title\" : \"Android Test Purchased\", \"description\" : \"you can test your signature verification implementation using these responses.\"  }  "));
-
-        } catch (JSONException e) {
-            Log.e(TAG, "Error Parsing Json : " + e.getMessage(), e);
+        ArrayList<SkuDetails> skus = SkuProductEnum.createListItems();
+        for (SkuDetails sku : skus) {
+            adapter.add(sku);
         }
         return adapter;
 

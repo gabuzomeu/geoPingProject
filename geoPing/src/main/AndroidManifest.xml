@@ -186,14 +186,14 @@
         <service android:label="@string/app_name" android:name=".service.receiver.LogReadHistoryService"/>
 
         <!-- GCM Receiver -->
-        <receiver android:name=".GcmBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
+        <receiver android:name=".service.gcm.GcmBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
                 <category android:name="eu.ttbox.geoping"/>
             </intent-filter>
         </receiver>
 
-        <service android:name=".GcmIntentService"/>
+        <service android:name=".service.gcm.GcmIntentService"/>
 
         <activity android:name="eu.ttbox.geoping.ui.Gcm.GcmActivity"  android:label="@string/app_name"
                   android:configChanges="orientation|keyboardHidden|screenSize"
@@ -263,7 +263,7 @@
         </receiver> 
 
         <!-- Resnt Sms Listener -->
-        <receiver android:enabled="false"  android:name="eu.ttbox.geoping.service.slave.blocker.ReSentSmsMessageReceiver">
+        <receiver android:enabled="false"  android:name=".service.receiver.network.ReSentSmsMessageReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>

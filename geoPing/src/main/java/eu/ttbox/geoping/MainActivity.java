@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
+import eu.ttbox.geoping.core.VersionUtils;
 import eu.ttbox.geoping.ui.GeoPingSlidingMenuFragmentActivity;
 import eu.ttbox.geoping.ui.MenuOptionsItemSelectionHelper;
 import eu.ttbox.geoping.ui.pairing.PairingListFragment;
@@ -60,6 +61,8 @@ public class MainActivity extends GeoPingSlidingMenuFragmentActivity { //
     private PairingListFragment pairingListFragment;
     private SmsLogListFragment smsLogListFragment;
 
+    // Instance
+    private int maxPageCount = 3;
     // ===========================================================
     // Constructors
     // ===========================================================
@@ -68,6 +71,12 @@ public class MainActivity extends GeoPingSlidingMenuFragmentActivity { //
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Limit For GingerBread : to catch Bug in SmsLog
+        if (!VersionUtils.isHc11) {
+              maxPageCount = 2;
+        }
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the app.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -246,7 +255,7 @@ public class MainActivity extends GeoPingSlidingMenuFragmentActivity { //
 
         @Override
         public int getCount() {
-            return 3;
+            return maxPageCount;
         }
 
         @Override
