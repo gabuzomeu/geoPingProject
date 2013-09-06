@@ -53,9 +53,9 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
 
     private static final String TAG = "GeoPingSlaveService";
 
-    private static final int SHOW_GEOPING_REQUEST_NOTIFICATION_ID = AppConstants.PER_PERSON_ID_MULTIPLICATOR * R.id.show_notification_new_geoping_request_confirm;
+  //  private static final int SHOW_GEOPING_REQUEST_NOTIFICATION_ID = AppConstants.PER_PERSON_ID_MULTIPLICATOR * R.id.show_notification_new_geoping_request_confirm;
 
-    private static final int SHOW_PAIRING_NOTIFICATION_ID = AppConstants.PER_PERSON_ID_MULTIPLICATOR * R.id.show_pairing_request;
+  //  private static final int SHOW_PAIRING_NOTIFICATION_ID = AppConstants.PER_PERSON_ID_MULTIPLICATOR * R.id.show_pairing_request;
 
     private final IBinder binder = new LocalBinder();
     // Constant
@@ -279,6 +279,7 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
         // Read Intent
         String phone = extras.getString(Intents.EXTRA_SMS_PHONE);
         Bundle config = extras.getBundle(Intents.EXTRA_SMS_PARAMS);
+        Intent enventIntent = extras.getParcelable(Intents.EXTRA_INTENT);
         long personId = MessageEncoderHelper.readLong(config, MessageParamEnum.PERSON_ID, -1l);
         GeopingNotifSlaveTypeEnum notifType = GeopingNotifSlaveTypeEnum.getByOrdinal(extras.getInt(Intents.EXTRA_NOTIFICATION_TYPE_ENUM_ORDINAL, -1));
         AuthorizePhoneTypeEnum type = AuthorizePhoneTypeEnum.getByOrdinal(extras.getInt(Intents.EXTRA_AUTHORIZE_PHONE_TYPE_ENUM_ORDINAL));
@@ -390,7 +391,6 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
         Log.d(TAG, String.format("Search Painring for Phone [%s] : Found %s", phoneNumber, result));
         // Create It
         if (result == null) {
-            // TODO Read Prefs values
             result = createPairingByPhone(phoneNumber);
          }
         return result;
@@ -443,6 +443,13 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
     private void showNotificationNewPingRequestConfirm(Pairing pairing, Bundle params, GeopingNotifSlaveTypeEnum onlyPairing) {
         NotificationSlavePairingHelper notif = new NotificationSlavePairingHelper(this);
         notif.showNotificationNewPingRequestConfirm(pairing, params, onlyPairing);
+    }
+
+
+    private void showNotificationForNewPairing(String phone, Intent eventIntent){
+        Pairing pairing = createPairingByPhone(phone);
+        NotificationSlavePairing2Helper notif = new NotificationSlavePairing2Helper(this);
+        notif.showNotificationNewPingRequestConfirm(pairing, eventIntent);
     }
 
     // ===========================================================

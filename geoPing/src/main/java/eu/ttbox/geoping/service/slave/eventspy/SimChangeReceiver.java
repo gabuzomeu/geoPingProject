@@ -17,9 +17,7 @@ import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 /**
  * {@link http
  * ://stackoverflow.com/questions/10528464/how-to-monitor-sim-state-change}
- * 
- * @author jmorille
- * 
+ *
  */
 public class SimChangeReceiver extends BroadcastReceiver {
 

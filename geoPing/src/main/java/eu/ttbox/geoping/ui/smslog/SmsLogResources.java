@@ -6,9 +6,7 @@ import android.graphics.drawable.Drawable;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.domain.model.SmsLogTypeEnum;
 
-/**
- * Created by jmorille on 19/06/13.
- */
+
 public class SmsLogResources {
 
     public final Drawable incoming;
