@@ -221,7 +221,22 @@ public class Intents {
 	// GeoPing Slave
 	// ===========================================================
 
+    public static Intent authorizePhone(Context context, String phone, Intent sourceIntent
+            ,AuthorizePhoneTypeEnum authorizePhoneType, int notificationId ,GeopingNotifSlaveTypeEnum notifType) {
+        // create
+        Intent intent = new Intent(context, GeoPingSlaveService.class);
+        intent.setData(Uri.parse("AuthorizePhoneTypeEnum:" + authorizePhoneType.name()));
+        intent.setAction(ACTION_SLAVE_GEOPING_PHONE_AUTHORIZE);
+        intent.putExtra(EXTRA_SMS_PHONE, phone);
+        intent.putExtra(EXTRA_INTENT, sourceIntent);
+        intent.putExtra(EXTRA_NOTIFICATION_TYPE_ENUM_ORDINAL, notifType.ordinal());
+        intent.putExtra(EXTRA_NOTIF_ID, notificationId);
+        intent.putExtra(EXTRA_AUTHORIZE_PHONE_TYPE_ENUM_ORDINAL, authorizePhoneType.ordinal());
+        return intent;
+    }
+
 	// Register Phone
+    @Deprecated
 	public static Intent authorizePhone(Context context, String phone, String contactNewName, Bundle params, AuthorizePhoneTypeEnum authorizePhoneType, int notificationId,
 			GeopingNotifSlaveTypeEnum notifType) {
 		// create

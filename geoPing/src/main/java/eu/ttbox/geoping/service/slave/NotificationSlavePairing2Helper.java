@@ -89,7 +89,7 @@ public class NotificationSlavePairing2Helper {
                 contentView.setTextViewText(R.id.notif_geoping_confirm_button_yes, r.getText(R.string.notif_confirm_request_eachtime));
                 title = context.getString(R.string.notif_pairing);
                 contentIntent = PendingIntent.getService(context, 0, //
-                        Intents.authorizePhone(context, phone, person.contactDisplayName, params, AuthorizePhoneTypeEnum.ALWAYS, notifId, onlyPairing),//
+                        Intents.authorizePhone(context, phone, eventIntent, AuthorizePhoneTypeEnum.ALWAYS, notifId, onlyPairing),//
                         PendingIntent.FLAG_UPDATE_CURRENT);
                 break;
             case GEOPING_REQUEST_CONFIRM:
@@ -117,16 +117,16 @@ public class NotificationSlavePairing2Helper {
         contentView.setTextViewText(R.id.notif_geoping_phone, person.contactDisplayName);
         // Pending Intent
         PendingIntent secuNo = PendingIntent.getService(context, 0, //
-                Intents.authorizePhone(context, phone, person.contactDisplayName, params, AuthorizePhoneTypeEnum.NO, notifId, onlyPairing),//
+                Intents.authorizePhone(context, phone,  eventIntent, AuthorizePhoneTypeEnum.NO, notifId, onlyPairing),//
                 PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent secuNever = PendingIntent.getService(context, 1, //
-                Intents.authorizePhone(context, phone, person.contactDisplayName, params, AuthorizePhoneTypeEnum.NEVER, notifId, onlyPairing),//
+                Intents.authorizePhone(context, phone, eventIntent, AuthorizePhoneTypeEnum.NEVER, notifId, onlyPairing),//
                 PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent secuYes = PendingIntent.getService(context, 2, //
-                Intents.authorizePhone(context, phone, person.contactDisplayName, params, AuthorizePhoneTypeEnum.YES, notifId, onlyPairing),//
+                Intents.authorizePhone(context, phone,  eventIntent, AuthorizePhoneTypeEnum.YES, notifId, onlyPairing),//
                 PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent secuAlways = PendingIntent.getService(context, 3, //
-                Intents.authorizePhone(context, phone, person.contactDisplayName, params, AuthorizePhoneTypeEnum.ALWAYS, notifId, onlyPairing),//
+                Intents.authorizePhone(context, phone, eventIntent, AuthorizePhoneTypeEnum.ALWAYS, notifId, onlyPairing),//
                 PendingIntent.FLAG_UPDATE_CURRENT);
         // Manage Button Confirmation
         contentView.setOnClickPendingIntent(R.id.notif_geoping_confirm_button_no, secuNo);
@@ -137,7 +137,7 @@ public class NotificationSlavePairing2Helper {
         // Content Intent
         if (contentIntent == null) {
             contentIntent = PendingIntent.getService(context, 0, //
-                    Intents.authorizePhone(context, phone, person.contactDisplayName, params, AuthorizePhoneTypeEnum.YES, notifId, onlyPairing),//
+                    Intents.authorizePhone(context, phone,  eventIntent, AuthorizePhoneTypeEnum.YES, notifId, onlyPairing),//
                     PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
