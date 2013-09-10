@@ -73,8 +73,6 @@ implements OnSharedPreferenceChangeListener {
         // Init Summary
         initSummaries(this.getPreferenceScreen());
 
-        // Tracker
-        EasyTracker.getInstance().activityStart(this);
     }
 
     /**
@@ -109,6 +107,19 @@ implements OnSharedPreferenceChangeListener {
             ListPreference listPref = (ListPreference) pref;
             pref.setSummary(listPref.getEntry());
         }
+    }
+
+
+
+    // ===========================================================
+    // Tracking Event
+    // ===========================================================
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Tracker
+        EasyTracker.getInstance().activityStart(this);
     }
 
     @Override

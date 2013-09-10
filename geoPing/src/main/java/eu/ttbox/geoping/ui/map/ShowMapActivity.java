@@ -54,9 +54,6 @@ public class ShowMapActivity extends GeoPingSlidingMenuFragmentActivity {
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.map_activity);
-
-        // Tracker
-        EasyTracker.getInstance().activityStart(this);
     }
 
     public SlidingMenu customizeSlidingMenu() {
@@ -65,12 +62,7 @@ public class ShowMapActivity extends GeoPingSlidingMenuFragmentActivity {
         return slidingMenu;
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        // Tracker
-        EasyTracker.getInstance().activityStop(this);
-    }
+
 
     @Override
     public void onAttachFragment(Fragment fragment) {

@@ -167,9 +167,6 @@ public class ExtraFeaturesActivity extends GeoPingSlidingMenuFragmentActivity   
 
         // Intents
         handleIntent(getIntent());
-        // Tracker
-        EasyTracker.getInstance().activityStart(this);
-
 
     }
 
@@ -183,15 +180,6 @@ public class ExtraFeaturesActivity extends GeoPingSlidingMenuFragmentActivity   
         mHelper = null;
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // Tracker
-        EasyTracker.getInstance().activityStop(this);
-
-
-    }
 
     private SkuDetailsListAdapter createListItems() {
         SkuDetailsListAdapter adapter = new SkuDetailsListAdapter(this);

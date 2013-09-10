@@ -35,17 +35,10 @@ public class SmsLogListActivity extends GeoPingSlidingMenuFragmentActivity {
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         
         // Intents
-        handleIntent(getIntent());
-        // Tracker
-        EasyTracker.getInstance().activityStart(this);
+        handleIntent(getIntent()); 
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        // Tracker
-        EasyTracker.getInstance().activityStop(this);
-    }
+
 
     @Override
     public void onAttachFragment(Fragment fragment) {

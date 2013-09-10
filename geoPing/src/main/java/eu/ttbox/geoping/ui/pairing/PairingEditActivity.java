@@ -87,6 +87,16 @@ public class PairingEditActivity extends ActionBarActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
         // Intents
         handleIntent(getIntent());
+
+    }
+
+    // ===========================================================
+    // Tracking Event
+    // ===========================================================
+
+    @Override
+    public void onStart() {
+        super.onStart();
         // Tracker
         EasyTracker.getInstance().activityStart(this);
     }
@@ -126,7 +136,6 @@ public class PairingEditActivity extends ActionBarActivity {
     // ===========================================================
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -161,9 +170,9 @@ public class PairingEditActivity extends ActionBarActivity {
             Bundle fragArgs = new Bundle();
             fragArgs.putString(Intents.EXTRA_PERSON_ID, entityUri.toString());
             editFragment.setArguments(fragArgs);
- 
+
         } else if (Intent.ACTION_INSERT.equals(action)) {
-            mViewPager.setCurrentItem(SectionsPagerAdapter.PAIRING); 
+            mViewPager.setCurrentItem(SectionsPagerAdapter.PAIRING);
         }
 
     }
@@ -191,28 +200,28 @@ public class PairingEditActivity extends ActionBarActivity {
         public Fragment getItem(int position) {
             Fragment fragment = null;
             switch (position) {
-            case PAIRING:
-                fragment = editFragment;
-                break;
-            case NOTIFICATION:
-                if (notificationFragment == null) {
-                    Bundle args = new Bundle();
-                    args.putString(Intents.EXTRA_DATA_URI, pairingUri.toString());
-                    notificationFragment = new PairingNotificationFragment();
-                    notificationFragment.setArguments(args);
-                }
-                fragment = notificationFragment;
-                break;
-            case LOG:
-                if (smsLogFragment == null) {
-                    Bundle args = new Bundle();
-                    args.putString(eu.ttbox.geoping.ui.smslog.SmsLogListFragment.Intents.EXTRA_SMS_PHONE, pairingPhone);
-                    args.putInt(eu.ttbox.geoping.ui.smslog.SmsLogListFragment.Intents.EXTRA_SIDE_DBCODE, SmsLogSideEnum.SLAVE.getDbCode());
-                    smsLogFragment = new SmsLogListFragment(false);
-                    smsLogFragment.setArguments(args);
-                }
-                fragment = smsLogFragment;
-                break;
+                case PAIRING:
+                    fragment = editFragment;
+                    break;
+                case NOTIFICATION:
+                    if (notificationFragment == null) {
+                        Bundle args = new Bundle();
+                        args.putString(Intents.EXTRA_DATA_URI, pairingUri.toString());
+                        notificationFragment = new PairingNotificationFragment();
+                        notificationFragment.setArguments(args);
+                    }
+                    fragment = notificationFragment;
+                    break;
+                case LOG:
+                    if (smsLogFragment == null) {
+                        Bundle args = new Bundle();
+                        args.putString(eu.ttbox.geoping.ui.smslog.SmsLogListFragment.Intents.EXTRA_SMS_PHONE, pairingPhone);
+                        args.putInt(eu.ttbox.geoping.ui.smslog.SmsLogListFragment.Intents.EXTRA_SIDE_DBCODE, SmsLogSideEnum.SLAVE.getDbCode());
+                        smsLogFragment = new SmsLogListFragment(false);
+                        smsLogFragment.setArguments(args);
+                    }
+                    fragment = smsLogFragment;
+                    break;
             }
             return fragment;
         }
@@ -225,12 +234,12 @@ public class PairingEditActivity extends ActionBarActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
-            case PAIRING:
-                return getString(R.string.menu_pairing).toUpperCase();
-            case NOTIFICATION:
-                return getString(R.string.menu_pairing_notification).toUpperCase();
-            case LOG:
-                return getString(R.string.menu_smslog).toUpperCase();
+                case PAIRING:
+                    return getString(R.string.menu_pairing).toUpperCase();
+                case NOTIFICATION:
+                    return getString(R.string.menu_pairing_notification).toUpperCase();
+                case LOG:
+                    return getString(R.string.menu_smslog).toUpperCase();
             }
             return null;
         }

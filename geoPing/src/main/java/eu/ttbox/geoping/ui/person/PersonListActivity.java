@@ -35,15 +35,7 @@ public class PersonListActivity extends GeoPingSlidingMenuFragmentActivity {
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Intent
         handleIntent(getIntent());
-        // Tracker
-        EasyTracker.getInstance().activityStart(this);
-    }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        // Tracker
-        EasyTracker.getInstance().activityStop(this);
     }
 
     @Override

@@ -42,13 +42,27 @@ public class SmsLogViewActivity extends ActionBarActivity {
         }
     }
 
-        @Override
+
+
+
+    // ===========================================================
+    // Tracking Event
+    // ===========================================================
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Tracker
+        EasyTracker.getInstance().activityStart(this);
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         // Tracker
         EasyTracker.getInstance().activityStop(this);
-
     }
+
     // ===========================================================
     // Menu
     // ===========================================================

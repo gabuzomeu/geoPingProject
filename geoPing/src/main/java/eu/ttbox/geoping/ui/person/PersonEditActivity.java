@@ -98,7 +98,18 @@ public class PersonEditActivity extends ActionBarActivity {
 		mViewPager.setAdapter(mSectionsPagerAdapter);
 		// Intents
 		handleIntent(getIntent());
-		  // Tracker
+
+    }
+
+
+    // ===========================================================
+    // Tracking Event
+    // ===========================================================
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Tracker
         EasyTracker.getInstance().activityStart(this);
     }
 
@@ -108,7 +119,6 @@ public class PersonEditActivity extends ActionBarActivity {
         // Tracker
         EasyTracker.getInstance().activityStop(this);
     }
-
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putString(PersonColumns.COL_ID, personId);

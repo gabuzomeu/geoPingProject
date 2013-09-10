@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
+import com.google.analytics.tracking.android.EasyTracker;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivityBase;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivityHelper;
@@ -15,6 +16,26 @@ import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.ui.slidingmenu.SlidingMenuHelper;
 
 public class GeoPingSlidingMenuFragmentActivity extends ActionBarActivity implements SlidingActivityBase {
+
+
+    // ===========================================================
+    // Tracking Event
+    // ===========================================================
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Tracker
+        EasyTracker.getInstance().activityStart(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // Tracker
+        EasyTracker.getInstance().activityStop(this);
+    }
+
 
     // ===========================================================
     // Sliding fragment Activity Copy

@@ -117,8 +117,7 @@ public class GeofenceEditActivity extends ActionBarActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
         // Intents
         handleIntent(getIntent());
-        // Tracker
-        EasyTracker.getInstance().activityStart(this);
+
     }
 
 
@@ -141,9 +140,19 @@ public class GeofenceEditActivity extends ActionBarActivity {
     }
 
 
+
+
+
     // ===========================================================
-    // Life Cycle
+    // Tracking Event
     // ===========================================================
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Tracker
+        EasyTracker.getInstance().activityStart(this);
+    }
 
     @Override
     public void onStop() {
@@ -151,6 +160,11 @@ public class GeofenceEditActivity extends ActionBarActivity {
         // Tracker
         EasyTracker.getInstance().activityStop(this);
     }
+
+    // ===========================================================
+    // Life Cycle
+    // ===========================================================
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {

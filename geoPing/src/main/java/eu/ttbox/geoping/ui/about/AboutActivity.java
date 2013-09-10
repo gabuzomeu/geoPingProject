@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
+import com.google.analytics.tracking.android.EasyTracker;
+
 import eu.ttbox.geoping.R;
 
 /**
@@ -36,6 +38,27 @@ public class AboutActivity extends FragmentActivity {
             aboutFragment = (AboutFragment) fragment;
         }
     }
+
+
+
+    // ===========================================================
+    // Tracking Event
+    // ===========================================================
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Tracker
+        EasyTracker.getInstance().activityStart(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // Tracker
+        EasyTracker.getInstance().activityStop(this);
+    }
+
 
     // ===========================================================
     // Other

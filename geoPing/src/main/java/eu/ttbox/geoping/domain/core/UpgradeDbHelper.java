@@ -3,6 +3,7 @@ package eu.ttbox.geoping.domain.core;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -62,6 +63,8 @@ public class UpgradeDbHelper {
                      Log.d(TAG, "Upgrading database " + oldTable + " : memory copy of row values : " + values);
                  }
             }
+        } catch (SQLiteException e) {
+            Log.e(TAG, "error in copyTable " + oldTable + " : " + e.getMessage(), e);
         } finally {
             if (cursor!=null) {
                 cursor.close();

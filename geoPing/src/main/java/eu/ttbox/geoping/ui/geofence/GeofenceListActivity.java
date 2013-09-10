@@ -34,16 +34,8 @@ public class GeofenceListActivity extends GeoPingSlidingMenuFragmentActivity {
         
         // Intents
         handleIntent(getIntent());
-        // Tracker
-        EasyTracker.getInstance().activityStart(this);
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        // Tracker
-        EasyTracker.getInstance().activityStop(this);
-    }
 
     @Override
     public void onAttachFragment(Fragment fragment) {
