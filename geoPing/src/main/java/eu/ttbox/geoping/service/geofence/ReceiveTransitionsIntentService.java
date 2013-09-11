@@ -26,6 +26,7 @@ import java.util.List;
 
 import eu.ttbox.geoping.MainActivity;
 import eu.ttbox.geoping.R;
+import eu.ttbox.geoping.core.MessageActionEnumLabelHelper;
 import eu.ttbox.geoping.domain.GeoFenceProvider;
 import eu.ttbox.geoping.domain.geotrack.GeoTrackHelper;
 import eu.ttbox.geoping.domain.model.CircleGeofence;
@@ -37,11 +38,11 @@ import eu.ttbox.geoping.domain.smslog.SmsLogDatabase;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
 import eu.ttbox.geoping.service.SmsSenderHelper;
-import eu.ttbox.geoping.core.MessageActionEnumLabelHelper;
 import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
 import eu.ttbox.geoping.service.slave.GeoPingSlaveLocationService;
 import eu.ttbox.geoping.service.slave.eventspy.SpyNotificationHelper;
 import eu.ttbox.osm.core.LocationUtils;
+
 /**
  * This class receives geofence transition events from Location Services, in the
  * form of an Intent containing the transition type and geofence id(s) that triggered
@@ -93,7 +94,7 @@ public class ReceiveTransitionsIntentService extends IntentService {
 
         Log.d(TAG, "--- ------------------------------------------------------- ---");
         Log.d(TAG, "--- Geofence onHandleIntent : " + intent);
-      //  printExtras(intent.getExtras());
+        //  printExtras(intent.getExtras());
         Log.d(TAG, "--- ------------------------------------------------------- ---");
 
         // First check for errors
@@ -170,60 +171,63 @@ public class ReceiveTransitionsIntentService extends IntentService {
      * @param transitionType The type of transition that occurred.
      */
     private void sendNotification(MessageActionEnum transitionType, String[] geofenceRequestIds) {
-         // Compute afected geoFence
+        // Compute afected geoFence
         List<CircleGeofence> geofences = getCircleGeofenceFromRequestIds(geofenceRequestIds);
-        if (geofences==null || geofences.size()<1) {
-            Log.w(TAG, "No CircleGeofence in Db for request Ids : " +  Arrays.toString(geofenceRequestIds));
+        if (geofences == null || geofences.size() < 1) {
+            Log.w(TAG, "No CircleGeofence in Db for request Ids : " + Arrays.toString(geofenceRequestIds));
             return;
         }
         // Geofence Manage
         String[] phones = SpyNotificationHelper.searchListPhonesForGeofenceViolation(this, geofences, transitionType);
-        if (phones!=null && phones.length>0) {
-            Location lastLocation =   LocationUtils.getLastKnownLocation(locationManager);
+        if (phones != null && phones.length > 0) {
+            Location lastLocation = LocationUtils.getLastKnownLocation(locationManager);
             // TODO Compute Geofence Requests Id per User
-            CircleGeofence geofenceRequest = getBestCircleGeofence (geofences );
+            CircleGeofence geofenceRequest = getBestCircleGeofence(geofences);
             // Distance
-            Location centerLoc =  geofenceRequest.getCenterAsLocation();
-            int distanceToCenter =  Math.round( centerLoc.distanceTo(lastLocation));
-            if (distanceToCenter<geofenceRequest.radiusInMeters) {
-                Log.w(TAG, "Distance to Center is < to radius : "  + distanceToCenter + "m < " + geofenceRequest.radiusInMeters  +"m");
+            Location centerLoc = geofenceRequest.getCenterAsLocation();
+            if (lastLocation != null) {
+                int distanceToCenter = Math.round(centerLoc.distanceTo(lastLocation));
+                if (distanceToCenter < geofenceRequest.radiusInMeters) {
+                    Log.w(TAG, "Distance to Center is < to radius : " + distanceToCenter + "m < " + geofenceRequest.radiusInMeters + "m");
+                }
             }
             // Send Sms
-            sendEventSpySmsMessage(geofenceRequest,   transitionType, phones,   null,   lastLocation);
+            sendEventSpySmsMessage(geofenceRequest, transitionType, phones, null, lastLocation);
         } else {
             Log.w(TAG, "No Person assoiated to Geofences : " + geofenceRequestIds);
         }
 
         // Display Local Notification
-       //TODO  showNotification(geofences, transitionType);
+        //TODO  showNotification(geofences, transitionType);
 
     }
 
-    private CircleGeofence getBestCircleGeofence( List<CircleGeofence> geofences) {
+    private CircleGeofence getBestCircleGeofence(List<CircleGeofence> geofences) {
         CircleGeofence result = null;
-        if (geofences!=null || !geofences.isEmpty()) {
+        if (geofences != null || !geofences.isEmpty()) {
             int geofenceSize = geofences.size();
-            if (geofenceSize==1) {
+            if (geofenceSize == 1) {
                 result = geofences.get(0);
             } else {
                 Collections.sort(geofences, new Comparator<CircleGeofence>() {
                     @Override
                     public int compare(CircleGeofence lhs, CircleGeofence rhs) {
-                        int lhsAccuracy = lhs!=null ? lhs.getRadiusInMeters() : -1;
-                        int rhsAccuracy = rhs!=null ? rhs.getRadiusInMeters() : -1;
+                        int lhsAccuracy = lhs != null ? lhs.getRadiusInMeters() : -1;
+                        int rhsAccuracy = rhs != null ? rhs.getRadiusInMeters() : -1;
                         return lhsAccuracy < rhsAccuracy ? -1 : (lhsAccuracy == rhsAccuracy ? 0 : 1);
-                     }
+                    }
                 });
+                result = geofences.get(0);
             }
         }
         return result;
 
     }
 
-    private void showNotification( List<CircleGeofence> geofences, MessageActionEnum transitionType  ) {
+    private void showNotification(List<CircleGeofence> geofences, MessageActionEnum transitionType) {
         CircleGeofence firstGeofence = geofences.get(0);
 
-        String transitionTypeMsg = MessageActionEnumLabelHelper.getString(this,transitionType );
+        String transitionTypeMsg = MessageActionEnumLabelHelper.getString(this, transitionType);
 
         // Create an explicit content Intent that starts the main Activity
         Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
@@ -286,10 +290,8 @@ public class ReceiveTransitionsIntentService extends IntentService {
     }
 
 
-
-
-    public void sendEventSpySmsMessage(   CircleGeofence geofenceRequest ,  MessageActionEnum eventType, String[] phones,
-                                          Bundle eventParams, Location location) {
+    public void sendEventSpySmsMessage(CircleGeofence geofenceRequest, MessageActionEnum eventType, String[] phones,
+                                       Bundle eventParams, Location location) {
         if (phones == null || phones.length < 1) {
             Log.w(TAG, "Geofence violation detected but nobody to warning");
         }
@@ -303,12 +305,12 @@ public class ReceiveTransitionsIntentService extends IntentService {
             extrasBundles.putString(SmsLogDatabase.SmsLogColumns.COL_REQUEST_ID, geofenceRequest.requestId);
         }
         //
-        if (geofenceRequest !=null) {
+        if (geofenceRequest != null) {
             // Geofence Refenrence
             extrasBundles.putInt(GeoFenceDatabase.GeoFenceColumns.COL_LATITUDE_E6, geofenceRequest.getLatitudeE6());
-            extrasBundles.putInt(GeoFenceDatabase.GeoFenceColumns.COL_LONGITUDE_E6, geofenceRequest.getLongitudeE6() );
-            extrasBundles.putInt(GeoFenceDatabase.GeoFenceColumns.COL_RADIUS, geofenceRequest.getRadiusInMeters()  );
-            extrasBundles.putInt(GeoFenceDatabase.GeoFenceColumns.COL_TRANSITION, geofenceRequest.getTransitionType()  );
+            extrasBundles.putInt(GeoFenceDatabase.GeoFenceColumns.COL_LONGITUDE_E6, geofenceRequest.getLongitudeE6());
+            extrasBundles.putInt(GeoFenceDatabase.GeoFenceColumns.COL_RADIUS, geofenceRequest.getRadiusInMeters());
+            extrasBundles.putInt(GeoFenceDatabase.GeoFenceColumns.COL_TRANSITION, geofenceRequest.getTransitionType());
             // Name
             MessageEncoderHelper.writeToBundle(extrasBundles, MessageParamEnum.GEOFENCE_NAME, geofenceRequest.name);
         }
