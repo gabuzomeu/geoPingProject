@@ -20,6 +20,7 @@ import android.telephony.CellLocation;
 import android.telephony.NeighboringCellInfo;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import java.util.List;
@@ -105,7 +106,7 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
         super.onCreate();
         Log.d(TAG, "#####################################");
         Log.d(TAG, "### GeoPing Location Service Started.");
-        Log.d(TAG, "#####################################");
+     //   Log.d(TAG, "#####################################");
         // service
         this.appPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         this.locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -134,7 +135,7 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
         this.myLocation.pauseAllUpdates(); //stopListening();
         multiGeoRequestListener.clear();
         super.onDestroy();
-        Log.d(TAG, "#######################################");
+  //      Log.d(TAG, "#######################################");
         Log.d(TAG, "### GeoPing Location Service Destroyed.");
         Log.d(TAG, "#######################################");
     }
@@ -164,6 +165,7 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
     @Override
     protected void onHandleIntent(Intent intent) {
         String action = intent.getAction();
+        Log.d(TAG, "onHandleIntent : " + action);
         if (ACTION_FIND_LOCALISATION_AND_SEND_SMS_GEOPING.equals(action)) {
             String[] phone = intent.getStringArrayExtra(Intents.EXTRA_SMS_PHONE);
             Bundle params = intent.getBundleExtra(Intents.EXTRA_SMS_PARAMS);
@@ -232,13 +234,14 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
             // Acquire Lock
             PowerManager.WakeLock lock = getLock(this.getApplicationContext());
             lock.acquire();
+            Log.d(TAG, "*** **************************************************************************** ***");
             Log.d(TAG, "*** Lock Acquire: " + LOCK_NAME + " " + lock);
             // Register request
             OsmLocation loc = myLocation.getLastKnownLocation();
             Location initLastLoc = loc!=null ? loc.getLocation() : null;
-            GeoPingRequest request = new GeoPingRequest(  smsAction, phoneNumber, params, config);
+            GeoPingRequest request = new GeoPingRequest(smsAction, phoneNumber, params, config);
             multiGeoRequestListener.add(request);
-
+            Log.d(TAG, "multiGeoRequestListener size : " + multiGeoRequestListener.size());
 //            myLocation.addLocationListener(request);
             // TODO Bad for multi request
             myLocation.addLocationListener(multiGeoRequestListener);
@@ -269,12 +272,15 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
                 lock.release();
             }
             Log.d(TAG, "*** Lock Release: " + LOCK_NAME + " " + lock);
+            Log.d(TAG, "*** **************************************************************************** ***");
             // Stop Service if necessary
             if (multiGeoRequestListener.isEmpty()) {
                 Log.d(TAG, "No GeoPing Request in list, do Stop Service");
                 myLocation.pauseAllUpdates();
                 // Stop Service
                 stopSelf();
+            } else {
+                Log.d(TAG, "Do not stop service for waiting multiGeoRequestListener : " + multiGeoRequestListener.size());
             }
         }
     }
@@ -339,6 +345,7 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
             Boolean result = Boolean.FALSE;
             try {
                 Location lastLocation = myLocation.getLastFixAsLocation();
+                Log.d(TAG, "Future Callable end with location : " + lastLocation);
                 result = sendFoundLocation(lastLocation);
             } finally {
                 unregisterGeoPingRequest(GeoPingRequest.this);
@@ -349,9 +356,12 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
         private Boolean sendFoundLocation(Location lastLocation) {
             Boolean isDone = Boolean.FALSE;
             // TODO Cell Id
-            int[] cellId = getCellId();
+           // int[] cellId = getCellId();
             // Location
             if (lastLocation != null) {
+                Log.d(TAG, "sendFoundLocation with accuracy= " + lastLocation.getAccuracy()
+                        + " / Time : "  + DateUtils.formatDateRange(getApplicationContext(),lastLocation.getTime(), lastLocation.getTime(),
+                        DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE ) + " : " + lastLocation);
                 sendSmsLocation(smsAction, smsPhoneNumber, lastLocation, params);
                 isDone = Boolean.TRUE;
             }
@@ -368,16 +378,20 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
             if (isAccuracyExpectedCheck && location != null) {
                 // TODO check expected accuracy
                 int locAcc = (int) location.getAccuracy();
-                Log.d(TAG, "onLocationChanged with accuracy= " + locAcc + " : " + location);
                 if (locAcc <= accuracyExpected) {
                     // Unregister Request
+                    Log.d(TAG, "onLocationChanged with accuracy= " + locAcc + " : " + location
+                            + " / Time : "  + DateUtils.formatDateRange(getApplicationContext(),location.getTime(), location.getTime(),
+                            DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE ));
+
                     Boolean isDone = sendFoundLocation(location);
                     if (isDone.booleanValue()) {
                         // Ignore next match
                         isAccuracyExpectedCheck = false;
                         // Unregister event
                         boolean isMeTaskCancel = meTask.cancel(false);
-
+                        Log.d(TAG, "Future Cancel Callable for expercted accuracy [" +accuracyExpected +
+                                "] end with location : " + location);
                         if (isMeTaskCancel) {
                             unregisterGeoPingRequest(GeoPingRequest.this);
                         }

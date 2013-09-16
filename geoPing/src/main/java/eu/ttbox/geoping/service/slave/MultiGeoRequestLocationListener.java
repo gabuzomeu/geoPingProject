@@ -20,8 +20,6 @@ public class MultiGeoRequestLocationListener implements LocationListener, OsmAnd
 	}
 
 
-
-
     @Override
     public void onLocationChanged(OsmLocation location) {
         if (!geoPingRequestList.isEmpty()) {
@@ -67,6 +65,10 @@ public class MultiGeoRequestLocationListener implements LocationListener, OsmAnd
 			}
 		}
 	}
+
+    public int size() {
+        return geoPingRequestList.size();
+    }
 
 	public boolean isEmpty() {
 		return geoPingRequestList.isEmpty();
