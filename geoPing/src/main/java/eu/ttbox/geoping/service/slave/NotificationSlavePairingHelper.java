@@ -24,6 +24,7 @@ import eu.ttbox.geoping.service.core.ContactHelper;
 import eu.ttbox.geoping.service.core.NotifPersonVo;
 import eu.ttbox.geoping.service.slave.receiver.AuthorizePhoneTypeEnum;
 
+@Deprecated
 public class NotificationSlavePairingHelper {
 
     private static final String TAG = "NotificationSlavePairingHelper";

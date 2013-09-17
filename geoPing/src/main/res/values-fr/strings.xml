@@ -32,12 +32,14 @@
     <string name="notif_click_to_accept">(Accepter)</string>
     <string name="notif_geoping_response">Je suis là</string>   <!-- Todo où est affiché le texte  -->
     <string name="notif_geoping_request">Où es-tu ?</string>
-    <string name="notif_geoping_request_blocked">GeoPing non-autorisé</string> 
     <string name="notif_pairing">Association GeoPing</string>
     <string name="notif_pairing_always">Toujours</string>
     <string name="notif_pairing_never">Bloquer</string> 
     <string name="notif_confirm_request_eachtime">\?</string>
-    
+
+    <string name="notif_geoping_request_blocked">GeoPing non-autorisé</string>
+    <string name="notif_actionMessage_blocked">%s non-autorisé</string>
+
     <string name="toast_notif_sended_geoping_smsError">Erreur durant l\'envoi du SMS vers %s</string>
     <string name="toast_notif_sended_geoping_pairing">GeoPing association demandée : %s</string>
     <string name="toast_notif_sended_geoping_request">Où es-tu ?: %s</string>

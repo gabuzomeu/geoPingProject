@@ -138,22 +138,44 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
                     // GeoPing Pairing
                     managePairingRequest(phone, params);
                 }
+                // --- Manage New Pairing
+                // ------------------------
                 // Check Security
                 Pairing pairing = null;
                 if (phone!=null) {
                     pairing = gePairingByPhone(phone);
-
                 }
-                // Manage New Pairing
                 if (pairing==null) {
                     showNotificationForNewPairing(phone, intent, GeopingNotifSlaveTypeEnum.PAIRING);
                     return;
                 }
-                // Manage Security
+                // --- Manage Security
+                // ------------------------
                 boolean showNotification = pairing.showNotification;
-                AuthorizePhoneTypeEnum authorizeType = AuthorizePhoneTypeEnum.getByOrdinal(intent.getIntExtra(Intents.EXTRA_AUTHORIZE_PHONE_TYPE_ENUM_ORDINAL, -1));
-                if (authorizeType==null) {
-                   // authorizeType = pairing.authorizeType;
+                switch (pairing.authorizeType) {
+                    case AUTHORIZE_NEVER: {
+                        // Show Blocking Notification
+                        if (showNotification) {
+                            showGeopingRequestNotification(pairing, intent, msgAction, false);
+                        }
+                        return;
+                    }
+                    case AUTHORIZE_REQUEST: {
+                        AuthorizePhoneTypeEnum authorizeType = AuthorizePhoneTypeEnum.getByOrdinal(intent.getIntExtra(Intents.EXTRA_AUTHORIZE_PHONE_TYPE_ENUM_ORDINAL, -1));
+                        if (authorizeType==null) { 
+                            GeopingNotifSlaveTypeEnum type = GeopingNotifSlaveTypeEnum.GEOPING_REQUEST_CONFIRM;
+                            Bundle config = intent.getExtras();
+                            showNotificationNewPingRequestConfirm(pairing, config, type);
+                            return;
+                        }
+
+                    }
+                    break;
+                    case  AUTHORIZE_ALWAYS:
+                        break;
+                    default:
+                        Log.w(TAG, "Not manage Pairing authorizeType : " + pairing.authorizeType);
+                        throw new RuntimeException("Not manage Pairing authorizeType : " + pairing.authorizeType);
                 }
                // Log.d(TAG, "******* AuthorizePhoneTypeEnum : " + type);
 
@@ -456,24 +478,36 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
     // Notification
     // ===========================================================
 
+    @Deprecated
     private void showGeopingRequestNotification(Pairing pairing, Bundle params, boolean authorizeIt) {
         NotificationSlaveHelper notif = new NotificationSlaveHelper(this);
         notif.showGeopingRequestNotification(pairing,   params,   authorizeIt);
     }
 
+    @Deprecated
     private void showNotificationNewPingRequestConfirm(Pairing pairing, Bundle params, GeopingNotifSlaveTypeEnum onlyPairing) {
         NotificationSlavePairingHelper notif = new NotificationSlavePairingHelper(this);
         notif.showNotificationNewPingRequestConfirm(pairing, params, onlyPairing);
     }
 
 
+
+    private void showGeopingRequestNotification(Pairing pairing, Intent eventIntent, MessageActionEnum msgAction, boolean authorizeIt) {
+        NotificationSlave2Helper notif = new NotificationSlave2Helper(this);
+        notif.showGeopingRequestNotification(pairing, eventIntent, msgAction, authorizeIt);
+    }
+
+
     private void showNotificationForNewPairing(String phone, Intent eventIntent, GeopingNotifSlaveTypeEnum onlyPairing){
         Pairing pairing = createPairingByPhone(phone);
+        showNotificationForNewPairing(pairing, eventIntent, onlyPairing);
+    }
+
+    private void showNotificationForNewPairing( Pairing pairing , Intent eventIntent, GeopingNotifSlaveTypeEnum onlyPairing){
         NotificationSlavePairing2Helper notif = new NotificationSlavePairing2Helper(this);
         notif.showNotificationNewPingRequestConfirm(pairing, eventIntent, onlyPairing);
     }
-
-    // ===========================================================
+        // ===========================================================
     // Binder
     // ===========================================================
 

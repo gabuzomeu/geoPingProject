@@ -14,14 +14,15 @@ import android.util.Log;
 
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.AppConstants;
+import eu.ttbox.geoping.core.MessageActionEnumLabelHelper;
 import eu.ttbox.geoping.domain.model.Pairing;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
+import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.service.core.ContactHelper;
 import eu.ttbox.geoping.service.core.NotifPersonVo;
 import eu.ttbox.geoping.service.receiver.LogReadHistoryService;
 
-@Deprecated
-public class NotificationSlaveHelper {
+public class NotificationSlave2Helper {
 
     private static final String TAG = "NotificationSlaveHelper";
 
@@ -42,7 +43,7 @@ public class NotificationSlaveHelper {
     // ===========================================================
 
 
-    public NotificationSlaveHelper(Context context) {
+    public NotificationSlave2Helper(Context context) {
         this.context = context;
         this.mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     }
@@ -52,7 +53,7 @@ public class NotificationSlaveHelper {
     // GeoPing Request Notification Builder
     // ===========================================================
 
-    public void showGeopingRequestNotification(Pairing pairing, Bundle params, boolean authorizeIt) {
+    public void showGeopingRequestNotification(Pairing pairing, Intent eventIntent, MessageActionEnum msgAction, boolean authorizeIt) {
         String phone = pairing.phone;
         // Contact Name
         NotifPersonVo person = ContactHelper.getNotifPairingVo(context, pairing);
@@ -69,7 +70,8 @@ public class NotificationSlaveHelper {
         if (authorizeIt) {
             builder.setContentTitle(context.getString(R.string.notif_geoping_request)); //
         } else {
-            builder.setContentTitle(context.getString(R.string.notif_geoping_request_blocked)); //
+            String actionLabel = MessageActionEnumLabelHelper.getString(context,  msgAction );
+            builder.setContentTitle(context.getString(R.string.notif_actionMessage_blocked, actionLabel)); //
         }
         if (person.photo != null) {
             builder.setLargeIcon(person.photo);

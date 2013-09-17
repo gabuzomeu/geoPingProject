@@ -147,6 +147,7 @@ public class NotificationSlavePairing2Helper {
                 .setSmallIcon(R.drawable.ic_stat_notif_icon) //
                 .setWhen(System.currentTimeMillis()) //
                 .setAutoCancel(true) //
+
                 .setOngoing(true) //
                 .setContentTitle(title) //
                 .setContentText(contentText) //
@@ -203,11 +204,12 @@ public class NotificationSlavePairing2Helper {
             notificationBuilder.setLargeIcon(icon);
         }
         Notification notification = notificationBuilder.build();
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
         // notification.contentIntent = contentIntent;
         // notification.contentView = contentView;
         // notification.flags = Notification.FLAG_ONGOING_EVENT |
         // Notification.FLAG_ONLY_ALERT_ONCE;
-        // notification.flags = Notification.FLAG_SHOW_LIGHTS;
+        // notification.flags |= Notification.FLAG_SHOW_LIGHTS;
         // Show
         mNotificationManager.notify(notifId, notification);
     }

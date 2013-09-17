@@ -25,7 +25,6 @@
     <string name="notif_geoping">GeoPing</string>
     <string name="notif_geoping_response">I am here</string>
     <string name="notif_geoping_request">Where are you ?</string>
-    <string name="notif_geoping_request_blocked">GeoPing blocked</string>
     <string name="notif_pairing">Click to accept GeoPing pairing</string>
     <string name="notif_pairing_always">Always</string>
     <string name="notif_pairing_never">Blocked</string>
@@ -35,6 +34,9 @@
     <string name="toast_notif_sended_geoping_request">Where are you ?: %s</string>
     <string name="toast_notif_sended_geoping_response">I am here: %s</string>
     <string name="toast_notif_backup_restored">Backup restored</string>
+
+    <string name="notif_geoping_request_blocked">GeoPing blocked</string>
+    <string name="notif_actionMessage_blocked">%s blocked</string>
 
     <!-- Widget -->
     <string name="widget_geoping_person_title">Where are you ?</string>
