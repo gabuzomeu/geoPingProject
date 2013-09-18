@@ -5,6 +5,11 @@ allprojects {
     group = 'eu.ttbox.android.geoping'
     version = '0.3.2'
 
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    
     task hello << {task -> println "I'm $task.project.name" }
 
 }
