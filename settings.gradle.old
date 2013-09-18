@@ -1,1 +1,1 @@
-include ':geoPing-encoder', ':geoPing-Endpoints', ':geoPing', ':geoPing-cloud-server'
+include ':geoPing-encoder'

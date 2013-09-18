@@ -161,13 +161,13 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
                         return;
                     }
                     case AUTHORIZE_REQUEST: {
-//                        AuthorizePhoneTypeEnum authorizeType = AuthorizePhoneTypeEnum.getByOrdinal(intent.getIntExtra(Intents.EXTRA_AUTHORIZE_PHONE_TYPE_ENUM_ORDINAL, -1));
-//                        if (authorizeType==null) {
-//                            GeopingNotifSlaveTypeEnum type = GeopingNotifSlaveTypeEnum.GEOPING_REQUEST_CONFIRM;
-//                            Bundle config = intent.getExtras();
-//                            showNotificationNewPingRequestConfirm(pairing, config, type);
-//                            return;
-//                        }
+                        AuthorizePhoneTypeEnum authorizeType = AuthorizePhoneTypeEnum.getByOrdinal(intent.getIntExtra(Intents.EXTRA_AUTHORIZE_PHONE_TYPE_ENUM_ORDINAL, -1));
+                        if (authorizeType==null) {
+                            GeopingNotifSlaveTypeEnum type = GeopingNotifSlaveTypeEnum.GEOPING_REQUEST_CONFIRM;
+                            Bundle config = intent.getExtras();
+                            showNotificationNewPingRequestConfirm(pairing, config, type);
+                            return;
+                        }
 
                     }
                     break;
