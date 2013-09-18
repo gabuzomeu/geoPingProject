@@ -1,0 +1,10 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+allprojects {
+
+    apply plugin: 'maven'
+    group = 'eu.ttbox.android.geoping'
+    version = '0.3.2'
+
+    task hello << {task -> println "I'm $task.project.name" }
+
+}

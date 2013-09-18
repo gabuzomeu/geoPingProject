@@ -1,0 +1,91 @@
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.5.+'
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+
+apply plugin: 'android'
+
+// Jackson
+List jackson = ['com.fasterxml.jackson.core:jackson-core:2.2.3@jar', 'com.fasterxml.jackson.core:jackson-databind:2.2.3@jar']
+
+// Google Apis
+List admob = ['com.google.android.admob:admob:6.4.1-r11']
+List googlePlayServices = ['com.google.android.gms:play-services:3.2.25@aar']
+List analytics = ['com.google.android.analytics:analytics:3@jar']
+
+// Compatibility
+List slidingmenu = ['com.jeremyfeinstein.slidingmenu:library:1.3.2@aar']
+
+List osmdroid = ['org.osmdroid:osmdroid-android:3.0.10@jar',  'org.osmdroid:osmdroid-third-party:3.0.10@jar', 'org.slf4j:slf4j-android:1.6.1-RC1@jar']
+
+dependencies {
+    compile project(':geoPing-encoder')
+    compile "eu.ttbox.android.osm:osmLib:0.2.0@aar"
+    compile "com.android.support:support-v13:18.0.+"
+    compile "com.android.support:appcompat-v7:18.0.+"
+
+    compile analytics
+    compile jackson
+    compile osmdroid
+    compile admob
+    compile googlePlayServices
+
+    compile slidingmenu
+}
+
+android {
+    compileSdkVersion 18
+    buildToolsVersion "18.0.1"
+
+    sourceSets {
+        main {
+            // otherwise aidl task does not see aidl files in the project
+            aidl.srcDirs = ['src/main/java']
+
+        }
+    }
+    defaultConfig {
+        minSdkVersion 10
+        targetSdkVersion 18
+    }
+
+    signingConfigs {
+        debug {
+
+        }
+        release {
+            storeFile file("other.keystore")
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
+    }
+    buildTypes {
+        debug {
+            //signingConfig signingConfigs.debug
+            debuggable true
+        }
+
+        release {
+            //http://tools.android.com/tech-docs/new-build-system/user-guide
+            debuggable false
+            runProguard true
+            proguardFile ('proguard.cfg')
+            signingConfig signingConfigs.release
+        }
+
+    }
+
+}
