@@ -381,7 +381,7 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
 
         @Override
         public void onLocationChanged(Location location) {
-            if (isAccuracyExpectedCheck && location != null) { 
+            if (isAccuracyExpectedCheck && location != null) {
                 // Check expected accuracy
                 int locAcc = (int) location.getAccuracy();
                 if (locAcc <= accuracyExpected) {
