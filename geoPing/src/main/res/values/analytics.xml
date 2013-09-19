@@ -4,7 +4,7 @@
     <string name="ga_appName">GeoPing</string>
 
     <!-- Analytics http://blog.blundell-apps.com/google-analytics-common-problems-and-fixes/ -->
-    <string name="ga_trackingId">UA-36410991-1</string>
+    <string name="ga_trackingId">UA-36410991-3</string>
 
     <bool name="ga_autoActivityTracking">true</bool>
     <integer name="ga_dispatchPeriod">60</integer>
