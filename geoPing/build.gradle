@@ -75,7 +75,7 @@ android {
             //http://tools.android.com/tech-docs/new-build-system/user-guide
             debuggable false
             runProguard true
-            proguardFile ('proguard.cfg')
+            proguardFile ('${project.buildDir}/proguard.cfg')
             signingConfig signingConfigs.release
         }
 
