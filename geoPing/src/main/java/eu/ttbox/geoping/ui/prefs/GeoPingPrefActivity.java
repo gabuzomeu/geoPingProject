@@ -88,7 +88,7 @@ implements OnSharedPreferenceChangeListener {
             if (p instanceof PreferenceGroup) {
                 this.initSummaries((PreferenceGroup) p); // recursion
             } else {
-                this.setSummary(p);
+                setSummary(p);
             }
         }
     }
@@ -96,7 +96,7 @@ implements OnSharedPreferenceChangeListener {
     /**
      * Set the summaries of the given preference
      */
-    private void setSummary(Preference pref) {
+    private static void setSummary(Preference pref) {
         // react on type or key
         if (pref instanceof EditTextPreference) {
             EditTextPreference editPref = (EditTextPreference) pref;
@@ -244,6 +244,27 @@ implements OnSharedPreferenceChangeListener {
             int thePrefRes = anAct.getResources().getIdentifier(fragFileIdentifer, "xml", anAct.getPackageName());
             Log.i(TAG, "Create PrefsFragment for file : " + fragFileIdentifer);
             addPreferencesFromResource(thePrefRes);
+            // Init Summary
+            initSummaries(this.getPreferenceScreen());
+        }
+
+
+        /**
+         * Set the summaries of all preferences
+         */
+        private void initSummaries(PreferenceGroup pg) {
+            if (pg==null) {
+                return;
+            }
+            for (int i = 0; i < pg.getPreferenceCount(); ++i) {
+                Preference p = pg.getPreference(i);
+                // Init
+                if (p instanceof PreferenceGroup) {
+                    this.initSummaries((PreferenceGroup) p); // recursion
+                } else {
+                    setSummary(p);
+                }
+            }
         }
     }
 

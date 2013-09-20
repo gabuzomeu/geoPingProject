@@ -13,6 +13,7 @@ allprojects {
         }
     }
 
+ 
     dependencies {
        // mavenScp 'org.apache.maven.wagon:wagon-scp:1.0-beta-2'
     }
@@ -32,6 +33,5 @@ allprojects {
         }
     }
 
-    task hello << {task -> println "I'm $task.project.name" }
 
 }

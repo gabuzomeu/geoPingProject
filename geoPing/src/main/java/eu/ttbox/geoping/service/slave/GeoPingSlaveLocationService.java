@@ -23,6 +23,7 @@ import android.telephony.gsm.GsmCellLocation;
 import android.text.format.DateUtils;
 import android.util.Log;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
@@ -42,6 +43,7 @@ import eu.ttbox.geoping.encoder.model.MessageParamEnum;
 import eu.ttbox.geoping.service.SmsSenderHelper;
 import eu.ttbox.geoping.service.core.WorkerService;
 import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
+import eu.ttbox.osm.core.LocationUtils;
 import eu.ttbox.osm.ui.map.mylocation.sensor.MyLocationListenerProxy;
 import eu.ttbox.osm.ui.map.mylocation.sensor.v2.OsmAndLocationProvider;
 import eu.ttbox.osm.ui.map.mylocation.sensor.v2.OsmLocation;
@@ -315,13 +317,16 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
     }
 
     public class GeoPingRequest implements Callable<Boolean>, LocationListener, OsmAndLocationProvider.OsmAndLocationListener {
+
+        private static final int LOCALISATION_SIGNIFICATY_NEWER_IN_MS = 1000 * 60 * 1;
+        // Context
         private MessageActionEnum smsAction;
         private  String[] smsPhoneNumber;
         private Bundle params;
-
+        // Config
         private int accuracyExpected = -1;
         private boolean isAccuracyExpectedCheck = false;
-
+        // Task Reference
         ScheduledFuture<Boolean> meTask;
 
         public GeoPingRequest() {
@@ -373,16 +378,28 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
             Location loc = location!=null ? location.getLocation() : null;
             onLocationChanged(loc);
         }
+
         @Override
         public void onLocationChanged(Location location) {
             if (isAccuracyExpectedCheck && location != null) {
-                // TODO check expected accuracy
+                // Check expected accuracy
                 int locAcc = (int) location.getAccuracy();
                 if (locAcc <= accuracyExpected) {
+                    // Test Date, in case of a very old Location
+                    long now = System.currentTimeMillis();
+                    Log.d(TAG, "The Current Time is : "
+                            + DateUtils.formatDateRange(getApplicationContext(),now, now, DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE )
+                    );
+                    if (LocationUtils.isLocationTooOld(location, now)) {
+                        Log.d(TAG, "Ignore too old LocationChanged : "
+                                + DateUtils.formatDateRange(getApplicationContext(),location.getTime(), location.getTime(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE )
+                                + " : " + location.getProvider() + " +/-"+ locAcc+ "m");
+                        return;
+                    }
                     // Unregister Request
-                    Log.d(TAG, "onLocationChanged with accuracy= " + locAcc + " : " + location
-                            + " / Time : "  + DateUtils.formatDateRange(getApplicationContext(),location.getTime(), location.getTime(),
-                            DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE ));
+                    Log.d(TAG, "Keep enough accuracy LocationChanged : "
+                            + DateUtils.formatDateRange(getApplicationContext(),location.getTime(), location.getTime(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE )
+                            + " : " + location.getProvider() + " +/-"+ locAcc+ "m");
 
                     Boolean isDone = sendFoundLocation(location);
                     if (isDone.booleanValue()) {
@@ -390,7 +407,7 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
                         isAccuracyExpectedCheck = false;
                         // Unregister event
                         boolean isMeTaskCancel = meTask.cancel(false);
-                        Log.d(TAG, "Future Cancel Callable for expercted accuracy [" +accuracyExpected +
+                        Log.d(TAG, "Future Cancel Callable for expected accuracy [" +accuracyExpected +
                                 "] end with location : " + location);
                         if (isMeTaskCancel) {
                             unregisterGeoPingRequest(GeoPingRequest.this);
