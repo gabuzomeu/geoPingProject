@@ -8,8 +8,30 @@ allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
+        maven {
+            url "https://raw.github.com/gabuzomeu/maven-repo/master/third-parties/"
+        }
     }
-    
+
+    dependencies {
+       // mavenScp 'org.apache.maven.wagon:wagon-scp:1.0-beta-2'
+    }
+
+    def isDevBuild = true
+
+    //https://github.com/mircea-pop/git-maven-repo/blob/master/gradle/git.gradle
+    uploadArchives {
+        repositories {
+            if (isDevBuild) {
+                mavenLocal()
+            }else {
+                mavenDeployer() {
+                    repository(url: 'file:${project.buildDir}/../maven-repo/releases')
+                }
+            }
+        }
+    }
+
     task hello << {task -> println "I'm $task.project.name" }
 
 }

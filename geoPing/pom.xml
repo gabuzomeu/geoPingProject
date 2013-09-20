@@ -100,7 +100,7 @@
             <version>${jackson.version}</version>
         </dependency>
 
-        <!--Guava -->
+        <!--Guava
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
@@ -114,7 +114,7 @@
             <scope>provided</scope>
         </dependency>
 
-
+-->
     </dependencies>
 
     <!-- <modules> <module>geoPing-tests</module> </modules> -->

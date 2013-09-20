@@ -9,11 +9,6 @@ buildscript {
     }
 }
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-}
-
 
 apply plugin: 'android'
 
@@ -32,17 +27,18 @@ List osmdroid = ['org.osmdroid:osmdroid-android:3.0.10@jar',  'org.osmdroid:osmd
 
 dependencies {
     compile project(':geoPing-encoder')
+    compile osmdroid
+
     compile "eu.ttbox.android.osm:osmLib:0.2.0@aar"
     compile "com.android.support:support-v13:18.0.+"
     compile "com.android.support:appcompat-v7:18.0.+"
-
-    compile analytics
-    compile jackson
-    compile osmdroid
-    compile admob
-    compile googlePlayServices
-
     compile slidingmenu
+
+    compile googlePlayServices
+    compile analytics
+    compile admob
+
+    compile jackson
 }
 
 android {
@@ -62,14 +58,11 @@ android {
     }
 
     signingConfigs {
-        debug {
-
-        }
         release {
-            storeFile file("other.keystore")
-            storePassword "android"
-            keyAlias "androiddebugkey"
-            keyPassword "android"
+            storeFile file(ttboxSignKeystore)
+            storePassword ttboxSignStorepass
+            keyAlias "android"
+            keyPassword ttboxSignKeypass
         }
     }
     buildTypes {
