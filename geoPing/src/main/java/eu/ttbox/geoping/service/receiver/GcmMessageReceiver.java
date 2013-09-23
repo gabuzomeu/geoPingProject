@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import eu.ttbox.geoping.core.Intents;
+
 @Deprecated
 public class GcmMessageReceiver  extends BroadcastReceiver {
 
@@ -31,12 +33,7 @@ public class GcmMessageReceiver  extends BroadcastReceiver {
     }
 
     private void printExtras(Bundle extras) {
-        if (extras != null) {
-            for (String key : extras.keySet()) {
-                Object value = extras.get(key);
-                Log.d(TAG, "### GCM extras : " + key + " = " + value);
-            }
-        }
+        Intents.printExtras(TAG, extras);
     }
 
 

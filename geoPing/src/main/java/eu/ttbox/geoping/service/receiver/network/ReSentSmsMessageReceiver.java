@@ -9,6 +9,8 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 
+import eu.ttbox.geoping.core.Intents;
+
 public class ReSentSmsMessageReceiver extends BroadcastReceiver {
 
     private static final String TAG = "ReSentSmsMessageReceiver";
@@ -37,11 +39,6 @@ public class ReSentSmsMessageReceiver extends BroadcastReceiver {
 
 
     private void printExtras(Bundle extras) {
-        if (extras!=null) {
-            for (String key : extras.keySet()) {
-                Object value = extras.get(key);
-                Log.d(TAG, "### Phone State extras : " + key + " = " + value);
-            }
-        }
+        Intents.printExtras(TAG, extras);
     }
 }

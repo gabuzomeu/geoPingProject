@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.pairing.PairingDatabase.PairingColumns;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
@@ -153,10 +154,7 @@ public class PhoneCallReceiver extends BroadcastReceiver {
     }
 
     private void printExtras(Bundle extras) {
-        for (String key : extras.keySet()) {
-            Object value = extras.get(key);
-            Log.d(TAG, "EventSpy PhoneState extras : " + key + " = " + value);
-        }
-    }
+        Intents.printExtras(TAG, extras);
+     }
 
 }

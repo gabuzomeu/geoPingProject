@@ -15,6 +15,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.google.android.gms.internal.ex;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationClient;
 
@@ -26,6 +27,7 @@ import java.util.List;
 
 import eu.ttbox.geoping.MainActivity;
 import eu.ttbox.geoping.R;
+import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.core.MessageActionEnumLabelHelper;
 import eu.ttbox.geoping.domain.GeoFenceProvider;
 import eu.ttbox.geoping.domain.geotrack.GeoTrackHelper;
@@ -70,12 +72,7 @@ public class ReceiveTransitionsIntentService extends IntentService {
     }
 
     private void printExtras(Bundle extras) {
-        if (extras != null) {
-            for (String key : extras.keySet()) {
-                Object value = extras.get(key);
-                Log.d(TAG, "--- Geofence extras : " + key + " = " + value);
-            }
-        }
+        Intents.printExtras(TAG, extras);
     }
 
     /**

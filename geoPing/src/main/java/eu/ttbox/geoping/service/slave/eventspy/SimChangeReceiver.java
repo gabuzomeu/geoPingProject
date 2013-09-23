@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import eu.ttbox.geoping.core.AppConstants;
+import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.pairing.PairingDatabase.PairingColumns;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 
@@ -96,15 +97,6 @@ public class SimChangeReceiver extends BroadcastReceiver {
 		}
 	}
 
-	private void printExtras(Bundle extras) {
-		if (extras != null) { 
-			for (String key : extras.keySet()) {
-				Object value = extras.get(key);
-				Log.d(TAG, "EventSpy SIM extras : " + key + " = " + value);
-			}
-		}
-	}
-
 	private static String getSystemPhoneNumber(Context context) {
 		// Read Phone number
 		TelephonyManager telephoneMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -140,5 +132,12 @@ public class SimChangeReceiver extends BroadcastReceiver {
 			Log.w(TAG, "No Phone number to save in pref Key : " + AppConstants.PREFS_EVENT_SPY_SIMCHANGE_PHONENUMBER);
 		}
 	}
+
+
+    private void printExtras(Bundle extras) {
+        if (extras != null) {
+            Intents.printExtras(TAG, extras);
+        }
+    }
 
 }

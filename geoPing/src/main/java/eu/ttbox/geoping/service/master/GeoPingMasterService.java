@@ -205,14 +205,7 @@ public class GeoPingMasterService extends IntentService {
     // ===========================================================
 
     private void printExtras(Bundle extras) {
-        if (extras != null && !extras.isEmpty()) {
-            for (String key : extras.keySet()) {
-                Object value = extras.get(key);
-                Log.d(TAG, "--- Intent extras : " + key + " = " + value);
-            }
-        } else {
-            Log.d(TAG, "--- Intent extras : NONE");
-        }
+        Intents.printExtras(TAG, extras);
     }
 
     private Person getPersonByPhone(String phoneNumber) {
