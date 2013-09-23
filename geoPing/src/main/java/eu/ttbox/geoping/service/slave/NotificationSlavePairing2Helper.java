@@ -18,9 +18,11 @@ import android.widget.RemoteViews;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.core.Intents;
+import eu.ttbox.geoping.core.MessageActionEnumLabelHelper;
 import eu.ttbox.geoping.core.VersionUtils;
 import eu.ttbox.geoping.domain.model.Pairing;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
+import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.service.core.ContactHelper;
 import eu.ttbox.geoping.service.core.NotifPersonVo;
 import eu.ttbox.geoping.service.slave.receiver.AuthorizePhoneTypeEnum;
@@ -56,7 +58,12 @@ public class NotificationSlavePairing2Helper {
     // GeoPing Request Notification Builder
     // ===========================================================
 
-    public void showNotificationNewPingRequestConfirm(Pairing pairing, Intent eventIntent, GeopingNotifSlaveTypeEnum onlyPairing) {
+    private String getTitle(MessageActionEnum msgAction, GeopingNotifSlaveTypeEnum onlyPairing ) {
+        String actionLabel = MessageActionEnumLabelHelper.getString(context, msgAction);
+        return actionLabel;
+    }
+
+    public void showNotificationNewPingRequestConfirm(Pairing pairing, Intent eventIntent, MessageActionEnum msgAction, GeopingNotifSlaveTypeEnum onlyPairing) {
         // Log.d(TAG,"******************************************************");
         // Log.d(TAG,"*****  showNotificationNewPingRequestConfirm  ****");
         // Log.d(TAG,"******************************************************");
@@ -93,14 +100,14 @@ public class NotificationSlavePairing2Helper {
                         PendingIntent.FLAG_UPDATE_CURRENT);
                 break;
             case GEOPING_REQUEST_CONFIRM:
-                title = context.getString(R.string.notif_geoping_request);
+                title = getTitle(msgAction, onlyPairing);//context.getString(R.string.notif_geoping_request);
                 contentView.setViewVisibility(R.id.notif_geoping_confirm_button_yes, View.VISIBLE);
                 contentView.setViewVisibility(R.id.notif_geoping_confirm_button_no, View.VISIBLE);
                 contentView.setViewVisibility(R.id.notif_geoping_confirm_button_never, View.GONE);
                 contentView.setViewVisibility(R.id.notif_geoping_confirm_button_always, View.GONE);
                 break;
             case GEOPING_REQUEST_CONFIRM_FIRST:
-                title = context.getString(R.string.notif_geoping_request);
+                title =  getTitle(msgAction, onlyPairing);//context.getString(R.string.notif_geoping_request);
                 contentView.setViewVisibility(R.id.notif_geoping_confirm_button_yes, View.VISIBLE);
                 contentView.setViewVisibility(R.id.notif_geoping_confirm_button_no, View.GONE);
                 contentView.setViewVisibility(R.id.notif_geoping_confirm_button_always, View.VISIBLE);

@@ -186,7 +186,7 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
 
         String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
         if (pairing == null) {
-            showNotificationForNewPairing(phone, intent, GeopingNotifSlaveTypeEnum.PAIRING);
+            showNotificationForNewPairing(phone, intent, msgAction, GeopingNotifSlaveTypeEnum.PAIRING);
             return false;
         }
         // --- Manage Security
@@ -215,7 +215,7 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
                 if (authorizeType == null) {
                     GeopingNotifSlaveTypeEnum type = GeopingNotifSlaveTypeEnum.GEOPING_REQUEST_CONFIRM;
                     Bundle config = intent.getExtras();
-                    showNotificationForNewPairing(phone, intent, GeopingNotifSlaveTypeEnum.GEOPING_REQUEST_CONFIRM);
+                    showNotificationForNewPairing(phone, intent, msgAction, GeopingNotifSlaveTypeEnum.GEOPING_REQUEST_CONFIRM);
                     //showNotificationNewPingRequestConfirm(pairing, config, type);
                     isAuthorize = false;
                 } else {
@@ -520,14 +520,14 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
     }
 
 
-    private void showNotificationForNewPairing(String phone, Intent eventIntent, GeopingNotifSlaveTypeEnum onlyPairing) {
+    private void showNotificationForNewPairing(String phone, Intent eventIntent, MessageActionEnum msgAction, GeopingNotifSlaveTypeEnum onlyPairing) {
         Pairing pairing = createPairingByPhone(phone);
-        showNotificationForNewPairing(pairing, eventIntent, onlyPairing);
+        showNotificationForNewPairing(pairing, eventIntent,msgAction, onlyPairing);
     }
 
-    private void showNotificationForNewPairing(Pairing pairing, Intent eventIntent, GeopingNotifSlaveTypeEnum onlyPairing) {
+    private void showNotificationForNewPairing(Pairing pairing, Intent eventIntent, MessageActionEnum msgAction, GeopingNotifSlaveTypeEnum onlyPairing) {
         NotificationSlavePairing2Helper notif = new NotificationSlavePairing2Helper(this);
-        notif.showNotificationNewPingRequestConfirm(pairing, eventIntent, onlyPairing);
+        notif.showNotificationNewPingRequestConfirm(pairing, eventIntent, msgAction,onlyPairing);
     }
     // ===========================================================
     // Binder
