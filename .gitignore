@@ -32,6 +32,7 @@ out
 
 # Other
 .gradle
+/gradle
 lint.xml
 .cache
 classes
