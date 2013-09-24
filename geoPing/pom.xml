@@ -233,7 +233,7 @@
                             </manifest>
                             <proguard>
                                 <skip>false</skip>
-                                <config>proguard.cfg</config>
+                                <config>proguard.txt</config>
                                 <configs>
                                     <config>${env.ANDROID_HOME}/tools/proguard/proguard-android-optimize.txt</config>
                                 </configs>

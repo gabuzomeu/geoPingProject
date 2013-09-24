@@ -17,7 +17,7 @@ apply plugin: 'android'
 List jackson = ['com.fasterxml.jackson.core:jackson-core:2.2.3@jar', 'com.fasterxml.jackson.core:jackson-databind:2.2.3@jar']
 
 // Google Apis
-List admob = ['com.google.android.admob:admob:6.4.1-r11']
+List admob = ['com.google.android.admob:admob:6.4.1-r11@jar']
 List googlePlayServices = ['com.google.android.gms:play-services:3.2.25@aar']
 List analytics = ['com.google.android.analytics:analytics:3@jar']
 
@@ -26,16 +26,20 @@ List slidingmenu = ['com.jeremyfeinstein.slidingmenu:library:1.3.2@aar']
 
 List osmdroid = ['org.osmdroid:osmdroid-android:3.0.10@jar', 'org.osmdroid:osmdroid-third-party:3.0.10@jar', 'org.slf4j:slf4j-android:1.6.1-RC1@jar']
 
+
 dependencies {
 
 
     compile project(':geoPing-encoder')
-    //  compile osmdroid
+     compile osmdroid
 
-    compile('eu.ttbox.android.osm:osmLib:0.2.0@aar') { transitive = true }
+    compile('eu.ttbox.android.osm:osmLib:0.2.1@aar') { transitive = true }
     compile "com.android.support:support-v13:18.0.+"
-    compile "com.android.support:appcompat-v7:18.0.+"
+    compile "com.android.support:appcompat-v7:18.0.+@aar"
     compile slidingmenu
+
+    compile ('com.squareup.okhttp:okhttp:1.2.+@jar') { transitive = true }
+
 
     compile googlePlayServices
     compile analytics
@@ -46,7 +50,7 @@ dependencies {
 
 android {
     compileSdkVersion 18
-    buildToolsVersion "18.0.1"
+    buildToolsVersion "18.1.0" //18.0.1
 
     sourceSets {
         main {
@@ -78,7 +82,7 @@ android {
             //http://tools.android.com/tech-docs/new-build-system/user-guide
             debuggable false
             runProguard true
-            proguardFile('proguard.cfg')
+            proguardFile('proguard.txt')
             signingConfig signingConfigs.release
         }
 
