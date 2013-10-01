@@ -15,7 +15,6 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.google.android.gms.internal.ex;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationClient;
 

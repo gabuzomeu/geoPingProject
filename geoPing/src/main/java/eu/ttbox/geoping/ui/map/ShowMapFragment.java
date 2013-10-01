@@ -59,7 +59,6 @@ import eu.ttbox.geoping.ui.map.track.GeoTrackOverlay.OnRangeGeoTrackValuesChange
 import eu.ttbox.geoping.ui.map.track.dialog.SelectGeoTrackDialog;
 import eu.ttbox.geoping.ui.map.track.dialog.SelectGeoTrackDialog.OnSelectPersonListener;
 import eu.ttbox.osm.ui.map.MapViewFactory;
-import eu.ttbox.osm.ui.map.mylocation.MyLocationOverlay;
 import eu.ttbox.osm.ui.map.mylocation.MyLocationOverlay2;
 
 /**

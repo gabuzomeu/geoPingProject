@@ -26,7 +26,6 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivityBase;
 
 import eu.ttbox.geoping.BuildConfig;

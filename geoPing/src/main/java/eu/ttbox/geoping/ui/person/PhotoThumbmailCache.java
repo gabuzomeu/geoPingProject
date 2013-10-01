@@ -11,10 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import eu.ttbox.geoping.service.core.ContactHelper;
 import eu.ttbox.geoping.service.core.ContactVo;

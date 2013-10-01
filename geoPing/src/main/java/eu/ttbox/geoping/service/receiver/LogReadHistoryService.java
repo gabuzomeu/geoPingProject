@@ -16,12 +16,12 @@ import java.util.ArrayList;
 
 import eu.ttbox.geoping.MainActivity;
 import eu.ttbox.geoping.core.Intents;
+import eu.ttbox.geoping.core.MessageActionEnumLabelHelper;
 import eu.ttbox.geoping.domain.SmsLogProvider;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
 import eu.ttbox.geoping.domain.smslog.SmsLogDatabase;
 import eu.ttbox.geoping.domain.smslog.SmsLogHelper;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
-import eu.ttbox.geoping.core.MessageActionEnumLabelHelper;
 
 
 public class LogReadHistoryService extends IntentService {

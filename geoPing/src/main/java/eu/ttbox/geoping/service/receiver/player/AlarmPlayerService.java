@@ -2,7 +2,6 @@ package eu.ttbox.geoping.service.receiver.player;
 
 
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -13,18 +12,12 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.provider.Settings;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.io.IOException;
-import android.app.Notification;
 
-import eu.ttbox.geoping.MainActivity;
-import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
-import eu.ttbox.geoping.service.core.ContactHelper;
-import eu.ttbox.geoping.service.core.NotifPersonVo;
 
 /**
  *  com.example.android.musicplayer.MusicService

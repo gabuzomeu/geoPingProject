@@ -11,11 +11,11 @@ import android.widget.TextView;
 
 import eu.ttbox.geoping.GeoPingApplication;
 import eu.ttbox.geoping.R;
+import eu.ttbox.geoping.core.MessageActionEnumLabelHelper;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
 import eu.ttbox.geoping.domain.model.SmsLogTypeEnum;
 import eu.ttbox.geoping.domain.smslog.SmsLogHelper;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
-import eu.ttbox.geoping.core.MessageActionEnumLabelHelper;
 import eu.ttbox.geoping.ui.person.PhotoEditorView;
 import eu.ttbox.geoping.ui.person.PhotoThumbmailCache;
 

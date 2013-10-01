@@ -2,10 +2,7 @@ package eu.ttbox.geoping.ui.person;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -15,7 +12,6 @@ import eu.ttbox.geoping.GeoPingApplication;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.domain.person.PersonHelper;
 import eu.ttbox.geoping.ui.person.PhotoEditorView.EditorListener;
-import eu.ttbox.geoping.ui.person.PhotoThumbmailCache.PhotoLoaderAsyncTask;
 
 public class PersonListAdapter extends android.support.v4.widget.ResourceCursorAdapter {
 

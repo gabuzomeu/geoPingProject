@@ -18,7 +18,7 @@ List jackson = ['com.fasterxml.jackson.core:jackson-core:2.2.3@jar', 'com.faster
 
 // Google Apis
 List admob = ['com.google.android.admob:admob:6.4.1-r11@jar']
-List googlePlayServices = ['com.google.android.gms:play-services:3.2.25@aar']
+List googlePlayServices = ['com.google.android.gms:play-services:3.2.65@aar']
 List analytics = ['com.google.android.analytics:analytics:3@jar']
 
 // Compatibility

@@ -40,7 +40,6 @@ import eu.ttbox.geoping.domain.PairingProvider;
 import eu.ttbox.geoping.domain.model.PairingAuthorizeTypeEnum;
 import eu.ttbox.geoping.domain.pairing.PairingDatabase.PairingColumns;
 import eu.ttbox.geoping.domain.pairing.PairingHelper;
-import eu.ttbox.geoping.domain.person.PersonDatabase;
 import eu.ttbox.geoping.ui.core.BindingHelper;
 import eu.ttbox.geoping.ui.core.validator.Form;
 import eu.ttbox.geoping.ui.core.validator.validate.ValidateTextView;

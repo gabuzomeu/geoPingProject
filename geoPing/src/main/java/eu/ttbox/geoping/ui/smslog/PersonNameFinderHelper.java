@@ -11,8 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import java.util.concurrent.CopyOnWriteArraySet;
-
 import eu.ttbox.geoping.core.PhoneNumberUtils;
 import eu.ttbox.geoping.domain.PairingProvider;
 import eu.ttbox.geoping.domain.PersonProvider;

@@ -15,8 +15,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
-import com.google.ads.internal.i;
-
 import eu.ttbox.geoping.MainActivity;
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.core.Intents;

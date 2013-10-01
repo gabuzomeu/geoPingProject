@@ -23,7 +23,6 @@ import android.telephony.gsm.GsmCellLocation;
 import android.text.format.DateUtils;
 import android.util.Log;
 
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
@@ -44,7 +43,6 @@ import eu.ttbox.geoping.service.SmsSenderHelper;
 import eu.ttbox.geoping.service.core.WorkerService;
 import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
 import eu.ttbox.osm.core.LocationUtils;
-import eu.ttbox.osm.ui.map.mylocation.sensor.MyLocationListenerProxy;
 import eu.ttbox.osm.ui.map.mylocation.sensor.v2.OsmAndLocationProvider;
 import eu.ttbox.osm.ui.map.mylocation.sensor.v2.OsmLocation;
 

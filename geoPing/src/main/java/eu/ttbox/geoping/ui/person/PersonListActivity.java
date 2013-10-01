@@ -9,8 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.analytics.tracking.android.EasyTracker;
-
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.ui.GeoPingSlidingMenuFragmentActivity;
 

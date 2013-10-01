@@ -17,17 +17,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-
 import java.io.IOException;
 import java.util.Locale;
 
 import eu.ttbox.geoping.GeoPingApplication;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
-import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.service.master.GeoPingMasterService;
-import eu.ttbox.geoping.service.receiver.player.AlarmPlayerService;
 
 
 public class PersonRemoteControlFragment extends Fragment {
