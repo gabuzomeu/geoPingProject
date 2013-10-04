@@ -60,6 +60,9 @@ android {
         }
     }
     defaultConfig {
+        packageName "eu.ttbox.geoping"
+//        versionCode 1
+//        versionName "1"
         minSdkVersion 10
         targetSdkVersion 18
     }
