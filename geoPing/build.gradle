@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.5.+'
+        classpath 'com.android.tools.build:gradle:0.6.+'
     }
 }
 
@@ -55,9 +55,10 @@ android {
     sourceSets {
         main {
             // otherwise aidl task does not see aidl files in the project
-            aidl.srcDirs = ['src/main/java']
+           aidl.srcDirs = ['src/main/aidl']
 
         }
+//        instrumentTest.setRoot('src/tests')
     }
     defaultConfig {
         packageName "eu.ttbox.geoping"
