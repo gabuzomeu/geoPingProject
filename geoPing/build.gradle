@@ -86,6 +86,7 @@ android {
             //http://tools.android.com/tech-docs/new-build-system/user-guide
             debuggable false
             runProguard true
+            zipAlign true
             proguardFile('proguard.txt')
             signingConfig signingConfigs.release
         }
