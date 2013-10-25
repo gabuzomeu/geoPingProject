@@ -7,6 +7,7 @@ import android.view.View;
 
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.ResourceProxy;
+import org.osmdroid.api.IMapController;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Overlay;
@@ -22,7 +23,7 @@ public class GeoPingOverlay extends Overlay {
     
     // Map
     private Context context;
-    private final MapController mMapController;
+    private final IMapController mMapController;
     private final MapView mapView;
 
     // Bubble

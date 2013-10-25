@@ -27,6 +27,7 @@ import android.view.animation.AnimationUtils;
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.api.IGeoPoint;
+import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -79,7 +80,7 @@ public class ShowMapFragment extends Fragment implements SharedPreferences.OnSha
     private int MENU_LAST_ID = 3;
 
     // Map
-    public MapController mapController;
+    public IMapController mapController;
     public MapView mapView;
 
     // Config
