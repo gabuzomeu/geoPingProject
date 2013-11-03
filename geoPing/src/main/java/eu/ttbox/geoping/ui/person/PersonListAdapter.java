@@ -53,12 +53,7 @@ public class PersonListAdapter extends android.support.v4.widget.ResourceCursorA
 			intViewBinding(view, context, cursor);
 		}
 		final ViewHolder holder = (ViewHolder) view.getTag();
-		// Cancel any pending thumbnail task, since this view is now bound to
-		// new thumbnail
-	//	final PhotoLoaderAsyncTask oldTask = holder.photoLoaderAsyncTask;
-	//	if (oldTask != null) {
-	//		oldTask.cancel(false);
-	//	}
+
 
 		// Value
 		final String phoneNumber = helper.getPersonPhone(cursor);
@@ -80,16 +75,6 @@ public class PersonListAdapter extends android.support.v4.widget.ResourceCursorA
 
 		// Photo
         photoCache.loadPhoto(context, holder.pingButton, contactId, phoneNumber);
-//		if (!TextUtils.isEmpty(contactId)) {
-//			Bitmap cachedResult = photoCache.get(contactId);
-//			if (cachedResult != null) {
-//				holder.pingButton.setValues(cachedResult, false);
-//			} else {
-//				PhotoLoaderAsyncTask newTask = photoCache.getPhotoLoaderAsyncTask(context, holder.pingButton);
-//				holder.photoLoaderAsyncTask = newTask;
-//				newTask.execute(contactId, phoneNumber);
-//			}
-//		}
 
 		// Button
 		holder.pingButton.setEditorListener(new EditorListener() {
@@ -100,19 +85,16 @@ public class PersonListAdapter extends android.support.v4.widget.ResourceCursorA
  				}
 			}
 		});
-		holder.mapButton.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-//				Animation animationOut = AnimationUtils.loadAnimation(context, R.anim.rotate_anim);
-//				holder.mapButton.clearAnimation();
-//				holder.mapButton.startAnimation(animationOut);
-				if (personListItemListener != null) {
-					personListItemListener.onClickMap(v, personId, phoneNumber);
- 				}
-				
-			}
-		});
+		holder.editButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (personListItemListener != null) {
+                    personListItemListener.onClickEditPerson(v, personId, phoneNumber);
+                }
+
+            }
+        });
 	}
 
 	@Override
@@ -123,17 +105,17 @@ public class PersonListAdapter extends android.support.v4.widget.ResourceCursorA
 		holder.nameText = (TextView) view.findViewById(R.id.person_list_item_name);
 		holder.phoneText = (TextView) view.findViewById(R.id.person_list_item_phone);
 		holder.pingButton = (PhotoEditorView) view.findViewById(R.id.person_list_item_geoping_button);
-		holder.mapButton = (ImageButton) view.findViewById(R.id.person_list_item_editButton);
+		holder.editButton = (ImageButton) view.findViewById(R.id.person_list_item_editButton);
 		// Do not work if set in the xml laytou file
-		holder.mapButton .setFocusable(false);
-        holder.mapButton .setFocusableInTouchMode(false);
+		holder.editButton.setFocusable(false);
+        holder.editButton.setFocusableInTouchMode(false);
 		view.setTag(holder);
 		return view;
 
 	}
 
 	static class ViewHolder {
-		ImageButton mapButton;
+		ImageButton editButton;
 		TextView nameText;
 		TextView phoneText;
 		PhotoEditorView pingButton;
@@ -151,7 +133,7 @@ public class PersonListAdapter extends android.support.v4.widget.ResourceCursorA
 
 	public interface PersonListItemListener {
 		
-		public void onClickMap(View v,  long personId, String phoneNumber);
+		public void onClickEditPerson(View v, long personId, String phoneNumber);
 		public void onClickPing(View v,  long personId, String phoneNumber);
 
 		 

@@ -1,22 +1,32 @@
 package eu.ttbox.geoping.ui;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.internal.ad;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivityBase;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivityHelper;
 
 import eu.ttbox.geoping.R;
+import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.ui.slidingmenu.SlidingMenuHelper;
 
 public class GeoPingSlidingMenuFragmentActivity extends ActionBarActivity implements SlidingActivityBase {
 
+    private static final String TAG = "GeoPingSlidingMenuFragmentActivity";
+
+    private AdView adView;
 
     // ===========================================================
     // Tracking Event
@@ -36,6 +46,30 @@ public class GeoPingSlidingMenuFragmentActivity extends ActionBarActivity implem
         EasyTracker.getInstance().activityStop(this);
     }
 
+
+    @Override
+    protected void onPause() {
+        if (adView != null) {
+            adView.pause();
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        if (adView != null) {
+            adView.resume();
+        }
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (adView != null) {
+            adView.destroy();
+        }
+        super.onDestroy();
+    }
 
     // ===========================================================
     // Sliding fragment Activity Copy
@@ -67,7 +101,27 @@ public class GeoPingSlidingMenuFragmentActivity extends ActionBarActivity implem
             // slidingMenu.setSlidingEnabled(false);
             // slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
         }
+    }
 
+    private boolean isAddBlocked(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isAddBlocked = sharedPreferences != null ? sharedPreferences.getBoolean(AppConstants.PREFS_ADD_BLOCKED, false) : false;
+        return isAddBlocked;
+    }
+
+    private void bindAdMobView() {
+        // Admob
+        if (isAddBlocked()) {
+            View admob =   findViewById(R.id.adsContainer);
+            admob.setVisibility(View.GONE);
+        } else {
+            adView = (AdView) findViewById(R.id.adView);
+        }
+        // Request Ad
+        if (adView!=null) {
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        }
     }
 
     @Override
@@ -104,6 +158,7 @@ public class GeoPingSlidingMenuFragmentActivity extends ActionBarActivity implem
     public void setContentView(View v, LayoutParams params) {
         super.setContentView(v, params);
         mHelper.registerAboveContentView(v, params);
+        bindAdMobView();
     }
 
     public void setBehindContentView(int id) {

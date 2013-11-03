@@ -36,6 +36,8 @@ public enum MessageParamEnum implements IParamEncoder {
             MessageParamField.GEOFENCE_TRANSITION, //
             MessageParamField.GEOFENCE_EXPIRATION_DATE  //
     ), //
+    // Alarm
+    ALARM('h', MessageParamField.ALARM),
     // Spy Event
     //    EVT_SIM_PHONE('i', ParamTypeEncoding.STRING, "EVT_SIM_PHONE"),
     PHONE_NUMBER('n', MessageParamField.PHONE_NUMBER), //

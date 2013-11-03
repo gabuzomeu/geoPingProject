@@ -27,6 +27,7 @@ public class CircleGeofence {
     public long expirationDate = UNSET_DATE;
     public int transitionType = Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT;
 
+    public int alarm;
 
     public String address;
 
@@ -58,6 +59,7 @@ public class CircleGeofence {
         this.radiusInMeters = other.radiusInMeters;
         this.expirationDate  = other.expirationDate;
         this.transitionType = other.transitionType;
+        this.alarm = other.alarm;
     }
 
     /**
@@ -241,6 +243,14 @@ public class CircleGeofence {
         return this;
     }
 
+    public int getAlarm() {
+        return alarm;
+    }
+
+    public CircleGeofence setAlarm(int alarm) {
+        this.alarm = alarm;
+        return this;
+    }
 
     public long getExpirationDuration() {
         if (this.expirationDate == UNSET_DATE) {

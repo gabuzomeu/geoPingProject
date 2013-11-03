@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.backup.BackupManager;
 import android.app.backup.RestoreObserver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Build;
@@ -27,14 +28,17 @@ import java.util.List;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.NotifToasts;
 import eu.ttbox.geoping.core.VersionUtils;
+import eu.ttbox.geoping.ui.lock.prefs.CommandsPrefsHelper;
+import eu.ttbox.geoping.ui.lock.prefs.PreferenceHolder;
 import eu.ttbox.geoping.ui.prefs.comp.version.AppVersionPreference;
+import group.pals.android.lib.ui.lockpattern.LockPatternActivity;
+import group.pals.android.lib.ui.lockpattern.prefs.SecurityPrefs;
 
 /**
  * http://www.blackmoonit.com/2012/07/all_api_prefsactivity/
- * 
  */
 public class GeoPingPrefActivity extends PreferenceActivity //SlidingPreferenceActivity
-implements OnSharedPreferenceChangeListener {
+        implements OnSharedPreferenceChangeListener, PreferenceHolder {
 
     private static final String TAG = "GeoPingPrefActivity";
 
@@ -62,24 +66,32 @@ implements OnSharedPreferenceChangeListener {
             // addPreferencesFromResource(R.xml.prefs);
             addPreferencesFromResource(R.xml.geoping_prefs);
             addPreferencesFromResource(R.xml.map_prefs);
+            // Lock Pattern
+            addPreferencesFromResource(R.xml.lockpattern_prefs);
+            new CommandsPrefsHelper(this, this).init();
             if (showDev) {
                 addPreferencesFromResource(R.xml.development_prefs);
             }
             addPreferencesFromResource(R.xml.info_prefs);
         } else {
             // Add selector
-            getActionBar().setDisplayHomeAsUpEnabled(true);
+            setHcDisplayHomeAsUpEnabled();
         }
         // Init Summary
         initSummaries(this.getPreferenceScreen());
+    }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void setHcDisplayHomeAsUpEnabled() {
+        // Add selector
+        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     /**
      * Set the summaries of all preferences
      */
     private void initSummaries(PreferenceGroup pg) {
-        if (pg==null) {
+        if (pg == null) {
             return;
         }
         for (int i = 0; i < pg.getPreferenceCount(); ++i) {
@@ -108,7 +120,26 @@ implements OnSharedPreferenceChangeListener {
             pref.setSummary(listPref.getEntry());
         }
     }
+    // ===========================================================
+    // onActivityResult
+    // ===========================================================
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case CommandsPrefsHelper.REQ_CREATE_PATTERN: {
+                if (resultCode == RESULT_OK) {
+                    char[] pattern = data.getCharArrayExtra(LockPatternActivity.EXTRA_PATTERN);
+                    SecurityPrefs.setPattern(this, pattern);
+                } else {
+                    // setTitle(R.string.app_name);
+                }
+
+                break;
+            }// REQ_CREATE_PATTERN
+        }
+    }
 
 
     // ===========================================================
@@ -219,17 +250,16 @@ implements OnSharedPreferenceChangeListener {
 //        customizeSlidingMenuActionBar(); 
 //        return slidingMenu;
 //    }
-   
 
-    
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void customizeSlidingMenuActionBar() {
         if (VersionUtils.isHc11) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
-    
-    
+
+
     // ===========================================================
     // Generic Fragment
     // ===========================================================
@@ -253,7 +283,7 @@ implements OnSharedPreferenceChangeListener {
          * Set the summaries of all preferences
          */
         private void initSummaries(PreferenceGroup pg) {
-            if (pg==null) {
+            if (pg == null) {
                 return;
             }
             for (int i = 0; i < pg.getPreferenceCount(); ++i) {
@@ -267,6 +297,32 @@ implements OnSharedPreferenceChangeListener {
             }
         }
     }
+
+    // ===========================================================
+    // Lock Fragment
+    // ===========================================================
+
+    /**
+     * This fragment shows the COMMANDS.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class PrefsLockPatternFragment extends PreferenceFragment
+            implements PreferenceHolder {
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            addPreferencesForActivity();
+        }// onCreate()
+
+
+        private void addPreferencesForActivity() {
+            addPreferencesFromResource(R.xml.lockpattern_prefs);
+            new CommandsPrefsHelper(getActivity(), this).init();
+            Log.d(TAG, "##################### int CommandsPrefsHelper #####################");
+        }
+    }// Fragment_Prefs_Commands
 
     // ===========================================================
     // Change Pref Listener

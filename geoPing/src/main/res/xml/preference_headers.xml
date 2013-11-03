@@ -1,40 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<preference-headers xmlns:android="http://schemas.android.com/apk/res/android" >
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
 
     <header
         android:fragment="eu.ttbox.geoping.ui.prefs.GeoPingPrefActivity$PrefsFragment"
         android:icon="@android:drawable/ic_menu_myplaces"
-        android:title="@string/prefs_geoping_request" >
+        android:title="@string/prefs_geoping_request">
         <extra
             android:name="pref-resource"
             android:value="geoping_prefs" />
     </header>
 
-        <header
+    <header
         android:fragment="eu.ttbox.geoping.ui.prefs.GeoPingPrefActivity$PrefsFragment"
         android:icon="@drawable/ic_location_web_site"
-        android:title="@string/prefs_geoping_geoPoint_category" >
+        android:title="@string/prefs_geoping_geoPoint_category">
         <extra
             android:name="pref-resource"
             android:value="map_prefs" />
     </header>
-    
-    <!-- System --> 
-    
+
+    <!-- Lock Pattern -->
+
     <header
-         android:id="@+id/development_settings"
+        android:id="@+id/lockpattern_settings"
+        android:fragment="eu.ttbox.geoping.ui.prefs.GeoPingPrefActivity$PrefsLockPatternFragment"
+        android:icon="@android:drawable/ic_lock_idle_lock"
+        android:title="@string/prefs_lockapp">
+    </header>
+
+    <!-- System -->
+
+    <header
+        android:id="@+id/development_settings"
         android:fragment="eu.ttbox.geoping.ui.prefs.GeoPingPrefActivity$PrefsFragment"
         android:icon="@android:drawable/ic_menu_gallery"
-        android:title="@string/prefs_developement" >
+        android:title="@string/prefs_developement">
         <extra
             android:name="pref-resource"
             android:value="development_prefs" />
     </header>
+
     <header
-          android:id="@+id/about_settings"
+        android:id="@+id/about_settings"
         android:fragment="eu.ttbox.geoping.ui.prefs.GeoPingPrefActivity$PrefsFragment"
         android:icon="@android:drawable/ic_menu_info_details"
-        android:title="@string/prefs_info" >
+        android:title="@string/prefs_info">
         <extra
             android:name="pref-resource"
             android:value="info_prefs" />

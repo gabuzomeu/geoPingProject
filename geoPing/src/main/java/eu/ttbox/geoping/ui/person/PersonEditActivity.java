@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
@@ -23,41 +25,42 @@ import eu.ttbox.geoping.ui.smslog.SmsLogListFragment;
 
 public class PersonEditActivity extends ActionBarActivity {
 
-	private static final String TAG = "PersonEditActivity";
+    private static final String TAG = "PersonEditActivity";
 
-	// Binding
-	private PersonEditFragment editFragment;
-	private SmsLogListFragment smsLogFragment;
+    // Binding
+    private PersonEditFragment editFragment;
+    private SmsLogListFragment smsLogFragment;
     private PersonRemoteControlFragment remoteControlFragment;
 
-	private SectionsPagerAdapter mSectionsPagerAdapter;
-	private ViewPager mViewPager;
-	// Instance
-	private static final int VIEW_PAGER_LOADPERS_PAGE_COUNT = 3;
-	private int viewPagerPageCount = 1;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private ViewPager mViewPager;
+    // Instance
+    private static final int VIEW_PAGER_LOADPERS_PAGE_COUNT = 3;
+    private int viewPagerPageCount = 1;
 
-	private String personId;
-	private String personPhone;
+    private String personId;
+    private String personPhone;
 
-	// ===========================================================
-	// Listener
-	// ===========================================================
 
-	private PersonEditFragment.OnPersonSelectListener onPersonSelectListener = new PersonEditFragment.OnPersonSelectListener() {
+    // ===========================================================
+    // Listener
+    // ===========================================================
 
-		@Override
-		public void onPersonSelect(String id, String phone) {
+    private PersonEditFragment.OnPersonSelectListener onPersonSelectListener = new PersonEditFragment.OnPersonSelectListener() {
+
+        @Override
+        public void onPersonSelect(String id, String phone) {
             personId = id;
             personPhone = phone;
             // Check Update Phone
-			if (!TextUtils.isEmpty(personPhone) && !TextUtils.isEmpty(phone)) {
-				if (smsLogFragment!=null && !personPhone.equals(phone)) {
-					Bundle args = new Bundle();
-					args.putString(eu.ttbox.geoping.ui.smslog.SmsLogListFragment.Intents.EXTRA_SMS_PHONE, personPhone);
-					args.putInt(eu.ttbox.geoping.ui.smslog.SmsLogListFragment.Intents.EXTRA_SIDE_DBCODE, SmsLogSideEnum.MASTER.getDbCode());
-  					smsLogFragment.refreshLoader(args); 
-				}
-			}
+            if (!TextUtils.isEmpty(personPhone) && !TextUtils.isEmpty(phone)) {
+                if (smsLogFragment != null && !personPhone.equals(phone)) {
+                    Bundle args = new Bundle();
+                    args.putString(eu.ttbox.geoping.ui.smslog.SmsLogListFragment.Intents.EXTRA_SMS_PHONE, personPhone);
+                    args.putInt(eu.ttbox.geoping.ui.smslog.SmsLogListFragment.Intents.EXTRA_SIDE_DBCODE, SmsLogSideEnum.MASTER.getDbCode());
+                    smsLogFragment.refreshLoader(args);
+                }
+            }
             // remote Controle
             if (remoteControlFragment != null) {
                 Uri entityUri = PersonProvider.Constants.getUriEntityId(id);
@@ -68,36 +71,37 @@ public class PersonEditActivity extends ActionBarActivity {
                 remoteControlFragment.loadEntity(args);
 //                remoteControlFragment.setEntity(entityUri, phone);
             }
-			// Update Ui Tabs
-			if (viewPagerPageCount != VIEW_PAGER_LOADPERS_PAGE_COUNT) {
-				viewPagerPageCount = VIEW_PAGER_LOADPERS_PAGE_COUNT;
-				mSectionsPagerAdapter.notifyDataSetChanged();
-			}
-		}
+            // Update Ui Tabs
+            if (viewPagerPageCount != VIEW_PAGER_LOADPERS_PAGE_COUNT) {
+                viewPagerPageCount = VIEW_PAGER_LOADPERS_PAGE_COUNT;
+                mSectionsPagerAdapter.notifyDataSetChanged();
+            }
+        }
 
-	};
+    };
 
-	// ===========================================================
-	// Constructors
-	// ===========================================================
+    // ===========================================================
+    // Constructors
+    // ===========================================================
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.track_person_edit_activity);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.track_person_edit_activity);
         // Add selector
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Pagers
-		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-		mViewPager = (ViewPager) findViewById(R.id.pager);
-		// Fragment
-		editFragment = new PersonEditFragment();
-		editFragment.setOnPersonSelectListener(onPersonSelectListener);
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        // Fragment
+        editFragment = new PersonEditFragment();
+        editFragment.setOnPersonSelectListener(onPersonSelectListener);
 
-		// Analytic
-		mViewPager.setAdapter(mSectionsPagerAdapter);
-		// Intents
-		handleIntent(getIntent());
+        // Analytic
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        // Intents
+        handleIntent(getIntent());
+
 
     }
 
@@ -119,24 +123,25 @@ public class PersonEditActivity extends ActionBarActivity {
         // Tracker
         EasyTracker.getInstance().activityStop(this);
     }
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		outState.putString(PersonColumns.COL_ID, personId);
-		outState.putString(PersonColumns.COL_PHONE, personPhone);
-		super.onSaveInstanceState(outState);
-	}
 
-	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		personId = savedInstanceState.getString(PersonColumns.COL_ID);
-		personPhone = savedInstanceState.getString(PersonColumns.COL_PHONE);
-		super.onRestoreInstanceState(savedInstanceState);
-	}
 
-	// ===========================================================
-	// Menu
-	// ===========================================================
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(PersonColumns.COL_ID, personId);
+        outState.putString(PersonColumns.COL_PHONE, personPhone);
+        super.onSaveInstanceState(outState);
+    }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        personId = savedInstanceState.getString(PersonColumns.COL_ID);
+        personPhone = savedInstanceState.getString(PersonColumns.COL_PHONE);
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    // ===========================================================
+    // Menu
+    // ===========================================================
 
 
     @Override
@@ -150,121 +155,120 @@ public class PersonEditActivity extends ActionBarActivity {
     }
 
 
-	// ===========================================================
-	// Intent Handler
-	// ===========================================================
+    // ===========================================================
+    // Intent Handler
+    // ===========================================================
 
-	@Override
-	protected void onNewIntent(Intent intent) {
-		handleIntent(intent);
-	}
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleIntent(intent);
+    }
 
-	protected void handleIntent(Intent intent) {
-		if (intent == null) {
-			return;
-		}
-		String action = intent.getAction();
-		Log.d(TAG, "handleIntent for action : " + action);
-		if (Intent.ACTION_EDIT.equals(action) || Intent.ACTION_DELETE.equals(action)) {
-			mViewPager.setCurrentItem(SectionsPagerAdapter.PERSON);
-			// Prepare Edit
-			String entityId = intent.getData().getLastPathSegment();
-			// Set Fragment
-			Bundle fragArgs = new Bundle();
-			fragArgs.putString(Intents.EXTRA_PERSON_ID, entityId);
-			editFragment.setArguments(fragArgs);
-			// Tracker
-			if (Intent.ACTION_DELETE.equals(action)) {
-				// Delete
-			} else {
-				// Edit
-			}
-		} else if (Intent.ACTION_INSERT.equals(action)) {
-			mViewPager.setCurrentItem(SectionsPagerAdapter.PERSON); 
-		}
+    protected void handleIntent(Intent intent) {
+        if (intent == null) {
+            return;
+        }
+        String action = intent.getAction();
+        Log.d(TAG, "handleIntent for action : " + action);
+        if (Intent.ACTION_EDIT.equals(action) || Intent.ACTION_DELETE.equals(action)) {
+            mViewPager.setCurrentItem(SectionsPagerAdapter.PERSON);
+            // Prepare Edit
+            String entityId = intent.getData().getLastPathSegment();
+            // Set Fragment
+            Bundle fragArgs = new Bundle();
+            fragArgs.putString(Intents.EXTRA_PERSON_ID, entityId);
+            editFragment.setArguments(fragArgs);
+            // Tracker
+            if (Intent.ACTION_DELETE.equals(action)) {
+                // Delete
+            } else {
+                // Edit
+            }
+        } else if (Intent.ACTION_INSERT.equals(action)) {
+            mViewPager.setCurrentItem(SectionsPagerAdapter.PERSON);
+        }
 
-	}
+    }
 
-	// ===========================================================
-	// Pages Adapter
-	// ===========================================================
+    // ===========================================================
+    // Pages Adapter
+    // ===========================================================
 
- 
 
-	/**
-	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-	 * one of the primary sections of the app.
-	 */
-	public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    /**
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the primary sections of the app.
+     */
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-		static final int PERSON = 0;
-		static final int REMOTE_CONTROL = 1;
-		static final int LOG = 2    ;
+        static final int PERSON = 0;
+        static final int REMOTE_CONTROL = 1;
+        static final int LOG = 2;
 
-		public SectionsPagerAdapter(FragmentManager fm) {
-			super(fm);
-		}
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
 
-		@Override
-		public Fragment getItem(int position) {
-			Fragment fragment = null;
-			switch (position) {
-			case PERSON:
-				fragment = editFragment;
-				break;
-           case REMOTE_CONTROL:
-               if (remoteControlFragment == null) {
-                   Uri entityUri = PersonProvider.Constants.getUriEntityId(personId);
-                   Bundle args = new Bundle();
-                   args.putString(eu.ttbox.geoping.ui.smslog.SmsLogListFragment.Intents.EXTRA_SMS_PHONE, personPhone);
-                   args.putString(eu.ttbox.geoping.core.Intents.EXTRA_DATA_URI, entityUri.toString());
-                   args.putString(eu.ttbox.geoping.core.Intents.EXTRA_PERSON_ID, personId);
-                   // TODO Args for personId
-                   remoteControlFragment = new PersonRemoteControlFragment();
-                   remoteControlFragment.setArguments(args);
- //                  remoteControlFragment.setEntity(entityUri, personPhone);
-                  // remoteControlFragment.setArguments(args);
-               }
-               fragment = remoteControlFragment;
-                 break;
-			case LOG:
-				if (smsLogFragment == null) {
-					Bundle args = new Bundle();
-					args.putString(eu.ttbox.geoping.ui.smslog.SmsLogListFragment.Intents.EXTRA_SMS_PHONE, personPhone);
-					args.putInt(eu.ttbox.geoping.ui.smslog.SmsLogListFragment.Intents.EXTRA_SIDE_DBCODE, SmsLogSideEnum.MASTER.getDbCode());
-			 		smsLogFragment = new SmsLogListFragment(false);
-					smsLogFragment.setArguments(args);
-				}
-				fragment = smsLogFragment;
-				break;
-			}
-			return fragment;
-		}
+        @Override
+        public Fragment getItem(int position) {
+            Fragment fragment = null;
+            switch (position) {
+                case PERSON:
+                    fragment = editFragment;
+                    break;
+                case REMOTE_CONTROL:
+                    if (remoteControlFragment == null) {
+                        Uri entityUri = PersonProvider.Constants.getUriEntityId(personId);
+                        Bundle args = new Bundle();
+                        args.putString(eu.ttbox.geoping.ui.smslog.SmsLogListFragment.Intents.EXTRA_SMS_PHONE, personPhone);
+                        args.putString(eu.ttbox.geoping.core.Intents.EXTRA_DATA_URI, entityUri.toString());
+                        args.putString(eu.ttbox.geoping.core.Intents.EXTRA_PERSON_ID, personId);
+                        // TODO Args for personId
+                        remoteControlFragment = new PersonRemoteControlFragment();
+                        remoteControlFragment.setArguments(args);
+                        //                  remoteControlFragment.setEntity(entityUri, personPhone);
+                        // remoteControlFragment.setArguments(args);
+                    }
+                    fragment = remoteControlFragment;
+                    break;
+                case LOG:
+                    if (smsLogFragment == null) {
+                        Bundle args = new Bundle();
+                        args.putString(eu.ttbox.geoping.ui.smslog.SmsLogListFragment.Intents.EXTRA_SMS_PHONE, personPhone);
+                        args.putInt(eu.ttbox.geoping.ui.smslog.SmsLogListFragment.Intents.EXTRA_SIDE_DBCODE, SmsLogSideEnum.MASTER.getDbCode());
+                        smsLogFragment = new SmsLogListFragment(false);
+                        smsLogFragment.setArguments(args);
+                    }
+                    fragment = smsLogFragment;
+                    break;
+            }
+            return fragment;
+        }
 
-		@Override
-		public int getCount() {
-			return viewPagerPageCount;
-		}
+        @Override
+        public int getCount() {
+            return viewPagerPageCount;
+        }
 
-		@Override
-		public CharSequence getPageTitle(int position) {
-			switch (position) {
-			case PERSON:
-				return getString(R.string.menu_person).toUpperCase();
-			 case REMOTE_CONTROL:
-				 return getString(R.string.menu_person_remote_control).toUpperCase();
-			case LOG:
-				return getString(R.string.menu_smslog).toUpperCase();
-			}
-			return null;
-		}
-	}
-	// ===========================================================
-	// Listener
-	// ===========================================================
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case PERSON:
+                    return getString(R.string.menu_person).toUpperCase();
+                case REMOTE_CONTROL:
+                    return getString(R.string.menu_person_remote_control).toUpperCase();
+                case LOG:
+                    return getString(R.string.menu_smslog).toUpperCase();
+            }
+            return null;
+        }
+    }
+    // ===========================================================
+    // Listener
+    // ===========================================================
 
-	// ===========================================================
-	// Activity Result handler
-	// ===========================================================
+    // ===========================================================
+    // Activity Result handler
+    // ===========================================================
 
 }

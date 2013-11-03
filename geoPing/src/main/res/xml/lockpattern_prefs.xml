@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:title="@string/prefs_lockapp" >
+
+    <eu.ttbox.geoping.ui.prefs.lock.LockAppPreference
+        android:key="@string/pkey_create_pattern"
+        android:title="@string/prefs_lockapp_lockpattern_create"
+        />
+
+<!-- android:widgetLayout="@layout/prefs_lockpattern" -->
+
+</PreferenceScreen>

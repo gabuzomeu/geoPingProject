@@ -44,7 +44,7 @@ public class GeofenceEditFragment extends Fragment {
     private EditText nameEditText;
     private CompoundButton transitionEnterCheckBox;
     private CompoundButton transitionExitCheckBox;
-
+    private CompoundButton alarmCheckBox;
     // Listener
     private OnGeofenceSelectListener onGeofenceSelectListener;
 
@@ -76,6 +76,8 @@ public class GeofenceEditFragment extends Fragment {
         this.nameEditText = (EditText) v.findViewById(R.id.geofenceEditName);
         this.transitionEnterCheckBox = (CompoundButton) v.findViewById(R.id.geofence_transition_enter_checkBox);
         this.transitionExitCheckBox = (CompoundButton) v.findViewById(R.id.geofence_transition_exit_checkBox);
+        //
+        this.alarmCheckBox =  (CompoundButton) v.findViewById(R.id.geofence_alarm_checkBox);
         // Form
         formValidator = createValidator(getActivity());
 
@@ -97,13 +99,15 @@ public class GeofenceEditFragment extends Fragment {
         if (!TextUtils.isEmpty(geofence.name)  ) {
          this.nameEditText.setText(geofence.name);
         }
-
-          // Transition Type
+        // Transition Type
         Log.d(TAG, "CircleGeofence transition : " + geofence.transitionType);
         boolean isEnter = ( geofence.transitionType & Geofence.GEOFENCE_TRANSITION_ENTER) != 0;
         boolean isExit = ( geofence.transitionType & Geofence.GEOFENCE_TRANSITION_EXIT) != 0;
         transitionEnterCheckBox.setChecked(isEnter);
         transitionExitCheckBox.setChecked(isExit);
+        // Alarm
+        int alarmType = geofence.alarm;
+        this.alarmCheckBox.setChecked(alarmType>0);
     }
 
     // ===========================================================
@@ -271,6 +275,9 @@ public class GeofenceEditFragment extends Fragment {
         // Transition
         int transitionType = readViewTransitionType();
         fence.setTransitionType(transitionType);
+        // alarm
+        int alarm =readAlarmType();
+        fence.setAlarm(alarm);
         // Result
         return fence;
     }
@@ -284,6 +291,10 @@ public class GeofenceEditFragment extends Fragment {
         return transitionType;
     }
 
+    private int readAlarmType() {
+        int alarm = alarmCheckBox.isChecked()?1:0;
+        return alarm;
+    }
     private Uri doSaveGeofence() {
 
         // Validate
@@ -298,6 +309,8 @@ public class GeofenceEditFragment extends Fragment {
         String name = BindingHelper.getEditTextAsValueTrimToNull(nameEditText);
          // Transition
         int transitionType = readViewTransitionType();
+        // alarm
+        int alarmType = readAlarmType();
 
 
 
@@ -305,7 +318,7 @@ public class GeofenceEditFragment extends Fragment {
         ContentValues values = GeoFenceHelper.getContentValues(fence);
         values.put(GeoFenceDatabase.GeoFenceColumns.COL_NAME, name);
         values.put(GeoFenceDatabase.GeoFenceColumns.COL_TRANSITION, transitionType);
-
+        values.put(GeoFenceDatabase.GeoFenceColumns.COL_ALARM , alarmType);
 
         // Content
         Uri uri;

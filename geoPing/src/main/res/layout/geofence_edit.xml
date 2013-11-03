@@ -47,5 +47,12 @@
             android:text="@string/geofence_transition_exit"/>
 
 
+    <CheckBox android:id="@+id/geofence_alarm_checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_below="@+id/geofence_transition_exit_checkBox"
+        android:text="@string/geofence_alarm"/>
+
 
 </RelativeLayout>

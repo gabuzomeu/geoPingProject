@@ -369,11 +369,13 @@ public class GeoFenceDatabase {
         public static final String COL_TRANSITION = "GEOFENCE_TRANSITION";
         public static final String COL_EXPIRATION_DATE = "GEOFENCE_EXPIRATION_DATE";
 
+        public static final String COL_ALARM = "GEOFENCE_ALARM";
         public static final String COL_VERSION_UPDATE_DATE = "VERSION_UPDATE_DATE";
 
         public static final String[] ALL_COLS = new String[]{COL_ID, COL_REQUEST_ID, COL_NAME//
                 , COL_LATITUDE_E6, COL_LONGITUDE_E6, COL_RADIUS, COL_TRANSITION, COL_EXPIRATION_DATE //
                 , COL_ADDRESS //
+                , COL_ALARM //
                 , COL_VERSION_UPDATE_DATE //
         };
         public static final String[] ALL_GEOFENCE_REQUESTER_COLS = new String[]{COL_REQUEST_ID//

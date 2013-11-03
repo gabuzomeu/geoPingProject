@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="62" android:versionName="0.3.2" package="eu.ttbox.geoping">
 
     
-    <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="18"/>
+    <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="19"/>
 
       <!-- App receives GCM messages. -->
     <permission android:name="eu.ttbox.geoping.permission.C2D_MESSAGE" android:protectionLevel="signature"/>
@@ -61,12 +61,14 @@
     <application android:backupAgent=".service.backup.GeoPingBackupAgent" android:debuggable="false" android:hardwareAccelerated="true" android:icon="@drawable/ic_launcher" android:installLocation="auto" android:label="@string/app_name" android:name="GeoPingApplication" android:restoreAnyVersion="false" android:theme="@style/AppTheme">
  	    
  	    <meta-data android:name="com.google.android.backup.api_key" android:value="@string/backup_api_key"/>
-	    
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+
         <!-- Cloudmade Key http://developers.cloudmade.com/projects/web-maps-api/examples -->
         <meta-data android:name="CLOUDMADE_KEY" android:value="75b3a96b94c74eb0b7f1450ed5235a78"/>
         <!-- Bing Key https://www.bingmapsportal.com -->
         <meta-data android:name="BING_KEY" android:value="Ao79Q93fhgMvZfbRgKd5xG708MsP2yhnRFedFeWVeFrjMgBOY36-HkQIYc4cQ-Ai"/>
-        
+
+
         <!-- Multi Windows -->
         <meta-data android:name="com.sec.android.support.multiwindow" android:value="true"/>
         <meta-data android:name="com.sec.android.multiwindow.DEFAULT_SIZE_W" android:resource="@dimen/app_multiwindows_defaultSize_w"/>
@@ -74,8 +76,28 @@
         <meta-data android:name="com.sec.android.multiwindow.MINIMUM_SIZE_W" android:resource="@dimen/app_multiwindows_minSize_w"/>
         <meta-data android:name="com.sec.android.multiwindow.MINIMUM_SIZE_H" android:resource="@dimen/app_multiwindows_minSize_h"/>
         
-        <uses-library android:name="com.sec.android.app.multiwindow" android:required="false"/> 
-            
+        <uses-library android:name="com.sec.android.app.multiwindow" android:required="false"/>
+
+        <!-- Login -->
+        <activity android:label="@string/app_name"
+            android:name="group.pals.android.lib.ui.lockpattern.LockPatternActivity"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
+            android:screenOrientation="user"
+            android:theme="@style/Alp.Theme.Dialog.Dark" />
+
+
+        <activity android:label="@string/app_name" android:launchMode="singleTask"
+            android:name=".LoginActivity"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
+            android:screenOrientation="user">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <!-- Main -->
         <activity android:label="@string/app_name" android:launchMode="singleTask" android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SENDTO"/>
@@ -86,13 +108,12 @@
         </activity>
 
         <activity android:label="@string/app_name" android:launchMode="singleTask" android:name=".LaucherMainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER"/>
-            </intent-filter>
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN"/>-->
+                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
+                <!--<category android:name="android.intent.category.MULTIWINDOW_LAUNCHER"/>-->
+            <!--</intent-filter>-->
         </activity>
-
 
         <!-- Pref -->
         <activity android:exported="false" android:name=".ui.prefs.GeoPingPrefActivity"/>
@@ -146,9 +167,8 @@
 <!--         </receiver> -->
                 
         <!-- Admob -->
-        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" android:name="com.google.ads.AdActivity"/>
-
-
+        <activity android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 
         <!-- SMS Receiver -->
         <receiver android:name=".service.receiver.SMSReceiver">

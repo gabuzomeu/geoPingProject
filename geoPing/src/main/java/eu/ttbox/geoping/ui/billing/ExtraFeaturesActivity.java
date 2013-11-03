@@ -167,7 +167,7 @@ public class ExtraFeaturesActivity extends GeoPingSlidingMenuFragmentActivity   
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
 
         // very important:

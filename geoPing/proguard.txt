@@ -66,6 +66,7 @@
 -keep public class * extends android.preference.PreferenceFragment
 
 # Compatibility
+# #######################
 -keep class android.support.v4.** { *; }
 -keep interface android.support.v4.app.** { *; }
 -keep public class * extends android.support.v4.app.Fragment
@@ -77,30 +78,51 @@
 -keep interface com.actionbarsherlock.** { *; }
 
 # Sliding Menu 
+# #######################
 -keep class com.slidingmenu.** { *; }
 -keep interface com.slidingmenu.** { *; }
 
-# Admob 
--keep public class com.admob.android.ads.** {*;}
--keep class com.google.ads.** {*;}
--keep interface com.google.ads.** {*;}
--dontwarn com.google.ads.**
+# Admob
+# #######################
+-keep public class com.google.ads.** {
+    public *;
+}
+-keep public class com.google.android.gms.ads.** {
+    public *;
+}
+
 
 # Google Analytics
+# #######################
 -keep class com.google.android.gms.analytics.**
 -keep class com.google.analytics.tracking.**
 -dontwarn com.google.android.gms.analytics.**
 -dontwarn com.google.analytics.tracking.**
 
 # Google InApp billing  
+# #######################
 -keep class com.android.vending.billing.**
 
 # Google Play services
+# #######################
 -keep class * extends java.util.ListResourceBundle {
     protected Object[][] getContents();
 }
+-keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
+    public static final *** NULL;
+}
+
+-keepnames @com.google.android.gms.common.annotation.KeepName class *
+-keepclassmembernames class * {
+    @com.google.android.gms.common.annotation.KeepName *;
+}
+
+-keepnames class * implements android.os.Parcelable {
+    public static final ** CREATOR;
+}
 
 # GCM
+# #######################
 -keepattributes Signature,RuntimeVisibleAnnotations,AnnotationDefault
 
 -keepclassmembers class * {
@@ -112,6 +134,7 @@
 
 
 # Osmdroid 
+# #######################
 -dontwarn org.osmdroid.google.**
 -dontwarn org.apache.http.entity.**
 
@@ -120,9 +143,11 @@
 -dontwarn com.fasterxml.jackson.**
 
 # Logs
+# #######################
 -assumenosideeffects class android.util.Log {
     public static *** v(...);
     public static *** d(...);
+    public static *** i(...);
 }
 
 -keep public class * extends android.view.View {

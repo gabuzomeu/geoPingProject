@@ -30,7 +30,7 @@ public class PairingOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = "PairingOpenHelper";
 
     public static final String DATABASE_NAME = "pairing.db";
-    public static final int DATABASE_VERSION = 9;
+    public static final int DATABASE_VERSION = 10;
 
     // ===========================================================
     // Table
@@ -86,6 +86,8 @@ public class PairingOpenHelper extends SQLiteOpenHelper {
             // Config
             + ", " + GeoFenceColumns.COL_TRANSITION + " INTEGER NOT NULL " // 
             + ", " + GeoFenceColumns.COL_EXPIRATION_DATE + " INTEGER NOT NULL " //
+            // Alarm
+            + ", " + GeoFenceColumns.COL_ALARM + " INTEGER " //
             // Address
             + ", " + GeoFenceColumns.COL_ADDRESS  + " TEXT " //
             // Tracking Info

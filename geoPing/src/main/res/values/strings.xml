@@ -119,6 +119,13 @@
     <string name="prefs_count_laught">Counter of launching</string>
     <string name="prefs_count_laught_summary">Number of launching the application</string>
 
+    <!-- Prefs LockApp -->
+    <string name="prefs_lockapp">Lock Application</string>
+    <string name="prefs_lockapp_lockpattern_create">Lock By Pattern</string>
+    <string name="prefs_lockapp_lockpattern_max_retry">Maximum retry</string>
+    <string name="prefs_lockapp_lockpattern_min_wired_dots">Minimum wired dots</string>
+    <string name="failed">Failed</string>
+
     <!-- Prefs Dev -->
     <string name="show_dev_countdown">You are now <xliff:g id="step_count">%1$d</xliff:g> steps away from enabling development settings.</string>
     <string name="show_dev_on">You have enabled development settings!</string>
@@ -167,6 +174,7 @@
     <string name="geofence_transition">Transition Type</string>
     <string name="geofence_transition_enter">Entered Geo Fence</string>
     <string name="geofence_transition_exit">Exited Geo Fence</string>
+    <string name="geofence_alarm">Alarm</string>
 
 
     <string name="edit_geofence">Edit a GeoFence</string>

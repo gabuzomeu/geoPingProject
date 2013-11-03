@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Dark" parent="@style/Alp.Theme.Dark">
+    </style>
+
+    <style name="Theme.Dialog.Dark" parent="@style/Alp.Theme.Dialog.Dark">
+    </style>
+
+
+
+</resources>

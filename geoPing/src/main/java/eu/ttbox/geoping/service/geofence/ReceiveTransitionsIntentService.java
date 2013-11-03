@@ -38,6 +38,7 @@ import eu.ttbox.geoping.domain.pairing.GeoFenceHelper;
 import eu.ttbox.geoping.domain.smslog.SmsLogDatabase;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
+import eu.ttbox.geoping.encoder.params.MessageParamField;
 import eu.ttbox.geoping.service.SmsSenderHelper;
 import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
 import eu.ttbox.geoping.service.slave.GeoPingSlaveLocationService;
@@ -307,6 +308,11 @@ public class ReceiveTransitionsIntentService extends IntentService {
             extrasBundles.putInt(GeoFenceDatabase.GeoFenceColumns.COL_LONGITUDE_E6, geofenceRequest.getLongitudeE6());
             extrasBundles.putInt(GeoFenceDatabase.GeoFenceColumns.COL_RADIUS, geofenceRequest.getRadiusInMeters());
             extrasBundles.putInt(GeoFenceDatabase.GeoFenceColumns.COL_TRANSITION, geofenceRequest.getTransitionType());
+            // Alarm
+            int alarmType = geofenceRequest.getAlarm();
+            if (alarmType>0) {
+                 extrasBundles.putInt(MessageParamField.ALARM.dbFieldName , alarmType);
+            }
             // Name
             MessageEncoderHelper.writeToBundle(extrasBundles, MessageParamEnum.GEOFENCE_NAME, geofenceRequest.name);
         }

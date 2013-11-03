@@ -139,7 +139,7 @@ public class SlidingPersonListAdapter extends android.support.v4.widget.Resource
 
     public interface SlidingMenuPersonListItemListener {
         
-//        public void onClickMap(View v,  long personId, String phoneNumber);
+//        public void onClickEditPerson(View v,  long personId, String phoneNumber);
         public void onClickPing(View v,  long personId, String phoneNumber);
 
          

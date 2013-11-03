@@ -47,10 +47,27 @@ public class PersonListFragment extends Fragment {
 			Log.w(TAG, "OnItemClickListener on Item at Position=" + position + " with id=" + id);
 			Cursor cursor = (Cursor) parent.getItemAtPosition(position);
 			PersonHelper helper = new PersonHelper().initWrapper(cursor);
-			String entityId = helper.getPersonIdAsString(cursor);
-			onEditEntityClick(entityId);
-		}
+//			String entityId = helper.getPersonIdAsString(cursor);
+           long personId = helper.getPersonId(cursor);
+            String phoneNumber = helper.getPersonPhone(cursor);
+            Intents.startActivityShowOnMapPerson(v, getActivity(), personId, phoneNumber);
+ 		}
 	};
+
+    private final PersonListAdapter.PersonListItemListener mListAdapterListListener =   new PersonListAdapter.PersonListItemListener() {
+
+        @Override
+        public void onClickPing(View v, long personId, String phoneNumber) {
+            Context context = getActivity();
+            context.startService(Intents.sendSmsGeoPingRequest(context, phoneNumber));
+        }
+
+        @Override
+        public void onClickEditPerson(View v, long personId, String phoneNumber) {
+            String entityId = String.valueOf(personId);
+            onEditEntityClick(entityId);
+        }
+    };
 
 	// ===========================================================
 	// Constructors
@@ -85,27 +102,7 @@ public class PersonListFragment extends Fragment {
 		listAdapter = new PersonListAdapter(getActivity(), null, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 		listView.setAdapter(listAdapter);
 		listView.setOnItemClickListener(mOnClickListener);
-		listAdapter.setPersonListItemListener(new PersonListAdapter.PersonListItemListener() {
-
-			@Override
-			public void onClickPing(View v, long personId, String phoneNumber) {
-				Context context = getActivity();
-				context.startService(Intents.sendSmsGeoPingRequest(context, phoneNumber));
-			}
-
-			@Override
-			public void onClickMap(View v, long personId, String phoneNumber) {
-				//
-				// Animation animationOut =
-				// AnimationUtils.loadAnimation(getActivity(),
-				// R.anim.shrink_to_top);
-				// v.clearAnimation();
-				// v.startAnimation(animationOut);
-				// Start Activity 
-						Intents.startActivityShowOnMapPerson(v, getActivity(), personId, phoneNumber);
-//				context.startActivity(intentMap);
-			}
-		});
+		listAdapter.setPersonListItemListener(mListAdapterListListener);
 		// Empty List
 		// emptyListView = (TextView) v.findViewById(android.R.id.empty);
 		// listView.setEmptyView(emptyListView);
