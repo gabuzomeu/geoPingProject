@@ -12,6 +12,7 @@ import android.util.Log;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.ui.billing.ExtraFeatureHelper;
 import group.pals.android.lib.ui.lockpattern.LockPatternActivity;
+import group.pals.android.lib.ui.lockpattern.prefs.DisplayPrefs;
 import group.pals.android.lib.ui.lockpattern.prefs.Prefs;
 import group.pals.android.lib.ui.lockpattern.prefs.SecurityPrefs;
 
@@ -58,15 +59,6 @@ public class CommandsPrefsHelper {
             return startActivityPatternCreate(mActivity);
         }// onPreferenceClick()
     };// mCmdCreatePatternListener
-
-
-    private final Preference.OnPreferenceClickListener mCmdEnterPatternListener = new Preference.OnPreferenceClickListener() {
-
-        @Override
-        public boolean onPreferenceClick(Preference preference) {
-            return startActivityPatternCompare(mActivity);
-        }// onPreferenceClick()
-    };// mCmdEnterPatternListener
 
 
 
@@ -123,8 +115,14 @@ public class CommandsPrefsHelper {
         return true;
     }
 
-    public static boolean startActivityPatternCompare(Activity context) {
+    public static boolean startActivityPatternCompare(Activity context, int retryCount) {
         Intent intentActivity = getIntentLockPatternCompare(context);
+        int maxRetry = context.getResources().getInteger(R.integer.alp_pkey_display_max_retry_default);
+        if (retryCount>0) {
+            maxRetry = maxRetry - retryCount;
+        }
+        Log.d(TAG, "### Set Login Max Retry Count : " + maxRetry + " / for current try count : " + retryCount);
+        DisplayPrefs.setMaxRetry(context, maxRetry);
         context.startActivityForResult(intentActivity, REQ_ENTER_PATTERN);
         return true;
     }
@@ -168,7 +166,7 @@ public class CommandsPrefsHelper {
         SharedPreferences p = context.getSharedPreferences(Prefs.genPreferenceFilename(), Context.MODE_MULTI_PROCESS);
 
         //return useDialogTheme ? R.style.Alp_Theme_Dialog_Dark  : R.style.Alp_Theme_Dark;
-        return R.style.Alp_Theme_Dark;
+        return R.style.Theme_Dialog_Dark;
     }// getThemeForLockPatternActivity()
 
     public static boolean isPassword(Context context) {

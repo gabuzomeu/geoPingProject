@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.ui.lock.prefs.CommandsPrefsHelper;
@@ -32,7 +33,8 @@ public class LoginActivity extends ActionBarActivity { //
         if (CommandsPrefsHelper.isPassword(this)) {
             loginPrefs = getSharedPreferences(AppConstants.PREFS_FILE_LOGIN, MODE_PRIVATE);
             // Open Login
-            CommandsPrefsHelper.startActivityPatternCompare(this);
+            int previousRetryCount = loginPrefs.getInt(PREF_RETRY_COUNT, 0);
+            CommandsPrefsHelper.startActivityPatternCompare(this, previousRetryCount);
         } else {
             startMainActivity();
         }
@@ -61,23 +63,30 @@ public class LoginActivity extends ActionBarActivity { //
                             startMainActivity();
                             // Mark Success
                             prefEditor.putLong(PREF_LOGIN_SUCCESS_DATE, now);
+                            // Reset retry
+                            prefEditor.putInt(PREF_RETRY_COUNT, 0);
                             // Reset Failed
                             prefEditor.putLong(PREF_LOGIN_FAILED_DATE, Long.MIN_VALUE);
                             prefEditor.putInt(PREF_LOGIN_FAILED_COUNT, 0);
-                            prefEditor.putInt(PREF_RETRY_COUNT, 0);
                         }
                         break;
                         case RESULT_CANCELED: {
                             // The user cancelled the task
                             msgId = android.R.string.cancel;
-                            prefEditor.putInt(PREF_RETRY_COUNT, retryCount);
-                            finish();
-                        }
+                            Log.d(TAG, "### Login Cancel after retryCount : " + retryCount );
+                            int previousRetryCount = loginPrefs.getInt(PREF_RETRY_COUNT, 0);
+                            Log.d(TAG, "### Login Cancel Previous retryCount : " + previousRetryCount );
+                            Log.d(TAG, "### Login Cancel Store Previous retryCount : " + (retryCount+previousRetryCount) );
+                            prefEditor.putInt(PREF_RETRY_COUNT, retryCount+previousRetryCount);
+                        finish();
+                    }
                         break;
                         case LockPatternActivity.RESULT_FAILED: {
                             // The user failed to enter the pattern
                             // Mark Failed
                             prefEditor.putLong(PREF_LOGIN_FAILED_DATE, now);
+                            // Reset retry
+                            prefEditor.putInt(PREF_RETRY_COUNT, 0);
                             // Increment Failed Count
                             int failedCount = loginPrefs.getInt(PREF_LOGIN_FAILED_COUNT, 0);
                             prefEditor.putInt(PREF_LOGIN_FAILED_COUNT, failedCount+1);
@@ -89,6 +98,7 @@ public class LoginActivity extends ActionBarActivity { //
                             break;
                         }
                         default:
+                            Log.d(TAG, "### Login Unknown Status for  ResultCode : " + resultCode );
                             finish();
                             return;
                     }

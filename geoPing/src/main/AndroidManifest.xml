@@ -83,7 +83,7 @@
             android:name="group.pals.android.lib.ui.lockpattern.LockPatternActivity"
             android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
             android:screenOrientation="user"
-            android:theme="@style/Theme.Dark"
+            android:theme="@style/Theme.Dialog.Dark"
             android:noHistory="true" />
 
 
