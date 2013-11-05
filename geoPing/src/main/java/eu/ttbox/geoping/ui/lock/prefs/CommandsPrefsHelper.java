@@ -10,6 +10,7 @@ import android.preference.Preference;
 import android.util.Log;
 
 import eu.ttbox.geoping.R;
+import eu.ttbox.geoping.ui.billing.ExtraFeatureHelper;
 import group.pals.android.lib.ui.lockpattern.LockPatternActivity;
 import group.pals.android.lib.ui.lockpattern.prefs.Prefs;
 import group.pals.android.lib.ui.lockpattern.prefs.SecurityPrefs;
@@ -24,6 +25,46 @@ public class CommandsPrefsHelper {
 
     private final Activity mActivity;
     private final PreferenceHolder mPreferenceHolder;
+
+
+    // ===========================================================
+    // Listeners
+    // ===========================================================
+
+
+    private final Preference.OnPreferenceClickListener mCmdDisableLaucherListener = new Preference.OnPreferenceClickListener() {
+
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+            Log.d(TAG,  "### Ask DisableLaucherListener");
+            ExtraFeatureHelper.switchEnabledSettingLaucherIcon(mActivity);
+            return true;
+        }// onPreferenceClick()
+    };// mCmdCreatePatternListener
+
+
+    private final Preference.OnPreferenceClickListener mCmdCreatePatternListener = new Preference.OnPreferenceClickListener() {
+
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+            return startActivityPatternCreate(mActivity);
+        }// onPreferenceClick()
+    };// mCmdCreatePatternListener
+
+
+    private final Preference.OnPreferenceClickListener mCmdEnterPatternListener = new Preference.OnPreferenceClickListener() {
+
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+            return startActivityPatternCompare(mActivity);
+        }// onPreferenceClick()
+    };// mCmdEnterPatternListener
+
+
+    // ===========================================================
+    // Constructors
+    // ===========================================================
+
 
     /**
      * Creates new instance.
@@ -42,9 +83,11 @@ public class CommandsPrefsHelper {
      */
     public void init() {
         Preference lockPref = mPreferenceHolder.findPreference(mActivity.getString(R.string.pkey_create_pattern));
-        Log.d(TAG, "### init lockPref enable : " + lockPref.isEnabled());
-        Log.d(TAG, "### init lockPref class : " + lockPref.getClass().getSimpleName());
         lockPref.setOnPreferenceClickListener(mCmdCreatePatternListener);
+
+        Preference disableLauncherPref = mPreferenceHolder.findPreference("DISABLE_LAUNCHER");
+        disableLauncherPref.setOnPreferenceClickListener(mCmdDisableLaucherListener);
+
 //        mPreferenceHolder.findPreference(
 //                mActivity.getString(R.string.pkey_enter_pattern))
 //                .setOnPreferenceClickListener(mCmdEnterPatternListener);
@@ -53,18 +96,10 @@ public class CommandsPrefsHelper {
 //                .setOnPreferenceClickListener(mCmdVerifyCaptchaListener);
     }// init()
 
-    /*
-     * LISTENERS
-     */
 
-    private final Preference.OnPreferenceClickListener mCmdCreatePatternListener = new Preference.OnPreferenceClickListener() {
-
-        @Override
-        public boolean onPreferenceClick(Preference preference) {
-            Log.d(TAG, "### onPreferenceClick : " + preference.isEnabled());
-            return startActivityPatternCreate(mActivity);
-        }// onPreferenceClick()
-    };// mCmdCreatePatternListener
+    // ===========================================================
+    // Start Activity
+    // ===========================================================
 
     public static boolean startActivityPatternCreate(Activity context) {
         Intent intentActivity = new Intent(
@@ -76,17 +111,6 @@ public class CommandsPrefsHelper {
 
         return true;
     }
-
-
-    private final Preference.OnPreferenceClickListener mCmdEnterPatternListener = new Preference.OnPreferenceClickListener() {
-
-        @Override
-        public boolean onPreferenceClick(Preference preference) {
-            return startActivityPatternCompare(mActivity);
-
-        }// onPreferenceClick()
-    };// mCmdEnterPatternListener
-
 
     public static boolean startActivityPatternCompare(Activity context) {
         Intent intentActivity = getIntentLockPatternCompare(context);
@@ -116,9 +140,10 @@ public class CommandsPrefsHelper {
         }// onPreferenceClick()
     };// mCmdVerifyCaptchaListener
 
-    /*
-     * UTILITIES
-     */
+
+    // ===========================================================
+    // Utilities
+    // ===========================================================
 
     /**
      * Gets the theme that the user chose to apply to
@@ -137,6 +162,6 @@ public class CommandsPrefsHelper {
 
     public static boolean isPassword(Context context) {
         char[] password = SecurityPrefs.getPattern(context);
-        return (password!=null && password.length>0);
+        return (password != null && password.length > 0);
     }
 }

@@ -2,6 +2,7 @@
 <resources>
 
     <style name="Theme.Dark" parent="@style/Alp.Theme.Dark">
+        <item name="android:background">@android:color/darker_gray</item>
     </style>
 
     <style name="Theme.Dialog.Dark" parent="@style/Alp.Theme.Dialog.Dark">

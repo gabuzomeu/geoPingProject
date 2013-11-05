@@ -16,6 +16,11 @@ public class ExtraFeatureHelper {
     // Extra Feature accessors
     // ===========================================================
 
+    public static boolean switchEnabledSettingLaucherIcon(Context context) {
+        ComponentName componentName = new ComponentName(context, LaucherMainActivity.class);
+        boolean  wantedState = isComponentEnabledSetting(context, componentName);
+        return enabledComponentEnabledSetting(context, componentName, !wantedState);
+    }
 
     public static boolean isEnabledSettingLaucherIcon(Context context, Boolean wantedState) {
         ComponentName componentName = new ComponentName(context, LaucherMainActivity.class);
