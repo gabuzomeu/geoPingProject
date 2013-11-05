@@ -5,22 +5,12 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <View
-        android:id="@+id/divider_manage"
-        android:layout_width="2dip"
-        android:layout_height="match_parent"
-        android:layout_marginTop="5dip"
-        android:layout_marginBottom="5dip"
-        android:background="@android:drawable/divider_horizontal_dark" />
 
-    <Button xmlns:android="http://schemas.android.com/apk/res/android"
+    <ImageButton
         android:id="@+id/action_button"
-        android:text="X"
-        android:background="@color/holo_blue_light"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:paddingStart="16dip"
-        android:paddingEnd="16dip"
+        android:src="@android:drawable/ic_menu_delete"
         android:layout_gravity="center" />
 
 </LinearLayout>

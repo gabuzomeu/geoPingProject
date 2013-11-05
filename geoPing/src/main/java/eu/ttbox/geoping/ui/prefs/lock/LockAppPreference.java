@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,12 +56,31 @@ public class LockAppPreference extends Preference {
     @Override
     protected void onBindView(View v) {
         super.onBindView(v);
-        final Button actionView = (Button) v.findViewById( R.id.action_button);
-        if (actionView!=null) {
-            actionView.setOnClickListener(mPasswordResetListener);
-        }
-        // FIXME : Why we need to do that just because you setWidgetLayoutResource
-        v.setOnClickListener(mPasswordCreateClickListener);
+        ViewHolder holder = getViewHolder(v);
+//        char[] pattern = SecurityPrefs.getPattern(getContext());
+//        if (pattern==null || pattern.length<1) {
+//            holder.actionView.setVisibility(View.GONE);
+//        } else {
+//            holder.actionView.setVisibility(View.VISIBLE);
+//        }
      }
- 
+
+    private ViewHolder getViewHolder(View v) {
+        ViewHolder holder = (ViewHolder)v.getTag();
+        if (holder ==null) {
+            holder = new ViewHolder();
+            holder.actionView = (ImageButton) v.findViewById( R.id.action_button);
+            if (holder.actionView!=null) {
+                // FIXME : Why we need to do that just because you setWidgetLayoutResource
+                holder.actionView.setOnClickListener(mPasswordResetListener);
+            }
+            v.setTag(holder);
+        }
+        return holder;
+    }
+
+    static class ViewHolder {
+        ImageButton actionView;
+    }
+
 }

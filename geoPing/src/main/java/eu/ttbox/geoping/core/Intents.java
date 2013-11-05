@@ -15,6 +15,7 @@ import eu.ttbox.geoping.domain.GeoFenceProvider;
 import eu.ttbox.geoping.domain.PairingProvider;
 import eu.ttbox.geoping.domain.PersonProvider;
 import eu.ttbox.geoping.domain.geotrack.GeoTrackDatabase.GeoTrackColumns;
+import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.service.master.GeoPingMasterService;
 import eu.ttbox.geoping.service.slave.GeoPingSlaveService;
 import eu.ttbox.geoping.service.slave.GeopingNotifSlaveTypeEnum;
@@ -230,7 +231,7 @@ public class Intents {
     public static Intent commandOpenApplication(Context context, String phoneNumber, String userId) {
         Long entityId = Long.valueOf(userId);
         return new Intent(context, GeoPingMasterService.class) //
-                .setAction(ACTION_SMS_COMMAND_OPEN_APP)//
+                .setAction(MessageActionEnum.COMMAND_OPEN_APP.intentAction)//
                 .putExtra(EXTRA_SMS_USER_ID, entityId)//
                 .putExtra(EXTRA_SMS_PHONE, phoneNumber);
     }

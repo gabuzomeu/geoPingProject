@@ -8,11 +8,12 @@
         android:title="@string/prefs_lockapp_lockpattern_create"
         />
 
-    <eu.ttbox.geoping.ui.prefs.lock.DisableLauncherPreference
+    <CheckBoxPreference
         android:key="DISABLE_LAUNCHER"
-        android:title="Disable launcher"
-        android:summaryOn="is disable"
-        android:summaryOff="is enable"
+        android:title="@string/prefs_launcher_icon"
+        android:summaryOn="@string/prefs_launcher_icon_summary_on"
+        android:summaryOff="@string/prefs_launcher_icon_summary_off"
+        android:defaultValue="true"
     />
 
 <!-- android:widgetLayout="@layout/prefs_lockpattern" -->

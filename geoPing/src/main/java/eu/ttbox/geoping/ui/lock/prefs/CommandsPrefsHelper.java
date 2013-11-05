@@ -32,16 +32,24 @@ public class CommandsPrefsHelper {
     // ===========================================================
 
 
-    private final Preference.OnPreferenceClickListener mCmdDisableLaucherListener = new Preference.OnPreferenceClickListener() {
+//    private final Preference.OnPreferenceClickListener mCmdDisableLaucherListener = new Preference.OnPreferenceClickListener() {
+//
+//        @Override
+//        public boolean onPreferenceClick(Preference preference) {
+//            Log.d(TAG,  "### Ask DisableLaucherListener");
+//            ExtraFeatureHelper.switchEnabledSettingLaucherIcon(mActivity);
+//            return true;
+//        }// onPreferenceClick()
+//    };// mCmdCreatePatternListener
 
+    private final Preference.OnPreferenceChangeListener  mLauncherDisableChangeListener = new Preference.OnPreferenceChangeListener() {
         @Override
-        public boolean onPreferenceClick(Preference preference) {
-            Log.d(TAG,  "### Ask DisableLaucherListener");
-            ExtraFeatureHelper.switchEnabledSettingLaucherIcon(mActivity);
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            Boolean value =(Boolean) newValue;
+            ExtraFeatureHelper.enabledSettingLaucherIcon(mActivity, value);
             return true;
-        }// onPreferenceClick()
-    };// mCmdCreatePatternListener
-
+        }
+    };
 
     private final Preference.OnPreferenceClickListener mCmdCreatePatternListener = new Preference.OnPreferenceClickListener() {
 
@@ -59,6 +67,9 @@ public class CommandsPrefsHelper {
             return startActivityPatternCompare(mActivity);
         }// onPreferenceClick()
     };// mCmdEnterPatternListener
+
+
+
 
 
     // ===========================================================
@@ -86,7 +97,7 @@ public class CommandsPrefsHelper {
         lockPref.setOnPreferenceClickListener(mCmdCreatePatternListener);
 
         Preference disableLauncherPref = mPreferenceHolder.findPreference("DISABLE_LAUNCHER");
-        disableLauncherPref.setOnPreferenceClickListener(mCmdDisableLaucherListener);
+        disableLauncherPref.setOnPreferenceChangeListener(mLauncherDisableChangeListener);
 
 //        mPreferenceHolder.findPreference(
 //                mActivity.getString(R.string.pkey_enter_pattern))

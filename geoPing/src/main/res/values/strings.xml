@@ -124,7 +124,11 @@
     <string name="prefs_lockapp_lockpattern_create">Lock By Pattern</string>
     <string name="prefs_lockapp_lockpattern_max_retry">Maximum retry</string>
     <string name="prefs_lockapp_lockpattern_min_wired_dots">Minimum wired dots</string>
-    <string name="failed">Failed</string>
+
+    <string name="prefs_launcher_icon">Launcher Icon</string>
+    <string name="prefs_launcher_icon_summary_on">Launcher Icon is show</string>
+    <string name="prefs_launcher_icon_summary_off">Launcher Icon is hide</string>
+
 
     <!-- Prefs Dev -->
     <string name="show_dev_countdown">You are now <xliff:g id="step_count">%1$d</xliff:g> steps away from enabling development settings.</string>

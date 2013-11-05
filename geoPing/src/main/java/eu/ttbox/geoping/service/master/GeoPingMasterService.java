@@ -142,6 +142,7 @@ public class GeoPingMasterService extends IntentService {
                     case COMMAND_OPEN_APP: {
                         String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
                         Bundle params = intent.getBundleExtra(Intents.EXTRA_SMS_PARAMS);
+                        Log.d(TAG, "### Request Sending Sms for " +actionEnum+     " and Phone : " +phone );
                         sendSmsCommand(actionEnum, phone, params);
                     }
                     break;
@@ -312,18 +313,23 @@ public class GeoPingMasterService extends IntentService {
         boolean isSend = false;
 
         if (phone == null || phone.length() < 1) {
+            Log.d(TAG, "### Not Sending Sms for Not Phone define"  );
             return false;
         }
 
         try {
             Uri logUri = SmsSenderHelper.sendSmsAndLogIt(this, SmsLogSideEnum.MASTER, phone, action, params);
             isSend = (logUri != null);
+            Log.d(TAG, "### Sending Sms : " + isSend + " for lorUri : " + logUri);
+
         } catch (IllegalArgumentException e) {
             Message msg = uiHandler.obtainMessage(UI_MSG_TOAST, getResources().getString(R.string.toast_notif_sended_geoping_smsError, phone + " : " + e.getMessage()));
             uiHandler.sendMessage(msg);
+            Log.e(TAG, "Error sending Sms : " + e.getMessage(), e);
         } catch (NullPointerException e) {
             Message msg = uiHandler.obtainMessage(UI_MSG_TOAST, getResources().getString(R.string.toast_notif_sended_geoping_smsError, phone + " : " + e.getMessage()));
             uiHandler.sendMessage(msg);
+            Log.e(TAG, "Error sending Sms : " + e.getMessage(), e);
         }
 
         return isSend;

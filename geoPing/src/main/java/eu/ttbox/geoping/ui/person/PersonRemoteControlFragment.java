@@ -34,7 +34,7 @@ public class PersonRemoteControlFragment extends Fragment {
     private static final int[] buttonIds = new int[]{ //
             R.id.track_person_remote_control_pairingButton //
             , R.id.track_person_remote_control_openButton //
-            , R.id.track_person_remote_control_hideButton //
+            , R.id.track_person_remote_control_ringButton //
     };
     // Instance
     private Uri entityUri;
@@ -143,7 +143,7 @@ public class PersonRemoteControlFragment extends Fragment {
                 Toast.makeText(getActivity(), "Open App button click", Toast.LENGTH_SHORT).show();
             }
             break;
-            case R.id.track_person_remote_control_hideButton:
+            case R.id.track_person_remote_control_ringButton:
                 onTestPlaySoundClick(v);
                 Toast.makeText(getActivity(), "Send Test Long SMS click", Toast.LENGTH_SHORT).show();
                 break;

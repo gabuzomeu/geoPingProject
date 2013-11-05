@@ -57,7 +57,7 @@ public class LoginActivity extends ActionBarActivity { //
                         break;
                     case LockPatternActivity.RESULT_FAILED:
                         // The user failed to enter the pattern
-                        msgId = R.string.failed;
+                      //  msgId = R.string.failed;
                         finish();
                         break;
                     default:
