@@ -57,6 +57,7 @@ public class LockAppPreference extends Preference {
     protected void onBindView(View v) {
         super.onBindView(v);
         ViewHolder holder = getViewHolder(v);
+
 //        char[] pattern = SecurityPrefs.getPattern(getContext());
 //        if (pattern==null || pattern.length<1) {
 //            holder.actionView.setVisibility(View.GONE);
@@ -70,11 +71,13 @@ public class LockAppPreference extends Preference {
         if (holder ==null) {
             holder = new ViewHolder();
             holder.actionView = (ImageButton) v.findViewById( R.id.action_button);
+            v.setTag(holder);
+            // Add Listener
             if (holder.actionView!=null) {
-                // FIXME : Why we need to do that just because you setWidgetLayoutResource
                 holder.actionView.setOnClickListener(mPasswordResetListener);
             }
-            v.setTag(holder);
+            // FIXME : Why we need to do that just because you setWidgetLayoutResource
+            v.setOnClickListener(mPasswordCreateClickListener);
         }
         return holder;
     }

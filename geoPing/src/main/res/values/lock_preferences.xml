@@ -2,5 +2,6 @@
 <resources>
 
      <string name="pkey_create_pattern">pkey.create_pattern</string>
+     <string name="pkey_launcher_icon">pkey.launcher_icon</string>
 
 </resources>

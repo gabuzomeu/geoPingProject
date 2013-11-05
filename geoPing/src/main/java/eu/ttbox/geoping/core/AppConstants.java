@@ -32,6 +32,12 @@ public class AppConstants {
     public static final int PER_PERSON_ID_MULTIPLICATOR = 10000;
     public static final String KEY_DB_LOCAL = "local";
 
+    // ---  Prefs File
+    // --------------
+    public static final String PREFS_FILE_LOGIN = "login";
+
+    // ---  Prefs Keys
+    // --------------
     // Request Timeout
     public static final String PREFS_REQUEST_TIMEOUT_S = "requestTimeoutInS";
     public static final String PREFS_REQUEST_ACCURACY_M = "requestAccuracyExpectedInM";

@@ -2,17 +2,25 @@ package eu.ttbox.geoping;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.widget.Toast;
 
+import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.ui.lock.prefs.CommandsPrefsHelper;
 import group.pals.android.lib.ui.lockpattern.LockPatternActivity;
-import group.pals.android.lib.ui.lockpattern.prefs.SecurityPrefs;
 
 public class LoginActivity extends ActionBarActivity { //
 
     private static final String TAG = "LoginActivity";
+
+    private SharedPreferences loginPrefs;
+
+    private static final String PREF_RETRY_COUNT = "retry_count";
+    private static final String PREF_LOGIN_SUCCESS_DATE = "login_success_date";
+
+    private static final String PREF_LOGIN_FAILED_DATE = "login_failed_date";
+    private static final String PREF_LOGIN_FAILED_COUNT = "login_failed_count";
 
     // ===========================================================
     // Constructors
@@ -22,6 +30,7 @@ public class LoginActivity extends ActionBarActivity { //
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (CommandsPrefsHelper.isPassword(this)) {
+            loginPrefs = getSharedPreferences(AppConstants.PREFS_FILE_LOGIN, MODE_PRIVATE);
             // Open Login
             CommandsPrefsHelper.startActivityPatternCompare(this);
         } else {
@@ -41,51 +50,67 @@ public class LoginActivity extends ActionBarActivity { //
             case CommandsPrefsHelper.REQ_VERIFY_CAPTCHA: {
                 int msgId = 0;
 
-            /*
-             * NOTE that there are 3 possible result codes!!!
-             */
-                switch (resultCode) {
-                    case RESULT_OK:
-                        // The user passed
-                        msgId = android.R.string.ok;
-                        startMainActivity();
+                int retryCount = data.getIntExtra(LockPatternActivity.EXTRA_RETRY_COUNT, 0);
+                SharedPreferences.Editor prefEditor = loginPrefs.edit();
+                long now = System.currentTimeMillis();
+                try {
+                    switch (resultCode) {
+                        case RESULT_OK: {
+                            // The user passed
+                            msgId = android.R.string.ok;
+                            startMainActivity();
+                            // Mark Success
+                            prefEditor.putLong(PREF_LOGIN_SUCCESS_DATE, now);
+                            // Reset Failed
+                            prefEditor.putLong(PREF_LOGIN_FAILED_DATE, Long.MIN_VALUE);
+                            prefEditor.putInt(PREF_LOGIN_FAILED_COUNT, 0);
+                            prefEditor.putInt(PREF_RETRY_COUNT, 0);
+                        }
                         break;
-                    case RESULT_CANCELED:
-                        // The user cancelled the task
-                        msgId = android.R.string.cancel;
-                        finish();
+                        case RESULT_CANCELED: {
+                            // The user cancelled the task
+                            msgId = android.R.string.cancel;
+                            prefEditor.putInt(PREF_RETRY_COUNT, retryCount);
+                            finish();
+                        }
                         break;
-                    case LockPatternActivity.RESULT_FAILED:
-                        // The user failed to enter the pattern
-                      //  msgId = R.string.failed;
-                        finish();
+                        case LockPatternActivity.RESULT_FAILED: {
+                            // The user failed to enter the pattern
+                            // Mark Failed
+                            prefEditor.putLong(PREF_LOGIN_FAILED_DATE, now);
+                            // Increment Failed Count
+                            int failedCount = loginPrefs.getInt(PREF_LOGIN_FAILED_COUNT, 0);
+                            prefEditor.putInt(PREF_LOGIN_FAILED_COUNT, failedCount+1);
+                            // finish();
+                        }
                         break;
-                    default:
-                        finish();
-                        return;
+                        case LockPatternActivity.RESULT_FORGOT_PATTERN: {
+                            // The user forgot the pattern and invoked your recovery Activity.
+                            break;
+                        }
+                        default:
+                            finish();
+                            return;
+                    }
+                } finally {
+
+                    prefEditor.commit();
+
                 }
 
-            /*
-             * In any case, there's always a key EXTRA_RETRY_COUNT, which holds
-             * the number of tries that the user did.
-             */
-                String msg = String.format("%s (%,d tries)", getString(msgId),
-                        data.getIntExtra(LockPatternActivity.EXTRA_RETRY_COUNT, 0));
-
-                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-
-                break;
-            }// REQ_ENTER_PATTERN && REQ_VERIFY_CAPTCHA
+            }
         }
-    }// onActivityResult()
+    }
 
     // ===========================================================
     // Handle Intent
     // ===========================================================
 
-     public void startMainActivity() {
+    public void startMainActivity() {
         Intent mainActivity = new Intent(this, MainActivity.class);
-         startActivity(mainActivity);
-         finish();
+        startActivity(mainActivity);
+        finish();
     }
+
+
 }

@@ -96,7 +96,7 @@ public class CommandsPrefsHelper {
         Preference lockPref = mPreferenceHolder.findPreference(mActivity.getString(R.string.pkey_create_pattern));
         lockPref.setOnPreferenceClickListener(mCmdCreatePatternListener);
 
-        Preference disableLauncherPref = mPreferenceHolder.findPreference("DISABLE_LAUNCHER");
+        Preference disableLauncherPref = mPreferenceHolder.findPreference(mActivity.getString(R.string.pkey_launcher_icon));
         disableLauncherPref.setOnPreferenceChangeListener(mLauncherDisableChangeListener);
 
 //        mPreferenceHolder.findPreference(

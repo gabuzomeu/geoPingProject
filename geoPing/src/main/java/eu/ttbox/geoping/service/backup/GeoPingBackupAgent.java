@@ -4,10 +4,15 @@ import android.app.backup.BackupAgentHelper;
 import android.app.backup.BackupDataInput;
 import android.app.backup.BackupDataOutput;
 import android.app.backup.SharedPreferencesBackupHelper;
+import android.content.SharedPreferences;
 import android.os.ParcelFileDescriptor;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.io.IOException;
+
+import eu.ttbox.geoping.R;
+import eu.ttbox.geoping.ui.billing.ExtraFeatureHelper;
 
 public class GeoPingBackupAgent extends BackupAgentHelper {
 
@@ -60,10 +65,27 @@ public class GeoPingBackupAgent extends BackupAgentHelper {
             Log.i(TAG, "----- onRestore GeoPing Backup : Version = " + appVersionCode);
             Log.i(TAG, "----- onRestore GeoPing Backup --- Begin");
             super.onRestore(data, appVersionCode, newState);
+            // Apply Prefs Config
+            try {
+                applyPrefsConfig();
+            } catch (Throwable e) {
+                Log.e(TAG, "Error Prefs Config Apply to Service : " + e.getMessage(), e);
+            }
+
             Log.i(TAG, "----- onRestore GeoPing End --- End");
             Log.i(TAG, "----- ----- ----- ----- ----- ----- ----- ----- ----- ");
             Log.i(TAG, "----- ----- ----- ----- ----- ----- ----- ----- ----- ");
         }
+    }
+
+
+    private void applyPrefsConfig() {
+        //
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        // Launcher Icon
+        String launcherIconKey = getString(R.string.pkey_launcher_icon);
+        boolean isLauncherIcon = sharedPreferences.getBoolean(launcherIconKey, true);
+        ExtraFeatureHelper.enabledSettingLaucherIcon(getApplicationContext(), isLauncherIcon);
     }
 
 }

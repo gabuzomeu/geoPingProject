@@ -9,7 +9,7 @@
         />
 
     <CheckBoxPreference
-        android:key="DISABLE_LAUNCHER"
+        android:key="@string/pkey_launcher_icon"
         android:title="@string/prefs_launcher_icon"
         android:summaryOn="@string/prefs_launcher_icon_summary_on"
         android:summaryOff="@string/prefs_launcher_icon_summary_off"
