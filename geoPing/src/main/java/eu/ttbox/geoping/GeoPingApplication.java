@@ -43,7 +43,7 @@ public class GeoPingApplication extends Application {
     // DataBase
     private SmsLogDatabase smsLogDatabase;
     private GeoTrackDatabase geoTrackDatabase;
-   // private SecureDatabase secureDatabase;
+    // private SecureDatabase secureDatabase;
 
     // ===========================================================
     // Constructors
@@ -71,7 +71,7 @@ public class GeoPingApplication extends Application {
 
         long delayInMs;
 
-        public  DelayedInitializer(long delayInMs) {
+        public DelayedInitializer(long delayInMs) {
             super();
             this.delayInMs = delayInMs;
         }
@@ -104,23 +104,34 @@ public class GeoPingApplication extends Application {
 
     private int incrementApplicationLaunchCounter(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        // Read previous values
-        int counter = settings.getInt(AppConstants.PREFS_APP_LAUGHT_COUNT, 0);
-        // TODO long lastVersionLaugth =
-        // settings.getInt(AppConstants.PREFS_APP_LAUGHT_LASTVERSION,
-        // Integer.MIN_VALUE);
-        long firstDateLaugth = settings.getLong(AppConstants.PREFS_APP_LAUGHT_FIRSTDATE, Long.MIN_VALUE);
-        counter++;
-        // Edit
         SharedPreferences.Editor prefEditor = settings.edit();
-        prefEditor.putInt(AppConstants.PREFS_APP_LAUGHT_COUNT, counter);
+        // Launch count
+        int counter = incrementKey(settings, prefEditor, AppConstants.PREFS_APP_LAUGHT_COUNT);
+        // Last Launch version
+        int appVersionCode = versionCode();
+        int appPreviousVersionCode =  settings.getInt(AppConstants.PREFS_APP_LAUGHT_LASTVERSION, Integer.MIN_VALUE);
+        if (appVersionCode>appPreviousVersionCode) {
+            prefEditor.putInt(AppConstants.PREFS_APP_LAUGHT_LASTVERSION, appVersionCode);
+            // TODO display release notes 
+        }
+        // Launch date
+        long firstDateLaugth = settings.getLong(AppConstants.PREFS_APP_LAUGHT_FIRSTDATE, Long.MIN_VALUE);
         long now = System.currentTimeMillis();
         prefEditor.putLong(AppConstants.PREFS_APP_LAUGHT_LASTDATE, now);
         if (Long.MIN_VALUE == firstDateLaugth) {
             prefEditor.putLong(AppConstants.PREFS_APP_LAUGHT_FIRSTDATE, now);
         }
+        // Commit modifs
         prefEditor.commit();
         return counter;
+    }
+
+    private int incrementKey(SharedPreferences settings, SharedPreferences.Editor prefEditor, String pkey) {|
+        int previousCount = settings.getInt(pkey, 0);
+        int incVal = 1 + previousCount;
+        prefEditor.putInt(pkey, incVal);
+        Log.d(TAG, "### Increment " + pkey + " : " + previousCount + " ===> " + incVal);
+        return incVal;
     }
 
     // ===========================================================
@@ -145,8 +156,8 @@ public class GeoPingApplication extends Application {
     }
 
     @Override
-    public void onTerminate() { 
-        GAServiceManager.getInstance().dispatch(); 
+    public void onTerminate() {
+        GAServiceManager.getInstance().dispatch();
         super.onTerminate();
     }
 
@@ -156,7 +167,7 @@ public class GeoPingApplication extends Application {
 
     /**
      * Get Application Version
-     * 
+     *
      * @return
      */
     public String version() {
@@ -174,6 +185,15 @@ public class GeoPingApplication extends Application {
         } // try
         catch (PackageManager.NameNotFoundException nnfe) {
             return "Unknown";
+        }
+    }
+    public int versionCode() {
+        try {
+            final PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), 0);
+            return info.versionCode;
+        } // try
+        catch (PackageManager.NameNotFoundException nnfe) {
+            return 0;
         }
     }
 
@@ -205,14 +225,14 @@ public class GeoPingApplication extends Application {
     // ===========================================================
 
     public SmsLogDatabase getSmsLogDatabase() {
-        if (smsLogDatabase==null) {
+        if (smsLogDatabase == null) {
             smsLogDatabase = new SmsLogDatabase(this);
         }
         return smsLogDatabase;
     }
 
     public GeoTrackDatabase getGeoTrackDatabase() {
-        if (geoTrackDatabase==null) {
+        if (geoTrackDatabase == null) {
             geoTrackDatabase = new GeoTrackDatabase(this);
         }
         return geoTrackDatabase;
@@ -225,8 +245,6 @@ public class GeoPingApplication extends Application {
         }
         return secureDatabase;
     }*/
-
-
 
 
     // ===========================================================
@@ -252,7 +270,7 @@ public class GeoPingApplication extends Application {
     // ===========================================================
 
     public static GeoPingApplication getGeoPingApplication(Context context) {
-        return (GeoPingApplication)context.getApplicationContext();
+        return (GeoPingApplication) context.getApplicationContext();
     }
 
 }
