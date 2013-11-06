@@ -18,7 +18,9 @@ public class LoginActivity extends ActionBarActivity { //
     private SharedPreferences loginPrefs;
 
     private static final String PREF_RETRY_COUNT = "retry_count";
+
     private static final String PREF_LOGIN_SUCCESS_DATE = "login_success_date";
+    private static final String PREF_LOGIN_SUCCESS_COUNT = "login_success_count";
 
     private static final String PREF_LOGIN_FAILED_DATE = "login_failed_date";
     private static final String PREF_LOGIN_FAILED_COUNT = "login_failed_count";
@@ -45,6 +47,17 @@ public class LoginActivity extends ActionBarActivity { //
     // Handle Intent
     // ===========================================================
 
+
+    private void incrementKey(SharedPreferences.Editor prefEditor, String pkey, int incCount) {
+       if (incCount != 0) {
+            int previousCount = loginPrefs.getInt(pkey, 0);
+            int incVal = incCount + previousCount;
+            prefEditor.putInt(pkey, incVal);
+            Log.d(TAG, "### Increment " + pkey + " : " + previousCount + " ===> " + incVal);
+            //   return incVal;
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -63,6 +76,7 @@ public class LoginActivity extends ActionBarActivity { //
                             startMainActivity();
                             // Mark Success
                             prefEditor.putLong(PREF_LOGIN_SUCCESS_DATE, now);
+                            incrementKey(prefEditor, PREF_LOGIN_SUCCESS_COUNT, 1);
                             // Reset retry
                             prefEditor.putInt(PREF_RETRY_COUNT, 0);
                             // Reset Failed
@@ -73,13 +87,9 @@ public class LoginActivity extends ActionBarActivity { //
                         case RESULT_CANCELED: {
                             // The user cancelled the task
                             msgId = android.R.string.cancel;
-                            Log.d(TAG, "### Login Cancel after retryCount : " + retryCount );
-                            int previousRetryCount = loginPrefs.getInt(PREF_RETRY_COUNT, 0);
-                            Log.d(TAG, "### Login Cancel Previous retryCount : " + previousRetryCount );
-                            Log.d(TAG, "### Login Cancel Store Previous retryCount : " + (retryCount+previousRetryCount) );
-                            prefEditor.putInt(PREF_RETRY_COUNT, retryCount+previousRetryCount);
-                        finish();
-                    }
+                            incrementKey(prefEditor, PREF_RETRY_COUNT, retryCount);
+                            finish();
+                        }
                         break;
                         case LockPatternActivity.RESULT_FAILED: {
                             // The user failed to enter the pattern
@@ -88,8 +98,7 @@ public class LoginActivity extends ActionBarActivity { //
                             // Reset retry
                             prefEditor.putInt(PREF_RETRY_COUNT, 0);
                             // Increment Failed Count
-                            int failedCount = loginPrefs.getInt(PREF_LOGIN_FAILED_COUNT, 0);
-                            prefEditor.putInt(PREF_LOGIN_FAILED_COUNT, failedCount+1);
+                            incrementKey(prefEditor, PREF_LOGIN_FAILED_COUNT, 1);
                             // finish();
                         }
                         break;
@@ -98,7 +107,7 @@ public class LoginActivity extends ActionBarActivity { //
                             break;
                         }
                         default:
-                            Log.d(TAG, "### Login Unknown Status for  ResultCode : " + resultCode );
+                            Log.d(TAG, "### Login Unknown Status for  ResultCode : " + resultCode);
                             finish();
                             return;
                     }
