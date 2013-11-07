@@ -12,8 +12,6 @@ import android.util.Log;
 import android.widget.TextView;
 
 import eu.ttbox.geoping.core.AppConstants;
-import eu.ttbox.geoping.ui.lock.KeyguardMessageArea;
-import eu.ttbox.geoping.ui.lock.SecurityMessageDisplay;
 import eu.ttbox.geoping.ui.lock.prefs.CommandsPrefsHelper;
 import group.pals.android.lib.ui.lockpattern.LockPatternActivity;
 
@@ -89,21 +87,21 @@ public class LoginActivity extends ActionBarActivity { //
     // Action
     // ===========================================================
     private void openPromptPassword(){
-        int previousRetryCount = loginPrefs.getInt(PREF_RETRY_COUNT, 0);
+        int previousRetryCount = readPrefInt(PREF_RETRY_COUNT, 0);
         CommandsPrefsHelper.startActivityPatternCompare(this, previousRetryCount);
     }
 
 
     private void lockScreen() {
         // Read Param
-       long failedDate = loginPrefs.getLong(PREF_LOGIN_FAILED_DATE, 0);
-       int failedCount = loginPrefs.getInt(PREF_RETRY_COUNT, 0);
+       long failedDate = readPrefLong(PREF_LOGIN_FAILED_DATE, 0);
+       int failedCount = readPrefInt(PREF_LOGIN_FAILED_COUNT, 1);
         // Compute Lock Time
         long now = System.currentTimeMillis();
 //        long lockPass =
         // Apply Lock
   //      startCountDownInMinutes(3);
-        startCountDownInSeconds(30*3);
+        startCountDownInSeconds(30*failedCount);
     }
 
 
@@ -117,7 +115,7 @@ public class LoginActivity extends ActionBarActivity { //
         @Override
         public void handleMessage(Message msg) {
             String displayText = msg.getData().getString(HANDLER_DISPLAY_TEXT);
-            mSecurityMessageDisplay.setText( displayText );
+            mSecurityMessageDisplay.setText(displayText);
         }
 
     };
@@ -168,7 +166,7 @@ public class LoginActivity extends ActionBarActivity { //
             @Override
             public void onFinish() {
                 String displayText = "";
-                mSecurityMessageDisplay.setText(displayText );
+                mSecurityMessageDisplay.setText(displayText);
                 //
                 countDownTimer = null;
                 openPromptPassword();
@@ -177,19 +175,43 @@ public class LoginActivity extends ActionBarActivity { //
         countDownTimer.start();
     }
 
+
     // ===========================================================
-    // Handle Intent
+    // Prefs Accessors
     // ===========================================================
 
 
     private void incrementKey(SharedPreferences.Editor prefEditor, String pkey, int incCount) {
         if (incCount != 0) {
-            int previousCount = loginPrefs.getInt(pkey, 0);
+            int previousCount = readPrefInt(pkey, 0);
             int incVal = incCount + previousCount;
-            prefEditor.putInt(pkey, incVal);
+            writePrefInt( prefEditor, pkey, incVal);
             Log.d(TAG, "### Increment " + pkey + " : " + previousCount + " ===> " + incVal);
-         }
+        }
     }
+
+    private void writePrefLong(SharedPreferences.Editor prefEditor, String key, long val) {
+        prefEditor.putLong(key, val);
+    }
+
+    private long readPrefLong(String key, long defaultVal) {
+        return loginPrefs.getLong(key, defaultVal);
+    }
+
+    private void writePrefInt(SharedPreferences.Editor prefEditor, String key, int val) {
+        prefEditor.putInt(key, val);
+    }
+
+    private int readPrefInt(String key, int defaultVal) {
+        return loginPrefs.getInt(key, defaultVal);
+    }
+
+
+    // ===========================================================
+    // Handle Intent
+    // ===========================================================
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -207,13 +229,13 @@ public class LoginActivity extends ActionBarActivity { //
                             msgId = android.R.string.ok;
                             startMainActivity();
                             // Mark Success
-                            prefEditor.putLong(PREF_LOGIN_SUCCESS_DATE, now);
+                            writePrefLong(prefEditor, PREF_LOGIN_SUCCESS_DATE, now);
                             incrementKey(prefEditor, PREF_LOGIN_SUCCESS_COUNT, 1);
                             // Reset retry
-                            prefEditor.putInt(PREF_RETRY_COUNT, 0);
+                            writePrefInt(prefEditor, PREF_RETRY_COUNT, 0);
                             // Reset Failed
-                            prefEditor.putLong(PREF_LOGIN_FAILED_DATE, Long.MIN_VALUE);
-                            prefEditor.putInt(PREF_LOGIN_FAILED_COUNT, 0);
+                            writePrefLong(prefEditor, PREF_LOGIN_FAILED_DATE, Long.MIN_VALUE);
+                            writePrefInt(prefEditor, PREF_LOGIN_FAILED_COUNT, 0);
                         }
                         break;
                         case RESULT_CANCELED: {
@@ -226,9 +248,9 @@ public class LoginActivity extends ActionBarActivity { //
                         case LockPatternActivity.RESULT_FAILED: {
                             // The user failed to enter the pattern
                             // Mark Failed
-                            prefEditor.putLong(PREF_LOGIN_FAILED_DATE, now);
+                            writePrefLong(prefEditor, PREF_LOGIN_FAILED_DATE, now);
                             // Reset retry
-                            prefEditor.putInt(PREF_RETRY_COUNT, 0);
+                            writePrefInt(prefEditor,  PREF_RETRY_COUNT, 0);
                             // Increment Failed Count
                             incrementKey(prefEditor, PREF_LOGIN_FAILED_COUNT, 1);
                             // Define Timer
