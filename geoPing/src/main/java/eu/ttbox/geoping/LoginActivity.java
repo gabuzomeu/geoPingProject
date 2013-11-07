@@ -266,8 +266,7 @@ public class LoginActivity extends ActionBarActivity { //
                             finish();
                             return;
                     }
-                } finally {
-
+                } finally { 
                     prefEditor.commit();
 
                 }
