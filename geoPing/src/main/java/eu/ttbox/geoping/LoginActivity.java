@@ -4,11 +4,14 @@ package eu.ttbox.geoping;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.widget.TextView;
+
+import com.google.android.gms.internal.v;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -18,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.ui.lock.prefs.CommandsPrefsHelper;
 import group.pals.android.lib.ui.lockpattern.LockPatternActivity;
+import group.pals.android.lib.ui.lockpattern.util.Sys;
 
 public class LoginActivity extends ActionBarActivity { //
 
@@ -34,7 +38,7 @@ public class LoginActivity extends ActionBarActivity { //
 
     // Service
     private SharedPreferences loginPrefs;
-    private ScheduledExecutorService scheduler;
+    private CountDownTimer countDownTimer;
     // Binding
     private TextView loginText;
 
@@ -48,8 +52,7 @@ public class LoginActivity extends ActionBarActivity { //
         if (CommandsPrefsHelper.isPassword(this)) {
             loginPrefs = getSharedPreferences(AppConstants.PREFS_FILE_LOGIN, MODE_PRIVATE);
             // Open Login
-            int previousRetryCount = loginPrefs.getInt(PREF_RETRY_COUNT, 0);
-            CommandsPrefsHelper.startActivityPatternCompare(this, previousRetryCount);
+            openPromptPassword();
             // Init Binding
             initBinding();
         } else {
@@ -70,10 +73,9 @@ public class LoginActivity extends ActionBarActivity { //
     @Override
     public void onPause() {
         super.onPause();
-        if (scheduler != null) {
-            scheduler.shutdown();
-            scheduler = null;
-        }
+//        if (countDownTimer != null) {
+//            countDownTimer.cancel();
+//        }
     }
 
     @Override
@@ -84,48 +86,78 @@ public class LoginActivity extends ActionBarActivity { //
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (scheduler != null) {
-            scheduler.shutdownNow();
-            scheduler = null;
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
         }
     }
+
+    // ===========================================================
+    // Action
+    // ===========================================================
+    private void openPromptPassword(){
+        int previousRetryCount = loginPrefs.getInt(PREF_RETRY_COUNT, 0);
+        CommandsPrefsHelper.startActivityPatternCompare(this, previousRetryCount);
+    }
+
+
+    private void lockScreen() {
+        // Read Param
+       long failedDate = loginPrefs.getLong(PREF_LOGIN_FAILED_DATE, 0);
+       int failedCount = loginPrefs.getInt(PREF_RETRY_COUNT, 0);
+        // Compute Lock Time
+        long now = System.currentTimeMillis();
+//        long lockPass =
+        // Apply Lock
+        startCountDownInMinutes(3);
+//        startCountDownInSeconds(30);
+    }
+
 
     // ===========================================================
     // Scheduler
     // ===========================================================
 
-    private static final String HANDLER_MESSAGE = "MSG";
+    private void startCountDownInMinutes(int minutes) {
+        int countMin = minutes;
+//        if (minutes<)
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            Bundle bundle = msg.getData();
-            String displayText = bundle.getString(HANDLER_MESSAGE);
-            loginText.setText(displayText);
-        }
-    };
+        countDownTimer = new CountDownTimer(countMin * 60 * 1000, 60 *1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                int counterInMin = (int)( millisUntilFinished / (60 * 1000));
+                String displayText = "Try again in " + counterInMin + " minutes";
+                loginText.setText(displayText);
+            }
 
-    private void schedulerTimer() {
-        if (scheduler == null) {
-            scheduler = Executors.newScheduledThreadPool(1);
-        }
-        final Runnable beeper = new Runnable() {
-            private int counterInS = 30;
-
-            public void run() {
-                // Dec Counter
-                counterInS = counterInS - 1;
-                // Define Text
-                String displayText = "Try again in " + counterInS + " seconds";
-                Log.d(TAG, displayText);
-                // Send Message
-                Message myMessage = handler.obtainMessage();
-                myMessage.getData().putString(HANDLER_MESSAGE, displayText);
-                handler.sendMessage(myMessage);
+            @Override
+            public void onFinish() {
+                String displayText = "Try again in 1 minutes";
+                startCountDownInSeconds(59);
             }
         };
-        // Schedule Tasks
-        ScheduledFuture<?> beeperHandle =  scheduler.scheduleAtFixedRate(beeper, 0, 1, TimeUnit.SECONDS);
+
+    }
+
+    private void startCountDownInSeconds(int seconds) {
+        countDownTimer = new CountDownTimer(seconds * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                int counterInS = (int)( millisUntilFinished / 1000);
+                String displayText = "Try again in " + counterInS + " seconds";
+                loginText.setText(displayText);
+
+            }
+
+            @Override
+            public void onFinish() {
+                String displayText = "";
+                loginText.setText(displayText);
+                //
+                countDownTimer = null;
+                openPromptPassword();
+            }
+        };
+        countDownTimer.start();
     }
 
     // ===========================================================
@@ -139,8 +171,7 @@ public class LoginActivity extends ActionBarActivity { //
             int incVal = incCount + previousCount;
             prefEditor.putInt(pkey, incVal);
             Log.d(TAG, "### Increment " + pkey + " : " + previousCount + " ===> " + incVal);
-            //   return incVal;
-        }
+         }
     }
 
     @Override
@@ -184,7 +215,7 @@ public class LoginActivity extends ActionBarActivity { //
                             // Increment Failed Count
                             incrementKey(prefEditor, PREF_LOGIN_FAILED_COUNT, 1);
                             // Define Timer
-                            schedulerTimer();
+                            lockScreen();
                         }
                         break;
                         case LockPatternActivity.RESULT_FORGOT_PATTERN: {

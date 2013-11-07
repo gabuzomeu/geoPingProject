@@ -112,7 +112,7 @@ public class GeoPingApplication extends Application {
         int appPreviousVersionCode =  settings.getInt(AppConstants.PREFS_APP_LAUGHT_LASTVERSION, Integer.MIN_VALUE);
         if (appVersionCode>appPreviousVersionCode) {
             prefEditor.putInt(AppConstants.PREFS_APP_LAUGHT_LASTVERSION, appVersionCode);
-            // TODO display release notes 
+            // TODO display release notes
         }
         // Launch date
         long firstDateLaugth = settings.getLong(AppConstants.PREFS_APP_LAUGHT_FIRSTDATE, Long.MIN_VALUE);
@@ -126,7 +126,7 @@ public class GeoPingApplication extends Application {
         return counter;
     }
 
-    private int incrementKey(SharedPreferences settings, SharedPreferences.Editor prefEditor, String pkey) {|
+    private int incrementKey(SharedPreferences settings, SharedPreferences.Editor prefEditor, String pkey) {
         int previousCount = settings.getInt(pkey, 0);
         int incVal = 1 + previousCount;
         prefEditor.putInt(pkey, incVal);
