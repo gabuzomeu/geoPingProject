@@ -11,17 +11,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.google.android.gms.internal.v;
-
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
 import eu.ttbox.geoping.core.AppConstants;
+import eu.ttbox.geoping.ui.lock.KeyguardMessageArea;
+import eu.ttbox.geoping.ui.lock.SecurityMessageDisplay;
 import eu.ttbox.geoping.ui.lock.prefs.CommandsPrefsHelper;
 import group.pals.android.lib.ui.lockpattern.LockPatternActivity;
-import group.pals.android.lib.ui.lockpattern.util.Sys;
 
 public class LoginActivity extends ActionBarActivity { //
 
@@ -40,7 +34,7 @@ public class LoginActivity extends ActionBarActivity { //
     private SharedPreferences loginPrefs;
     private CountDownTimer countDownTimer;
     // Binding
-    private TextView loginText;
+    private TextView mSecurityMessageDisplay;
 
     // ===========================================================
     // Constructors
@@ -62,7 +56,7 @@ public class LoginActivity extends ActionBarActivity { //
 
     private void initBinding() {
         setContentView(R.layout.login_activity);
-        loginText = (TextView) findViewById(R.id.login_status_textView);
+        mSecurityMessageDisplay =(TextView)findViewById(R.id.keyguard_message_area);
     }
 
 
@@ -108,8 +102,8 @@ public class LoginActivity extends ActionBarActivity { //
         long now = System.currentTimeMillis();
 //        long lockPass =
         // Apply Lock
-        startCountDownInMinutes(3);
-//        startCountDownInSeconds(30);
+  //      startCountDownInMinutes(3);
+        startCountDownInSeconds(30*3);
     }
 
 
@@ -117,6 +111,21 @@ public class LoginActivity extends ActionBarActivity { //
     // Scheduler
     // ===========================================================
 
+    private static final String HANDLER_DISPLAY_TEXT = "TXT";
+    private Handler handler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            String displayText = msg.getData().getString(HANDLER_DISPLAY_TEXT);
+            mSecurityMessageDisplay.setText( displayText );
+        }
+
+    };
+
+    /**
+     * ./platform_frameworks_base/policy/src/com/android/internal/policy/impl/keyguard/KeyguardPatternView.java
+     * @param minutes
+     */
     private void startCountDownInMinutes(int minutes) {
         int countMin = minutes;
 //        if (minutes<)
@@ -124,9 +133,17 @@ public class LoginActivity extends ActionBarActivity { //
         countDownTimer = new CountDownTimer(countMin * 60 * 1000, 60 *1000) {
             @Override
             public void onTick(long millisUntilFinished) {
+                final int secondsRemaining = (int) (millisUntilFinished / 1000);
+                String msgDisplay = getString( R.string.kg_too_many_failed_attempts_countdown, secondsRemaining);
+                mSecurityMessageDisplay.setText(msgDisplay);
+
                 int counterInMin = (int)( millisUntilFinished / (60 * 1000));
+
                 String displayText = "Try again in " + counterInMin + " minutes";
-                loginText.setText(displayText);
+                // Display Text
+                Message msg  = handler.obtainMessage();
+                msg.getData().putString(HANDLER_DISPLAY_TEXT, displayText);
+                handler.dispatchMessage(msg);
             }
 
             @Override
@@ -136,22 +153,22 @@ public class LoginActivity extends ActionBarActivity { //
             }
         };
 
+        countDownTimer.start();
     }
 
     private void startCountDownInSeconds(int seconds) {
         countDownTimer = new CountDownTimer(seconds * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                int counterInS = (int)( millisUntilFinished / 1000);
-                String displayText = "Try again in " + counterInS + " seconds";
-                loginText.setText(displayText);
-
+                final int secondsRemaining = (int) (millisUntilFinished / 1000);
+                String msgDisplay = getString( R.string.kg_too_many_failed_attempts_countdown, secondsRemaining);
+                mSecurityMessageDisplay.setText(msgDisplay);
             }
 
             @Override
             public void onFinish() {
                 String displayText = "";
-                loginText.setText(displayText);
+                mSecurityMessageDisplay.setText(displayText );
                 //
                 countDownTimer = null;
                 openPromptPassword();

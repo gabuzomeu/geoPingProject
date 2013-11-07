@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
 
-    <TextView android:id="@+id/login_status_textView"
+    <TextView android:id="@+id/keyguard_message_area"
         android:layout_height="match_parent"
         android:layout_width="wrap_content" />
 

@@ -137,8 +137,19 @@
     <string name="prefs_relasenotes">Que tal de nuevo ?</string> 
     <string name="prefs_count_laught">Numero de lanzamiento</string>
     <string name="prefs_count_laught_summary">Numero de utilizacion de la aplicacion</string>
-    
-   
+
+    <!-- Prefs LockApp -->
+    <string name="prefs_lockapp">Lock Application</string>
+    <string name="prefs_lockapp_lockpattern_create">Lock By Pattern</string>
+    <string name="prefs_lockapp_lockpattern_max_retry">Maximum retry</string>
+    <string name="prefs_lockapp_lockpattern_min_wired_dots">Minimum wired dots</string>
+
+    <string name="prefs_launcher_icon">Launcher Icon</string>
+    <string name="prefs_launcher_icon_summary_on">Launcher Icon is show</string>
+    <string name="prefs_launcher_icon_summary_off">Launcher Icon is hide</string>
+
+    <string name="kg_too_many_failed_attempts_countdown" msgid="6358110221603297548">"Inténtalo de nuevo en <xliff:g id="NUMBER">%d</xliff:g> segundos."</string>
+
     <!-- Prefs Dev-->
     <string name="show_dev_countdown">"Solo te quedan <xliff:g id="STEP_COUNT">%1$d</xliff:g> pasos para ser un desarrollador."</string>
     <string name="show_dev_on">"¡Ahora están activadas las opciones de desarrollo!"</string>

@@ -13,6 +13,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.domain.SmsLogProvider;
@@ -51,10 +52,21 @@ public class SmsSenderHelper {
         return result;
     }
 
+    public static ArrayList<String> splitNumbers(String phoneString) {
+        ArrayList<String> phones = new ArrayList<String>();
+        StringTokenizer st = new StringTokenizer(phoneString, ";");
+        while (st.hasMoreTokens()) {
+            String phone = st.nextToken();
+            phones.add(phone);
+        }
+        return phones;
+    }
+
     public static Uri sendSmsAndLogIt(Context context, SmsLogSideEnum side, String phone, MessageActionEnum action, Bundle params) {
         Uri isSend = null;
         String encrypedMsg = MessageEncoderHelper.encodeSmsMessage(action, params);
         Log.d(TAG, String.format("Send Request SmsMessage to %s : %s (%s)", phone, action, encrypedMsg));
+
         if (encrypedMsg != null && encrypedMsg.length() > 0) {
             SmsManager smsManager = SmsManager.getDefault();
             // Compute Messages
@@ -65,7 +77,7 @@ public class SmsSenderHelper {
             Uri logUri = logSmsMessage(cr, side, SmsLogTypeEnum.SEND_REQ, phone, action, params, msgSplitCount, encrypedMsg, false, null);
 
             // Shot Message Send
-            if (msgSplitCount==1) {
+            if (msgSplitCount == 1) {
                 // Acknowledge
                 PendingIntent sendIntent = PendingIntent.getBroadcast(context, 0, //
                         new Intent(MessageAcknowledgeReceiver.ACTION_SEND_ACK).setData(logUri) //
@@ -84,7 +96,7 @@ public class SmsSenderHelper {
                 ArrayList<PendingIntent> sentIntents = new ArrayList<PendingIntent>(msgSplitCount);
                 ArrayList<PendingIntent> deliveryIntents = new ArrayList<PendingIntent>(msgSplitCount);
                 for (int msgId = 1; msgId <= msgSplitCount; msgId++) {
-                     // Acknowledge
+                    // Acknowledge
                     PendingIntent sendIntent = PendingIntent.getBroadcast(context, 0, //
                             new Intent(MessageAcknowledgeReceiver.ACTION_SEND_ACK).setData(logUri) //
                                     .putExtra(EXTRA_MSG_PART_COUNT, msgSplitCount).putExtra(EXTRA_MSG_PART_ID, msgId) //
@@ -128,17 +140,17 @@ public class SmsSenderHelper {
     public static Uri logSmsMessage(ContentResolver cr, SmsLogSideEnum side, SmsLogTypeEnum type
             , BundleEncoderAdapter geoMessage
             , int smsWeight, String encrypedMsg
-            , boolean markAsUnread , Uri parentUri) {
+            , boolean markAsUnread, Uri parentUri) {
         return logSmsMessage(cr, side, type, geoMessage.getPhone(), geoMessage.getAction(), geoMessage.getMap(), smsWeight, encrypedMsg, markAsUnread, parentUri);
     }
 
     public static Uri logSmsMessage(ContentResolver cr, SmsLogSideEnum side, SmsLogTypeEnum type, String phone
             , MessageActionEnum action, Bundle params
             , int smsWeight, String encrypedMsg
-            , boolean markAsToRead, Uri parentUri ) {
+            , boolean markAsToRead, Uri parentUri) {
         ContentValues values = SmsLogHelper.getContentValues(side, type, phone, action, params, encrypedMsg);
         values.put(SmsLogColumns.COL_MSG_COUNT, smsWeight);
-        if (parentUri!=null) {
+        if (parentUri != null) {
             String logParentId = parentUri.getLastPathSegment();
             values.put(SmsLogColumns.COL_PARENT_ID, logParentId);
         }

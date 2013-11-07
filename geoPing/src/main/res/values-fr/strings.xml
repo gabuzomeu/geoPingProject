@@ -148,7 +148,20 @@
     <!-- Infos Legale -->
     <string name="legal_information">"Informations légales"</string>
     <string name="prefs_license_activity_title">"Licences open source"</string>
-     
+
+    <!-- Prefs LockApp -->
+    <string name="prefs_lockapp">Lock Application</string>
+    <string name="prefs_lockapp_lockpattern_create">Lock By Pattern</string>
+    <string name="prefs_lockapp_lockpattern_max_retry">Maximum retry</string>
+    <string name="prefs_lockapp_lockpattern_min_wired_dots">Minimum wired dots</string>
+
+    <string name="prefs_launcher_icon">Launcher Icon</string>
+    <string name="prefs_launcher_icon_summary_on">Launcher Icon is show</string>
+    <string name="prefs_launcher_icon_summary_off">Launcher Icon is hide</string>
+
+
+    <string name="kg_too_many_failed_attempts_countdown" msgid="6358110221603297548">"Réessayez dans <xliff:g id="NUMBER">%d</xliff:g> secondes."</string>
+
     <!-- Prefs Dev-->
     <string name="show_dev_countdown">"Plus que <xliff:g id="STEP_COUNT">%1$d</xliff:g> étapes pour devenir un développeur."</string>
     <string name="show_dev_on">"Vous êtes désormais un développeur !"</string>
