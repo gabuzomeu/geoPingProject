@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+     <!-- Config Keys -->
      <string name="pkey_create_pattern">pkey.create_pattern</string>
      <string name="pkey_launcher_icon">pkey.launcher_icon</string>
+
+    <!-- Status Keys -->
+    <string name="pkey_login_retry_count">login_retry_count</string>
+    <string name="pkey_login_success_date">login_success_date</string>
+    <string name="pkey_login_success_count">login_success_count</string>
+    <string name="pkey_login_failed_date">login_failed_date</string>
+    <string name="pkey_login_failed_count">login_failed_count</string>
+
 
 </resources>

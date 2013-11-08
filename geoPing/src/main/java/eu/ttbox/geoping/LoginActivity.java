@@ -19,15 +19,6 @@ public class LoginActivity extends ActionBarActivity { //
 
     private static final String TAG = "LoginActivity";
 
-
-    private static final String PREF_RETRY_COUNT = "retry_count";
-
-    private static final String PREF_LOGIN_SUCCESS_DATE = "login_success_date";
-    private static final String PREF_LOGIN_SUCCESS_COUNT = "login_success_count";
-
-    private static final String PREF_LOGIN_FAILED_DATE = "login_failed_date";
-    private static final String PREF_LOGIN_FAILED_COUNT = "login_failed_count";
-
     // Service
     private SharedPreferences loginPrefs;
     private CountDownTimer countDownTimer;
@@ -87,15 +78,31 @@ public class LoginActivity extends ActionBarActivity { //
     // Action
     // ===========================================================
     private void openPromptPassword(){
-        int previousRetryCount = readPrefInt(PREF_RETRY_COUNT, 0);
+        int previousRetryCount = readPrefInt(R.string.pkey_login_retry_count, 0);
         CommandsPrefsHelper.startActivityPatternCompare(this, previousRetryCount);
     }
 
+    private final  long LOCK_BASE_TIME_IN_MS = 30* 1000;
+
+    private void long isLockApp() {
+        long lockTime = 0;
+        int failedCount = readPrefInt(R.string.pkey_login_failed_count, 0);
+        if (failedCount>0) {
+            long now = System.currentTimeMillis();
+            long failedDate = readPrefLong(R.string.pkey_login_failed_date, 0);
+            // Compute Time
+            long enlapseRealTime = now - failedDate;
+            long enlapseExpectedLockTime = failedCount * LOCK_BASE_TIME_IN_MS; // TODO exponential Algo
+            long enlapseExpectedTime = now - enlapseExpectedLockTime; // TODO exponential Algo
+            long restTimeInMs = enlapseExpectedLockTime - enlapseRealTime;
+        }
+        return lockTime;
+    }
 
     private void lockScreen() {
         // Read Param
-       long failedDate = readPrefLong(PREF_LOGIN_FAILED_DATE, 0);
-       int failedCount = readPrefInt(PREF_LOGIN_FAILED_COUNT, 1);
+       long failedDate = readPrefLong(R.string.pkey_login_failed_date, 0);
+       int failedCount = readPrefInt(R.string.pkey_login_failed_count, 1);
         // Compute Lock Time
         long now = System.currentTimeMillis();
 //        long lockPass =
@@ -181,28 +188,32 @@ public class LoginActivity extends ActionBarActivity { //
     // ===========================================================
 
 
-    private void incrementKey(SharedPreferences.Editor prefEditor, String pkey, int incCount) {
+    private void incrementKey(SharedPreferences.Editor prefEditor, int pkeyId, int incCount) {
         if (incCount != 0) {
-            int previousCount = readPrefInt(pkey, 0);
+            int previousCount = readPrefInt(pkeyId, 0);
             int incVal = incCount + previousCount;
-            writePrefInt( prefEditor, pkey, incVal);
-            Log.d(TAG, "### Increment " + pkey + " : " + previousCount + " ===> " + incVal);
+            writePrefInt( prefEditor, pkeyId, incVal);
+            Log.d(TAG, "### Increment " + getString(pkeyId) + " : " + previousCount + " ===> " + incVal);
         }
     }
 
-    private void writePrefLong(SharedPreferences.Editor prefEditor, String key, long val) {
+    private void writePrefLong(SharedPreferences.Editor prefEditor, int pkeyId, long val) {
+        String key = getString(pkeyId);
         prefEditor.putLong(key, val);
     }
 
-    private long readPrefLong(String key, long defaultVal) {
+    private long readPrefLong(int pkeyId, long defaultVal) {
+        String key = getString(pkeyId);
         return loginPrefs.getLong(key, defaultVal);
     }
 
-    private void writePrefInt(SharedPreferences.Editor prefEditor, String key, int val) {
+    private void writePrefInt(SharedPreferences.Editor prefEditor, int pkeyId, int val) {
+        String key = getString(pkeyId);
         prefEditor.putInt(key, val);
     }
 
-    private int readPrefInt(String key, int defaultVal) {
+    private int readPrefInt(int pkeyId, int defaultVal) {
+        String key = getString(pkeyId);
         return loginPrefs.getInt(key, defaultVal);
     }
 
@@ -229,30 +240,30 @@ public class LoginActivity extends ActionBarActivity { //
                             msgId = android.R.string.ok;
                             startMainActivity();
                             // Mark Success
-                            writePrefLong(prefEditor, PREF_LOGIN_SUCCESS_DATE, now);
-                            incrementKey(prefEditor, PREF_LOGIN_SUCCESS_COUNT, 1);
+                            writePrefLong(prefEditor, R.string.pkey_login_success_date  , now);
+                            incrementKey(prefEditor, R.string.pkey_login_success_count, 1);
                             // Reset retry
-                            writePrefInt(prefEditor, PREF_RETRY_COUNT, 0);
+                            writePrefInt(prefEditor, R.string.pkey_login_retry_count, 0);
                             // Reset Failed
-                            writePrefLong(prefEditor, PREF_LOGIN_FAILED_DATE, Long.MIN_VALUE);
-                            writePrefInt(prefEditor, PREF_LOGIN_FAILED_COUNT, 0);
+                            writePrefLong(prefEditor, R.string.pkey_login_failed_date, Long.MIN_VALUE);
+                            writePrefInt(prefEditor, R.string.pkey_login_failed_count, 0);
                         }
                         break;
                         case RESULT_CANCELED: {
                             // The user cancelled the task
                             msgId = android.R.string.cancel;
-                            incrementKey(prefEditor, PREF_RETRY_COUNT, retryCount);
+                            incrementKey(prefEditor, R.string.pkey_login_retry_count, retryCount);
                             finish();
                         }
                         break;
                         case LockPatternActivity.RESULT_FAILED: {
                             // The user failed to enter the pattern
                             // Mark Failed
-                            writePrefLong(prefEditor, PREF_LOGIN_FAILED_DATE, now);
+                            writePrefLong(prefEditor, R.string.pkey_login_failed_date, now);
                             // Reset retry
-                            writePrefInt(prefEditor,  PREF_RETRY_COUNT, 0);
+                            writePrefInt(prefEditor,  R.string.pkey_login_retry_count, 0);
                             // Increment Failed Count
-                            incrementKey(prefEditor, PREF_LOGIN_FAILED_COUNT, 1);
+                            incrementKey(prefEditor, R.string.pkey_login_failed_count, 1);
                             // Define Timer
                             lockScreen();
                         }
