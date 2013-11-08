@@ -159,7 +159,7 @@ public class LoginActivity extends ActionBarActivity { //
         String msgDisplay = getString(R.string.kg_too_many_failed_attempts_countdown, secondsRemaining);
         if (secondsRemaining >= 60l) {
             long s = secondsRemaining % 60;
-            long min = (secondsRemaining / (60)) % 60;
+            long min = (secondsRemaining / 60) % 60;
             long hour = (secondsRemaining / (60 * 60)) % 24;
             Log.d(TAG, "### Time to finish : " + hour + "h " + min + "min " + s + "s");
         } else {
