@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import eu.ttbox.geoping.core.AppConstants;
+import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.ui.lock.prefs.CommandsPrefsHelper;
 import group.pals.android.lib.ui.lockpattern.LockPatternActivity;
 
@@ -19,8 +20,8 @@ public class LoginActivity extends ActionBarActivity { //
 
     private static final String TAG = "LoginActivity";
 
-    private final long LOCK_BASE_TIME_IN_MS = 30 * 1000;
-
+    private static final long LOCK_BASE_TIME_IN_MS = 30 * 1000;
+    private static final String DEFAULT_USER = "Local_";
     // Service
     private SharedPreferences loginPrefs;
     private CountDownTimer countDownTimer;
@@ -29,7 +30,7 @@ public class LoginActivity extends ActionBarActivity { //
     private TextView mSecurityMessageDisplay;
 
     // Config instance
-    private String user = "Local_";
+    private String user = DEFAULT_USER;
 
     // ===========================================================
     // Constructors
@@ -38,6 +39,9 @@ public class LoginActivity extends ActionBarActivity { //
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Read Parameter
+        handleIntent(getIntent());
+        // Load Screen
         if (CommandsPrefsHelper.isPassword(this)) {
             loginPrefs = getSharedPreferences(AppConstants.PREFS_FILE_LOGIN, MODE_PRIVATE);
             // Init Binding
@@ -54,17 +58,37 @@ public class LoginActivity extends ActionBarActivity { //
 
 
     // ===========================================================
+    // Handle Intent
+    // ===========================================================
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        String phone = null;
+        if (intent != null) {
+            phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
+        }
+        // Define User Id
+        if (phone != null) {
+            user = phone + "_";
+        } else {
+            user = DEFAULT_USER;
+        }
+    }
+
+
+    // ===========================================================
     // Life Cycle
     // ===========================================================
 
     @Override
     public void onPause() {
         super.onPause();
-        if (countDownTimer != null) {
-            Log.d(TAG, "### onPause : countDownTimer.cancel()");
-            countDownTimer.cancel();
-            countDownTimer = null;
-        }
+        cancelCountDown();
     }
 
     @Override
@@ -79,12 +103,9 @@ public class LoginActivity extends ActionBarActivity { //
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (countDownTimer != null) {
-            Log.d(TAG, "### onDestroy : countDownTimer.cancel()");
-            countDownTimer.cancel();
-            countDownTimer = null;
-        }
+        cancelCountDown();
     }
+
 
     // ===========================================================
     // Action
@@ -93,7 +114,7 @@ public class LoginActivity extends ActionBarActivity { //
     private long getExpectedEnlapseLockTime(int failedCount) {
         // exponential Algo
         long failFactor = Math.round(Math.exp(Math.max(0, failedCount - 1)));
-//        failFactor = 0;
+//       failFactor = 0;
         long enlapseExpectedLockTime = failFactor * LOCK_BASE_TIME_IN_MS;
         Log.d(TAG, "### Fail count " + failedCount + " ==> Factor : " + failFactor + " ==> " + enlapseExpectedLockTime + "ms");
         return enlapseExpectedLockTime;
@@ -155,7 +176,7 @@ public class LoginActivity extends ActionBarActivity { //
     };
 
     private void setDisplayText(long millisUntilFinished) {
-        final long secondsRemaining =  Math.round(millisUntilFinished / 1000);
+        final long secondsRemaining = Math.round(millisUntilFinished / 1000);
         String msgDisplay = getString(R.string.kg_too_many_failed_attempts_countdown, secondsRemaining);
         if (secondsRemaining >= 60l) {
             long s = secondsRemaining % 60;
@@ -170,8 +191,8 @@ public class LoginActivity extends ActionBarActivity { //
 
     private synchronized void startCountDownInSeconds(long lockTimeInMs) {
         if (countDownTimer != null) {
-            countDownTimer.cancel();
             Log.w(TAG, "### Cancel previous CountDown");
+            cancelCountDown();
         }
         countDownTimer = new CountDownTimer(lockTimeInMs, 1000) {
 
@@ -238,7 +259,7 @@ public class LoginActivity extends ActionBarActivity { //
 
 
     // ===========================================================
-    // Handle Intent
+    // Logging Event
     // ===========================================================
 
 
@@ -308,6 +329,17 @@ public class LoginActivity extends ActionBarActivity { //
     // ===========================================================
     // Handle Intent
     // ===========================================================
+
+    private void cancelCountDown() {
+        CountDownTimer countDown = countDownTimer;
+        if (countDown != null) {
+            Log.d(TAG, "### Cancel CountDownTimer");
+            countDown.cancel();
+            countDownTimer = null;
+            // Display Text
+            mSecurityMessageDisplay.setText(null);
+        }
+    }
 
     private void openPromptPassword() {
         int previousRetryCount = readPrefInt(R.string.pkey_login_retry_count, 0);
