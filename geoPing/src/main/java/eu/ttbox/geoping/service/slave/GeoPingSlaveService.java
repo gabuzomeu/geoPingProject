@@ -15,6 +15,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
+import eu.ttbox.geoping.LoginActivity;
 import eu.ttbox.geoping.MainActivity;
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.core.Intents;
@@ -151,7 +152,7 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
                     break;
                     case COMMAND_OPEN_APP: {
                         // GeoPing Command : Open Application
-                        manageCommandOpenApplication(pairing, params);
+                        manageCommandOpenApplication(pairing, phone, params);
                     }
                     break;
                     case COMMAND_RING: {
@@ -244,10 +245,13 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
     // Commande
     // ===========================================================
 
-    private void manageCommandOpenApplication(Pairing pairing, Bundle params) {
+    private void manageCommandOpenApplication(Pairing pairing, String phone , Bundle params) {
+        Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+        loginIntent.putExtra(Intents.EXTRA_SMS_PHONE, phone);
+        // Create Stack
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(MainActivity.class);
-        stackBuilder.addNextIntent(new Intent(getApplicationContext(), MainActivity.class));
+        stackBuilder.addNextIntent(loginIntent);
         stackBuilder.startActivities();
     }
 
