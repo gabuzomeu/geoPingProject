@@ -32,16 +32,13 @@ public class CommandsPrefsHelper {
     // Listeners
     // ===========================================================
 
+    private final Preference.OnPreferenceClickListener mCmdCreatePatternListener = new Preference.OnPreferenceClickListener() {
 
-//    private final Preference.OnPreferenceClickListener mCmdDisableLaucherListener = new Preference.OnPreferenceClickListener() {
-//
-//        @Override
-//        public boolean onPreferenceClick(Preference preference) {
-//            Log.d(TAG,  "### Ask DisableLaucherListener");
-//            ExtraFeatureHelper.switchEnabledSettingLaucherIcon(mActivity);
-//            return true;
-//        }// onPreferenceClick()
-//    };// mCmdCreatePatternListener
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+            return startActivityPatternCreate(mActivity);
+        }// onPreferenceClick()
+    };// mCmdCreatePatternListener
 
     private final Preference.OnPreferenceChangeListener  mLauncherDisableChangeListener = new Preference.OnPreferenceChangeListener() {
         @Override
@@ -52,13 +49,25 @@ public class CommandsPrefsHelper {
         }
     };
 
-    private final Preference.OnPreferenceClickListener mCmdCreatePatternListener = new Preference.OnPreferenceClickListener() {
 
+    private final Preference.OnPreferenceChangeListener  mPersonListDisableChangeListener = new Preference.OnPreferenceChangeListener() {
         @Override
-        public boolean onPreferenceClick(Preference preference) {
-            return startActivityPatternCreate(mActivity);
-        }// onPreferenceClick()
-    };// mCmdCreatePatternListener
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            Boolean value =(Boolean) newValue;
+            ExtraFeatureHelper.enabledSettingPesonListIcon(mActivity, value);
+            return true;
+        }
+    };
+
+    private final Preference.OnPreferenceChangeListener  mPairingListDisableChangeListener = new Preference.OnPreferenceChangeListener() {
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            Boolean value =(Boolean) newValue;
+            ExtraFeatureHelper.enabledSettingPairingListIcon(mActivity, value);
+            return true;
+        }
+    };
+
 
 
 
@@ -90,6 +99,12 @@ public class CommandsPrefsHelper {
 
         Preference disableLauncherPref = mPreferenceHolder.findPreference(mActivity.getString(R.string.pkey_launcher_icon));
         disableLauncherPref.setOnPreferenceChangeListener(mLauncherDisableChangeListener);
+
+        Preference disablePersonListPref = mPreferenceHolder.findPreference(mActivity.getString(R.string.pkey_widget_person_list));
+        disablePersonListPref.setOnPreferenceChangeListener(mPersonListDisableChangeListener);
+
+        Preference disablePairingListPref = mPreferenceHolder.findPreference(mActivity.getString(R.string.pkey_widget_pairing_list));
+        disablePairingListPref.setOnPreferenceChangeListener(mPairingListDisableChangeListener);
 
 //        mPreferenceHolder.findPreference(
 //                mActivity.getString(R.string.pkey_enter_pattern))

@@ -1,21 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:title="@string/prefs_lockapp" >
+    android:title="@string/prefs_lockapp">
 
     <eu.ttbox.geoping.ui.prefs.lock.LockAppPreference
         android:key="@string/pkey_create_pattern"
-        android:title="@string/prefs_lockapp_lockpattern_create"
-        />
+        android:title="@string/prefs_lockapp_lockpattern_create" />
 
     <CheckBoxPreference
         android:key="@string/pkey_launcher_icon"
         android:title="@string/prefs_launcher_icon"
         android:summaryOn="@string/prefs_launcher_icon_summary_on"
         android:summaryOff="@string/prefs_launcher_icon_summary_off"
-        android:defaultValue="true"
-    />
+        android:defaultValue="true" />
 
-<!-- android:widgetLayout="@layout/prefs_lockpattern" -->
+    <PreferenceCategory android:enabled="@bool/postHoneycomb"
+        android:icon="@android:drawable/ic_menu_my_calendar"
+        android:title="@string/prefs_widget_category">
+
+        <CheckBoxPreference
+            android:key="@string/pkey_widget_person_list"
+            android:title="@string/prefs_widget_person_list"
+            android:summaryOn="@string/prefs_widget_person_list_summary_on"
+            android:summaryOff="@string/prefs_widget_person_list_summary_off"
+            android:defaultValue="@bool/postHoneycomb" />
+
+        <CheckBoxPreference
+            android:key="@string/pkey_widget_pairing_list"
+            android:title="@string/prefs_widget_pairing_list"
+            android:summaryOn="@string/prefs_widget_pairing_list_summary_on"
+            android:summaryOff="@string/prefs_widget_pairing_list_summary_off"
+            android:defaultValue="@bool/postHoneycomb" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

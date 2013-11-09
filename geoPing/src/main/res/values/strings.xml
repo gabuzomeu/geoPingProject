@@ -129,6 +129,15 @@
     <string name="prefs_launcher_icon_summary_on">Launcher Icon is show</string>
     <string name="prefs_launcher_icon_summary_off">Launcher Icon is hide</string>
 
+    <string name="prefs_widget_category">Widget Feature</string>
+    <string name="prefs_widget_person_list">Person Widget Icon</string>
+    <string name="prefs_widget_person_list_summary_on">Person Widget Icon is show</string>
+    <string name="prefs_widget_person_list_summary_off">Person Widget Icon is hide</string>
+
+    <string name="prefs_widget_pairing_list">Pairing Widget Icon</string>
+    <string name="prefs_widget_pairing_list_summary_on">Pairing Widget Icon is show</string>
+    <string name="prefs_widget_pairing_list_summary_off">Pairing Widget Icon is hide</string>
+
 
     <string name="kg_too_many_failed_attempts_countdown">Try again in <xliff:g id="number">%d</xliff:g> seconds.</string>
 

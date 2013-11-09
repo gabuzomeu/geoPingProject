@@ -5,6 +5,10 @@
      <string name="pkey_create_pattern">pkey.create_pattern</string>
      <string name="pkey_launcher_icon">pkey.launcher_icon</string>
 
+    <string name="pkey_widget_person_list">pkey.widget_person_list</string>
+    <string name="pkey_widget_pairing_list">pkey.widget_pairing_list</string>
+
+
     <!-- Status Keys -->
     <string name="pkey_login_retry_count">login_retry_count</string>
     <string name="pkey_login_success_date">login_success_date</string>
