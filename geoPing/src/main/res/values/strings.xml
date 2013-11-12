@@ -140,8 +140,8 @@
 
 
     <string name="kg_too_many_failed_attempts_countdown_seconds">Try again in <xliff:g id="seconds">%d</xliff:g> seconds.</string>
-    <string name="kg_too_many_failed_attempts_countdown_minutes">Try again in <xliff:g id="minutes">%d</xliff:g>min <xliff:g id="seconds">%d</xliff:g>s.</string>
-    <string name="kg_too_many_failed_attempts_countdown_hours">Try again in <xliff:g id="hours">%d</xliff:g>h <xliff:g id="minutes">%d</xliff:g>min <xliff:g id="seconds">%d</xliff:g>s.</string>
+    <string name="kg_too_many_failed_attempts_countdown_minutes">Try again in <xliff:g id="minutes">%1$d min %2$d s.</xliff:g></string>
+    <string name="kg_too_many_failed_attempts_countdown_hours">Try again in <xliff:g id="hours">%1$d h %2$d min %3$d s.</xliff:g></string>
 
     <!-- Prefs Dev -->
     <string name="show_dev_countdown">You are now <xliff:g id="step_count">%1$d</xliff:g> steps away from enabling development settings.</string>

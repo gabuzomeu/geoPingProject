@@ -149,8 +149,8 @@
     <string name="prefs_launcher_icon_summary_off">Launcher Icon is hide</string>
 
     <string name="kg_too_many_failed_attempts_countdown_seconds">"Inténtalo de nuevo en <xliff:g id="seconds">%d</xliff:g> segundos."</string>
-    <string name="kg_too_many_failed_attempts_countdown_minutes">"Inténtalo de nuevo en <xliff:g id="minutes">%d</xliff:g>min <xliff:g id="seconds">%d</xliff:g>s."</string>
-    <string name="kg_too_many_failed_attempts_countdown_hours">"Inténtalo de nuevo en <xliff:g id="hours">%d</xliff:g>h <xliff:g id="minutes">%d</xliff:g>min <xliff:g id="seconds">%d</xliff:g>s."</string>
+    <string name="kg_too_many_failed_attempts_countdown_minutes">"Inténtalo de nuevo en <xliff:g id="minutes">%1$d min %2$d s.</xliff:g>"</string>
+    <string name="kg_too_many_failed_attempts_countdown_hours">"Inténtalo de nuevo en <xliff:g id="hours">%1$d h %2$d min %3$d s.</xliff:g>"</string>
 
     <!-- Prefs Dev-->
     <string name="show_dev_countdown">"Solo te quedan <xliff:g id="STEP_COUNT">%1$d</xliff:g> pasos para ser un desarrollador."</string>

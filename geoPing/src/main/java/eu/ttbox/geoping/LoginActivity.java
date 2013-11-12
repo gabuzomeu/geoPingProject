@@ -320,7 +320,7 @@ public class LoginActivity extends ActionBarActivity { //
                 countDownTimer = null;
                 Log.d(TAG, "### CountDown onFinish : openPromptPassword");
                 openPromptPassword();
-                setSignboardVisibility(false);
+
                 //     }
             }
         };
@@ -464,6 +464,7 @@ public class LoginActivity extends ActionBarActivity { //
     private void openPromptPassword() {
         int previousRetryCount = readPrefInt(R.string.pkey_login_retry_count, 0);
         Log.d(TAG, "### Open Prompt Password : " + previousRetryCount + " retry");
+        setSignboardVisibility(false);
         CommandsPrefsHelper.startActivityPatternCompare(this, previousRetryCount);
     }
 
