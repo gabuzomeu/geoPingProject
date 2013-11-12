@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.analytics.tracking.android.EasyTracker;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 
@@ -64,7 +65,6 @@ public class LoginActivity extends ActionBarActivity { //
     private void initBinding() {
         setContentView(R.layout.login_activity);
         // Bind
-
         mSignboardImageView = (ImageView) findViewById(R.id.keyguard_signboard);
         if (!AdmobHelper.isAddBlocked(this)) {
             mSignboardImageView.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +76,9 @@ public class LoginActivity extends ActionBarActivity { //
             });
         }
         mSignboardTextView = (TextView) findViewById(R.id.keyguard_signboard_textview);
+        // Manage Visibility
+        setSignboardVisibility(false);
+
         // Ad View
         adView = AdmobHelper.bindAdMobView(this);
     }
@@ -139,7 +142,20 @@ public class LoginActivity extends ActionBarActivity { //
     // Life Cycle
     // ===========================================================
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Tracker
+        EasyTracker.getInstance().activityStart(this);
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        // Tracker
+        EasyTracker.getInstance().activityStop(this);
+    }
+    
     @Override
     public void onPause() {
         super.onPause();
@@ -268,7 +284,9 @@ public class LoginActivity extends ActionBarActivity { //
             Log.d(TAG, "### Time to finish : " + secondsRemaining + "s");
         }
         if (secondsRemaining % 60 == 0) {
-            // displayInterstitial();
+            if (!AdmobHelper.isAddBlocked(this)) {
+                displayInterstitial();
+            }
         }
 
         mSignboardTextView.setText(msgDisplay);
@@ -294,17 +312,18 @@ public class LoginActivity extends ActionBarActivity { //
                 countDownTimer = null;
                 Log.d(TAG, "### CountDown onFinish : openPromptPassword");
                 openPromptPassword();
-                setSignboardVisibility(View.GONE);
+                setSignboardVisibility(false);
                 //     }
             }
         };
         Log.i(TAG, "### Start CountDown for : " + lockTimeInMs + " ms");
         setDisplayText(lockTimeInMs);
-        setSignboardVisibility(View.VISIBLE);
+        setSignboardVisibility(true);
         countDownTimer.start();
     }
 
-    private void setSignboardVisibility(int visible) {
+    private void setSignboardVisibility(boolean isVisible) {
+        int visible = isVisible ? View.VISIBLE : View.GONE;
         mSignboardImageView.setVisibility(visible);
         mSignboardTextView.setVisibility(visible);
 
@@ -367,6 +386,7 @@ public class LoginActivity extends ActionBarActivity { //
                 try {
                     switch (resultCode) {
                         case RESULT_OK: {
+                            setSignboardVisibility(false);
                             // Mark Success
                             writePrefLong(prefEditor, R.string.pkey_login_success_date, now);
                             incrementKey(prefEditor, R.string.pkey_login_success_count, 1);
