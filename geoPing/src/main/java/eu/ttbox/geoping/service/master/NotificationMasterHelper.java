@@ -19,6 +19,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import eu.ttbox.geoping.LoginActivity;
 import eu.ttbox.geoping.MainActivity;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.AppConstants;
@@ -85,6 +86,7 @@ public class NotificationMasterHelper {
 
 
 
+
     @SuppressLint("NewApi")
     public void showNotificationGeoPing(MessageActionEnum actionEnum, Uri geoTrackData, ContentValues values
             , GeoTrack geoTrack,  Bundle params) {
@@ -92,13 +94,13 @@ public class NotificationMasterHelper {
         // Contact Name
         NotifPersonVo person = ContactHelper.getNotifPersonVo(context, phone);
 
-        // --- Create Notif Intent response ---7
+        // --- Create Notif Intent response ---
         // --- ---------------------------- ---
         // --- Create Parent
         // Create an explicit content Intent that starts the main Activity
         Intent mapAction = Intents.showOnMap(context.getApplicationContext(), geoTrackData, values);
-        // Intent
-
+     //TODO mapAction =   Intents.showLoginPrompt(context.getApplicationContext(), mapAction);
+        // Success Intent
         PendingIntent pendingIntent = LogReadHistoryService.createClearLogPendingIntent(context, side, phone, mapAction);
 
         // Get a notification builder that's compatible with platform versions >= 4

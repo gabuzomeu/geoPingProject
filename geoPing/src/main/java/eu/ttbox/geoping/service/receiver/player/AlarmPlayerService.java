@@ -41,7 +41,7 @@ public class AlarmPlayerService extends Service implements
 
     // Service
     private AudioManager mAudioManager;
-    private NotificationManager mNotificationManager;
+
 
     private final IBinder binder = new LocalBinder();
 
@@ -90,9 +90,7 @@ public class AlarmPlayerService extends Service implements
     public void onCreate() {
         Log.i(TAG, "### onCreate service");
         // Service
-        mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mAudioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-
         onMusicRetrieverPrepared();
     }
 

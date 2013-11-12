@@ -17,10 +17,10 @@ import org.osmdroid.util.BoundingBoxE6;
 
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.domain.model.CircleGeofence;
-import eu.ttbox.geoping.ui.map.ShowMapFragment;
+import eu.ttbox.geoping.ui.map.ShowMapFragmentV2;
 import eu.ttbox.geoping.ui.map.geofence.GeofenceEditOverlay;
 
-public class GeofenceEditMapFragment extends ShowMapFragment {
+public class GeofenceEditMapFragment extends ShowMapFragmentV2 {
 
     private static final String TAG = "GeofenceEditMapFragment";
 
@@ -55,13 +55,13 @@ public class GeofenceEditMapFragment extends ShowMapFragment {
                 onSaveClick();
                 return true;
             case R.id.menuMap_mypositoncenter: {
-                centerOnMyPosition();
-                return true;
+                super.centerOnMyLocationFix();
+                 return true;
             }
-            case R.id.menuMap_mypositon_hide: {
-                 swichDisplayMyPosition();
-                return true;
-            }
+//            case R.id.menuMap_mypositon_hide: {
+//                 swichDisplayMyPosition();
+//                return true;
+//            }
 
         }
         return super.onOptionsItemSelected(item);

@@ -138,6 +138,7 @@ public class GeoPingMasterService extends IntentService {
             if (actionEnum != null) {
                 Log.d(TAG, String.format("###  onHandleIntent for actionEnum %s : %s", actionEnum, intent));
                 switch (actionEnum) {
+                    // Send Sms
                     case COMMAND_RING:
                     case COMMAND_OPEN_APP: {
                         String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
@@ -146,6 +147,7 @@ public class GeoPingMasterService extends IntentService {
                         sendSmsCommand(actionEnum, phone, params);
                     }
                     break;
+                    // Read Sms
                     case ACTION_GEO_PAIRING_RESPONSE: {
                         String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
                         Bundle params = intent.getBundleExtra(Intents.EXTRA_SMS_PARAMS);
@@ -159,6 +161,7 @@ public class GeoPingMasterService extends IntentService {
                                 0l); // Value
                     }
                     break;
+                    // Read Sms
                     case SPY_SHUTDOWN:
                         // TODO Display Notification
                         break;

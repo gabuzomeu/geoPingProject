@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.core.Intents;
-import eu.ttbox.geoping.ui.lock.prefs.CommandsPrefsHelper;
+import eu.ttbox.geoping.ui.prefs.lock.core.CommandsPrefsHelper;
 import group.pals.android.lib.ui.lockpattern.LockPatternActivity;
 
 public class LoginActivity extends ActionBarActivity { //
@@ -31,6 +31,7 @@ public class LoginActivity extends ActionBarActivity { //
 
     // Config instance
     private String user = DEFAULT_USER;
+    private Intent destIntent = null;
 
     // ===========================================================
     // Constructors
@@ -69,8 +70,10 @@ public class LoginActivity extends ActionBarActivity { //
 
     private void handleIntent(Intent intent) {
         String phone = null;
+        Intent wantedIntent = null;
         if (intent != null) {
             phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
+            wantedIntent = intent.getParcelableExtra(Intents.EXTRA_INTENT);
         }
         // Define User Id
         if (phone != null) {
@@ -78,12 +81,42 @@ public class LoginActivity extends ActionBarActivity { //
         } else {
             user = DEFAULT_USER;
         }
+        //
+        if (wantedIntent == null) {
+            wantedIntent = new Intent(this, MainActivity.class);
+        }
     }
 
 
     // ===========================================================
+    // Save and Restore
+    // ===========================================================
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(Intents.EXTRA_PERSON_ID, user);
+        if (destIntent != null) {
+            outState.putParcelable(Intents.EXTRA_INTENT, destIntent);
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        user = savedInstanceState.getString(Intents.EXTRA_PERSON_ID);
+        Intent savIntent = savedInstanceState.getParcelable(Intents.EXTRA_INTENT);
+        if (savIntent != null) {
+            destIntent = savIntent;
+        }
+    }
+
+    // ===========================================================
     // Life Cycle
     // ===========================================================
+
+
 
     @Override
     public void onPause() {
@@ -104,6 +137,7 @@ public class LoginActivity extends ActionBarActivity { //
     public void onDestroy() {
         super.onDestroy();
         cancelCountDown();
+
     }
 
 
@@ -347,10 +381,16 @@ public class LoginActivity extends ActionBarActivity { //
         CommandsPrefsHelper.startActivityPatternCompare(this, previousRetryCount);
     }
 
+
     public void startMainActivity() {
-        finish();
-        Intent mainActivity = new Intent(this, MainActivity.class);
+        Intent mainActivity = null;
+        if (destIntent == null) {
+            mainActivity = new Intent(this, MainActivity.class);
+        } else {
+            mainActivity = destIntent;
+        }
         startActivity(mainActivity);
+        finish();
     }
 
 

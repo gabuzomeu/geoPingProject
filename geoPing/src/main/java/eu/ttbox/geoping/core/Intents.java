@@ -147,6 +147,19 @@ public class Intents {
         return intent;
     }
 
+    public static Intent showLoginPrompt(Context context, Intent destItent) {
+        Intent intent = new Intent(context, ShowMapActivity.class);
+        intent.setAction(Intent.ACTION_VIEW);
+        // Extra
+        if (destItent!=null) {
+            intent.putExtra(EXTRA_INTENT, destItent);
+            String phone = destItent.getStringExtra(EXTRA_SMS_PHONE);
+            if (phone !=null) {
+                intent.putExtra(EXTRA_SMS_PHONE, phone);
+            }
+        }
+        return intent;
+    }
     public static Intent showOnMap(Context context, Uri geoTrackData, ContentValues values) {
         String phone = values.getAsString(GeoTrackColumns.COL_PHONE);
         // Wsg84

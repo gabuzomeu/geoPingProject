@@ -3,15 +3,11 @@ package eu.ttbox.geoping.ui.prefs.lock;
 import android.content.Context;
 import android.preference.Preference;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import eu.ttbox.geoping.R;
-import eu.ttbox.geoping.ui.lock.prefs.CommandsPrefsHelper;
 import group.pals.android.lib.ui.lockpattern.prefs.SecurityPrefs;
 
 

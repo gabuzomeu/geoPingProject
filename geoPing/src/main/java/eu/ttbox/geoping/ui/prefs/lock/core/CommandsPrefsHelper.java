@@ -1,4 +1,4 @@
-package eu.ttbox.geoping.ui.lock.prefs;
+package eu.ttbox.geoping.ui.prefs.lock.core;
 
 
 import android.annotation.SuppressLint;
