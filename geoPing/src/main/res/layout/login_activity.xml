@@ -1,12 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include
+        android:id="@+id/admob"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        layout="@layout/admob"
+        />
+
 
     <TextView android:id="@+id/keyguard_message_area"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_width="wrap_content" />
 
-</LinearLayout>
+   <ImageView android:id="@+id/keyguard_signboard"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_centerInParent="true"
+       android:src="@drawable/interdiction_loging"/>
+
+    <TextView android:id="@+id/keyguard_signboard_textview"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:text="sssss"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:layout_above="@id/admob"
+        android:layout_alignBottom="@id/keyguard_signboard"
+
+        android:background="@android:drawable/alert_light_frame"/>
+
+
+</RelativeLayout>

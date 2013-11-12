@@ -109,6 +109,7 @@ public class GeoPingSlidingMenuFragmentActivity extends ActionBarActivity implem
         return isAddBlocked;
     }
 
+    // FIXME Dont do a copy
     private void bindAdMobView() {
         // Admob
         if (isAddBlocked()) {

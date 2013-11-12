@@ -7,9 +7,15 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.core.Intents;
@@ -26,8 +32,13 @@ public class LoginActivity extends ActionBarActivity { //
     private SharedPreferences loginPrefs;
     private CountDownTimer countDownTimer;
 
+    // AddView
+    private AdView adView;
+
     // Binding
     private TextView mSecurityMessageDisplay;
+    private ImageView mSignboardImageView;
+    private TextView mSignboardTextView;
 
     // Config instance
     private String user = DEFAULT_USER;
@@ -54,7 +65,12 @@ public class LoginActivity extends ActionBarActivity { //
 
     private void initBinding() {
         setContentView(R.layout.login_activity);
+        // Bind
         mSecurityMessageDisplay = (TextView) findViewById(R.id.keyguard_message_area);
+        mSignboardImageView = (ImageView) findViewById(R.id.keyguard_signboard);
+        mSignboardTextView = (TextView) findViewById(R.id.keyguard_signboard_textview);
+        // Ad View
+        bindAdMobView();
     }
 
 
@@ -121,12 +137,18 @@ public class LoginActivity extends ActionBarActivity { //
     @Override
     public void onPause() {
         super.onPause();
+        if (adView != null) {
+            adView.pause();
+        }
         cancelCountDown();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        if (adView != null) {
+            adView.resume();
+        }
         if (!lockScreen()) {
             Log.d(TAG, "### onResume : openPromptPassword");
             openPromptPassword();
@@ -136,10 +158,39 @@ public class LoginActivity extends ActionBarActivity { //
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (adView != null) {
+            adView.destroy();
+        }
         cancelCountDown();
 
     }
 
+    // ===========================================================
+    // AdView
+    // ===========================================================
+
+
+    // FIXME Dont do a copy
+    private void bindAdMobView() {
+        // Admob
+        if (isAddBlocked()) {
+            View admob =   findViewById(R.id.adsContainer);
+            admob.setVisibility(View.GONE);
+        } else {
+            adView = (AdView) findViewById(R.id.adView);
+        }
+        // Request Ad
+        if (adView!=null) {
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        }
+    }
+
+    private boolean isAddBlocked(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isAddBlocked = sharedPreferences != null ? sharedPreferences.getBoolean(AppConstants.PREFS_ADD_BLOCKED, false) : false;
+        return isAddBlocked;
+    }
 
     // ===========================================================
     // Action
@@ -216,11 +267,15 @@ public class LoginActivity extends ActionBarActivity { //
             long s = secondsRemaining % 60;
             long min = (secondsRemaining / 60) % 60;
             long hour = (secondsRemaining / (60 * 60)) % 24;
+            msgDisplay = "" +  hour + "h " + min + "min " + s + "s";
             Log.d(TAG, "### Time to finish : " + hour + "h " + min + "min " + s + "s");
+
         } else {
+            msgDisplay = "" + secondsRemaining + "s";
             Log.d(TAG, "### Time to finish : " + secondsRemaining + "s");
         }
         mSecurityMessageDisplay.setText(msgDisplay);
+        mSignboardTextView.setText(msgDisplay);
     }
 
     private synchronized void startCountDownInSeconds(long lockTimeInMs) {
@@ -243,11 +298,14 @@ public class LoginActivity extends ActionBarActivity { //
                 countDownTimer = null;
                 Log.d(TAG, "### CountDown onFinish : openPromptPassword");
                 openPromptPassword();
+                mSignboardImageView.setVisibility(View.GONE);
+
                 //     }
             }
         };
         Log.i(TAG, "### Start CountDown for : " + lockTimeInMs + " ms");
         setDisplayText(lockTimeInMs);
+        mSignboardImageView.setVisibility(View.VISIBLE);
         countDownTimer.start();
     }
 
