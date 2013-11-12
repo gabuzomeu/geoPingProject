@@ -271,16 +271,24 @@ public class LoginActivity extends ActionBarActivity { //
 
     private void setDisplayText(long millisUntilFinished) {
         final long secondsRemaining = Math.round(millisUntilFinished / 1000);
-        String msgDisplay = getString(R.string.kg_too_many_failed_attempts_countdown, secondsRemaining);
+        String msgDisplay = null;
         if (secondsRemaining >= 60l) {
             long s = secondsRemaining % 60;
             long min = (secondsRemaining / 60) % 60;
-            long hour = (secondsRemaining / (60 * 60)) % 24;
-            msgDisplay = "" + hour + "h " + min + "min " + s + "s";
-            Log.d(TAG, "### Time to finish : " + hour + "h " + min + "min " + s + "s");
+            if (secondsRemaining>= 60*60) {
+                long hour = (secondsRemaining / (60 * 60)) % 24;
+//                msgDisplay = "" + hour + "h " + min + "min " + s + "s";
+                msgDisplay = getString(R.string.kg_too_many_failed_attempts_countdown_hours, hour, min, s);
+                Log.d(TAG, "### Time to finish : " + hour + "h " + min + "min " + s + "s");
+            } else {
+//                msgDisplay = ""  + min + "min " + s + "s";
+                msgDisplay = getString(R.string.kg_too_many_failed_attempts_countdown_minutes, min, s);
+                Log.d(TAG, "### Time to finish : "  + min + "min " + s + "s");
+            }
 
         } else {
           //  msgDisplay = "" + secondsRemaining + "s";
+            msgDisplay = getString(R.string.kg_too_many_failed_attempts_countdown_seconds, secondsRemaining);
             Log.d(TAG, "### Time to finish : " + secondsRemaining + "s");
         }
         if (secondsRemaining % 60 == 0) {

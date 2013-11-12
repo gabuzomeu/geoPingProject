@@ -160,7 +160,9 @@
     <string name="prefs_launcher_icon_summary_off">Launcher Icon is hide</string>
 
 
-    <string name="kg_too_many_failed_attempts_countdown" msgid="6358110221603297548">"Réessayez dans <xliff:g id="NUMBER">%d</xliff:g> secondes."</string>
+    <string name="kg_too_many_failed_attempts_countdown_seconds">"Réessayez dans <xliff:g id="seconds">%d secondes.</xliff:g>"</string>
+    <string name="kg_too_many_failed_attempts_countdown_minutes">"Réessayez dans <xliff:g id="minutes">%1$d min %2$d s.</xliff:g>"</string>
+    <string name="kg_too_many_failed_attempts_countdown_hours">"Réessayez dans <xliff:g id="hours">%d</xliff:g>h <xliff:g id="minutes">%d</xliff:g>min <xliff:g id="seconds">%d</xliff:g>s."</string>
 
     <!-- Prefs Dev-->
     <string name="show_dev_countdown">"Plus que <xliff:g id="STEP_COUNT">%1$d</xliff:g> étapes pour devenir un développeur."</string>
