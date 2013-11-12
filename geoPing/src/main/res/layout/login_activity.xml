@@ -13,10 +13,6 @@
         />
 
 
-    <TextView android:id="@+id/keyguard_message_area"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content" />
-
    <ImageView android:id="@+id/keyguard_signboard"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
@@ -30,9 +26,7 @@
         android:gravity="center"
         android:layout_centerInParent="true"
         android:layout_above="@id/admob"
-        android:layout_alignBottom="@id/keyguard_signboard"
-
-        android:background="@android:drawable/alert_light_frame"/>
+        android:background="@drawable/tab_sign"/>
 
 
 </RelativeLayout>

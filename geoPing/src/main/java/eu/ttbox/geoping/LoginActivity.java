@@ -5,20 +5,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Message;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.core.Intents;
+import eu.ttbox.geoping.ui.admob.AdmobHelper;
 import eu.ttbox.geoping.ui.prefs.lock.core.CommandsPrefsHelper;
 import group.pals.android.lib.ui.lockpattern.LockPatternActivity;
 
@@ -36,7 +34,6 @@ public class LoginActivity extends ActionBarActivity { //
     private AdView adView;
 
     // Binding
-    private TextView mSecurityMessageDisplay;
     private ImageView mSignboardImageView;
     private TextView mSignboardTextView;
 
@@ -51,6 +48,7 @@ public class LoginActivity extends ActionBarActivity { //
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // Read Parameter
         handleIntent(getIntent());
         // Load Screen
@@ -66,11 +64,20 @@ public class LoginActivity extends ActionBarActivity { //
     private void initBinding() {
         setContentView(R.layout.login_activity);
         // Bind
-        mSecurityMessageDisplay = (TextView) findViewById(R.id.keyguard_message_area);
+
         mSignboardImageView = (ImageView) findViewById(R.id.keyguard_signboard);
+        if (!AdmobHelper.isAddBlocked(this)) {
+            mSignboardImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i(TAG, "### onClick : Display Interstitial Ad");
+                    displayInterstitial();
+                }
+            });
+        }
         mSignboardTextView = (TextView) findViewById(R.id.keyguard_signboard_textview);
         // Ad View
-        bindAdMobView();
+        adView = AdmobHelper.bindAdMobView(this);
     }
 
 
@@ -133,7 +140,6 @@ public class LoginActivity extends ActionBarActivity { //
     // ===========================================================
 
 
-
     @Override
     public void onPause() {
         super.onPause();
@@ -170,27 +176,24 @@ public class LoginActivity extends ActionBarActivity { //
     // ===========================================================
 
 
-    // FIXME Dont do a copy
-    private void bindAdMobView() {
-        // Admob
-        if (isAddBlocked()) {
-            View admob =   findViewById(R.id.adsContainer);
-            admob.setVisibility(View.GONE);
-        } else {
-            adView = (AdView) findViewById(R.id.adView);
+    private InterstitialAd interstitial;
+
+    private InterstitialAd displayInterstitial() {
+        if (interstitial == null) {
+            AdmobHelper.AppAdListener adListener = new AdmobHelper.AppAdListener() {
+                @Override
+                public void onAdClosed() {
+                    super.onAdClosed();
+                    interstitial = null;
+                }
+            };
+            // Create the interstitial.
+//            final InterstitialAd
+            interstitial = AdmobHelper.displayInterstitialAd(this, adListener);
         }
-        // Request Ad
-        if (adView!=null) {
-            AdRequest adRequest = new AdRequest.Builder().build();
-            adView.loadAd(adRequest);
-        }
+        return interstitial;
     }
 
-    private boolean isAddBlocked(){
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean isAddBlocked = sharedPreferences != null ? sharedPreferences.getBoolean(AppConstants.PREFS_ADD_BLOCKED, false) : false;
-        return isAddBlocked;
-    }
 
     // ===========================================================
     // Action
@@ -249,16 +252,6 @@ public class LoginActivity extends ActionBarActivity { //
     // Scheduler
     // ===========================================================
 
-    private static final String HANDLER_DISPLAY_TEXT = "TXT";
-    private Handler handler = new Handler() {
-
-        @Override
-        public void handleMessage(Message msg) {
-            String displayText = msg.getData().getString(HANDLER_DISPLAY_TEXT);
-            mSecurityMessageDisplay.setText(displayText);
-        }
-
-    };
 
     private void setDisplayText(long millisUntilFinished) {
         final long secondsRemaining = Math.round(millisUntilFinished / 1000);
@@ -267,14 +260,17 @@ public class LoginActivity extends ActionBarActivity { //
             long s = secondsRemaining % 60;
             long min = (secondsRemaining / 60) % 60;
             long hour = (secondsRemaining / (60 * 60)) % 24;
-            msgDisplay = "" +  hour + "h " + min + "min " + s + "s";
+            msgDisplay = "" + hour + "h " + min + "min " + s + "s";
             Log.d(TAG, "### Time to finish : " + hour + "h " + min + "min " + s + "s");
 
         } else {
             msgDisplay = "" + secondsRemaining + "s";
             Log.d(TAG, "### Time to finish : " + secondsRemaining + "s");
         }
-        mSecurityMessageDisplay.setText(msgDisplay);
+        if (secondsRemaining % 60 == 0) {
+            // displayInterstitial();
+        }
+
         mSignboardTextView.setText(msgDisplay);
     }
 
@@ -293,22 +289,26 @@ public class LoginActivity extends ActionBarActivity { //
             @Override
             public void onFinish() {
                 String displayText = "";
-                mSecurityMessageDisplay.setText(displayText);
+                mSignboardTextView.setText(displayText);
                 //    if (countDownTimer != null) {
                 countDownTimer = null;
                 Log.d(TAG, "### CountDown onFinish : openPromptPassword");
                 openPromptPassword();
-                mSignboardImageView.setVisibility(View.GONE);
-
+                setSignboardVisibility(View.GONE);
                 //     }
             }
         };
         Log.i(TAG, "### Start CountDown for : " + lockTimeInMs + " ms");
         setDisplayText(lockTimeInMs);
-        mSignboardImageView.setVisibility(View.VISIBLE);
+        setSignboardVisibility(View.VISIBLE);
         countDownTimer.start();
     }
 
+    private void setSignboardVisibility(int visible) {
+        mSignboardImageView.setVisibility(visible);
+        mSignboardTextView.setVisibility(visible);
+
+    }
 
     // ===========================================================
     // Prefs Accessors
@@ -429,7 +429,7 @@ public class LoginActivity extends ActionBarActivity { //
             countDown.cancel();
             countDownTimer = null;
             // Display Text
-            mSecurityMessageDisplay.setText(null);
+            mSignboardTextView.setText(null);
         }
     }
 
