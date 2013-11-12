@@ -155,7 +155,7 @@ public class LoginActivity extends ActionBarActivity { //
         // Tracker
         EasyTracker.getInstance().activityStop(this);
     }
-    
+
     @Override
     public void onPause() {
         super.onPause();
@@ -280,7 +280,7 @@ public class LoginActivity extends ActionBarActivity { //
             Log.d(TAG, "### Time to finish : " + hour + "h " + min + "min " + s + "s");
 
         } else {
-            msgDisplay = "" + secondsRemaining + "s";
+          //  msgDisplay = "" + secondsRemaining + "s";
             Log.d(TAG, "### Time to finish : " + secondsRemaining + "s");
         }
         if (secondsRemaining % 60 == 0) {
