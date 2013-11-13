@@ -185,4 +185,11 @@ public class GeofenceEditMapFragment extends ShowMapFragmentV2 {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+
+    // ===========================================================
+    // Other
+    // ===========================================================
+
+
 }

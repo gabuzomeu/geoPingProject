@@ -1,5 +1,7 @@
 package eu.ttbox.geoping.ui.billing;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,11 +11,15 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.common.AccountPicker;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import eu.ttbox.geoping.BuildConfig;
 import eu.ttbox.geoping.R;
+import eu.ttbox.geoping.core.AccountUtils;
 import eu.ttbox.geoping.service.billing.util.IabHelper;
 import eu.ttbox.geoping.service.billing.util.IabResult;
 import eu.ttbox.geoping.service.billing.util.Inventory;
@@ -21,14 +27,13 @@ import eu.ttbox.geoping.service.billing.util.Purchase;
 import eu.ttbox.geoping.service.billing.util.SkuDetails;
 import eu.ttbox.geoping.ui.GeoPingSlidingMenuFragmentActivity;
 
-public class ExtraFeaturesActivity extends GeoPingSlidingMenuFragmentActivity   {
+public class ExtraFeaturesActivity extends GeoPingSlidingMenuFragmentActivity {
 
     // Debug tag, for logging
     private static final String TAG = "ExtraFeaturesActivity";
 
     // Product
     private static final String SKU_NO_AD_PER_YEAR = "no_ad_per_year";
-
 
 
     // (arbitrary) request code for the purchase flow
@@ -40,8 +45,6 @@ public class ExtraFeaturesActivity extends GeoPingSlidingMenuFragmentActivity   
 
     // The helper object
     private IabHelper mHelper;
-
-
 
 
     // ===========================================================
@@ -188,7 +191,6 @@ public class ExtraFeaturesActivity extends GeoPingSlidingMenuFragmentActivity   
     }
 
 
-
     // ===========================================================
     // Intent
     // ===========================================================
@@ -204,8 +206,6 @@ public class ExtraFeaturesActivity extends GeoPingSlidingMenuFragmentActivity   
         }
         Log.d(TAG, "handleIntent for action : " + intent.getAction());
     }
-
-
 
 
     // ===========================================================
@@ -227,28 +227,28 @@ public class ExtraFeaturesActivity extends GeoPingSlidingMenuFragmentActivity   
 
 
     public void onClickSkuDetails(SkuDetails skuDetails) {
-        if ("SECU_HIDE_LAUNCHER".equals(skuDetails.getSku() )) {
-            boolean hideStatus =  ExtraFeatureHelper.enabledSettingLaucherIcon(this, null);
+        if ("SECU_HIDE_LAUNCHER".equals(skuDetails.getSku())) {
+            boolean hideStatus = ExtraFeatureHelper.enabledSettingLaucherIcon(this, null);
             if (hideStatus) {
                 Toast.makeText(this, "Show Icon Laucher", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Hide Icon Laucher", Toast.LENGTH_SHORT).show();
             }
-        } else  if (SKU_NO_AD_PER_YEAR.equals(skuDetails.getSku() )) {
+        } else if (SKU_NO_AD_PER_YEAR.equals(skuDetails.getSku())) {
             if (!mHelper.subscriptionsSupported()) {
                 complain("Subscriptions not supported on your device yet. Sorry!");
                 return;
             }
 
             String payload = DeveloperPayloadHelper.generateDeveloperPayload(SKU_NO_AD_PER_YEAR);
-            Log.d(TAG, "Launching purchase for sku : " + skuDetails.getSku() );
-            mHelper.launchSubscriptionPurchaseFlow(this, skuDetails.getSku() ,
+            Log.d(TAG, "Launching purchase for sku : " + skuDetails.getSku());
+            mHelper.launchSubscriptionPurchaseFlow(this, skuDetails.getSku(),
                     RC_REQUEST, mPurchaseFinishedListener, payload);
 
-        } else if ("android.test.purchased".equals(skuDetails.getSku() )) {
+        } else if ("android.test.purchased".equals(skuDetails.getSku())) {
             String payload = DeveloperPayloadHelper.generateDeveloperPayload(skuDetails.getSku());
-            Log.d(TAG, "Launching purchase for sku : " + skuDetails.getSku() );
-            mHelper.launchPurchaseFlow(this, skuDetails.getSku()  , RC_REQUEST,
+            Log.d(TAG, "Launching purchase for sku : " + skuDetails.getSku());
+            mHelper.launchPurchaseFlow(this, skuDetails.getSku(), RC_REQUEST,
                     mPurchaseFinishedListener, payload);
 
         }
@@ -259,23 +259,37 @@ public class ExtraFeaturesActivity extends GeoPingSlidingMenuFragmentActivity   
     // ===========================================================
 
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.i(TAG, "### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ###");
         Log.i(TAG, "### onActivityResult(" + requestCode + "," + resultCode + "," + data);
         Log.i(TAG, "### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ###");
+        switch (requestCode) {
+            case REQUEST_CODE_PICK_ACCOUNT: {
+                if (resultCode == RESULT_OK) {
+                    String accountName = data.getStringExtra(
+                            AccountManager.KEY_ACCOUNT_NAME);
+                    AccountUtils.setAccountName(this, accountName);
+                } else if (resultCode == RESULT_CANCELED) {
+                    Toast.makeText(this, "This application requires a Google account.",
+                            Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                return;
+            }
+            default: {
+                // Pass on the activity result to the helper for handling
+                if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
+                    // not handled, so handle it ourselves (here's where you'd
+                    // perform any handling of activity results not related to in-app
+                    // billing...
+                    super.onActivityResult(requestCode, resultCode, data);
+                } else {
+                    Log.d(TAG, "onActivityResult handled by IABUtil.");
+                }
+            }
+        }
 
-        // Pass on the activity result to the helper for handling
-        if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
-            // not handled, so handle it ourselves (here's where you'd
-            // perform any handling of activity results not related to in-app
-            // billing...
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-        else {
-            Log.d(TAG, "onActivityResult handled by IABUtil.");
-        }
     }
 
     // ===========================================================
@@ -308,7 +322,42 @@ public class ExtraFeaturesActivity extends GeoPingSlidingMenuFragmentActivity   
 
     }
     // ===========================================================
-    // Other
+    // Account
     // ===========================================================
+
+    private static final int REQUEST_CODE_PICK_ACCOUNT = 1002;
+
+    /**
+     * http://www.androiddesignpatterns.com/2013/01/google-play-services-setup.html
+     * @return
+     */
+    private boolean checkUserAccount() {
+        String accountName = AccountUtils.getAccountName(this);
+        if (accountName == null) {
+            // Then the user was not found in the SharedPreferences. Either the
+            // application deliberately removed the account, or the application's
+            // data has been forcefully erased.
+            showAccountPicker();
+            return false;
+        }
+
+        Account account = AccountUtils.getGoogleAccountByName(this, accountName);
+        if (account == null) {
+            // Then the account has since been removed.
+            AccountUtils.removeAccount(this);
+            showAccountPicker();
+            return false;
+        }
+
+        return true;
+    }
+
+    private void showAccountPicker() {
+        Intent pickAccountIntent = AccountPicker.newChooseAccountIntent(
+                null, null, new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE},
+                true, null, null, null, null);
+        startActivityForResult(pickAccountIntent, REQUEST_CODE_PICK_ACCOUNT);
+    }
+
 
 }

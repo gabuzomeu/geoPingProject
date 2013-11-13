@@ -274,9 +274,9 @@ public class GeoPingApplication extends Application {
         return this.lastActivityDate;
     }
 
-    public boolean isLastActivityDateRecent() {
-        return this.lastActivityDate;
-    }
+  //  public boolean isLastActivityDateRecent() {
+  //      return this.lastActivityDate;
+  //  }
 
 
     public void  setLastActivityDate() {

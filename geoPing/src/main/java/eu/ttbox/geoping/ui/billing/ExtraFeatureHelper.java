@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.util.Log;
 
 import eu.ttbox.geoping.LaucherMainActivity;
+import eu.ttbox.geoping.service.geofence.ReceiveTransitionsIntentService;
 import eu.ttbox.geoping.ui.widget.PersonWidgetProvider;
 import eu.ttbox.geoping.ui.widget.pairing.PairingWidgetProvider;
 
@@ -43,6 +44,13 @@ public class ExtraFeatureHelper {
         ComponentName componentName = new ComponentName(context, PairingWidgetProvider.class);
         return enabledComponentEnabledSetting(context, componentName, wantedState);
     }
+
+    public static boolean enabledGeofence(Context context, Boolean wantedState) {
+        ComponentName componentName = new ComponentName(context, ReceiveTransitionsIntentService.class);
+        return enabledComponentEnabledSetting(context, componentName, wantedState);
+    }
+
+
     // ===========================================================
     // Generic Fonctions
     // ===========================================================
