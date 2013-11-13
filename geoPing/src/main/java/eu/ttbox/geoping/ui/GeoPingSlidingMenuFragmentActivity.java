@@ -20,6 +20,7 @@ import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivityHelper;
 
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.AppConstants;
+import eu.ttbox.geoping.ui.admob.AdmobHelper;
 import eu.ttbox.geoping.ui.slidingmenu.SlidingMenuHelper;
 
 public class GeoPingSlidingMenuFragmentActivity extends ActionBarActivity implements SlidingActivityBase {
@@ -103,27 +104,7 @@ public class GeoPingSlidingMenuFragmentActivity extends ActionBarActivity implem
         }
     }
 
-    private boolean isAddBlocked(){
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean isAddBlocked = sharedPreferences != null ? sharedPreferences.getBoolean(AppConstants.PREFS_ADD_BLOCKED, false) : false;
-        return isAddBlocked;
-    }
 
-    // FIXME Dont do a copy
-    private void bindAdMobView() {
-        // Admob
-        if (isAddBlocked()) {
-            View admob =   findViewById(R.id.adsContainer);
-            admob.setVisibility(View.GONE);
-        } else {
-            adView = (AdView) findViewById(R.id.adView);
-        }
-        // Request Ad
-        if (adView!=null) {
-            AdRequest adRequest = new AdRequest.Builder().build();
-            adView.loadAd(adRequest);
-        }
-    }
 
     @Override
     public void onPostCreate(Bundle savedInstanceState) {
@@ -159,7 +140,7 @@ public class GeoPingSlidingMenuFragmentActivity extends ActionBarActivity implem
     public void setContentView(View v, LayoutParams params) {
         super.setContentView(v, params);
         mHelper.registerAboveContentView(v, params);
-        bindAdMobView();
+        adView = AdmobHelper.bindAdMobView(this);
     }
 
     public void setBehindContentView(int id) {
