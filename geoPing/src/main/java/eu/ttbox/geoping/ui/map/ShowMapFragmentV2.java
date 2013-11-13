@@ -30,6 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
+import eu.ttbox.geoping.BuildConfig;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.core.Intents;
@@ -170,6 +171,10 @@ public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferenc
         }
         String action = intent.getAction();
         Log.d(TAG, String.format("### Handle Intent for action %s : %s", action, intent));
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "### handleIntent : " + intent);
+            Intents.printExtras(TAG, intent.getExtras());
+        }
         if (Intent.ACTION_VIEW.equals(action)) {
             String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
             Bundle bundle = intent.getExtras();
@@ -177,7 +182,7 @@ public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferenc
                 int latE6 = intent.getIntExtra(GeoTrackDatabase.GeoTrackColumns.COL_LATITUDE_E6, Integer.MIN_VALUE);
                 int lngE6 = intent.getIntExtra(GeoTrackDatabase.GeoTrackColumns.COL_LONGITUDE_E6, Integer.MIN_VALUE);
                 int accuracy = intent.getIntExtra(GeoTrackDatabase.GeoTrackColumns.COL_ACCURACY, -1);
-                Log.d(TAG, String.format("handleIntent on Map Phone [%s] for center (%s, %s) ", phone, latE6, lngE6));
+                Log.d(TAG, String.format("### handleIntent on Map Phone [%s] for center (%s, %s) ", phone, latE6, lngE6));
                 if (Integer.MIN_VALUE != latE6 && Integer.MIN_VALUE != lngE6) {
                     centerOnPersonPhone(phone, latE6, lngE6, accuracy);
                 }
@@ -401,6 +406,7 @@ public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferenc
             myLocation.disableFollowLocation();
         }
         GeoTrackOverlay geoTrackOverlay = geoTrackOverlayGetOrAddForPhone(phone);
+        Log.d(TAG, "### geoTrackOverlayGetOrAddForPhone " + phone + " ==> " + geoTrackOverlay);
         geoTrackOverlay.animateToLastKnowPosition(false);
     }
 

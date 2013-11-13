@@ -99,7 +99,8 @@ public class NotificationMasterHelper {
         // --- Create Parent
         // Create an explicit content Intent that starts the main Activity
         Intent mapAction = Intents.showOnMap(context.getApplicationContext(), geoTrackData, values);
-     //TODO mapAction =   Intents.showLoginPrompt(context.getApplicationContext(), mapAction);
+     //TODO
+     mapAction =   Intents.showLoginPrompt(context.getApplicationContext(), mapAction);
         // Success Intent
         PendingIntent pendingIntent = LogReadHistoryService.createClearLogPendingIntent(context, side, phone, mapAction);
 

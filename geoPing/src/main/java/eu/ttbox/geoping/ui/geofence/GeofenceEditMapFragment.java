@@ -1,6 +1,7 @@
 package eu.ttbox.geoping.ui.geofence;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.BoundingBoxE6;
@@ -24,7 +29,9 @@ public class GeofenceEditMapFragment extends ShowMapFragmentV2 {
 
     private static final String TAG = "GeofenceEditMapFragment";
 
-    private CircleGeofence editGeofence ;
+    private CircleGeofence editGeofence;
+
+    public static final int REQUEST_CODE_RECOVER_PLAY_SERVICES = 1001;
 
     // ===========================================================
     // Constructors
@@ -56,7 +63,7 @@ public class GeofenceEditMapFragment extends ShowMapFragmentV2 {
                 return true;
             case R.id.menuMap_mypositoncenter: {
                 super.centerOnMyLocationFix();
-                 return true;
+                return true;
             }
 //            case R.id.menuMap_mypositon_hide: {
 //                 swichDisplayMyPosition();
@@ -69,7 +76,7 @@ public class GeofenceEditMapFragment extends ShowMapFragmentV2 {
 
     private void onSaveClick() {
         GeofenceEditActivity activity = (GeofenceEditActivity) getActivity();
-        if (activity!=null) {
+        if (activity != null) {
             activity.onSaveClick();
         }
     }
@@ -82,15 +89,15 @@ public class GeofenceEditMapFragment extends ShowMapFragmentV2 {
     @Override
     public void loadDefaultDatas() {
         // Activate
-        if (editGeofence!=null) {
+        if (editGeofence != null) {
             displayGeofence(editGeofence);
         }
     }
 
-    private  void displayGeofence(CircleGeofence editGeofence) {
-        if (mapController !=null) {
+    private void displayGeofence(CircleGeofence editGeofence) {
+        if (mapController != null) {
             // Prepare Insert
-            if (editGeofence.id== -1 ) {
+            if (editGeofence.id == -1) {
                 // Compute the default fence Size
                 BoundingBoxE6 boundyBox = mapView.getBoundingBox();
                 IGeoPoint center = boundyBox.getCenter();
@@ -103,9 +110,9 @@ public class GeofenceEditMapFragment extends ShowMapFragmentV2 {
             }
             //Define Center
             myLocationFollow(false);
-            mapController.setCenter(editGeofence.getCenterAsGeoPoint() );
+            mapController.setCenter(editGeofence.getCenterAsGeoPoint());
             // Do Edit
-            GeofenceEditOverlay mapOverlay =  super.showGeofenceOverlays();
+            GeofenceEditOverlay mapOverlay = super.showGeofenceOverlays();
             mapOverlay.doEditCircleGeofenceWithoutMenu(editGeofence);
         }
     }
@@ -115,6 +122,14 @@ public class GeofenceEditMapFragment extends ShowMapFragmentV2 {
     // ===========================================================
     public void handleIntent(Intent intent) {
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (checkPlayServices()) {
+            // Then we're good to go!
+        }
     }
 
     // ===========================================================
@@ -133,4 +148,41 @@ public class GeofenceEditMapFragment extends ShowMapFragmentV2 {
         displayGeofence(fence);
     }
 
+    // ===========================================================
+    // Play Service Check
+    // ===========================================================
+
+    private boolean checkPlayServices() {
+        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity());
+        if (status != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(status)) {
+                showErrorDialog(status);
+            } else {
+                Toast.makeText(getActivity(), "This device is not supported.",
+                        Toast.LENGTH_LONG).show();
+                getActivity().finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    void showErrorDialog(int code) {
+        GooglePlayServicesUtil.getErrorDialog(code, getActivity(),
+                REQUEST_CODE_RECOVER_PLAY_SERVICES).show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CODE_RECOVER_PLAY_SERVICES:
+                if (resultCode == Activity.RESULT_CANCELED) {
+                    Toast.makeText(getActivity(), "Google Play Services must be installed.",
+                            Toast.LENGTH_SHORT).show();
+                    getActivity().finish();
+                }
+                return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

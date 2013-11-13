@@ -37,13 +37,14 @@ public class GeoPingApplication extends Application {
     private static final boolean DEVELOPPER_MODE = BuildConfig.DEBUG;
 
     // Cache
-
     private PhotoThumbmailCache photoCache;
 
     // DataBase
     private SmsLogDatabase smsLogDatabase;
     private GeoTrackDatabase geoTrackDatabase;
     // private SecureDatabase secureDatabase;
+
+    private long lastActivityDate = Long.MIN_VALUE;
 
     // ===========================================================
     // Constructors
@@ -263,6 +264,28 @@ public class GeoPingApplication extends Application {
                             .penaltyLog()//
                             .build());
         }
+    }
+
+    // ===========================================================
+    // Login
+    // ===========================================================
+
+    public long getLastActivityDate() {
+        return this.lastActivityDate;
+    }
+
+    public boolean isLastActivityDateRecent() {
+        return this.lastActivityDate;
+    }
+
+
+    public void  setLastActivityDate() {
+        long now = System.currentTimeMillis();
+        setLastActivityDate(now);
+    }
+
+    public void  setLastActivityDate(long date) {
+        this.lastActivityDate = date;
     }
 
     // ===========================================================

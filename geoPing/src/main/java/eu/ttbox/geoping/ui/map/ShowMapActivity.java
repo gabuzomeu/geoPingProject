@@ -1,6 +1,7 @@
 package eu.ttbox.geoping.ui.map;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,7 +21,9 @@ import org.osmdroid.views.overlay.TilesOverlay;
 
 import java.util.ArrayList;
 
+import eu.ttbox.geoping.BuildConfig;
 import eu.ttbox.geoping.R;
+import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.core.VersionUtils;
 import eu.ttbox.geoping.ui.GeoPingSlidingMenuFragmentActivity;
 
@@ -128,15 +131,16 @@ public class ShowMapActivity extends GeoPingSlidingMenuFragmentActivity {
             geofenceMenu.setEnabled(false);
             geofenceAddMenu.setEnabled(false);
             // TODO Display Dialog
-//            Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(statusGooglePlayServices, this, PLAY_ERROR_REQUEST_CODE);
+            Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(statusGooglePlayServices, this, PLAY_ERROR_REQUEST_CODE);
             // If Google Play services can provide an error dialog
-//            if (errorDialog != null) {
-//                ErrorDialogFragment errorFragment = new ErrorDialogFragment();
+            if (errorDialog != null) {
+                errorDialog.show();
+                // ErrorDialogFragment errorFragment = new ErrorDialogFragment();
                 // Set the dialog in the DialogFragment
-//                errorFragment.setDialog(errorDialog);
+                // errorFragment.setDialog(errorDialog);
                 // Show the error dialog in the DialogFragment
-//                errorFragment.show(  getSupportFragmentManager(),  "Geofence Detection");
-//            }
+               //  errorFragment.show(  getSupportFragmentManager(),  "Geofence Detection");
+             }
         }
         if (mapFragment.isGeofenceOverlays()) {
             geofenceMenu.setTitle(R.string.menu_map_geofences_hide);
@@ -244,6 +248,7 @@ public class ShowMapActivity extends GeoPingSlidingMenuFragmentActivity {
         if (intent == null) {
             return;
         }
+
         if (mapFragment != null) {
             mapFragment.handleIntent(intent);
         }

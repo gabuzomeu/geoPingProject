@@ -5,6 +5,7 @@ import android.app.backup.BackupDataInput;
 import android.app.backup.BackupDataOutput;
 import android.app.backup.SharedPreferencesBackupHelper;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.ParcelFileDescriptor;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.util.Log;
 import java.io.IOException;
 
 import eu.ttbox.geoping.R;
+import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.ui.billing.ExtraFeatureHelper;
 
 public class GeoPingBackupAgent extends BackupAgentHelper {
@@ -31,7 +33,7 @@ public class GeoPingBackupAgent extends BackupAgentHelper {
     @Override
     public void onCreate() {
         // Prefs
-        SharedPreferencesBackupHelper helperPrefs = new TestSharedPreferencesBackupHelper(this, PREFS);
+        SharedPreferencesBackupHelper helperPrefs = new TestSharedPreferencesBackupHelper(this, PREFS, AppConstants.PREFS_FILE_LOGIN);
         addHelper(BACKUP_KEY_PREFS, helperPrefs);
         // Database Pairing
         PairingDbBackupHelper helperDbPairing = new PairingDbBackupHelper(this);
@@ -83,9 +85,19 @@ public class GeoPingBackupAgent extends BackupAgentHelper {
         //
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         // Launcher Icon
-        String launcherIconKey = getString(R.string.pkey_launcher_icon);
-        boolean isLauncherIcon = sharedPreferences.getBoolean(launcherIconKey, true);
+        boolean isLauncherIcon = sharedPreferences.getBoolean(getString(R.string.pkey_launcher_icon), true);
         ExtraFeatureHelper.enabledSettingLaucherIcon(getApplicationContext(), isLauncherIcon);
+        // Widget
+        Resources r = getResources();
+        boolean isWidgetActivable = r.getBoolean(R.bool.postHoneycomb);
+        boolean isWidgetListPerson = isWidgetActivable;
+        boolean isWidgetListPairing = isWidgetActivable;
+        if (isWidgetActivable) {
+            isWidgetListPerson = sharedPreferences.getBoolean(getString(R.string.pkey_widget_person_list), isWidgetActivable);
+            isWidgetListPairing = sharedPreferences.getBoolean(getString(R.string.pkey_widget_pairing_list), isWidgetActivable);
+        }
+        ExtraFeatureHelper.enabledSettingPesonListIcon(getApplicationContext(), isWidgetListPerson);
+        ExtraFeatureHelper.enabledSettingPairingListIcon(getApplicationContext(), isWidgetListPairing);
     }
 
 }

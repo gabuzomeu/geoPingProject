@@ -96,10 +96,13 @@ public class LoginActivity extends ActionBarActivity { //
 
     private void handleIntent(Intent intent) {
         String phone = null;
-        Intent wantedIntent = null;
+
         if (intent != null) {
             phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
-            wantedIntent = intent.getParcelableExtra(Intents.EXTRA_INTENT);
+            destIntent = intent.getParcelableExtra(Intents.EXTRA_INTENT);
+            Log.d(TAG, "### Handle intent : " + intent);
+            Intents.printExtras(TAG, intent.getExtras());
+            Log.d(TAG, "### Define wanted intent  : " + destIntent);
         }
         // Define User Id
         if (phone != null) {
@@ -108,8 +111,8 @@ public class LoginActivity extends ActionBarActivity { //
             user = DEFAULT_USER;
         }
         //
-        if (wantedIntent == null) {
-            wantedIntent = new Intent(this, MainActivity.class);
+        if (destIntent == null) {
+            destIntent = new Intent(this, MainActivity.class);
         }
     }
 
@@ -275,7 +278,7 @@ public class LoginActivity extends ActionBarActivity { //
         if (secondsRemaining >= 60l) {
             long s = secondsRemaining % 60;
             long min = (secondsRemaining / 60) % 60;
-            if (secondsRemaining>= 60*60) {
+            if (secondsRemaining >= 60 * 60) {
                 long hour = (secondsRemaining / (60 * 60)) % 24;
 //                msgDisplay = "" + hour + "h " + min + "min " + s + "s";
                 msgDisplay = getString(R.string.kg_too_many_failed_attempts_countdown_hours, hour, min, s);
@@ -283,11 +286,11 @@ public class LoginActivity extends ActionBarActivity { //
             } else {
 //                msgDisplay = ""  + min + "min " + s + "s";
                 msgDisplay = getString(R.string.kg_too_many_failed_attempts_countdown_minutes, min, s);
-                Log.d(TAG, "### Time to finish : "  + min + "min " + s + "s");
+                Log.d(TAG, "### Time to finish : " + min + "min " + s + "s");
             }
 
         } else {
-          //  msgDisplay = "" + secondsRemaining + "s";
+            //  msgDisplay = "" + secondsRemaining + "s";
             msgDisplay = getString(R.string.kg_too_many_failed_attempts_countdown_seconds, secondsRemaining);
             Log.d(TAG, "### Time to finish : " + secondsRemaining + "s");
         }
@@ -341,38 +344,66 @@ public class LoginActivity extends ActionBarActivity { //
     // Prefs Accessors
     // ===========================================================
 
-
-    private void incrementKey(SharedPreferences.Editor prefEditor, int pkeyId, int incCount) {
-        if (incCount != 0) {
-            int previousCount = readPrefInt(pkeyId, 0);
-            int incVal = incCount + previousCount;
-            writePrefInt(prefEditor, pkeyId, incVal);
-            Log.d(TAG, "### Increment " + getString(pkeyId) + " : " + previousCount + " ===> " + incVal);
-        }
+    private int incrementKey(SharedPreferences.Editor prefEditor, int pkeyId, int incCount) {
+        return incrementKey(prefEditor, pkeyId, incCount, true);
     }
 
-    private void writePrefLong(SharedPreferences.Editor prefEditor, int pkeyId, long val) {
-        String key = getPrefKey(pkeyId);
-        prefEditor.putLong(key, val);
+    private int incrementKey(SharedPreferences.Editor prefEditor, int pkeyId, int incCount, boolean perUser) {
+        int afterIncVal = -1;
+        if (incCount != 0) {
+            int previousCount = readPrefInt(pkeyId, 0, perUser);
+            int incVal = incCount + previousCount;
+            writePrefInt(prefEditor, pkeyId, incVal, perUser);
+            Log.d(TAG, "### Increment " + getString(pkeyId, perUser) + " : " + previousCount + " ===> " + incVal);
+            afterIncVal = incVal;
+        }
+        return afterIncVal;
+    }
+
+    // Pref Long
+    private SharedPreferences.Editor writePrefLong(SharedPreferences.Editor prefEditor, int pkeyId, long val) {
+        return writePrefLong(prefEditor, pkeyId, val, true);
+    }
+
+    private SharedPreferences.Editor writePrefLong(SharedPreferences.Editor prefEditor, int pkeyId, long val, boolean perUser) {
+        String key = getPrefKey(pkeyId, perUser);
+        return prefEditor.putLong(key, val);
     }
 
     private long readPrefLong(int pkeyId, long defaultVal) {
-        String key = getPrefKey(pkeyId);
+        return readPrefLong(pkeyId, defaultVal, true);
+    }
+
+    private long readPrefLong(int pkeyId, long defaultVal, boolean perUser) {
+        String key = getPrefKey(pkeyId, perUser);
         return loginPrefs.getLong(key, defaultVal);
     }
 
-    private void writePrefInt(SharedPreferences.Editor prefEditor, int pkeyId, int val) {
-        String key = getPrefKey(pkeyId);
-        prefEditor.putInt(key, val);
+    // Pref Int
+    private SharedPreferences.Editor writePrefInt(SharedPreferences.Editor prefEditor, int pkeyId, int val) {
+        return writePrefInt(prefEditor, pkeyId, val, true);
+    }
+
+    private SharedPreferences.Editor writePrefInt(SharedPreferences.Editor prefEditor, int pkeyId, int val, boolean perUser) {
+        String key = getPrefKey(pkeyId, perUser);
+        return prefEditor.putInt(key, val);
     }
 
     private int readPrefInt(int pkeyId, int defaultVal) {
-        String key = getPrefKey(pkeyId);
+        return readPrefInt(pkeyId, defaultVal, true);
+    }
+
+    private int readPrefInt(int pkeyId, int defaultVal, boolean perUser) {
+        String key = getPrefKey(pkeyId, perUser);
         return loginPrefs.getInt(key, defaultVal);
     }
 
-    private String getPrefKey(int pkeyId) {
-        String key = user + getString(pkeyId);
+    // Pref Key
+    private String getPrefKey(int pkeyId, boolean perUser) {
+        String key = getString(pkeyId);
+        if (perUser) {
+            key = user + key;
+        }
         return key;
     }
 
@@ -476,9 +507,25 @@ public class LoginActivity extends ActionBarActivity { //
         } else {
             mainActivity = destIntent;
         }
+        Log.d(TAG, "### Redirect to Intent : " + mainActivity);
+        // Increment Log
+        int counterInc = markPrefLoginStatus();
         startActivity(mainActivity);
+        if (!AdmobHelper.isAddBlocked(this)) {
+            if (counterInc%20 == 0) {
+                AdmobHelper.displayInterstitialAd(this);
+            }
+        }
         finish();
     }
 
+    private int markPrefLoginStatus() {
+        SharedPreferences.Editor prefEditor = loginPrefs.edit();
+        long now = System.currentTimeMillis();
+        writePrefLong(prefEditor, R.string.pkey_login_success_date, now, false);
+        int incCounter = incrementKey(prefEditor, R.string.pkey_login_success_count, 1, false);
+        prefEditor.commit();
+        return incCounter;
+    }
 
 }

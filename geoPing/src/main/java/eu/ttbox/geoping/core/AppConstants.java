@@ -35,7 +35,7 @@ public class AppConstants {
 
     // ---  Prefs File
     // --------------
-    public static final String PREFS_FILE_LOGIN = "login";
+    public static final String PREFS_FILE_LOGIN = "eu.ttbox.geoping_login";
 
     // ---  Prefs Keys
     // --------------

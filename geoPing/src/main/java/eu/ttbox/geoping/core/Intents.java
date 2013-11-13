@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 
 import eu.ttbox.geoping.BuildConfig;
+import eu.ttbox.geoping.LoginActivity;
 import eu.ttbox.geoping.MainActivity;
 import eu.ttbox.geoping.domain.GeoFenceProvider;
 import eu.ttbox.geoping.domain.PairingProvider;
@@ -81,7 +82,7 @@ public class Intents {
             if (extras != null && !extras.isEmpty()) {
                 for (String key : extras.keySet()) {
                     Object value = extras.get(key);
-                    Log.d(tag, "Bundle extras : " + key + " = " + value);
+                    Log.d(tag, "### Bundle extras : " + key + " = " + value);
                 }
             }
         }
@@ -148,7 +149,7 @@ public class Intents {
     }
 
     public static Intent showLoginPrompt(Context context, Intent destItent) {
-        Intent intent = new Intent(context, ShowMapActivity.class);
+        Intent intent = new Intent(context, LoginActivity.class);
         intent.setAction(Intent.ACTION_VIEW);
         // Extra
         if (destItent!=null) {
