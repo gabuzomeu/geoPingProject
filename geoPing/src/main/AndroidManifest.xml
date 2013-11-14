@@ -286,11 +286,15 @@
             </intent-filter>    
         </receiver> 
 
-        <!-- Resnt Sms Listener -->
-        <receiver android:enabled="false" android:name=".service.receiver.network.ReSentSmsMessageReceiver">
+        <!-- Resend Sms Listener -->
+        <receiver android:enabled="true" android:name=".service.receiver.network.ReSentSmsMessageReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SPN_STRINGS_UPDATED"/>
+            </intent-filter>
+
             <intent-filter android:priority="100">
                 <action android:name="android.provider.Telephony.SMS_SENT"/>
             </intent-filter>

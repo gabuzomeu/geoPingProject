@@ -49,12 +49,12 @@ public class LoginActivity extends ActionBarActivity { //
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        loginPrefs = getSharedPreferences(AppConstants.PREFS_FILE_LOGIN, MODE_PRIVATE);
 
         // Read Parameter
         handleIntent(getIntent());
         // Load Screen
         if (CommandsPrefsHelper.isPassword(this)) {
-            loginPrefs = getSharedPreferences(AppConstants.PREFS_FILE_LOGIN, MODE_PRIVATE);
             // Init Binding
             initBinding();
         } else {
