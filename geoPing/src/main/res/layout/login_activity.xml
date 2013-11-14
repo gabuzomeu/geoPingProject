@@ -17,12 +17,11 @@
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:layout_centerInParent="true"
-       android:src="@drawable/interdiction_loging"/>
+       android:src="@drawable/signboard_stop_login"/>
 
     <TextView android:id="@+id/keyguard_signboard_textview"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:text="sssss"
         android:gravity="center"
         android:layout_centerInParent="true"
         android:layout_above="@id/admob"
