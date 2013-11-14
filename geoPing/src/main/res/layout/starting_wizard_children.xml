@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@android:id/text1"
+        android:text="Profil Enfant"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content" />
+
+
+    <Button
+        android:id="@+id/wizard_new_pairing_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ajouter le Téléphone tracker" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bloquer tous nouveaux tracker" />
+
+    <Button
+        android:id="@+id/wizard_lockpattern_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Password" />
+
+    <Button
+        android:id="@+id/wizard_furtifmode_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mode furtif" />
+
+</LinearLayout>

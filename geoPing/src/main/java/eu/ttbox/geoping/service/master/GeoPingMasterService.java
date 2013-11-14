@@ -78,7 +78,7 @@ public class GeoPingMasterService extends IntentService {
         super.onCreate();
         // service
         this.appPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        this.notifyGeoPingResponse = appPreferences.getBoolean(AppConstants.PREFS_SHOW_GEOPING_NOTIFICATION, false);
+        this.notifyGeoPingResponse = appPreferences.getBoolean(getString(R.string.pkey_shownotif_newparing_default), false);
         // Google Analytics
         EasyTracker.getInstance().setContext(this);
         tracker = EasyTracker.getTracker();

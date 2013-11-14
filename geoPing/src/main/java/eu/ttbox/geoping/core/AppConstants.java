@@ -45,7 +45,7 @@ public class AppConstants {
 
     // Request Notification
     public static final String PREFS_SMS_DELETE_ON_MESSAGE = "smsDeleteOnMessage";
-    public static final String PREFS_SHOW_GEOPING_NOTIFICATION = "showGeopingNotification";
+
     public static final String PREFS_LOCAL_SAVE = "localSave";
     public static final String PREFS_AUTHORIZE_GEOPING_PAIRING = "authorizeNewGeopingPairing";
     
