@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -42,6 +43,8 @@ public class PersonRemoteControlFragment extends Fragment {
     // Bindings
     private SparseArray<Button> buttonsMap;
     private PhotoHeaderBinderHelper photoHeader;
+    private TextView remoteSummmary;
+
     // Cache
     private PhotoThumbmailCache photoCache;
     // ===========================================================
@@ -62,6 +65,7 @@ public class PersonRemoteControlFragment extends Fragment {
         View v = inflater.inflate(R.layout.track_person_remote_control, container, false);
 
         // Binding
+        remoteSummmary = (TextView)v.findViewById(R.id.header_photo_main_name);
         buttonsMap = new SparseArray<Button>(buttonIds.length);
         for (int buttonId : buttonIds) {
             Button localButton = (Button) v.findViewById(buttonId);
@@ -105,6 +109,7 @@ public class PersonRemoteControlFragment extends Fragment {
     public void setEntity(Uri entityUri, String phoneNumber) {
         this.entityUri = entityUri;
         this.entityPhoneNumber = phoneNumber;
+        this.remoteSummmary.setText(getString(R.string.menu_person_remote_control_summary));
         if (!TextUtils.isEmpty(phoneNumber)) {
             setButtonsVisibility(true);
             // Photo

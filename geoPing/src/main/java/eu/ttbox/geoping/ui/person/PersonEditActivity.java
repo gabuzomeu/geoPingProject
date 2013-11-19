@@ -26,7 +26,7 @@ import eu.ttbox.geoping.ui.smslog.SmsLogListFragment;
 public class PersonEditActivity extends ActionBarActivity {
 
     private static final String TAG = "PersonEditActivity";
-
+    private static final String SAVE_KEY_VIEWPAGER_PAGE_COUNT = "viewPagerPageCount";
     // Binding
     private PersonEditFragment editFragment;
     private SmsLogListFragment smsLogFragment;
@@ -73,9 +73,8 @@ public class PersonEditActivity extends ActionBarActivity {
             }
             // Update Ui Tabs
             if (viewPagerPageCount != VIEW_PAGER_LOADPERS_PAGE_COUNT) {
-                viewPagerPageCount = VIEW_PAGER_LOADPERS_PAGE_COUNT;
-                mSectionsPagerAdapter.notifyDataSetChanged();
-            }
+                setViewPagerPageCount (  VIEW_PAGER_LOADPERS_PAGE_COUNT);
+             }
         }
 
     };
@@ -129,6 +128,7 @@ public class PersonEditActivity extends ActionBarActivity {
     protected void onSaveInstanceState(Bundle outState) {
         outState.putString(PersonColumns.COL_ID, personId);
         outState.putString(PersonColumns.COL_PHONE, personPhone);
+        outState.putInt(SAVE_KEY_VIEWPAGER_PAGE_COUNT, viewPagerPageCount);
         super.onSaveInstanceState(outState);
     }
 
@@ -136,9 +136,16 @@ public class PersonEditActivity extends ActionBarActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         personId = savedInstanceState.getString(PersonColumns.COL_ID);
         personPhone = savedInstanceState.getString(PersonColumns.COL_PHONE);
-        super.onRestoreInstanceState(savedInstanceState);
+        setViewPagerPageCount(savedInstanceState.getInt(SAVE_KEY_VIEWPAGER_PAGE_COUNT));
+         super.onRestoreInstanceState(savedInstanceState);
     }
 
+
+
+    private void setViewPagerPageCount(int count) {
+        viewPagerPageCount = count;
+        mSectionsPagerAdapter.notifyDataSetChanged();
+    }
     // ===========================================================
     // Menu
     // ===========================================================
