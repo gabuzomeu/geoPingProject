@@ -90,6 +90,7 @@
     <string name="menu_map_mypositon_hide">Hide my position</string>
     <string name="menu_map_mypositon_show">Show my position</string>
     <string name="menu_map_track_timeline">Time Line</string>
+    <string name="menu_map_minimap">MiniMap</string>
 
     <!-- Prefs -->
     <string name="prefs_sms_category">Monitoring Sms</string>
