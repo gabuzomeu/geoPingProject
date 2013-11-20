@@ -18,11 +18,12 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.internal.view.SupportMenuInflater;
+import android.support.v7.view.ActionMode;
 import android.util.Log;
-import android.view.ActionMode;
-import android.view.Menu;
+
+
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 
 import org.osmdroid.api.IGeoPoint;
@@ -142,13 +143,13 @@ public class GeofenceEditOverlay extends Overlay {
     private ActionMode.Callback mActionModeCallbackAddGeofence = new ActionMode.Callback() {
 
         @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        public boolean   onPrepareActionMode(android.support.v7.view.ActionMode actionMode, android.view.Menu menu) {
             return false;
         }
 
         @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            MenuInflater inflater = mode.getMenuInflater();
+        public boolean onCreateActionMode(android.support.v7.view.ActionMode actionMode, android.view.Menu menu) {
+             MenuInflater inflater = actionMode.getMenuInflater();
 //            mode.setTitle("XXXXXXXX");
             inflater.inflate(R.menu.geofence_mapoverlay_edit_menu, menu);
             //return super.onCreateActionMode(mode, menu);
@@ -156,28 +157,28 @@ public class GeofenceEditOverlay extends Overlay {
         }
 
         @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            Log.d(TAG, "Click onActionItemClicked itemId : " + item.getItemId() + ", " + item);
-            switch (item.getItemId()) {
+        public boolean onActionItemClicked(android.support.v7.view.ActionMode actionMode, android.view.MenuItem menuItem) {
+            Log.d(TAG, "Click onActionItemClicked itemId : " + menuItem.getItemId() + ", " + menuItem);
+            switch (menuItem.getItemId()) {
                 case R.id.menu_save:
                     saveGeofenceOverlayEditor();
-                    mode.finish(); // Action picked, so close the CAB
+                    actionMode.finish(); // Action picked, so close the CAB
                     return true;
                 case R.id.menu_delete:
                     deleteGeofenceOverlayEditor();
-                    mode.finish(); // Action picked, so close the CAB
+                    actionMode.finish(); // Action picked, so close the CAB
                     return true;
                 case R.id.menu_edit:
                     openEditDialog();
                     return true;
                 default:
-                    Log.w(TAG, "Ignore onActionItemClicked itemId : " + item.getItemId() + ", " + item);
+                    Log.w(TAG, "Ignore onActionItemClicked itemId : " + menuItem.getItemId() + ", " + menuItem);
                     return false;
             }
         }
 
         @Override
-        public void onDestroyActionMode(ActionMode mode) {
+        public void onDestroyActionMode(android.support.v7.view.ActionMode actionMode) {
 //            mActionMode = null;
             geofence = null;
             mapView.postInvalidate();

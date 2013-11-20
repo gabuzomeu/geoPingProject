@@ -8,6 +8,8 @@
     <ImageButton
         android:id="@+id/person_list_item_editButton"
         style="@style/entity_list_item"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:focusable="false"

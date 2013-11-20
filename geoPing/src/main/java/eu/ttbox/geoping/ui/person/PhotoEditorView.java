@@ -42,6 +42,8 @@ public class PhotoEditorView extends RelativeLayout // implements Editor
     public static  final int GEOPING_TYPE_TRIANGLE = 1;
     public static  final int GEOPING_TYPE_GEOFENCE = 1;
 
+    public static final int DEFAULT_NO_PHOTO_IMAGE_ID = R.drawable.ic_contact_picture_holo_light;
+
     // Instance
     private ImageView mPhotoImageView;
     private View mFrameView;
@@ -139,7 +141,7 @@ public class PhotoEditorView extends RelativeLayout // implements Editor
 
     protected void resetDefault() {
         // Invalid photo, show default "add photo" place-holder
-        mPhotoImageView.setImageResource(R.drawable.ic_contact_picture_holo_light);
+        mPhotoImageView.setImageResource(DEFAULT_NO_PHOTO_IMAGE_ID);
         mFrameView.setEnabled(!mReadOnly && isEnabled());
         mHasSetPhoto = false;
         // mEntry.setFromTemplate(true);

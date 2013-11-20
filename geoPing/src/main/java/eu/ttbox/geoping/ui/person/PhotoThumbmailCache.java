@@ -126,9 +126,11 @@ public class PhotoThumbmailCache extends LruCache<String, Bitmap> {
             photo = this.get(phone);
         }
         // Set Photo
+
         if (photo != null) {
             photoImageView.setImageBitmap(photo);
         } else if (isContactId || isContactPhone) {
+            photoImageView.setImageResource(PhotoEditorView.DEFAULT_NO_PHOTO_IMAGE_ID);
             // Check Cache
             if (isContactId && noPhotoFor.contains(contactId)) {
                 Log.d(TAG, "Ignore Search, No photo for Contact id : " + contactId);
@@ -190,6 +192,7 @@ public class PhotoThumbmailCache extends LruCache<String, Bitmap> {
         if (photo != null) {
             photoImageView.setValues(photo, true);
         } else if (isContactId || isContactPhone) {
+            photoImageView.setValues(null, true);
             // Check Cache
             if (isContactId && noPhotoFor.contains(contactId)) {
                 Log.d(TAG, "Ignore Search, No photo for Contact id : " + contactId);

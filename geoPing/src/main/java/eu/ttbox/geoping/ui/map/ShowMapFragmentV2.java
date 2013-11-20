@@ -14,6 +14,9 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.view.ActionMode;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -88,8 +91,9 @@ public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferenc
         public void handleMessage(Message msg) {
             if (msg.what == GeofenceEditOverlay.MENU_CONTEXTUAL_EDIT) {
                 Log.i(TAG, "GeofenceEditOverlay MENU CONTEXTUAL EDIT");
-                android.view.ActionMode.Callback actionModeCallBack = geofenceListOverlay.getMenuActionCallback();
-                android.view.ActionMode actionMode = getActivity().startActionMode(actionModeCallBack);
+                ActionMode.Callback actionModeCallBack = geofenceListOverlay.getMenuActionCallback();
+                 ActionBarActivity activity = (ActionBarActivity)getActivity();
+                 ActionMode actionMode = activity.startSupportActionMode(actionModeCallBack);
             }
         }
     };
