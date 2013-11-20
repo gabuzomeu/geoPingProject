@@ -24,6 +24,9 @@ public class PairingEditActivity extends ActionBarActivity {
 
     private static final String TAG = "PairingEditActivity";
 
+    // Status
+    private static final String SAVE_KEY_VIEWPAGER_PAGE_COUNT = "viewPagerPageCount";
+
     // Binding
     private PairingEditFragment editFragment;
     private SmsLogListFragment smsLogFragment;
@@ -110,21 +113,28 @@ public class PairingEditActivity extends ActionBarActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
         if (pairingUri != null) {
             outState.putString(PersonColumns.COL_ID, pairingUri.toString());
             outState.putString(PersonColumns.COL_PHONE, pairingPhone);
         }
+        outState.putInt(SAVE_KEY_VIEWPAGER_PAGE_COUNT, viewPagerPageCount);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         String pariringUriString = savedInstanceState.getString(PersonColumns.COL_ID);
+        setViewPagerPageCount(savedInstanceState.getInt(SAVE_KEY_VIEWPAGER_PAGE_COUNT));
         if (pariringUriString != null) {
             pairingUri = Uri.parse(pariringUriString);
             pairingPhone = savedInstanceState.getString(PersonColumns.COL_PHONE);
         }
+    }
+
+    private void setViewPagerPageCount(int count) {
+        viewPagerPageCount = count;
+        mSectionsPagerAdapter.notifyDataSetChanged();
     }
 
     // ===========================================================

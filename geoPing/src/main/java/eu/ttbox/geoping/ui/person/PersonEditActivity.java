@@ -26,7 +26,10 @@ import eu.ttbox.geoping.ui.smslog.SmsLogListFragment;
 public class PersonEditActivity extends ActionBarActivity {
 
     private static final String TAG = "PersonEditActivity";
+
+    // Status
     private static final String SAVE_KEY_VIEWPAGER_PAGE_COUNT = "viewPagerPageCount";
+
     // Binding
     private PersonEditFragment editFragment;
     private SmsLogListFragment smsLogFragment;

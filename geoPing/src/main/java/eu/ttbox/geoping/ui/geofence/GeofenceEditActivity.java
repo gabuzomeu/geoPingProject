@@ -22,7 +22,10 @@ import eu.ttbox.geoping.ui.smslog.SmsLogListFragment;
 
 public class GeofenceEditActivity extends ActionBarActivity {
 
-        private static final String TAG = "GeofenceEditActivity";
+    private static final String TAG = "GeofenceEditActivity";
+
+    // Status
+    private static final String SAVE_KEY_VIEWPAGER_PAGE_COUNT = "viewPagerPageCount";
 
     // Binding
     private GeofenceEditFragment editFragment;
@@ -169,6 +172,7 @@ public class GeofenceEditActivity extends ActionBarActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putInt(SAVE_KEY_VIEWPAGER_PAGE_COUNT, viewPagerPageCount);
         if (geofenceUri != null) {
             outState.putString(GeoFenceDatabase.GeoFenceColumns.COL_ID, geofenceUri.toString());
             outState.putString(GeoFenceDatabase.GeoFenceColumns.COL_REQUEST_ID, geofenceRequestId);
@@ -179,10 +183,16 @@ public class GeofenceEditActivity extends ActionBarActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         String pariringUriString = savedInstanceState.getString(GeoFenceDatabase.GeoFenceColumns.COL_ID);
+        setViewPagerPageCount(savedInstanceState.getInt(SAVE_KEY_VIEWPAGER_PAGE_COUNT));
         if (pariringUriString != null) {
             geofenceUri = Uri.parse(pariringUriString);
             geofenceRequestId = savedInstanceState.getString(GeoFenceDatabase.GeoFenceColumns.COL_REQUEST_ID);
         }
+    }
+
+    private void setViewPagerPageCount(int count) {
+        viewPagerPageCount = count;
+        mSectionsPagerAdapter.notifyDataSetChanged();
     }
 
 
