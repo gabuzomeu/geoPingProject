@@ -83,6 +83,13 @@ public class ShowMapActivity extends GeoPingSlidingMenuFragmentActivity {
         //  handleIntent(getIntent());
     }
 
+    @Override
+    protected void onPause() {
+        Log.d(TAG, "### ### ### ### ### onPause call ### ### ### ### ###");
+        super.onPause();
+        //  handleIntent(getIntent());
+    }
+
     // ===========================================================
     // Menu
     // ===========================================================
@@ -118,6 +125,7 @@ public class ShowMapActivity extends GeoPingSlidingMenuFragmentActivity {
         // ---------------
         MenuItem miniMapMenu = menu.findItem(R.id.menuMap_minimap);
         boolean isMiniMap = mapFragment.isOverlayMinimap();
+        Log.d(TAG, "onPrepareOptionsMenu isMiniMap : " + isMiniMap);
         miniMapMenu.setChecked(isMiniMap);
 
         // Menu Geofence
@@ -212,7 +220,9 @@ public class ShowMapActivity extends GeoPingSlidingMenuFragmentActivity {
             case R.id.menuMap_minimap: {
                 boolean isChecked = !item.isChecked();
                 item.setChecked(isChecked);
+                mapFragment.printOverlays();
                  mapFragment.addOverlayMinimap(isChecked);
+                mapFragment.printOverlays();
                 return true;
             }
             default: {

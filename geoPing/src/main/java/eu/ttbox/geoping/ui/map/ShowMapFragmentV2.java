@@ -27,8 +27,11 @@ import android.view.animation.AnimationUtils;
 
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.overlay.Overlay;
+import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -92,8 +95,8 @@ public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferenc
             if (msg.what == GeofenceEditOverlay.MENU_CONTEXTUAL_EDIT) {
                 Log.i(TAG, "GeofenceEditOverlay MENU CONTEXTUAL EDIT");
                 ActionMode.Callback actionModeCallBack = geofenceListOverlay.getMenuActionCallback();
-                 ActionBarActivity activity = (ActionBarActivity)getActivity();
-                 ActionMode actionMode = activity.startSupportActionMode(actionModeCallBack);
+                ActionBarActivity activity = (ActionBarActivity) getActivity();
+                ActionMode actionMode = activity.startSupportActionMode(actionModeCallBack);
             }
         }
     };
@@ -124,6 +127,7 @@ public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferenc
 
         // Overlay
         // ----------
+        onRestoreSaveInstanceState(savedInstanceState);
 
         // Map Init Center
         // ----------
@@ -152,7 +156,7 @@ public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferenc
         // Query
         getActivity().getSupportLoaderManager().initLoader(GEOTRACK_PERSON_LOADER, null, geoTrackPersonLoaderCallback);
         // Handle Intents
-       // Call onResume handleIntent(getActivity().getIntent());
+        // Call onResume handleIntent(getActivity().getIntent());
     }
 
 
@@ -170,7 +174,7 @@ public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferenc
     // Life Cycle
     // ===========================================================
     public void handleIntent(Intent intent) {
-         if (intent == null) {
+        if (intent == null) {
             return;
         }
         String action = intent.getAction();
@@ -225,7 +229,7 @@ public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferenc
     @Override
     public void restoreMapPreference(SharedPreferences prefs) {
         super.restoreMapPreference(prefs);
-       // long saveDateInMs = prefs.getLong(eu.ttbox.osm.ui.map.MapConstants.PREFS_SAVE_DATE_IN_MS, -1);
+        // long saveDateInMs = prefs.getLong(eu.ttbox.osm.ui.map.MapConstants.PREFS_SAVE_DATE_IN_MS, -1);
     }
 
     @Override
@@ -238,6 +242,12 @@ public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferenc
         super.onPause();
         // timer.cancel();
     }
+
+
+    // ===========================================================
+    // On save
+    // ===========================================================
+
 
     // ===========================================================
     // Range Listener
@@ -396,7 +406,9 @@ public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferenc
                 rangeTimelineBar.setAbsoluteValues(geotrackRangeMin, geotrackRangeMax);
             }
         }
-    };
+    }
+
+    ;
 
 
     // ===========================================================
@@ -415,7 +427,7 @@ public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferenc
     }
 
     public void centerOnPersonPhone(final String phone, final int latE6, final int lngE6, final int accuracy) {
-        Log.d(TAG, "center OnPersonPhone : " + phone + " with GeoPoint(" + latE6 + ", " + lngE6 +") +/- " + accuracy + "m.");
+        Log.d(TAG, "center OnPersonPhone : " + phone + " with GeoPoint(" + latE6 + ", " + lngE6 + ") +/- " + accuracy + "m.");
         if (myLocation != null) {
             myLocation.disableFollowLocation();
         }
@@ -678,7 +690,7 @@ public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferenc
         }
     }
 
-    ;
+
 
     // ===========================================================
     // Other
