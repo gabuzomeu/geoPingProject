@@ -220,9 +220,7 @@ public class ShowMapActivity extends GeoPingSlidingMenuFragmentActivity {
             case R.id.menuMap_minimap: {
                 boolean isChecked = !item.isChecked();
                 item.setChecked(isChecked);
-                mapFragment.printOverlays();
-                 mapFragment.addOverlayMinimap(isChecked);
-                mapFragment.printOverlays();
+                mapFragment.addOverlayMinimap(isChecked);
                 return true;
             }
             default: {
