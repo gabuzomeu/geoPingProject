@@ -21,7 +21,7 @@ public class ReSentSmsMessageReceiver extends BroadcastReceiver {
 
     static class TelephonyIntents {
         public static final String SPN_STRINGS_UPDATED_ACTION = "android.provider.Telephony.SPN_STRINGS_UPDATED";
-        public static final String EXTRA_PLMN = "plmn";
+        public static final String   EXTRA_PLMN = "plmn";
         public static final String  EXTRA_SHOW_PLMN = "showPlmn";
         public static final String  EXTRA_SHOW_SPN = "showSpn";
         public static final String  EXTRA_SPN = "spn";

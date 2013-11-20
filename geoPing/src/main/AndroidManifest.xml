@@ -281,7 +281,7 @@
         </receiver> 
 
         <!-- Resnt Sms Listener -->
-        <receiver android:enabled="false" android:name=".service.receiver.network.ReSentSmsMessageReceiver">
+        <receiver android:enabled="true" android:name=".service.receiver.network.ReSentSmsMessageReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
