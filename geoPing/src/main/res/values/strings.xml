@@ -72,6 +72,8 @@
     <string name="menu_quit">Quit</string>
     <string name="menu_person">Person</string>
     <string name="menu_person_remote_control">Remote control</string>
+    <string name="menu_person_remote_control_summary">"On the remote phone"</string>
+
     <string name="menu_pairing">Privacy</string>
     <string name="menu_geofence">GeoFence</string>
     <string name="menu_smslog">Log Sms</string>
@@ -88,6 +90,7 @@
     <string name="menu_map_mypositon_hide">Hide my position</string>
     <string name="menu_map_mypositon_show">Show my position</string>
     <string name="menu_map_track_timeline">Time Line</string>
+    <string name="menu_map_minimap">MiniMap</string>
 
     <!-- Prefs -->
     <string name="prefs_sms_category">Monitoring Sms</string>

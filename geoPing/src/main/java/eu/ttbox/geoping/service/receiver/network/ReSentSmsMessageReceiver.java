@@ -25,6 +25,9 @@ public class ReSentSmsMessageReceiver extends BroadcastReceiver {
         public static final String  EXTRA_SHOW_PLMN = "showPlmn";
         public static final String  EXTRA_SHOW_SPN = "showSpn";
         public static final String  EXTRA_SPN = "spn";
+
+        public static final String ACTION_SIGNAL_STRENGTH_CHANGED = "android.intent.action.SIG_STR";
+
     }
 
     @Override
@@ -34,7 +37,7 @@ public class ReSentSmsMessageReceiver extends BroadcastReceiver {
         Log.d(TAG, "### ----------------------------------------- ###");
         Log.d(TAG, "### Phone State Change To :  " + action);
         printExtras(intent.getExtras());
-        Log.d(TAG, "### ----------------------------------------- ###");
+        Log.d(TAG, "### ----------------------------------------- ### \\n");
         if (ConnectivityManager.CONNECTIVITY_ACTION.equals( action)) {
             boolean noConnectivity = intent.getBooleanExtra(  ConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
             if (!noConnectivity) {
@@ -49,6 +52,8 @@ public class ReSentSmsMessageReceiver extends BroadcastReceiver {
         } else if ( TelephonyIntents.SPN_STRINGS_UPDATED_ACTION.equals(action)) {
             CharSequence  mTelephonyPlmn = getTelephonyPlmnFrom(intent);
             CharSequence  mTelephonySpn = getTelephonySpnFrom(intent);
+        } else if ( TelephonyIntents.ACTION_SIGNAL_STRENGTH_CHANGED.equals(action)) {
+
         }
     }
 

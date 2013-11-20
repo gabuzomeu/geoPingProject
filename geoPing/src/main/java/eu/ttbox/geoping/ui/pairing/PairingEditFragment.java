@@ -129,7 +129,8 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
         // Config
-        showNotifDefault = sharedPreferences.getBoolean(AppConstants.PREFS_SHOW_GEOPING_NOTIFICATION, DEFAULT_PREFS_SHOW_GEOPING_NOTIFICATION);
+        String keyPrefsShowNotif = getString(R.string.pkey_shownotif_newparing_default);
+        showNotifDefault = sharedPreferences.getBoolean(keyPrefsShowNotif, DEFAULT_PREFS_SHOW_GEOPING_NOTIFICATION);
 
         // binding
         photoImageView = (PhotoEditorView) v.findViewById(R.id.pairing_photo_imageView);
@@ -261,8 +262,9 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(AppConstants.PREFS_SHOW_GEOPING_NOTIFICATION)) {
-            showNotifDefault = sharedPreferences.getBoolean(AppConstants.PREFS_SHOW_GEOPING_NOTIFICATION, DEFAULT_PREFS_SHOW_GEOPING_NOTIFICATION);
+        String keyPrefsShowNotif = getString(R.string.pkey_shownotif_newparing_default);
+        if (key.equals(keyPrefsShowNotif)) {
+            showNotifDefault = sharedPreferences.getBoolean(keyPrefsShowNotif, DEFAULT_PREFS_SHOW_GEOPING_NOTIFICATION);
         }
     }
 

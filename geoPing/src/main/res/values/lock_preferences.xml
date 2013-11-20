@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-     <!-- Config Keys -->
-     <string name="pkey_create_pattern">pkey.create_pattern</string>
-     <string name="pkey_launcher_icon">pkey.launcher_icon</string>
+    <!-- Security Config Keys -->
+    <string name="pkey_shownotif_newparing_default">showGeopingNotification</string>
+
+    <!-- Security Config Keys -->
+    <string name="pkey_create_pattern">pkey.create_pattern</string>
+    <string name="pkey_launcher_icon">pkey.launcher_icon</string>
 
     <string name="pkey_widget_person_list">pkey.widget_person_list</string>
     <string name="pkey_widget_pairing_list">pkey.widget_pairing_list</string>

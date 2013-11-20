@@ -28,8 +28,7 @@ import eu.ttbox.geoping.core.VersionUtils;
 import eu.ttbox.geoping.ui.GeoPingSlidingMenuFragmentActivity;
 
 /**
- *  @see <a href="http://mobiforge.com/developing/story/using-google-maps-android">using-google-maps-android</a>
- * 
+ * @see <a href="http://mobiforge.com/developing/story/using-google-maps-android">using-google-maps-android</a>
  */
 public class ShowMapActivity extends GeoPingSlidingMenuFragmentActivity {
 
@@ -65,7 +64,6 @@ public class ShowMapActivity extends GeoPingSlidingMenuFragmentActivity {
     }
 
 
-
     @Override
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
@@ -82,7 +80,7 @@ public class ShowMapActivity extends GeoPingSlidingMenuFragmentActivity {
     protected void onResume() {
         Log.d(TAG, "### ### ### ### ### onResume call ### ### ### ### ###");
         super.onResume();
-      //  handleIntent(getIntent());
+        //  handleIntent(getIntent());
     }
 
     // ===========================================================
@@ -107,23 +105,27 @@ public class ShowMapActivity extends GeoPingSlidingMenuFragmentActivity {
 
         // Show My Location
         // ---------------
-        MenuItem myLocationHideMenu = menu.findItem(R.id.menuMap_mypositon_hide );
+        MenuItem myLocationHideMenu = menu.findItem(R.id.menuMap_mypositon_hide);
         if (mapFragment.isOverlayMyLocation()) {
             myLocationHideMenu.setTitle(R.string.menu_map_mypositon_hide);
             myLocationHideMenu.setVisible(true);
-//            myLocationHideMenu.setEnabled(true);
         } else {
             myLocationHideMenu.setTitle(R.string.menu_map_mypositon_show);
             myLocationHideMenu.setVisible(false);
-//            myLocationHideMenu.setEnabled(false);
         }
+
+        // Menu MiniMap
+        // ---------------
+        MenuItem miniMapMenu = menu.findItem(R.id.menuMap_minimap);
+        boolean isMiniMap = mapFragment.isOverlayMinimap();
+        miniMapMenu.setChecked(isMiniMap);
 
         // Menu Geofence
         // ---------------
         MenuItem geofenceAddMenu = menu.findItem(R.id.menuMap_geofence_add);
         MenuItem geofenceMenu = menu.findItem(R.id.menuMap_geofence_list);
-        int  statusGooglePlayServices = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if (ConnectionResult.SUCCESS == statusGooglePlayServices   ) {
+        int statusGooglePlayServices = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (ConnectionResult.SUCCESS == statusGooglePlayServices) {
             geofenceMenu.setEnabled(true);
             geofenceAddMenu.setEnabled(true);
         } else {
@@ -139,8 +141,8 @@ public class ShowMapActivity extends GeoPingSlidingMenuFragmentActivity {
                 // Set the dialog in the DialogFragment
                 // errorFragment.setDialog(errorDialog);
                 // Show the error dialog in the DialogFragment
-               //  errorFragment.show(  getSupportFragmentManager(),  "Geofence Detection");
-             }
+                //  errorFragment.show(  getSupportFragmentManager(),  "Geofence Detection");
+            }
         }
         if (mapFragment.isGeofenceOverlays()) {
             geofenceMenu.setTitle(R.string.menu_map_geofences_hide);
@@ -176,52 +178,60 @@ public class ShowMapActivity extends GeoPingSlidingMenuFragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-        case R.id.menuMap_mypositoncenter: {
-            mapFragment.centerOnMyLocationFix();
-            return true;
-        }
-        case R.id.menuMap_mypositon_hide: {
-            mapFragment.switchOverlayMyLocation();
-            return true;
-        }
-        case R.id.menuMap_track_person: {
-            mapFragment.showSelectPersonDialog();
-            return true;
-        }
-        case R.id.menuMap_track_timeline: {
-            mapFragment.swichRangeTimelineBarVisibility();
-            return true;
-        }
-        case R.id.menuMap_geofence_list: {
-            if (mapFragment.isGeofenceOverlays()) {
-                mapFragment.hideGeofenceOverlays();
-            } else {
-                mapFragment.showGeofenceOverlays();
-            } 
-            return true;
-        }
-        case R.id.menuMap_geofence_add: {
-            mapFragment.addGeofenceOverlayEditor();
-            return true;
-        }
-        default: {
-            // Map click
-            final int menuId = item.getItemId() - MENU_LAST_ID;
-            ArrayList<ITileSource> tiles = mapFragment.getMapViewTileSources();
-            int tileSize = tiles.size();
-            if ((menuId >= TilesOverlay.MENU_TILE_SOURCE_STARTING_ID) && (menuId < TilesOverlay.MENU_TILE_SOURCE_STARTING_ID + tileSize)) {
-                mapFragment.setMapViewTileSource(tiles.get(menuId - TilesOverlay.MENU_TILE_SOURCE_STARTING_ID));
-                // Compatibility
-                if (VersionUtils.isHc11) {
-                    isHc11InvalidateOptionsMenu();
+            case R.id.menuMap_mypositoncenter: {
+                mapFragment.centerOnMyLocationFix();
+                return true;
+            }
+            case R.id.menuMap_mypositon_hide: {
+//                boolean isChecked = !item.isChecked();
+//                item.setChecked(isChecked);
+//                mapFragment.addOverlayMyLocation(isChecked); //
+                mapFragment.switchOverlayMyLocation();
+                return true;
+            }
+            case R.id.menuMap_track_person: {
+                mapFragment.showSelectPersonDialog();
+                return true;
+            }
+            case R.id.menuMap_track_timeline: {
+                mapFragment.swichRangeTimelineBarVisibility();
+                return true;
+            }
+            case R.id.menuMap_geofence_list: {
+                if (mapFragment.isGeofenceOverlays()) {
+                    mapFragment.hideGeofenceOverlays();
+                } else {
+                    mapFragment.showGeofenceOverlays();
                 }
                 return true;
             }
-        }
+            case R.id.menuMap_geofence_add: {
+                mapFragment.addGeofenceOverlayEditor();
+                return true;
+            }
+            case R.id.menuMap_minimap: {
+                boolean isChecked = !item.isChecked();
+                item.setChecked(isChecked);
+                 mapFragment.addOverlayMinimap(isChecked);
+                return true;
+            }
+            default: {
+                // Map click
+                final int menuId = item.getItemId() - MENU_LAST_ID;
+                ArrayList<ITileSource> tiles = mapFragment.getMapViewTileSources();
+                int tileSize = tiles.size();
+                if ((menuId >= TilesOverlay.MENU_TILE_SOURCE_STARTING_ID) && (menuId < TilesOverlay.MENU_TILE_SOURCE_STARTING_ID + tileSize)) {
+                    mapFragment.setMapViewTileSource(tiles.get(menuId - TilesOverlay.MENU_TILE_SOURCE_STARTING_ID));
+                    // Compatibility
+                    if (VersionUtils.isHc11) {
+                        isHc11InvalidateOptionsMenu();
+                    }
+                    return true;
+                }
+            }
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 
     // ===========================================================

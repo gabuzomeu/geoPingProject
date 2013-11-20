@@ -120,14 +120,18 @@ public class CommandsPrefsHelper {
     // ===========================================================
 
     public static boolean startActivityPatternCreate(Activity context) {
-        Intent intentActivity = new Intent(
-                LockPatternActivity.ACTION_CREATE_PATTERN, null, context,
-                LockPatternActivity.class);
-        intentActivity.putExtra(LockPatternActivity.EXTRA_THEME, getThemeForLockPatternActivity(context));
+        Intent intentActivity = getIntentLockPatternCreate(context);
         context
                 .startActivityForResult(intentActivity, REQ_CREATE_PATTERN);
 
         return true;
+    }
+    public static Intent getIntentLockPatternCreate(Context context) {
+        Intent intentActivity = new Intent(
+                LockPatternActivity.ACTION_CREATE_PATTERN, null, context,
+                LockPatternActivity.class);
+        intentActivity.putExtra(LockPatternActivity.EXTRA_THEME, getThemeForLockPatternActivity(context));
+        return intentActivity;
     }
 
     public static boolean startActivityPatternCompare(Activity context, int retryCount) {

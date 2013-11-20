@@ -17,6 +17,7 @@ import android.util.Log;
 
 import eu.ttbox.geoping.LoginActivity;
 import eu.ttbox.geoping.MainActivity;
+import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.PairingProvider;
@@ -83,14 +84,15 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
     }
 
     private void loadPrefConfig() {
-        this.displayGeopingRequestNotification = appPreferences.getBoolean(AppConstants.PREFS_SHOW_GEOPING_NOTIFICATION, false);
+        this.displayGeopingRequestNotification = appPreferences.getBoolean(getString(R.string.pkey_shownotif_newparing_default), false);
         this.authorizeNewPairing = appPreferences.getBoolean(AppConstants.PREFS_AUTHORIZE_GEOPING_PAIRING, true);
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(AppConstants.PREFS_SHOW_GEOPING_NOTIFICATION)) {
-            this.displayGeopingRequestNotification = appPreferences.getBoolean(AppConstants.PREFS_SHOW_GEOPING_NOTIFICATION, false);
+        String keyPrefsShowNotif = getString(R.string.pkey_shownotif_newparing_default);
+        if (key.equals(keyPrefsShowNotif)) {
+            this.displayGeopingRequestNotification = appPreferences.getBoolean(keyPrefsShowNotif, false);
         }
         if (key.equals(AppConstants.PREFS_AUTHORIZE_GEOPING_PAIRING)) {
             this.authorizeNewPairing = appPreferences.getBoolean(AppConstants.PREFS_AUTHORIZE_GEOPING_PAIRING, true);
