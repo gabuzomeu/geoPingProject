@@ -10,8 +10,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
@@ -119,8 +122,7 @@ public class NotificationMasterHelper {
         }
         String contentTitle = MessageActionEnumLabelHelper.getString(context, actionEnum, actionLabelParams);
         // Notification
-        builder //
-                .setDefaults(Notification.DEFAULT_ALL) //
+        builder
                 .setSmallIcon(R.drawable.ic_stat_notif_icon) //
                 .setWhen(System.currentTimeMillis()) //
                 .setAutoCancel(true) //
@@ -128,14 +130,19 @@ public class NotificationMasterHelper {
                 .setDeleteIntent(LogReadHistoryService.createClearLogPendingIntent(context, side, phone, null))
                 .setContentTitle(contentTitle) //
                         // TODO .setContentTitle(getString(R.string.notif_geoping)) //
-                .setContentText(person.contactDisplayName); //
+                .setContentText( person.contactDisplayName); //
+        // Photo
         if (person.photo != null) {
             builder.setLargeIcon(person.photo);
         } else {
             Bitmap icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_stat_notif_icon);
             builder.setLargeIcon(icon);
         }
+        // Alram Type
+        defineSound(builder);
 
+
+        // Read Count
         int msgUnreadCount =  LogReadHistoryService.getReadLogHistory(context, phone, side);
         if (msgUnreadCount > 1) {
           builder.setNumber(msgUnreadCount);
@@ -173,11 +180,27 @@ public class NotificationMasterHelper {
         // Show
         int notifId = getNotificationId(phone);
         Log.d(TAG, String.format("GeoPing Notification Id : %s for phone %s", notifId, phone));
-
         Notification notification = builder.build();
         mNotificationManager.notify(notifId, notification);
     }
 
+
+    private void defineSound(  NotificationCompat.Builder builder) {
+        if (true) {
+            builder.setDefaults(Notification.DEFAULT_VIBRATE);
+            builder.setDefaults(Notification.DEFAULT_LIGHTS);
+         //   builder.setLights(0xFF0000FF, 100, 3000);
+
+            Uri sound = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.tardis);
+            // Uri playingItem = Settings.System.DEFAULT_ALARM_ALERT_URI;
+            builder.setSound(sound , AudioManager.STREAM_ALARM ); //RingtoneManager.TYPE_ALARM
+
+            //  builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
+        } else {
+            builder.setDefaults(Notification.DEFAULT_ALL);
+        }
+
+    }
 
     private int getNotificationId(String  phone) {
         int notifId = SHOW_ON_NOTIFICATION_ID;
