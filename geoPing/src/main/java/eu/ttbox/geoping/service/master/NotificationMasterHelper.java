@@ -181,17 +181,23 @@ public class NotificationMasterHelper {
         int notifId = getNotificationId(phone);
         Log.d(TAG, String.format("GeoPing Notification Id : %s for phone %s", notifId, phone));
         Notification notification = builder.build();
-        mNotificationManager.notify(notifId, notification);
+        if (false) {
+            mNotificationManager.notify(notifId, notification);
+        } else {
+            NotificationAlarmPlayerService.startNotifAlarmService(context, notifId, notification);
+
+        }
+
     }
 
 
     private void defineSound(  NotificationCompat.Builder builder) {
-        if (true) {
+        if (false) {
             builder.setDefaults(Notification.DEFAULT_VIBRATE);
             builder.setDefaults(Notification.DEFAULT_LIGHTS);
          //   builder.setLights(0xFF0000FF, 100, 3000);
 
-            Uri sound = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.tardis);
+            Uri sound = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.notif_alert_alien_siren);
             // Uri playingItem = Settings.System.DEFAULT_ALARM_ALERT_URI;
             builder.setSound(sound , AudioManager.STREAM_ALARM ); //RingtoneManager.TYPE_ALARM
 
@@ -222,5 +228,7 @@ public class NotificationMasterHelper {
         }
         return coordString;
     }
+
+
 
 }
