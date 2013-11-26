@@ -82,10 +82,10 @@
     <string name="menu_settings">Paramètres</string>
     <string name="menu_map">Carte</string>
     <string name="menu_quit">Quitter</string>
-    <string name="menu_person">Personnes</string>
+    <string name="menu_person">Ou es tu?</string>
     <string name="menu_person_remote_control">Télécommande</string>
     <string name="menu_person_remote_control_summary">"Sur le télephone distant"</string>
-    <string name="menu_pairing">Vie privée</string>
+    <string name="menu_pairing">Qui me suit!</string>
     <string name="menu_geofence">Géo Barrière</string>
 
     <string name="menu_smslog">Log Sms</string>

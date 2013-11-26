@@ -70,11 +70,11 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_map">Map</string>
     <string name="menu_quit">Quit</string>
-    <string name="menu_person">Person</string>
+    <string name="menu_person">Where are you?</string>
     <string name="menu_person_remote_control">Remote control</string>
     <string name="menu_person_remote_control_summary">"On the remote phone"</string>
 
-    <string name="menu_pairing">Privacy</string>
+    <string name="menu_pairing">Who follows me!</string>
     <string name="menu_geofence">GeoFence</string>
     <string name="menu_smslog">Log Sms</string>
     <string name="menu_extra_feature">Extra Features</string>
