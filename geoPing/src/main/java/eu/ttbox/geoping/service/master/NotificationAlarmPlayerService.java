@@ -17,6 +17,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.concurrent.Future;
 
+import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
 
@@ -119,6 +120,7 @@ public class NotificationAlarmPlayerService extends Service implements
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "### Alarm Service onStartCommand :  "+ intent );
         handleIntent(intent);
         return START_NOT_STICKY; // Means we started the service, but don't want it to
         // restart in case it's killed.
@@ -132,13 +134,14 @@ public class NotificationAlarmPlayerService extends Service implements
     }
 
     private void handleIntent(Intent intent) {
+        Log.d(TAG, "### Alarm Service handleIntent :  "+ intent );
         String action = intent.getAction();
         Log.i(TAG, "onStartCommand action : " + action);
         if (action.equals(ACTION_PLAY)) {
             int notifId = intent.getIntExtra(EXTRA_NOTIFICATION_ID, NOTIFICATION_ID);
             Notification notification = intent.getParcelableExtra(EXTRA_NOTIFICATION);
             // Holder
-            NotifHolder notif = new NotifHolder(notifId, notification);
+            NotifHolder notif = new NotifHolder(this, notifId, notification);
             processPlayRequest(notif);
         } else if (action.equals(ACTION_PAUSE)) processPauseRequest();
         else if (action.equals(ACTION_STOP)) processStopRequest();
@@ -436,9 +439,11 @@ public class NotificationAlarmPlayerService extends Service implements
         Notification notification;
         Future taskRunning;
 
-        NotifHolder(int notificationId, Notification notification) {
+        NotifHolder(Context context, int notificationId, Notification notification) {
             this.notificationId = notificationId;
             this.notification = notification;
+            // Alarm
+            playingItem = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.notif_alert_alien_siren);
         }
 
         @Override

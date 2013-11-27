@@ -358,7 +358,12 @@
         </service>
         <service android:exported="false" android:name=".service.slave.GeoPingSlaveLocationService"/>
         <service android:exported="false" android:name=".service.master.GeoPingMasterService"/>
-        
+
+        <service android:exported="false" android:name=".service.master.NotificationAlarmPlayerService"/>
+
+
+
+
           <!-- Export contact
         <service android:name=".service.accountsync.AccountAuthenticatorService" android:exported="true" android:process=":auth">
             <intent-filter>
