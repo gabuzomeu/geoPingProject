@@ -139,7 +139,6 @@ public class NotificationMasterHelper {
             builder.setLargeIcon(icon);
         }
         // Alram Type
-        defineSound(builder);
 
 
         // Read Count
@@ -176,6 +175,9 @@ public class NotificationMasterHelper {
             inBoxStyle.setSummaryText(person.contactDisplayName);
             builder.setStyle(inBoxStyle);
         }
+        // Sound
+        defineSound(context,builder);
+
 
         // Show
         int notifId = getNotificationId(phone);
@@ -185,13 +187,12 @@ public class NotificationMasterHelper {
             mNotificationManager.notify(notifId, notification);
         } else {
             NotificationAlarmPlayerService.startNotifAlarmService(context, notifId, notification);
-
         }
 
     }
 
 
-    private void defineSound(  NotificationCompat.Builder builder) {
+    private void defineSound(Context context,   NotificationCompat.Builder builder) {
         if (false) {
             builder.setDefaults(Notification.DEFAULT_VIBRATE);
             builder.setDefaults(Notification.DEFAULT_LIGHTS);
@@ -200,7 +201,6 @@ public class NotificationMasterHelper {
             Uri sound = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.notif_alert_alien_siren);
             // Uri playingItem = Settings.System.DEFAULT_ALARM_ALERT_URI;
             builder.setSound(sound , AudioManager.STREAM_ALARM ); //RingtoneManager.TYPE_ALARM
-
             //  builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
         } else {
             builder.setDefaults(Notification.DEFAULT_ALL);
