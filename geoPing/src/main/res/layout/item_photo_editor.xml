@@ -37,13 +37,14 @@
 
     <ImageView
         android:id="@+id/photo_triangle_affordance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_gravity="bottom"
+        android:visibility="gone"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:src="@drawable/account_spinner_icon" />
+        android:src="@android:drawable/ic_dialog_email" />
 
 </view>
