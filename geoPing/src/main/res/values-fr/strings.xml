@@ -86,7 +86,7 @@
     <string name="menu_person_remote_control">Télécommande</string>
     <string name="menu_person_remote_control_summary">"Sur le télephone distant"</string>
     <string name="menu_pairing">Qui me suit!</string>
-    <string name="menu_geofence">Géo Barrière</string>
+    <string name="menu_geofence">Zone de confiance</string>
 
     <string name="menu_smslog">Log Sms</string>
     <string name="menu_extra_feature">Extra Features</string>

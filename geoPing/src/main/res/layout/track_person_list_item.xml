@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:geoping="http://schemas.android.com/apk/res-auto"
     style="@style/entity_list_item_container"
     android:gravity="center"
     android:orientation="horizontal"
@@ -17,7 +18,6 @@
         android:src="@android:drawable/ic_menu_edit" />
 
     <include
-        xmlns:geoping="http://schemas.android.com/apk/res/eu.ttbox.geoping"
         android:id="@+id/person_list_item_geoping_button"
         style="@style/entity_list_item"
         android:layout_width="48dp"

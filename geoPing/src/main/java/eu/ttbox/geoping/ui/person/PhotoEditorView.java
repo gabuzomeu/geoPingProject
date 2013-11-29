@@ -71,9 +71,9 @@ public class PhotoEditorView extends RelativeLayout // implements Editor
         super(context, attrs, defStyle);
         // Read atrs
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.PhotoEditorView);
-        int geopingType = a.getInteger(R.styleable.PhotoEditorView_geopingType, 0);
+        int geopingType = a.getInt(R.styleable.PhotoEditorView_geopingType, 0);
         a.recycle();
-        Log.w(TAG, "geopingType : " + geopingType); 
+        Log.w(TAG, "#-# geopingType : " + geopingType);
     }
 
     private void initView(Context context){

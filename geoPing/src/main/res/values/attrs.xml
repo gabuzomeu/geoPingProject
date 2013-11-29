@@ -2,7 +2,7 @@
 <resources>
 
     <declare-styleable name="PhotoEditorView">
-         <attr name="geopingType">
+         <attr name="geopingType" format="enum">
             <enum name="request" value="1" />
             <enum name="declaration" value="2" />
         </attr>

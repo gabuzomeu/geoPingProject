@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="62"
-     android:versionName="0.4.0" package="eu.ttbox.geoping">
+    android:installLocation="auto"
+    android:versionName="0.4.0" package="eu.ttbox.geoping">
 
     
     <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="19"/>
@@ -358,7 +359,12 @@
         </service>
         <service android:exported="false" android:name=".service.slave.GeoPingSlaveLocationService"/>
         <service android:exported="false" android:name=".service.master.GeoPingMasterService"/>
-        
+
+        <service android:exported="false" android:name=".service.master.NotificationAlarmPlayerService"/>
+
+
+
+
           <!-- Export contact
         <service android:name=".service.accountsync.AccountAuthenticatorService" android:exported="true" android:process=":auth">
             <intent-filter>
