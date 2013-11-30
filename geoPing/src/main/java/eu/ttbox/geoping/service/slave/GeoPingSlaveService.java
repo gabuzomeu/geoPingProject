@@ -506,7 +506,7 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
     // ===========================================================
 
     @Deprecated
-    private void showGeopingRequestNotification(Pairing pairing, Bundle params, boolean authorizeIt) {
+     private void showGeopingRequestNotification(Pairing pairing, Bundle params, boolean authorizeIt) {
         NotificationSlaveHelper notif = new NotificationSlaveHelper(this);
         notif.showGeopingRequestNotification(pairing, params, authorizeIt);
     }
