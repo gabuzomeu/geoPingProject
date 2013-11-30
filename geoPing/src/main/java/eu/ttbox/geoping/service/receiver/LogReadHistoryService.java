@@ -63,7 +63,7 @@ public class LogReadHistoryService extends IntentService {
         }
         // Redirect Intent
         if (wantedIntent != null) {
-            readAction.putExtra(Intents.EXTRA_INTENT, wantedIntent);
+            readAction.putExtra(Intents.EXTRA_INTENT_ACTIVITY, wantedIntent);
             requestCode += wantedIntent.hashCode();
         }
         Uri searchUri = SmsLogProvider.Constants.CONTENT_URI;
@@ -97,7 +97,7 @@ public class LogReadHistoryService extends IntentService {
                 markAsToReadLog(this, logUri, Boolean.FALSE, side);
             }
             // Show Notification
-            Intent serviceIntent = intent.getParcelableExtra(Intents.EXTRA_INTENT);
+            Intent serviceIntent = intent.getParcelableExtra(Intents.EXTRA_INTENT_ACTIVITY);
             Log.d(TAG, "### serviceIntent : " + serviceIntent);
             if (serviceIntent != null) {
                 TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);

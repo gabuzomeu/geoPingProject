@@ -345,7 +345,7 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
         // Read Intent
         String phone = extras.getString(Intents.EXTRA_SMS_PHONE);
         Bundle config = extras.getBundle(Intents.EXTRA_SMS_PARAMS);
-        Intent enventIntent = extras.getParcelable(Intents.EXTRA_INTENT);
+        Intent enventIntent = extras.getParcelable(Intents.EXTRA_INTENT_ACTIVITY);
         long personId = MessageEncoderHelper.readLong(config, MessageParamEnum.PERSON_ID, -1l);
         GeopingNotifSlaveTypeEnum notifType = GeopingNotifSlaveTypeEnum.getByOrdinal(extras.getInt(Intents.EXTRA_NOTIFICATION_TYPE_ENUM_ORDINAL, -1));
         AuthorizePhoneTypeEnum type = AuthorizePhoneTypeEnum.getByOrdinal(extras.getInt(Intents.EXTRA_AUTHORIZE_PHONE_TYPE_ENUM_ORDINAL));

@@ -19,7 +19,7 @@ import java.util.concurrent.Future;
 
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
-import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
+import eu.ttbox.geoping.service.receiver.player.AlarmPlayerService;
 
 /**
  * com.example.android.musicplayer.MusicService
@@ -91,6 +91,14 @@ public class NotificationAlarmPlayerService extends Service implements
         context.startService(intent);
     }
 
+    public static Intent createStopAlarmIntent(Context context, Intent wrappedIntent) {
+        Intent stopIntent = new Intent(context, NotificationAlarmPlayerService.class);
+        stopIntent.setAction(AlarmPlayerService.ACTION_STOP);
+        if (wrappedIntent!=null) {
+            stopIntent.putExtra( Intents.EXTRA_INTENT_ACTIVITY, wrappedIntent );
+        }
+        return stopIntent;
+    }
     // ===========================================================
     // Constructors
     // ===========================================================
@@ -137,6 +145,14 @@ public class NotificationAlarmPlayerService extends Service implements
         Log.d(TAG, "### Alarm Service handleIntent :  "+ intent );
         String action = intent.getAction();
         Log.i(TAG, "onStartCommand action : " + action);
+        // Manage Wrapped Instance
+        if (intent.hasExtra(Intents.EXTRA_INTENT_ACTIVITY)) {
+            Intent wrappedIntent = intent.getParcelableExtra(Intents.EXTRA_INTENT_ACTIVITY);
+            if (wrappedIntent!=null) {
+
+            }
+        }
+        // Manage Alarm Intent
         if (action.equals(ACTION_PLAY)) {
             int notifId = intent.getIntExtra(EXTRA_NOTIFICATION_ID, NOTIFICATION_ID);
             Notification notification = intent.getParcelableExtra(EXTRA_NOTIFICATION);

@@ -99,7 +99,7 @@ public class LoginActivity extends ActionBarActivity { //
 
         if (intent != null) {
             phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
-            destIntent = intent.getParcelableExtra(Intents.EXTRA_INTENT);
+            destIntent = intent.getParcelableExtra(Intents.EXTRA_INTENT_ACTIVITY);
             Log.d(TAG, "### Handle intent : " + intent);
             Intents.printExtras(TAG, intent.getExtras());
             Log.d(TAG, "### Define wanted intent  : " + destIntent);
@@ -127,7 +127,7 @@ public class LoginActivity extends ActionBarActivity { //
         super.onSaveInstanceState(outState);
         outState.putString(Intents.EXTRA_PERSON_ID, user);
         if (destIntent != null) {
-            outState.putParcelable(Intents.EXTRA_INTENT, destIntent);
+            outState.putParcelable(Intents.EXTRA_INTENT_ACTIVITY, destIntent);
         }
     }
 
@@ -135,7 +135,7 @@ public class LoginActivity extends ActionBarActivity { //
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         user = savedInstanceState.getString(Intents.EXTRA_PERSON_ID);
-        Intent savIntent = savedInstanceState.getParcelable(Intents.EXTRA_INTENT);
+        Intent savIntent = savedInstanceState.getParcelable(Intents.EXTRA_INTENT_ACTIVITY);
         if (savIntent != null) {
             destIntent = savIntent;
         }

@@ -60,7 +60,8 @@ public class Intents {
 
     public static final String EXTRA_SMSLOG_URI = "EXTRA_SMSLOG_URI";
     public static final String EXTRA_SMSLOG_SIDE_DBCODE = "EXTRA_SMSLOG_SIDE_DBCODE";
-    public static final String EXTRA_INTENT = "EXTRA_INTENT";
+    public static final String EXTRA_INTENT_ACTIVITY = "EXTRA_INTENT_ACTIVITY";
+    public static final String EXTRA_INTENT_SERVICE = "EXTRA_INTENT_SERVICE";
 
 //	public static final String EXTRA_INTERNAL_BOOL = "EXTRA_INTERNAL_BOOL";
 
@@ -68,6 +69,29 @@ public class Intents {
 
     public static final String EXTRA_EXPECTED_ACCURACY = "EXPECTED_ACCURACY";
 
+    public static boolean startWrappedIntent(Context context, Intent intent) {
+        boolean started = false;
+        if (intent!=null) {
+            // Start Service
+            if (intent.hasExtra(EXTRA_INTENT_SERVICE)) {
+                Intent wrapIntent = intent.getParcelableExtra(EXTRA_INTENT_SERVICE);
+                if (wrapIntent!=null) {
+                    context.startService(wrapIntent);
+                    started = true;
+                }
+            }
+
+            // Start Activity
+            if (intent.hasExtra(EXTRA_INTENT_ACTIVITY)) {
+                Intent wrapIntent = intent.getParcelableExtra(EXTRA_INTENT_ACTIVITY);
+                if (wrapIntent!=null) {
+                    context.startActivity(wrapIntent);
+                    started = true;
+                }
+            }
+        }
+        return started;
+    }
     //
     public static void printExtras(String tag, Intent intent) {
         if (BuildConfig.DEBUG) {
@@ -153,7 +177,7 @@ public class Intents {
         intent.setAction(Intent.ACTION_VIEW);
         // Extra
         if (destItent!=null) {
-            intent.putExtra(EXTRA_INTENT, destItent);
+            intent.putExtra(EXTRA_INTENT_ACTIVITY, destItent);
             String phone = destItent.getStringExtra(EXTRA_SMS_PHONE);
             if (phone !=null) {
                 intent.putExtra(EXTRA_SMS_PHONE, phone);
@@ -262,7 +286,7 @@ public class Intents {
         intent.setData(Uri.parse("AuthorizePhoneTypeEnum:" + authorizePhoneType.name()));
         intent.setAction(ACTION_SLAVE_GEOPING_PHONE_AUTHORIZE);
         intent.putExtra(EXTRA_SMS_PHONE, phone);
-        intent.putExtra(EXTRA_INTENT, sourceIntent);
+        intent.putExtra(EXTRA_INTENT_ACTIVITY, sourceIntent);
         intent.putExtra(EXTRA_NOTIFICATION_TYPE_ENUM_ORDINAL, notifType.ordinal());
         intent.putExtra(EXTRA_NOTIF_ID, notificationId);
         intent.putExtra(EXTRA_AUTHORIZE_PHONE_TYPE_ENUM_ORDINAL, authorizePhoneType.ordinal());
