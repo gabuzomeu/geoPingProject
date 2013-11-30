@@ -78,18 +78,16 @@ public class NotificationSlaveHelper {
         }
 
         // Notification Count
-        PendingIntent contentIntent = null;
-        PendingIntent deleteIntent = null;
+        String searchPhone = showNotificationByPerson ? phone : null;
+        // Mark as read  Action
+        PendingIntent contentIntent = LogReadHistoryService.createClearLogPendingIntent(context, side, searchPhone, null);
+        PendingIntent deleteIntent = LogReadHistoryService.createClearLogPendingIntent(context, side, searchPhone, null, 10);
+        builder.setContentIntent(contentIntent);
+        builder.setDeleteIntent(deleteIntent);
+        // Set counter
         if (pairing.showNotification) {
-            String searchPhone = showNotificationByPerson ? phone : null;
             int msgUnreadCount =  LogReadHistoryService.getReadLogHistory(context, searchPhone, side);
             if (msgUnreadCount > 1) {
-                // Mark as read  Action
-                contentIntent =LogReadHistoryService.createClearLogPendingIntent(context, side, searchPhone, null);
-                builder.setContentIntent(contentIntent);
-                deleteIntent= LogReadHistoryService.createClearLogPendingIntent(context, side, searchPhone, null, 10);
-                builder.setDeleteIntent(deleteIntent);
-                // Ser counter
                 builder.setNumber(msgUnreadCount);
             }
         }

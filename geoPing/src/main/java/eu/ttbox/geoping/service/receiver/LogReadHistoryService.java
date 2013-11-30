@@ -54,6 +54,7 @@ public class LogReadHistoryService extends IntentService {
     public static PendingIntent createClearLogPendingIntent(Context context, SmsLogSideEnum side, String phone
             , Intent wantedIntent, int baseRequestCode) {
         Intent readAction = new Intent(context, LogReadHistoryService.class);
+     //   readAction.setPackage(context.getPackageName());
         readAction.setAction(ACTION_SMSLOG_MARK_AS_READ);
         // Filter Log
         int requestCode = baseRequestCode;
