@@ -224,6 +224,7 @@ public class Intents {
     @SuppressLint("NewApi")
     private static void startActivityWithTransitionBundle(Context context, Intent intent, View v) {
         if (VersionUtils.isJb16) {
+            // if (v!=null) {
             // Bundle translateBundle =
             // ActivityOptions.makeCustomAnimation(context,
             // R.anim.slide_in_left, R.anim.slide_out_left).toBundle();
@@ -231,6 +232,7 @@ public class Intents {
             // ActivityOptions.makeScaleUpAnimation(v,0,0, v.getWidth(),
             // v.getHeight() ).toBundle();
             // context.startActivity(intent, translateBundle);
+            // } else {
             context.startActivity(intent);
         } else {
             context.startActivity(intent);

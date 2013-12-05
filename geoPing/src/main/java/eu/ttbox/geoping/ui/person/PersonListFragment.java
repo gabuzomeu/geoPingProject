@@ -154,6 +154,7 @@ public class PersonListFragment extends Fragment {
             Cursor cursor = (Cursor) lv.getItemAtPosition(acmi.position);
             PersonHelper helper = new PersonHelper().initWrapper(cursor);
             menu.add(Menu.NONE, R.id.menu_gcm_message, Menu.NONE, R.string.menu_geoping);
+            menu.add(Menu.NONE, R.id.menuMap, Menu.NONE, R.string.menu_map);
             menu.add(Menu.NONE, R.id.menu_edit, Menu.NONE, R.string.menu_edit);
             menu.add(Menu.NONE, R.id.menu_delete, Menu.NONE, R.string.menu_delete);
             //
@@ -180,6 +181,12 @@ public class PersonListFragment extends Fragment {
                 getActivity().startService(Intents.sendSmsGeoPingRequest(getActivity(), phoneNumber));
             }
             return true;
+            case R.id.menuMap: {
+                long personId = helper.getPersonId(cursor);
+                String phoneNumber = helper.getPersonPhone(cursor);
+                Intents.startActivityShowOnMapPerson(listView, getActivity(), personId, phoneNumber);
+            }
+            return true;
             case R.id.menu_edit: {
                 String entityId = helper.getPersonIdAsString(cursor);
                 onEditEntityClick(entityId);
@@ -187,6 +194,8 @@ public class PersonListFragment extends Fragment {
             return true;
             case R.id.menu_delete: {
                 // TODO https://www.timroes.de/2013/09/23/enhancedlistview-swipe-to-dismiss-with-undo/
+                // https://github.com/timroes/EnhancedListView/blob/master/EnhancedListView/src/main/res/layout/undo_popup.xml
+                //
                 // TODO https://code.google.com/p/romannurik-code/source/browse/misc/undobar/src/com/example/android/undobar/UndoBarController.java
                 // TODO https://android.googlesource.com/platform/developers/samples/android/+/master/ui/actionbar/DoneBar/DoneBar/src/main/java/com/example/android/donebar/DoneBarActivity.java
                 String entityId = helper.getPersonIdAsString(cursor);
