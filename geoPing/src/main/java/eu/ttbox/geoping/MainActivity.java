@@ -1,6 +1,5 @@
 package eu.ttbox.geoping;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -128,14 +127,18 @@ public class MainActivity extends GeoPingSlidingMenuFragmentActivity { //
         mShareActionProvider = ( ShareActionProvider) MenuItemCompat.getActionProvider(itemShare);
         // Share Intent
 
-        mShareActionProvider.setShareIntent(createShareIntent(this));
+        mShareActionProvider.setShareIntent(createShareIntent());
         return super.onCreateOptionsMenu(menu);
     }
 
-    private Intent createShareIntent(Context context) {
+    /**
+     * http://android-developers.blogspot.fr/2013/08/actionbarcompat-and-io-2013-app-source.html
+     * @return
+     */
+    private Intent createShareIntent() {
         Intent shareAppIntent = new Intent(Intent.ACTION_SEND);
         shareAppIntent.setType("text/plain");
-        shareAppIntent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.share_app_subject));
+        shareAppIntent.putExtra(Intent.EXTRA_SUBJECT,  getString(R.string.share_app_subject));
         // shareAppIntent.putExtra(Intent.EXTRA_TEXT,
         // "geoPing://pairing?id=eu.ttbox.geoping");
         shareAppIntent.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=eu.ttbox.geoping");

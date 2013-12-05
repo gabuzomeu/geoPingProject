@@ -13,8 +13,6 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.analytics.tracking.android.EasyTracker;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;

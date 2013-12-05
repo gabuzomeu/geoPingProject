@@ -18,11 +18,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.internal.view.SupportMenuInflater;
 import android.support.v7.view.ActionMode;
 import android.util.Log;
-
-
 import android.view.MenuInflater;
 import android.view.MotionEvent;
 

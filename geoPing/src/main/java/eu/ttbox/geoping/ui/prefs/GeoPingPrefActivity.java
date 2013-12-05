@@ -28,9 +28,9 @@ import java.util.List;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.NotifToasts;
 import eu.ttbox.geoping.core.VersionUtils;
+import eu.ttbox.geoping.ui.prefs.comp.version.AppVersionPreference;
 import eu.ttbox.geoping.ui.prefs.lock.core.CommandsPrefsHelper;
 import eu.ttbox.geoping.ui.prefs.lock.core.PreferenceHolder;
-import eu.ttbox.geoping.ui.prefs.comp.version.AppVersionPreference;
 import group.pals.android.lib.ui.lockpattern.LockPatternActivity;
 import group.pals.android.lib.ui.lockpattern.prefs.SecurityPrefs;
 

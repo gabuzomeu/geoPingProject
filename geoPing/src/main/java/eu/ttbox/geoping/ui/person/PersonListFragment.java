@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -11,13 +12,17 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
@@ -108,7 +113,7 @@ public class PersonListFragment extends Fragment {
 		// listView.setEmptyView(emptyListView);
 		Log.d(TAG, "Binding end");
 		// Intents
-
+        registerForContextMenu(listView);
 		return v;
 	}
 
@@ -134,7 +139,66 @@ public class PersonListFragment extends Fragment {
 		startActivityForResult(intent, EDIT_ENTITY);
 	}
 
-	// ===========================================================
+
+    // ===========================================================
+    // List Popup Menu
+    // ===========================================================
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        if (v.getId() == android.R.id.list) {
+            ListView lv = (ListView) v;
+            AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;
+
+            Cursor cursor = (Cursor) lv.getItemAtPosition(acmi.position);
+            PersonHelper helper = new PersonHelper().initWrapper(cursor);
+             menu.add(Menu.NONE, R.id.menu_gcm_message, Menu.NONE, R.string.menu_geoping);
+            menu.add(Menu.NONE, R.id.menu_edit, Menu.NONE, R.string.menu_edit);
+            menu.add(Menu.NONE, R.id.menu_delete, Menu.NONE, R.string.menu_delete);
+            //
+            String titleMenu = helper.getPersonDisplayName(cursor);
+            if (titleMenu==null) {
+                titleMenu =  helper.getPersonPhone(cursor);
+            }
+            menu.setHeaderTitle(titleMenu);
+
+        }
+        super.onCreateContextMenu(menu, v , menuInfo);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
+                .getMenuInfo();
+        Cursor cursor = (Cursor) listView.getItemAtPosition(info.position);
+        PersonHelper helper = new PersonHelper().initWrapper(cursor);
+        //TODO implement menu
+        switch (item.getItemId()) {
+            case R.id.menu_gcm_message: {
+                String phoneNumber = helper.getPersonPhone(cursor);
+                getActivity().startService(Intents.sendSmsGeoPingRequest(getActivity(), phoneNumber));
+            }
+            return true;
+            case R.id.menu_edit: {
+                String entityId = helper.getPersonIdAsString(cursor);
+                onEditEntityClick(entityId);
+             }
+                return true;
+            case R.id.menu_delete: {
+                // TODO https://www.timroes.de/2013/09/23/enhancedlistview-swipe-to-dismiss-with-undo/
+                // TODO https://code.google.com/p/romannurik-code/source/browse/misc/undobar/src/com/example/android/undobar/UndoBarController.java
+                // TODO https://android.googlesource.com/platform/developers/samples/android/+/master/ui/actionbar/DoneBar/DoneBar/src/main/java/com/example/android/donebar/DoneBarActivity.java
+                String entityId = helper.getPersonIdAsString(cursor);
+                Uri entityUri = Uri.withAppendedPath(PersonProvider.Constants.CONTENT_URI, entityId);
+                int deleteCount = getActivity().getContentResolver().delete(entityUri, null, null);
+            }
+                return true;
+             default:
+                return super.onContextItemSelected(item);
+        }
+
+    }
+    // ===========================================================
 	// Accessors
 	// ===========================================================
 

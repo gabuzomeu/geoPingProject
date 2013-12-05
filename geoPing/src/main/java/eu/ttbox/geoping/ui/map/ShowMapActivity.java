@@ -21,9 +21,7 @@ import org.osmdroid.views.overlay.TilesOverlay;
 
 import java.util.ArrayList;
 
-import eu.ttbox.geoping.BuildConfig;
 import eu.ttbox.geoping.R;
-import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.core.VersionUtils;
 import eu.ttbox.geoping.ui.GeoPingSlidingMenuFragmentActivity;
 

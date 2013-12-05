@@ -146,12 +146,7 @@ public class NotificationAlarmPlayerService extends Service implements
         String action = intent.getAction();
         Log.i(TAG, "onStartCommand action : " + action);
         // Manage Wrapped Instance
-        if (intent.hasExtra(Intents.EXTRA_INTENT_ACTIVITY)) {
-            Intent wrappedIntent = intent.getParcelableExtra(Intents.EXTRA_INTENT_ACTIVITY);
-            if (wrappedIntent!=null) {
-
-            }
-        }
+        Intents.startWrappedIntent(getApplicationContext(), intent);
         // Manage Alarm Intent
         if (action.equals(ACTION_PLAY)) {
             int notifId = intent.getIntExtra(EXTRA_NOTIFICATION_ID, NOTIFICATION_ID);
