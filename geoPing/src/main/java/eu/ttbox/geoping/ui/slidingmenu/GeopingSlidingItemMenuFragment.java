@@ -36,7 +36,7 @@ import eu.ttbox.geoping.core.VersionUtils;
 import eu.ttbox.geoping.domain.PersonProvider;
 import eu.ttbox.geoping.domain.person.PersonDatabase.PersonColumns;
 import eu.ttbox.geoping.domain.person.PersonHelper;
-import eu.ttbox.geoping.ui.Gcm.GcmActivity;
+import eu.ttbox.geoping.ui.gcm.GcmActivity;
 import eu.ttbox.geoping.ui.billing.ExtraFeaturesActivity;
 import eu.ttbox.geoping.ui.geofence.GeofenceListActivity;
 import eu.ttbox.geoping.ui.map.ShowMapActivity;

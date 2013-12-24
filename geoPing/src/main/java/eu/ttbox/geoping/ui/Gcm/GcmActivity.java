@@ -1,4 +1,4 @@
-package eu.ttbox.geoping.ui.Gcm;
+package eu.ttbox.geoping.ui.gcm;
 
 
 import android.app.Activity;

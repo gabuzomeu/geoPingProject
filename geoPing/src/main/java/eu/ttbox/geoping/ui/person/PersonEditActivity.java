@@ -244,7 +244,8 @@ public class PersonEditActivity extends ActionBarActivity {
                         Bundle args = new Bundle();
                         args.putString(eu.ttbox.geoping.ui.smslog.SmsLogListFragment.Intents.EXTRA_SMS_PHONE, personPhone);
                         args.putInt(eu.ttbox.geoping.ui.smslog.SmsLogListFragment.Intents.EXTRA_SIDE_DBCODE, SmsLogSideEnum.MASTER.getDbCode());
-                        smsLogFragment = new SmsLogListFragment(false);
+                        args.putBoolean(SmsLogListFragment.Intents.EXTRA_DISPLAY_CONTACT_DETAIL, false);
+                        smsLogFragment = new SmsLogListFragment();
                         smsLogFragment.setArguments(args);
                     }
                     fragment = smsLogFragment;
@@ -262,11 +263,11 @@ public class PersonEditActivity extends ActionBarActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case PERSON:
-                    return getString(R.string.menu_person).toUpperCase();
+                    return getString(R.string.menu_person);//.toUpperCase(Locale.getDefault());
                 case REMOTE_CONTROL:
-                    return getString(R.string.menu_person_remote_control).toUpperCase();
+                    return getString(R.string.menu_person_remote_control);//.toUpperCase(Locale.getDefault());
                 case LOG:
-                    return getString(R.string.menu_smslog).toUpperCase();
+                    return getString(R.string.menu_smslog);//.toUpperCase(Locale.getDefault());
             }
             return null;
         }

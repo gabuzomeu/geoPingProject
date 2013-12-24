@@ -1,9 +1,11 @@
 package eu.ttbox.geoping.domain.core;
 
+import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.os.Build;
 import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -124,6 +126,7 @@ public class UpgradeDbHelper {
         values.put(colName, value);
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private static void readCursorColumnToContentValuesForHoneyComb(  Cursor cursor, ContentValues values , String colName) {
         int colIdx =  cursor.getColumnIndex(colName);
         switch (cursor.getType(colIdx)) {

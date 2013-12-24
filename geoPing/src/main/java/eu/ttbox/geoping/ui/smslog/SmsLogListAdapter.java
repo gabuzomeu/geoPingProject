@@ -54,6 +54,10 @@ public class SmsLogListAdapter extends android.support.v4.widget.ResourceCursorA
         this.cacheNameFinder = new PersonNameFinderHelper(mContext, isDisplayPhoneAndName);
     }
 
+    public void setDisplayContactDetail(boolean isDisplayContactDetail) {
+        this.isDisplayContactDetail = isDisplayContactDetail;
+    }
+
     private void intViewBinding(View view, Context context, Cursor cursor) {
         // Init Cursor
         helper = new SmsLogHelper().initWrapper(cursor);

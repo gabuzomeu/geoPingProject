@@ -14,6 +14,8 @@ import android.view.MenuItem;
 
 import com.google.analytics.tracking.android.EasyTracker;
 
+import java.util.Locale;
+
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.model.CircleGeofence;
@@ -285,11 +287,11 @@ public class GeofenceEditActivity extends ActionBarActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
             case GEOFENCE:
-                return getString(R.string.menu_geofence).toUpperCase();
+                return getString(R.string.menu_geofence);//.toUpperCase(Locale.getDefault());
             case GEOFENCE_MAP:
-                return getString(R.string.menu_map).toUpperCase();
+                return getString(R.string.menu_map);//.toUpperCase(Locale.getDefault());
             case GEOFENCE_LOG:
-                return getString(R.string.menu_smslog).toUpperCase();
+                return getString(R.string.menu_smslog);//.toUpperCase(Locale.getDefault());
             }
             return null;
         }

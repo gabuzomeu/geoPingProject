@@ -40,7 +40,6 @@
 <!--         android:width="20dp" /> -->
 
         <include
-            xmlns:geoping="http://schemas.android.com/apk/res/eu.ttbox.geoping"
             android:id="@+id/person_list_item_geoping_button"
             style="@style/entity_list_item"
             android:layout_width="48dp"
@@ -49,7 +48,6 @@
             android:layout_centerVertical="true"
             layout="@layout/item_photo_editor"
             android:minWidth="60dip" 
-            android:text="@string/geoping"
-            geoping:geopingType="request" />
+            android:text="@string/geoping"  />
     
 </RelativeLayout>

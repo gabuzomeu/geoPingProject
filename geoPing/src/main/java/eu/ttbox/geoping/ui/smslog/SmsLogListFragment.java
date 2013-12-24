@@ -49,6 +49,7 @@ public class SmsLogListFragment extends Fragment {
         public static final String EXTRA_GEOFENCE_REQUEST_ID = "eu.ttbox.geoping.core.Intents.EXTRA_GEOFENCE_REQUEST_ID";
         public static final String EXTRA_INOUT_GOING_TYPE = "EXTRA_INOUT_GOING_TYPE";
         public static final String EXTRA_SIDE_DBCODE = "EXTRA_SIDE_DBCODE";
+        public static final String EXTRA_DISPLAY_CONTACT_DETAIL = "EXTRA_DISPLAY_CONTACT_DETAIL";
     }
 
     // init
@@ -72,10 +73,6 @@ public class SmsLogListFragment extends Fragment {
         super();
     }
 
-    public SmsLogListFragment( boolean isDisplayContactDetail ) {
-        super();
-        this.isDisplayContactDetail = isDisplayContactDetail;
-    }
 
     @Override
     public void onInflate(android.app.Activity activity, AttributeSet attrs, Bundle savedInstanceState) {
@@ -169,11 +166,23 @@ public class SmsLogListFragment extends Fragment {
     // Loader
     // ===========================================================
 
+    private void readConfigArguments() {
+        Bundle args = getArguments();
+        if (args!=null) {
+            this.isDisplayContactDetail = args.getBoolean(Intents.EXTRA_DISPLAY_CONTACT_DETAIL, true);
+            if (listAdapter!=null) {
+                listAdapter.setDisplayContactDetail(this.isDisplayContactDetail);
+            }
+        }
+
+    }
+
     private final LoaderManager.LoaderCallbacks<Cursor> smsLogLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
 
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             Log.d(TAG, "onCreateLoader");
+            readConfigArguments();
             String sortOrder = SmsLogDatabase.SMSLOG_SORT_DEFAULT;
             String selection = null;
             String[] selectionArgs = null;

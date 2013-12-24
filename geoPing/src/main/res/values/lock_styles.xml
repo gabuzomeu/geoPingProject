@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources >
 
     <style name="Theme.Dark" parent="@style/Alp.Theme.Dark">
         <item name="android:background">@android:color/darker_gray</item>

@@ -27,6 +27,7 @@ import android.view.animation.AnimationUtils;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.util.GeoPoint;
 
+import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -84,18 +85,26 @@ public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferenc
     // Message Handler
     // ===========================================================
 
-    private Handler handler = new Handler() {
+    private Handler handler = new MyInnerHandler(this);
+
+    static class MyInnerHandler extends Handler{
+        WeakReference<ShowMapFragmentV2> mFrag;
+
+        MyInnerHandler(ShowMapFragmentV2 aFragment) {
+            mFrag = new WeakReference<ShowMapFragmentV2>(aFragment);
+        }
 
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == GeofenceEditOverlay.MENU_CONTEXTUAL_EDIT) {
+                ShowMapFragmentV2 theFrag = mFrag.get();
                 Log.i(TAG, "GeofenceEditOverlay MENU CONTEXTUAL EDIT");
-                ActionMode.Callback actionModeCallBack = geofenceListOverlay.getMenuActionCallback();
-                ActionBarActivity activity = (ActionBarActivity) getActivity();
+                ActionMode.Callback actionModeCallBack = theFrag.geofenceListOverlay.getMenuActionCallback();
+                ActionBarActivity activity = (ActionBarActivity) theFrag.getActivity();
                 ActionMode actionMode = activity.startSupportActionMode(actionModeCallBack);
             }
         }
-    };
+    }
 
 
     // ===========================================================

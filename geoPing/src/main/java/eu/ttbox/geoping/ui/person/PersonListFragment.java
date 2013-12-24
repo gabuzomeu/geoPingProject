@@ -163,6 +163,7 @@ public class PersonListFragment extends Fragment {
                 titleMenu = helper.getPersonPhone(cursor);
             }
             menu.setHeaderTitle(titleMenu);
+            menu.setHeaderIcon(R.drawable.ic_action_user);
 
         }
         super.onCreateContextMenu(menu, v, menuInfo);

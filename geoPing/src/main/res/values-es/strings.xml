@@ -15,7 +15,7 @@
     
     <!-- Billing -->
     <string name="send">Send</string>
-
+    <string name="clear">Clear</string>
 
     <!-- Share -->
     <string name="menu_share_app">Share GeoPing</string>
@@ -100,9 +100,9 @@
      <!-- Menu Map-->
     <string name="menu_map_mypositon_hide">Ocultar mi posicion</string>
     <string name="menu_map_mypositon_show">Mostrar mi posicion</string>
-
     <string name="menu_map_track_timeline">Time Line</string>
-           
+    <string name="menu_map_minimap">MiniMap</string>
+
     <!-- Prefs -->
     <string name="prefs_sms_category">Monitoring Sms</string>
     
@@ -150,6 +150,16 @@
     <string name="prefs_launcher_icon_summary_on">Launcher Icon is show</string>
     <string name="prefs_launcher_icon_summary_off">Launcher Icon is hide</string>
 
+    <string name="prefs_widget_category">Widget Feature</string>
+    <string name="prefs_widget_person_list">Person Widget Icon</string>
+    <string name="prefs_widget_person_list_summary_on">Person Widget Icon is show</string>
+    <string name="prefs_widget_person_list_summary_off">Person Widget Icon is hide</string>
+
+    <string name="prefs_widget_pairing_list">Pairing Widget Icon</string>
+    <string name="prefs_widget_pairing_list_summary_on">Pairing Widget Icon is show</string>
+    <string name="prefs_widget_pairing_list_summary_off">Pairing Widget Icon is hide</string>
+
+
     <string name="kg_too_many_failed_attempts_countdown_seconds">"Inténtalo de nuevo en <xliff:g id="seconds">%d</xliff:g> segundos."</string>
     <string name="kg_too_many_failed_attempts_countdown_minutes">"Inténtalo de nuevo en <xliff:g id="minutes">%1$d min %2$d s.</xliff:g>"</string>
     <string name="kg_too_many_failed_attempts_countdown_hours">"Inténtalo de nuevo en <xliff:g id="hours">%1$d h %2$d min %3$d s.</xliff:g>"</string>
@@ -158,6 +168,10 @@
     <string name="show_dev_countdown">"Solo te quedan <xliff:g id="STEP_COUNT">%1$d</xliff:g> pasos para ser un desarrollador."</string>
     <string name="show_dev_on">"¡Ahora están activadas las opciones de desarrollo!"</string>
     <string name="show_dev_already">"No es necesario, están activadas las opciones de desarrollo."</string>
+    <string name="prefs_spynotif_title">Spy Notification</string>
+    <string name="prefs_spynotif_shutdown_sleep_in_ms">Shutdown Sleep In Ms</string>
+    <string name="prefs_spynotif_changed_phonenumber">SIM Phone Number</string>
+    <string name="prefs_add_blocked">Add Blocked</string>
 
        <!-- Prefs Infos Legale -->
     <string name="legal_information">Legal information</string>
@@ -189,6 +203,11 @@
     <string name="pairing_authorize_type:never">Nunca</string>
     <string name="pairing_authorize_type:ask">Sobre validacion</string>
     <string name="pairing_authorize_type:always">Siempre</string>
+    <string name="pairing_notification_shutdown">Allumage/Extinction du téléphone</string>
+    <string name="pairing_notification_battery_low">Batterie faible</string>
+    <string name="pairing_notification_sim_change">Changement de carte SIM</string>
+    <string name="pairing_notification_phone_call">Appel Téléphonique Emis</string>
+    <string name="pairing_notification_phone_receive">Appel Téléphonique Recut</string>
 
     <!-- Geofence model -->
     <string name="geofence_name">Geofence Name</string>
@@ -197,6 +216,7 @@
     <string name="geofence_transition_exit">Exited Geo Fence</string>
     <string name="geofence_alarm">Alarm</string>
 
+    <string name="edit_geofence">Edit a GeoFence</string>
     <string name="add_geofence">Add a GeoFence</string>
     <string name="geofence_help">"Create a GeoFence to get alerts when family members come and go."</string>
 

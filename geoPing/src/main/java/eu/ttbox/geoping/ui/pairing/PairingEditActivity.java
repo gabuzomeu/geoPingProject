@@ -227,7 +227,8 @@ public class PairingEditActivity extends ActionBarActivity {
                         Bundle args = new Bundle();
                         args.putString(eu.ttbox.geoping.ui.smslog.SmsLogListFragment.Intents.EXTRA_SMS_PHONE, pairingPhone);
                         args.putInt(eu.ttbox.geoping.ui.smslog.SmsLogListFragment.Intents.EXTRA_SIDE_DBCODE, SmsLogSideEnum.SLAVE.getDbCode());
-                        smsLogFragment = new SmsLogListFragment(false);
+                        args.putBoolean(SmsLogListFragment.Intents.EXTRA_DISPLAY_CONTACT_DETAIL, false);
+                        smsLogFragment = new SmsLogListFragment();
                         smsLogFragment.setArguments(args);
                     }
                     fragment = smsLogFragment;
@@ -245,11 +246,11 @@ public class PairingEditActivity extends ActionBarActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case PAIRING:
-                    return getString(R.string.menu_pairing).toUpperCase();
+                    return getString(R.string.menu_pairing);//.toUpperCase(Locale.getDefault());
                 case NOTIFICATION:
-                    return getString(R.string.menu_pairing_notification).toUpperCase();
+                    return getString(R.string.menu_pairing_notification);//.toUpperCase(Locale.getDefault());
                 case LOG:
-                    return getString(R.string.menu_smslog).toUpperCase();
+                    return getString(R.string.menu_smslog);//.toUpperCase(Locale.getDefault());
             }
             return null;
         }

@@ -98,9 +98,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:layout_below="@+id/header_photo_main_name"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignBottom="@+id/header_photo_imageView"
                         android:textColor="@color/call_log_primary_text_color"
                         android:text="Phone"/>
 
@@ -110,18 +107,17 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@color/call_log_primary_text_color"
-                        android:layout_alignParentLeft="true"
                         android:text="Action"
                         />
             </LinearLayout>
 
             <View
-                    android:id="@+id/header_photo_subelt_divider"
-                    android:layout_width="1px"
-                    android:layout_height="32dip"
-                    android:background="@drawable/ic_divider_dashed_holo_dark"
-                    android:layout_gravity="center_vertical"
-                    />
+                android:id="@+id/header_photo_subelt_divider"
+                android:layout_width="1dp"
+                android:layout_height="32dip"
+                android:background="@drawable/ic_divider_dashed_holo_dark"
+                android:layout_gravity="center_vertical"
+                />
 
             <ImageView
                     android:id="@+id/header_photo_subelt_icon"

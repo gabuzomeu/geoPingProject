@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.6.+'
+        classpath 'com.android.tools.build:gradle:0.7.+'
     }
 }
 
@@ -12,7 +12,7 @@ buildscript {
 apply plugin: 'android'
 
 // Jackson
-List jackson = ['com.fasterxml.jackson.core:jackson-core:2.2.3@jar', 'com.fasterxml.jackson.core:jackson-databind:2.2.3@jar']
+List jackson = ['com.fasterxml.jackson.core:jackson-core:2.3.0@jar', 'com.fasterxml.jackson.core:jackson-databind:2.3.0@jar']
 
 // Google Apis
 List googlePlayServices = ['com.google.android.gms:play-services:4.0.+@aar']
@@ -53,7 +53,7 @@ dependencies {
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19" //18.0.1 18.1.1
+    buildToolsVersion "19.0.1" //18.0.1 18.1.1
 
     sourceSets {
         main {
@@ -69,6 +69,11 @@ android {
 //        versionName "0.3.2"
         minSdkVersion 10
         targetSdkVersion 19
+    }
+
+    packagingOptions {
+        exclude  'META-INF/LICENSE'
+        exclude  'META-INF/NOTICE'
     }
 
     signingConfigs {

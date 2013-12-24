@@ -26,8 +26,18 @@
         android:layout_centerVertical="true"
         layout="@layout/item_photo_editor"
         android:minWidth="60dip"
-        android:text="@string/geoping"
-        geoping:geopingType="request" />
+        android:text="@string/geoping"  />
+
+    <View
+        android:id="@+id/header_photo_subelt_divider"
+        android:layout_width="1dp"
+        android:layout_height="48dp"
+        android:background="@drawable/ic_divider_dashed_holo_dark"
+        android:layout_gravity="center_vertical"
+        android:layout_toLeftOf="@id/person_list_item_geoping_button"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
+        />
 
     <TextView
         android:id="@+id/person_list_item_name"

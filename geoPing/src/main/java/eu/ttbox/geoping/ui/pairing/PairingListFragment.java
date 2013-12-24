@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -12,7 +13,10 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -25,8 +29,12 @@ import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.PairingProvider;
+import eu.ttbox.geoping.domain.PersonProvider;
 import eu.ttbox.geoping.domain.pairing.PairingDatabase.PairingColumns;
 import eu.ttbox.geoping.domain.pairing.PairingHelper;
+import eu.ttbox.geoping.domain.person.PersonHelper;
+import eu.ttbox.geoping.encoder.model.MessageActionEnum;
+import eu.ttbox.geoping.service.slave.GeoPingSlaveLocationService;
 
 public class PairingListFragment extends Fragment {
 
@@ -98,6 +106,7 @@ public class PairingListFragment extends Fragment {
 		addEntityButton.setOnClickListener(addPairingOnClickListener);
 		addEntityButtonHelp.setOnClickListener(addPairingOnClickListener);
 		// Intents
+        registerForContextMenu(listView);
 		Log.d(TAG, "Binding end");
 
 		return v;
@@ -128,6 +137,71 @@ public class PairingListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         loadLockPairingData();
+    }
+
+
+    // ===========================================================
+    // List Popup Menu
+    // ===========================================================
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        if (v.getId() == android.R.id.list) {
+            ListView lv = (ListView) v;
+            AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;
+
+            Cursor cursor = (Cursor) lv.getItemAtPosition(acmi.position);
+            PairingHelper helper = new PairingHelper().initWrapper(cursor);
+            menu.add(Menu.NONE, R.id.menu_gcm_message, Menu.NONE, R.string.menu_geoping);
+            menu.add(Menu.NONE, R.id.menu_edit, Menu.NONE, R.string.menu_edit);
+            menu.add(Menu.NONE, R.id.menu_delete, Menu.NONE, R.string.menu_delete);
+
+            //
+            String titleMenu = helper.getDisplayName(cursor);
+            if (titleMenu == null) {
+                titleMenu = helper.getPairingPhone(cursor);
+            }
+            menu.setHeaderTitle(titleMenu);
+            menu.setHeaderIcon(R.drawable.ic_device_access_secure);
+        }
+        super.onCreateContextMenu(menu, v, menuInfo);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
+                .getMenuInfo();
+        Cursor cursor = (Cursor) listView.getItemAtPosition(info.position);
+        PairingHelper helper = new PairingHelper().initWrapper(cursor);
+        //TODO implement menu
+        switch (item.getItemId()) {
+            case R.id.menu_gcm_message: {
+                String phoneNumber = helper.getDisplayName(cursor);
+                GeoPingSlaveLocationService.runFindLocationAndSendInService(getActivity(), MessageActionEnum.LOC_DECLARATION,
+                        new String[]{phoneNumber}, null, null);
+            }
+            return true;
+
+            case R.id.menu_edit: {
+                String entityId = helper.getPairingIdAsString(cursor);
+                onEditEntityClick(entityId);
+            }
+            return true;
+            case R.id.menu_delete: {
+                // TODO https://www.timroes.de/2013/09/23/enhancedlistview-swipe-to-dismiss-with-undo/
+                // https://github.com/timroes/EnhancedListView/blob/master/EnhancedListView/src/main/res/layout/undo_popup.xml
+                //
+                // TODO https://code.google.com/p/romannurik-code/source/browse/misc/undobar/src/com/example/android/undobar/UndoBarController.java
+                // TODO https://android.googlesource.com/platform/developers/samples/android/+/master/ui/actionbar/DoneBar/DoneBar/src/main/java/com/example/android/donebar/DoneBarActivity.java
+                String entityId = helper.getPairingIdAsString(cursor);
+                Uri entityUri = Uri.withAppendedPath(PairingProvider.Constants.CONTENT_URI, entityId);
+                int deleteCount = getActivity().getContentResolver().delete(entityUri, null, null);
+            }
+            return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+
     }
 
     // ===========================================================

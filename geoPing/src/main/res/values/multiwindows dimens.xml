@@ -1,4 +1,4 @@
-<resources>
+<resources >
 
     <dimen name="app_multiwindows_defaultSize_w">640dip</dimen>
     <dimen name="app_multiwindows_defaultSize_h">400dip</dimen>

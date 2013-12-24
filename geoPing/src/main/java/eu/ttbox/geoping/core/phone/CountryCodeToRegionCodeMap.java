@@ -1,5 +1,7 @@
 package eu.ttbox.geoping.core.phone;
 
+import android.util.SparseArray;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,11 +13,10 @@ public class CountryCodeToRegionCodeMap {
     // country/region represented by that country code. In the case of multiple
     // countries sharing a calling code, such as the NANPA countries, the one
     // indicated with "isMainCountryForCode" in the metadata should be first.
-    static Map<Integer, List<String>> getCountryCodeToRegionCodeMap() {
+    static SparseArray< List<String>> getCountryCodeToRegionCodeMap() {
       // The capacity is set to 286 as there are 215 different country codes,
       // and this offers a load factor of roughly 0.75.
-      Map<Integer, List<String>> countryCodeToRegionCodeMap =
-          new HashMap<Integer, List<String>>(286);
+        SparseArray<List<String>> countryCodeToRegionCodeMap =  new SparseArray<List<String>>(286);
 
       ArrayList<String> listWithRegionCode;
 

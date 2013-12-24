@@ -64,9 +64,9 @@ public class SmsLogViewFragment extends Fragment {
     // ===========================================================
     private ContentObserver observer = new ContentObserver(handler) {
         @Override
-        public void onChange(boolean selfChange, Uri uri) {
+        public void onChange(boolean selfChange) {
             loadEntity(entityUri);
-            super.onChange(selfChange, uri);
+            super.onChange(selfChange);
         }
     };
 

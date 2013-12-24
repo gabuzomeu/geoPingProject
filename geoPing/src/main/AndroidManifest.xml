@@ -60,7 +60,10 @@
     <uses-feature android:name="android.hardware.telephony" android:required="false"/>
     
  
-    <application android:backupAgent=".service.backup.GeoPingBackupAgent" android:debuggable="false" android:hardwareAccelerated="true" android:icon="@drawable/ic_launcher" android:installLocation="auto" android:label="@string/app_name" android:name="GeoPingApplication" android:restoreAnyVersion="false" android:theme="@style/AppTheme">
+    <application android:backupAgent=".service.backup.GeoPingBackupAgent"
+        android:hardwareAccelerated="true" android:icon="@drawable/ic_launcher"
+        android:installLocation="auto" android:label="@string/app_name"
+        android:name="GeoPingApplication" android:allowBackup="true" android:restoreAnyVersion="false" android:theme="@style/AppTheme">
  	    
  	    <meta-data android:name="com.google.android.backup.api_key" android:value="@string/backup_api_key"/>
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
@@ -183,14 +186,14 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 
         <!-- SMS Receiver -->
-        <receiver android:name=".service.receiver.SMSReceiver">
+        <receiver android:name=".service.receiver.SMSReceiver" android:exported="true">
             <intent-filter android:priority="2147483647">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
         </receiver>
 
          <!-- SMS Acknowledge Receiver -->
-        <receiver android:name="eu.ttbox.geoping.service.receiver.MessageAcknowledgeReceiver">
+        <receiver android:name="eu.ttbox.geoping.service.receiver.MessageAcknowledgeReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="eu.ttbox.geoping.ACTION_SEND_ACK"/>  
                 <data android:mimeType="vnd.android.cursor.item/ttbox.geoping.smsLog"/>
@@ -225,9 +228,11 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".service.gcm.GcmIntentService"/>
+        <service android:name="eu.ttbox.geoping.service.gcm.GcmIntentService"/>
 
-        <activity android:configChanges="orientation|keyboardHidden|screenSize" android:label="@string/app_name" android:launchMode="singleTop" android:name="eu.ttbox.geoping.ui.Gcm.GcmActivity"/>
+        <activity android:name="eu.ttbox.geoping.ui.gcm.GcmActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name" android:launchMode="singleTop"  />
 
         <!-- Geofending -->
         <service android:exported="false" android:label="@string/app_name" android:name="eu.ttbox.geoping.service.geofence.ReceiveTransitionsIntentService">

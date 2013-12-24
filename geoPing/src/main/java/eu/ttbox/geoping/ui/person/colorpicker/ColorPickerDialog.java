@@ -96,14 +96,15 @@ public class ColorPickerDialog extends Dialog {
 
         private boolean mTrackingCenter;
         private boolean mHighlightCenter;
+        private RectF cachedrawOval = new RectF();
 
         @Override
         protected void onDraw(Canvas canvas) {
             float r = CENTER_X - mPaint.getStrokeWidth() * 0.5f;
-
             canvas.translate(CENTER_X, CENTER_X);
 
-            canvas.drawOval(new RectF(-r, -r, r, r), mPaint);
+            cachedrawOval.set(-r, -r, r, r);
+            canvas.drawOval(cachedrawOval, mPaint);
             canvas.drawCircle(0, 0, CENTER_RADIUS, mCenterPaint);
 
             if (mTrackingCenter) {

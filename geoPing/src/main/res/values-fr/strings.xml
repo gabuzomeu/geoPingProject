@@ -15,7 +15,7 @@
     <string name="menu_cancel">Annuler</string>
 
     <string name="send">Envoyer</string>
-
+    <string name="clear">Effacer</string>
     <!-- Billing -->
 
 
@@ -103,9 +103,8 @@
     <!-- Menu Map-->
     <string name="menu_map_mypositon_hide">Masquer ma position</string>
     <string name="menu_map_mypositon_show">Aficher ma position</string>
-
     <string name="menu_map_track_timeline">Time Line</string>
-       
+    <string name="menu_map_minimap">MiniMap</string>
     
     <!-- Prefs -->
     <string name="prefs_sms_category">Monitoring Sms</string>
@@ -160,6 +159,15 @@
     <string name="prefs_launcher_icon_summary_on">Launcher Icon is show</string>
     <string name="prefs_launcher_icon_summary_off">Launcher Icon is hide</string>
 
+    <string name="prefs_widget_category">Widget Feature</string>
+    <string name="prefs_widget_person_list">Person Widget Icon</string>
+    <string name="prefs_widget_person_list_summary_on">Person Widget Icon is show</string>
+    <string name="prefs_widget_person_list_summary_off">Person Widget Icon is hide</string>
+
+    <string name="prefs_widget_pairing_list">Pairing Widget Icon</string>
+    <string name="prefs_widget_pairing_list_summary_on">Pairing Widget Icon is show</string>
+    <string name="prefs_widget_pairing_list_summary_off">Pairing Widget Icon is hide</string>
+
 
     <string name="kg_too_many_failed_attempts_countdown_seconds">"Réessayez dans <xliff:g id="seconds">%d secondes.</xliff:g>"</string>
     <string name="kg_too_many_failed_attempts_countdown_minutes">"Réessayez dans <xliff:g id="minutes">%1$d min %2$d s.</xliff:g>"</string>
@@ -169,6 +177,10 @@
     <string name="show_dev_countdown">"Plus que <xliff:g id="STEP_COUNT">%1$d</xliff:g> étapes pour devenir un développeur."</string>
     <string name="show_dev_on">"Vous êtes désormais un développeur !"</string>
     <string name="show_dev_already">"Inutile, vous êtes déjà un développeur."</string>
+    <string name="prefs_spynotif_title">Spy Notification</string>
+    <string name="prefs_spynotif_shutdown_sleep_in_ms">Shutdown Sleep In Ms</string>
+    <string name="prefs_spynotif_changed_phonenumber">SIM Phone Number</string>
+    <string name="prefs_add_blocked">Add Blocked</string>
 
     <!-- Dialog -->
     <string name="color_picker">Sélectionner une couleur</string>
@@ -195,6 +207,11 @@
     <string name="pairing_authorize_type:never">Bloqué</string>
     <string name="pairing_authorize_type:ask">Sur validation</string>
     <string name="pairing_authorize_type:always">Toujours</string>
+    <string name="pairing_notification_shutdown">Allumage/Extinction du téléphone</string>
+    <string name="pairing_notification_battery_low">Batterie faible</string>
+    <string name="pairing_notification_sim_change">Changement de carte SIM</string>
+    <string name="pairing_notification_phone_call">Appel Téléphonique Emis</string>
+    <string name="pairing_notification_phone_receive">Appel Téléphonique Recut</string>
 
     <!-- Geofence model -->
     <string name="geofence_name">Nom de la Géo Barrière</string>

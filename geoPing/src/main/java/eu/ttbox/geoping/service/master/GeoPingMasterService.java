@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.Tracker;
 
+import java.lang.ref.WeakReference;
+
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.GeoTrackerProvider;
@@ -48,22 +50,29 @@ public class GeoPingMasterService extends IntentService {
     // UI Handler
     // ===========================================================
     private Tracker tracker;
-    private Handler uiHandler = new Handler() {
+
+    private Handler uiHandler = new MyInnerHandler(this);
+
+    static class MyInnerHandler extends Handler{
+        WeakReference<GeoPingMasterService> mFrag;
+
+        MyInnerHandler(GeoPingMasterService aFragment) {
+            mFrag = new WeakReference<GeoPingMasterService>(aFragment);
+        }
         @Override
         public void handleMessage(Message msg) {
+            GeoPingMasterService theFrag = mFrag.get();
             switch (msg.what) {
                 case UI_MSG_TOAST:
                     String msgText = (String) msg.obj;
-                    Toast.makeText(getApplicationContext(), msgText, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(theFrag.getApplicationContext(), msgText, Toast.LENGTH_SHORT).show();
                     break;
 
                 default:
                     break;
             }
         }
-    };
-
-
+    }
     // ===========================================================
     // Constructors
     // ===========================================================

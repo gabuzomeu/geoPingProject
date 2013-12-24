@@ -16,6 +16,8 @@ import android.view.MenuItem;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
+import java.util.Locale;
+
 import eu.ttbox.geoping.core.VersionUtils;
 import eu.ttbox.geoping.ui.GeoPingSlidingMenuFragmentActivity;
 import eu.ttbox.geoping.ui.MenuOptionsItemSelectionHelper;
@@ -252,11 +254,11 @@ public class MainActivity extends GeoPingSlidingMenuFragmentActivity { //
         public CharSequence getPageTitle(int position) {
             switch (position) {
             case PERSON:
-                return getString(R.string.menu_person).toUpperCase();
+                return getString(R.string.menu_person); //.toUpperCase(Locale.getDefault());
             case PAIRING:
-                return getString(R.string.menu_pairing).toUpperCase();
+                return getString(R.string.menu_pairing);//.toUpperCase(Locale.getDefault());
             case LOG:
-                return getString(R.string.menu_smslog).toUpperCase();
+                return getString(R.string.menu_smslog);//.toUpperCase(Locale.getDefault());
             }
             return null;
         }

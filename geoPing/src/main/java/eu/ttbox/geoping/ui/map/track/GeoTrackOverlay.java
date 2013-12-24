@@ -24,6 +24,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.view.ActionMode;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,6 +40,7 @@ import org.osmdroid.views.MapView.Projection;
 import org.osmdroid.views.overlay.Overlay;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -55,6 +58,7 @@ import eu.ttbox.geoping.domain.geotrack.GeoTrackDatabase.GeoTrackColumns;
 import eu.ttbox.geoping.domain.geotrack.GeoTrackHelper;
 import eu.ttbox.geoping.domain.model.GeoTrack;
 import eu.ttbox.geoping.domain.model.Person;
+import eu.ttbox.geoping.ui.map.geofence.GeofenceEditOverlay;
 import eu.ttbox.geoping.ui.map.timeline.RangeTimelineView.OnRangeTimelineValuesChangeListener;
 import eu.ttbox.geoping.ui.map.track.bubble.GeoTrackBubble;
 import microsoft.mappoint.TileSystem;
@@ -129,20 +133,27 @@ public class GeoTrackOverlay extends Overlay implements SharedPreferences.OnShar
 
 	private static final int UI_MSG_SET_ADDRESS = 1;
 
-	private Handler uiHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case UI_MSG_SET_ADDRESS:
-				if (balloonView != null) {
-					String addr = (String) msg.obj;
-					balloonView.setAddress(addr);
-				}
-				break;
-			}
-		}
-	};
-	
+	private Handler uiHandler = new MyInnerHandler(this);
+
+    static class MyInnerHandler extends Handler{
+        WeakReference<GeoTrackOverlay> mFrag;
+
+        MyInnerHandler(GeoTrackOverlay aFragment) {
+            mFrag = new WeakReference<GeoTrackOverlay>(aFragment);
+        }
+        @Override
+        public void handleMessage(Message msg) {
+            GeoTrackOverlay theFrag = mFrag.get();
+            switch (msg.what) {
+                case UI_MSG_SET_ADDRESS:
+                    if (theFrag.balloonView != null) {
+                        String addr = (String) msg.obj;
+                        theFrag.balloonView.setAddress(addr);
+                    }
+                    break;
+            }
+        }
+    }
 	 
 
 	// ===========================================================
