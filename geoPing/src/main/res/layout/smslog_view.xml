@@ -53,13 +53,27 @@
             android:text="Message"
             />
 
+        <TextView
+            android:id="@+id/smslog_message_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/call_log_inner_margin"
+            android:layout_marginLeft="@dimen/call_log_indent_margin"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/call_log_secondary_text_color"
+            android:layout_below="@+id/smslog_message"
+            android:text="Message Detail"
+            android:visibility="gone"
+            />
+
+
     <LinearLayout
             android:id="@+id/smslog_message_param_list"
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_below="@+id/smslog_message"
+            android:layout_below="@+id/smslog_message_detail"
             android:layout_marginRight="@dimen/call_log_inner_margin"
             android:layout_marginLeft="@dimen/call_log_indent_margin" />
 

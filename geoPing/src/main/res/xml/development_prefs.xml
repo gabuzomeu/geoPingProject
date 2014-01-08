@@ -38,7 +38,7 @@
             android:defaultValue="content://settings/system/notification_sound"
             android:showDefault="true"
             android:title="Notification"
-            android:key="notifSound"
+            android:key="@string/pkey_notif_sound"
             android:ringtoneType="notification"
             android:summary="Select the notification Sound"
             android:dialogTitle="Change Sound"

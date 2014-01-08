@@ -51,7 +51,7 @@ public class GeoPingMasterService extends IntentService {
     // ===========================================================
     private Tracker tracker;
 
-    private Handler uiHandler = new MyInnerHandler(this);
+    private Handler uiHandler = new MyInnerHandler(this)    ;
 
     static class MyInnerHandler extends Handler{
         WeakReference<GeoPingMasterService> mFrag;

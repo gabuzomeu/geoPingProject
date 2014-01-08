@@ -8,13 +8,16 @@ import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -46,11 +49,12 @@ public class NotificationMasterHelper {
 
     // Config
     private final SmsLogSideEnum side = SmsLogSideEnum.MASTER;
-    private  boolean showNotificationByPerson = true;
+    private boolean showNotificationByPerson = true;
 
     // Service
     private Context context;
     private NotificationManager mNotificationManager;
+    private SharedPreferences prefs;
 
     // ===========================================================
     // Constructor
@@ -60,6 +64,7 @@ public class NotificationMasterHelper {
     public NotificationMasterHelper(Context context) {
         this.context = context;
         this.mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
 
@@ -68,29 +73,27 @@ public class NotificationMasterHelper {
     // ===========================================================
 
 
-    private TaskStackBuilder createShowOnMapActivity( Uri geoTrackData, String phone, int latE6, int lngE6, int accuracy) {
+    private TaskStackBuilder createShowOnMapActivity(Uri geoTrackData, String phone, int latE6, int lngE6, int accuracy) {
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(new Intent(context.getApplicationContext(), MainActivity.class));
-        stackBuilder.addNextIntent(Intents.showOnMap(context, geoTrackData,   phone,   latE6,   lngE6,   accuracy));
+        stackBuilder.addNextIntent(Intents.showOnMap(context, geoTrackData, phone, latE6, lngE6, accuracy));
         return stackBuilder;
     }
 
 
-    private TaskStackBuilder clearReadHistoryShowOnMapActivity( Uri geoTrackData, String phone, int latE6, int lngE6, int accuracy) {
+    private TaskStackBuilder clearReadHistoryShowOnMapActivity(Uri geoTrackData, String phone, int latE6, int lngE6, int accuracy) {
         Intent serviceIntent = new Intent(context, LogReadHistoryService.class);
         // Create Stack
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addNextIntent( serviceIntent);
+        stackBuilder.addNextIntent(serviceIntent);
         return stackBuilder;
     }
-
-
 
 
     @SuppressLint("NewApi")
     public void showNotificationGeoPing(MessageActionEnum actionEnum, Uri geoTrackData, ContentValues values
-            , GeoTrack geoTrack,  Bundle params) {
+            , GeoTrack geoTrack, Bundle params) {
         String phone = values.getAsString(GeoTrackDatabase.GeoTrackColumns.COL_PHONE);
         // Contact Name
         NotifPersonVo person = ContactHelper.getNotifPersonVo(context, phone);
@@ -100,8 +103,8 @@ public class NotificationMasterHelper {
         // --- Create Parent
         // Create an explicit content Intent that starts the main Activity
         Intent mapAction = Intents.showOnMap(context.getApplicationContext(), geoTrackData, values);
-     //TODO
-     mapAction =   Intents.showLoginPrompt(context.getApplicationContext(), mapAction);
+        //TODO
+        mapAction = Intents.showLoginPrompt(context.getApplicationContext(), mapAction);
         // Success Intent
         PendingIntent pendingIntent = LogReadHistoryService.createClearLogPendingIntent(context, side, phone, mapAction);
 
@@ -112,10 +115,10 @@ public class NotificationMasterHelper {
         Log.d(TAG, "----- contentTitle with Bundle : " + params);
         // Action Label
         String[] actionLabelParams = null;
-        if (MessageActionEnum.GEOFENCE_ENTER.equals(actionEnum) || MessageActionEnum.GEOFENCE_EXIT.equals(actionEnum) ) {
+        if (MessageActionEnum.GEOFENCE_ENTER.equals(actionEnum) || MessageActionEnum.GEOFENCE_EXIT.equals(actionEnum)) {
             if (MessageEncoderHelper.isToBundle(params, MessageParamEnum.GEOFENCE_NAME)) {
                 String geofenceName = MessageEncoderHelper.readString(params, MessageParamEnum.GEOFENCE_NAME);
-                actionLabelParams = new String[] { geofenceName};
+                actionLabelParams = new String[]{geofenceName};
             }
         }
         String contentTitle = MessageActionEnumLabelHelper.getString(context, actionEnum, actionLabelParams);
@@ -128,7 +131,7 @@ public class NotificationMasterHelper {
                 .setDeleteIntent(LogReadHistoryService.createClearLogPendingIntent(context, side, phone, null))
                 .setContentTitle(contentTitle) //
                         // TODO .setContentTitle(getString(R.string.notif_geoping)) //
-                .setContentText( person.contactDisplayName); //
+                .setContentText(person.contactDisplayName); //
         // Photo
         if (person.photo != null) {
             builder.setLargeIcon(person.photo);
@@ -140,9 +143,9 @@ public class NotificationMasterHelper {
 
 
         // Read Count
-        int msgUnreadCount =  LogReadHistoryService.getReadLogHistory(context, phone, side);
+        int msgUnreadCount = LogReadHistoryService.getReadLogHistory(context, phone, side);
         if (msgUnreadCount > 1) {
-          builder.setNumber(msgUnreadCount);
+            builder.setNumber(msgUnreadCount);
         }
         // Details
         String coordString = getLatLngAsString(geoTrack);
@@ -160,10 +163,10 @@ public class NotificationMasterHelper {
                 inBoxStyle.addLine(smsTypeTime);
             }
             // Geofence
-            if (msgUnreadCount>1) {
+            if (msgUnreadCount > 1) {
                 // TODO Geofence Count / No Requestid
                 ArrayList<String> geofences = null;// LogReadHistoryService.getReadLogHistoryGeofenceViolation(  context,   phone,   side);
-                if (geofences!=null && !geofences.isEmpty()) {
+                if (geofences != null && !geofences.isEmpty()) {
                     for (String geofence : geofences) {
                         inBoxStyle.addLine(geofence);
                     }
@@ -174,7 +177,7 @@ public class NotificationMasterHelper {
             builder.setStyle(inBoxStyle);
         }
         // Sound
-        defineSound(context,builder);
+        defineSound(context, builder);
 
 
         // Show
@@ -193,23 +196,30 @@ public class NotificationMasterHelper {
     }
 
 
-    private void defineSound(Context context,   NotificationCompat.Builder builder) {
+    private void defineSound(Context context, NotificationCompat.Builder builder) {
+
         if (false) {
             builder.setDefaults(Notification.DEFAULT_VIBRATE);
             builder.setDefaults(Notification.DEFAULT_LIGHTS);
-         //   builder.setLights(0xFF0000FF, 100, 3000);
+            //   builder.setLights(0xFF0000FF, 100, 3000);
 
             Uri sound = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.notif_alert_alien_siren);
             // Uri playingItem = Settings.System.DEFAULT_ALARM_ALERT_URI;
-            builder.setSound(sound , AudioManager.STREAM_ALARM ); //RingtoneManager.TYPE_ALARM
+            builder.setSound(sound, AudioManager.STREAM_ALARM); //RingtoneManager.TYPE_ALARM
             //  builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
         } else {
-            builder.setDefaults(Notification.DEFAULT_ALL);
+            builder.setDefaults(Notification.DEFAULT_VIBRATE);
+            builder.setDefaults(Notification.DEFAULT_LIGHTS);
+            // Sound
+            String soundUri = prefs.getString(context.getString(R.string.pkey_notif_sound), "content://settings/system/notification_sound");
+            Log.d(TAG, "### Notif Sound Uri : " + soundUri);
+            Uri sound = Uri.parse(soundUri);
+            builder.setSound(sound, AudioManager.STREAM_NOTIFICATION);
         }
 
     }
 
-    private int getNotificationId(String  phone) {
+    private int getNotificationId(String phone) {
         int notifId = SHOW_ON_NOTIFICATION_ID;
         if (showNotificationByPerson) {
             notifId += phone.hashCode();
@@ -229,7 +239,6 @@ public class NotificationMasterHelper {
         }
         return coordString;
     }
-
 
 
 }

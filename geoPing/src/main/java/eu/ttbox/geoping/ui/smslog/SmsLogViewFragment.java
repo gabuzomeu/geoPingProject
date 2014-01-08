@@ -45,9 +45,16 @@ public class SmsLogViewFragment extends Fragment {
     // Binding
     private PhotoHeaderBinderHelper photoHeader;
     private TextView messageTextView;
+    private TextView messageDetailTextView;
+
     private ImageView smsTypeImageView;
     private TextView smsTypeTimeTextView;
     private LinearLayout paramListView;
+
+    // Binding Header
+    private ImageView headerMainIcon;
+    private ImageView headerSubIcon;
+
     // Cache
     private PhotoThumbmailCache photoCache;
     private SmsLogResources mResources;
@@ -85,13 +92,28 @@ public class SmsLogViewFragment extends Fragment {
         photoHeader = new PhotoHeaderBinderHelper(v);
 
         this.messageTextView = (TextView) v.findViewById(R.id.smslog_message);
+        this.messageDetailTextView =(TextView) v.findViewById(R.id.smslog_message_detail);
         this.paramListView = (LinearLayout) v.findViewById(R.id.smslog_message_param_list);
 
         this.smsTypeImageView = (ImageView) v.findViewById(R.id.smslog_list_item_smsType_imgs);
         this.smsTypeTimeTextView = (TextView) v.findViewById(R.id.smslog_list_item_time_ago);
 
+        this.messageTextView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                onLongClickSmsMessage();
+                return false;
+            }
+        });
+
+        // Header Bindings
+        headerMainIcon = (ImageView) v.findViewById(R.id.header_photo_main_action);
+        headerSubIcon = (ImageView) v.findViewById(R.id.header_photo_subelt_icon);
+
         return v;
     }
+
+
     // ===========================================================
     // Menu
     // ===========================================================
@@ -149,6 +171,15 @@ public class SmsLogViewFragment extends Fragment {
         ContentResolver cr = getActivity().getContentResolver();
         cr.unregisterContentObserver(observer);
     }
+    // ===========================================================
+    // User Action
+    // ===========================================================
+
+    private void onLongClickSmsMessage() {
+        if (View.VISIBLE != messageDetailTextView.getVisibility()) {
+            messageDetailTextView.setVisibility(View.VISIBLE);
+        }
+    }
 
     // ===========================================================
     // Load Data
@@ -200,6 +231,7 @@ public class SmsLogViewFragment extends Fragment {
         String message = getString(R.string.smslog_message_size, msgSize);
         messageTextView.setText(message);
 
+        messageDetailTextView.setText(smsMessage);
         // Bind Value
         SmsLogTypeEnum smLogType = helper.getSmsLogType(cursor);
         Drawable iconType = mResources.getCallTypeDrawable(smLogType);
