@@ -12,10 +12,10 @@ buildscript {
 apply plugin: 'android'
 
 // Jackson
-List jackson = ['com.fasterxml.jackson.core:jackson-core:2.3.0@jar', 'com.fasterxml.jackson.core:jackson-databind:2.3.0@jar']
+List jackson = ['com.fasterxml.jackson.core:jackson-core:2.3.+@jar', 'com.fasterxml.jackson.core:jackson-databind:2.3.+@jar']
 
 // Google Apis
-List googlePlayServices = ['com.google.android.gms:play-services:4.0.+@aar']
+List googlePlayServices = ['com.google.android.gms:play-services:4.+@aar']
 List analytics = ['com.google.android.analytics:analytics:3@jar']
 
 // Compatibility

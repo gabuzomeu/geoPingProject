@@ -82,6 +82,8 @@
 -keep class com.slidingmenu.** { *; }
 -keep interface com.slidingmenu.** { *; }
 
+
+
 # Admob
 # #######################
 -keep public class com.google.ads.** {
