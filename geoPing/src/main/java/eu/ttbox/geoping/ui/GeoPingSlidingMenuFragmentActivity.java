@@ -2,6 +2,7 @@ package eu.ttbox.geoping.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,6 +55,9 @@ public class GeoPingSlidingMenuFragmentActivity extends ActionBarActivity implem
     protected void onResume() {
         if (adView != null) {
             adView.resume();
+            Log.w(TAG, "### !!!!!  adView resume");
+        } else {
+            Log.w(TAG, "### !!!!!  No adView ");
         }
         super.onResume();
     }

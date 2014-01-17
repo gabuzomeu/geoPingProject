@@ -115,6 +115,24 @@ public class MainActivity extends GeoPingSlidingMenuFragmentActivity { //
     }
 
     // ===========================================================
+    // Live Cycle
+    // ===========================================================
+
+    @Override
+    protected void onPause() {
+        Log.d(TAG, "### ### ### ### ### onPause call ### ### ### ### ###");
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d(TAG, "### ### ### ### ### onResume call ### ### ### ### ###");
+        super.onResume();
+    }
+
+
+
+    // ===========================================================
     // Menu
     // ===========================================================
 
