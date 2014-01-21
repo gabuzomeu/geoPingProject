@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivityBase;
@@ -31,6 +32,7 @@ public class GeoPingSlidingMenuFragmentActivity extends ActionBarActivity implem
     @Override
     public void onStart() {
         super.onStart();
+        adView = AdmobHelper.bindAdMobView(this);
         // Tracker
         EasyTracker.getInstance().activityStart(this);
     }
@@ -53,11 +55,11 @@ public class GeoPingSlidingMenuFragmentActivity extends ActionBarActivity implem
 
     @Override
     protected void onResume() {
+
         if (adView != null) {
+
             adView.resume();
-            Log.w(TAG, "### !!!!!  adView resume");
-        } else {
-            Log.w(TAG, "### !!!!!  No adView ");
+            Log.d(TAG, "### onResume adView resume");
         }
         super.onResume();
     }
@@ -100,6 +102,7 @@ public class GeoPingSlidingMenuFragmentActivity extends ActionBarActivity implem
             // slidingMenu.setSlidingEnabled(false);
             // slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
         }
+
     }
 
 
@@ -138,7 +141,7 @@ public class GeoPingSlidingMenuFragmentActivity extends ActionBarActivity implem
     public void setContentView(View v, LayoutParams params) {
         super.setContentView(v, params);
         mHelper.registerAboveContentView(v, params);
-        adView = AdmobHelper.bindAdMobView(this);
+
     }
 
     public void setBehindContentView(int id) {

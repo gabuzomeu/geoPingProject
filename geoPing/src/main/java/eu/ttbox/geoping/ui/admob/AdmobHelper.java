@@ -38,8 +38,24 @@ public class AdmobHelper {
         }
         // Request Ad
         if (adView != null) {
-            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.setAdListener(new AdListener() {
+                public void onAdOpened() {
+                    Log.d(TAG, "### AdListener onAdOpened AdView"  );
+                }
+                public void onAdLoaded() {
+                    Log.d(TAG, "### AdListener onAdLoaded AdView"  );
+                }
+                public void onAdFailedToLoad(int errorcode) {
+                    Log.d(TAG, "### AdListener onAdFailedToLoad AdView : errorcode = " + errorcode);
+                }
+             });
+
+           AdRequest adRequest = new AdRequest.Builder().build();
             adView.loadAd(adRequest);
+            Log.d(TAG, "### Load adRequest AdView"  );
+        } else {
+            Log.e(TAG, "### Null  AdView"  );
+
         }
         return adView;
     }
