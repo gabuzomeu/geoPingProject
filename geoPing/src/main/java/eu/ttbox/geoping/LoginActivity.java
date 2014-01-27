@@ -512,9 +512,9 @@ public class LoginActivity extends ActionBarActivity { //
         int counterInc = markPrefLoginStatus();
         startActivity(mainActivity);
         if (!AdmobHelper.isAddBlocked(this)) {
-            if (counterInc%20 == 0) {
+         //   if (counterInc%20 == 0) {
                 AdmobHelper.displayInterstitialAd(this);
-            }
+         //   }
         }
         finish();
     }

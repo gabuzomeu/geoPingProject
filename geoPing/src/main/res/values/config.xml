@@ -6,8 +6,8 @@
 
     <!-- Backup Api Key For eu.ttbox.geoping -->
     <string name="backup_api_key">AEdPqrEAAAAI-ahoBk8qEhuAhuOd2Kecta_y7N3aCgBOFAHenA</string>
-    <!-- Money -->
-    <string name="admob_key">a1509acb46a10d6</string>
+    <!-- Money : a1509acb46a10d6-->
+    <string name="admob_key">ca-app-pub-6019644235290548/6060750910</string>
 
 
     <!-- ### Google Map ### -->
