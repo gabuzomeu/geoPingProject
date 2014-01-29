@@ -74,6 +74,9 @@
         <meta-data android:name="BING_KEY" android:value="Ao79Q93fhgMvZfbRgKd5xG708MsP2yhnRFedFeWVeFrjMgBOY36-HkQIYc4cQ-Ai"/>
 
 
+        <!-- AdMob -->
+        <!--<meta-data android:value="@string/admob_key" android:name="ADMOB_PUBLISHER_ID" />-->
+
         <!-- Multi Windows -->
         <meta-data android:name="com.sec.android.support.multiwindow" android:value="true"/>
         <meta-data android:name="com.sec.android.multiwindow.DEFAULT_SIZE_W" android:resource="@dimen/app_multiwindows_defaultSize_w"/>

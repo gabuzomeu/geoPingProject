@@ -69,6 +69,20 @@ public class Intents {
 
     public static final String EXTRA_EXPECTED_ACCURACY = "EXPECTED_ACCURACY";
 
+    public static Intent wrappedIntentAsActivity( Intent intent, Intent wrappedIntent) {
+        if (wrappedIntent!=null) {
+            intent.putExtra( Intents.EXTRA_INTENT_ACTIVITY, wrappedIntent );
+        }
+        return intent;
+    }
+
+    public static Intent wrappedIntentAsService(Intent intent, Intent wrappedIntent) {
+        if (wrappedIntent!=null) {
+            intent.putExtra( Intents.EXTRA_INTENT_SERVICE, wrappedIntent );
+        }
+        return intent;
+    }
+
     public static boolean startWrappedIntent(Context context, Intent intent) {
         boolean started = false;
         if (intent!=null) {
@@ -177,11 +191,12 @@ public class Intents {
         intent.setAction(Intent.ACTION_VIEW);
         // Extra
         if (destItent!=null) {
-            intent.putExtra(EXTRA_INTENT_ACTIVITY, destItent);
             String phone = destItent.getStringExtra(EXTRA_SMS_PHONE);
             if (phone !=null) {
                 intent.putExtra(EXTRA_SMS_PHONE, phone);
             }
+            // Wrapped Intent
+            Intents.wrappedIntentAsActivity(intent, destItent);
         }
         return intent;
     }
@@ -288,10 +303,11 @@ public class Intents {
         intent.setData(Uri.parse("AuthorizePhoneTypeEnum:" + authorizePhoneType.name()));
         intent.setAction(ACTION_SLAVE_GEOPING_PHONE_AUTHORIZE);
         intent.putExtra(EXTRA_SMS_PHONE, phone);
-        intent.putExtra(EXTRA_INTENT_ACTIVITY, sourceIntent);
         intent.putExtra(EXTRA_NOTIFICATION_TYPE_ENUM_ORDINAL, notifType.ordinal());
         intent.putExtra(EXTRA_NOTIF_ID, notificationId);
         intent.putExtra(EXTRA_AUTHORIZE_PHONE_TYPE_ENUM_ORDINAL, authorizePhoneType.ordinal());
+        // Wrapped Intent
+        Intents.wrappedIntentAsActivity(intent, sourceIntent);
         return intent;
     }
 

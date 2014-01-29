@@ -184,13 +184,16 @@ public class NotificationMasterHelper {
         int notifId = getNotificationId(phone);
         Log.d(TAG, String.format("GeoPing Notification Id : %s for phone %s", notifId, phone));
         Notification notification = builder.build();
-        if (true) {
-            mNotificationManager.notify(notifId, notification);
-        } else {
-            Intent stopIntent = new Intent(context.getApplicationContext(), NotificationAlarmPlayerService.class);
-            stopIntent.setAction(AlarmPlayerService.ACTION_STOP);
-            Log.d(TAG, "### Start notif service");
+
+        boolean isAlarm = false;
+       // isAlarm = true;
+        if (isAlarm) {
+            Intent stopIntent = NotificationAlarmPlayerService.createStopAlarmWrappedIntent(context,  mapAction);
+          //  stopIntent.setAction(AlarmPlayerService.ACTION_STOP);
+          //  Log.d(TAG, "### Start notif service");
             NotificationAlarmPlayerService.startNotifAlarmService(context, notifId, notification);
+        } else {
+            mNotificationManager.notify(notifId, notification);
         }
 
     }

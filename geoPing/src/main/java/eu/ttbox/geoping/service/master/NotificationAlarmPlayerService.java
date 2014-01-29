@@ -91,12 +91,10 @@ public class NotificationAlarmPlayerService extends Service implements
         context.startService(intent);
     }
 
-    public static Intent createStopAlarmIntent(Context context, Intent wrappedIntent) {
+    public static Intent createStopAlarmWrappedIntent(Context context, Intent wrappedIntent) {
         Intent stopIntent = new Intent(context, NotificationAlarmPlayerService.class);
         stopIntent.setAction(AlarmPlayerService.ACTION_STOP);
-        if (wrappedIntent!=null) {
-            stopIntent.putExtra( Intents.EXTRA_INTENT_ACTIVITY, wrappedIntent );
-        }
+        Intents.wrappedIntentAsActivity(stopIntent, wrappedIntent);
         return stopIntent;
     }
     // ===========================================================

@@ -51,27 +51,41 @@ public class LogReadHistoryService extends IntentService {
         return createClearLogPendingIntent(context, side, phone, wantedIntent, 0);
     }
 
-    public static PendingIntent createClearLogPendingIntent(Context context, SmsLogSideEnum side, String phone
-            , Intent wantedIntent, int baseRequestCode) {
+//    public static Intent createClearLogWrappedIntent(Context context, Intent wrappedIntent) {
+//
+//    }
+
+    public static Intent createClearLogWrappedIntentAsActivity(Context context, SmsLogSideEnum side, String phone
+            , Intent wantedIntent ) {
         Intent readAction = new Intent(context, LogReadHistoryService.class);
-     //   readAction.setPackage(context.getPackageName());
+        //   readAction.setPackage(context.getPackageName());
         readAction.setAction(ACTION_SMSLOG_MARK_AS_READ);
         // Filter Log
-        int requestCode = baseRequestCode;
         if (side != null) {
-            requestCode += (1 + side.getDbCode());
             readAction.putExtra(Intents.EXTRA_SMSLOG_SIDE_DBCODE, side.getDbCode());
         }
         // Redirect Intent
-        if (wantedIntent != null) {
-            readAction.putExtra(Intents.EXTRA_INTENT_ACTIVITY, wantedIntent);
-            requestCode += wantedIntent.hashCode();
-        }
+        Intents.wrappedIntentAsActivity(readAction, wantedIntent);
         Uri searchUri = SmsLogProvider.Constants.CONTENT_URI;
         if (!TextUtils.isEmpty(phone)) {
             searchUri = SmsLogProvider.Constants.getContentUriPhoneFilter(phone);
         }
         readAction.putExtra(Intents.EXTRA_SMSLOG_URI, searchUri);
+        return readAction;
+    }
+
+    public static PendingIntent createClearLogPendingIntent(Context context, SmsLogSideEnum side, String phone
+            , Intent wantedIntent, int baseRequestCode) {
+        Intent readAction =  createClearLogWrappedIntentAsActivity(context, side, phone, wantedIntent);
+        // Filter Log
+        int requestCode = baseRequestCode;
+        if (side != null) {
+            requestCode += (1 + side.getDbCode());
+         }
+        // Redirect Intent
+        if (wantedIntent != null) {
+             requestCode += wantedIntent.hashCode();
+        }
         // Create Pending
         PendingIntent pendingIntent = PendingIntent.getService(context, requestCode, readAction, PendingIntent.FLAG_UPDATE_CURRENT);
         return pendingIntent;
