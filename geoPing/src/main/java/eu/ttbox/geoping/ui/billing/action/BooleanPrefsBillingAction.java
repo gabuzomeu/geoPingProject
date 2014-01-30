@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-public class BooleanPrefsBillingAction implements  BillingAction {
+public class BooleanPrefsBillingAction implements BillingAction {
 
     private final String sku;
     private final String prefKey;
@@ -15,6 +15,10 @@ public class BooleanPrefsBillingAction implements  BillingAction {
         this.sku = sku;
         this.prefKey = prefKey;
         this.prefDefaultValue = prefDefaultValue;
+    }
+
+    public String getSku() {
+        return sku;
     }
 
     public boolean isApply(String skuTested) {
