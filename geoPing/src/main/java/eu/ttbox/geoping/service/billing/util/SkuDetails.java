@@ -29,6 +29,7 @@ public class SkuDetails {
     String mPrice;
     String mTitle;
     String mDescription;
+
   //  String mJson;
 
     public SkuDetails(String jsonSkuDetails) throws JSONException {
