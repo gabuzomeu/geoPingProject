@@ -26,6 +26,7 @@ import eu.ttbox.geoping.service.billing.util.Inventory;
 import eu.ttbox.geoping.service.billing.util.Purchase;
 import eu.ttbox.geoping.service.billing.util.SkuDetails;
 import eu.ttbox.geoping.ui.GeoPingSlidingMenuFragmentActivity;
+import eu.ttbox.geoping.ui.billing.action.BillingActionFinder;
 
 public class ExtraFeaturesActivity extends GeoPingSlidingMenuFragmentActivity {
 
@@ -45,7 +46,7 @@ public class ExtraFeaturesActivity extends GeoPingSlidingMenuFragmentActivity {
 
     // The helper object
     private IabHelper mHelper;
-
+    private BillingActionFinder billingActions;
 
     // ===========================================================
     // Billing Listener
@@ -137,6 +138,7 @@ public class ExtraFeaturesActivity extends GeoPingSlidingMenuFragmentActivity {
         // Create the helper, passing it our context and the public key to verify signatures with
         // -----------------------------------------------------------------------------------------
         Log.d(TAG, "Creating IAB helper.");
+        billingActions = new BillingActionFinder(this);
         mHelper = new IabHelper(this, getBase64EncodedPublicKey());
         // enable debug logging (for a production application, you should set this to false).
         if (BuildConfig.DEBUG) {
