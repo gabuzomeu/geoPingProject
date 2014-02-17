@@ -9,13 +9,11 @@ import eu.ttbox.geoping.service.billing.util.SkuDetails;
 public class SkuProductEnum {
 
     // Free Feature
-    public static SkuDetails SECU_HIDE_LAUNCHER = new SkuDetails("secu_hide_launcher" //
-            , IabHelper.ITEM_TYPE_INAPP, "No icon app launcher", "Free" //
-            , "Hide the GeoPing Application in the Phone");
+
 
     // Add
     public static SkuDetails SKU_NO_AD_PER_YEAR = new SkuDetails("no_ad_per_year" //
-            , IabHelper.ITEM_TYPE_INAPP, "No add in app", "$1.99" //
+            , IabHelper.ITEM_TYPE_INAPP, "No add in app", "1 €" //
             , "Suppress all adds during one year");
 
     // Bear
@@ -35,7 +33,6 @@ public class SkuProductEnum {
     public static ArrayList<SkuDetails> createListItems() {
         ArrayList<SkuDetails> adapter = new ArrayList<SkuDetails>();
         // Feature
-        adapter.add(SECU_HIDE_LAUNCHER);
         adapter.add(SKU_NO_AD_PER_YEAR);
 
         // Bear

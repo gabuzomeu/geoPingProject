@@ -70,6 +70,7 @@ public class ExtraFeaturesActivity extends GeoPingSlidingMenuFragmentActivity {
             Log.d(TAG, "--- noAdPerYearPurchase = " + noAdPerYearPurchase);
             Log.d(TAG, "--- SkuDetails = " + inventory.getSkuDetails(SKU_NO_AD_PER_YEAR));
             adapter.add(inventory.getSkuDetails(SKU_NO_AD_PER_YEAR));
+            
             isAdSupressPerYearPurchase = (noAdPerYearPurchase != null && DeveloperPayloadHelper.verifyDeveloperPayload(noAdPerYearPurchase));
             Log.d(TAG, "isAdSupressPerYearPurchase : " + isAdSupressPerYearPurchase);
 
