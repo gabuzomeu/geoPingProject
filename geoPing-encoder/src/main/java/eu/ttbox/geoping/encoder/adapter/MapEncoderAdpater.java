@@ -30,7 +30,7 @@ public class MapEncoderAdpater implements EncoderDecoderAdapter {
     }
 
     @Override
-    public MapEncoderAdpater newInstance() {
+    public  MapEncoderAdpater newInstance() {
         return new MapEncoderAdpater();
     }
 
@@ -262,22 +262,22 @@ public class MapEncoderAdpater implements EncoderDecoderAdapter {
 
     @Override
     public void putInt(String key, int value) {
-        mMap.put(key, value);
+        mMap.put(key, Integer.valueOf(value));
     }
 
     @Override
     public void putInt(MessageParamField key, int value) {
-        mMap.put(key.dbFieldName, value);
+        putInt(key.dbFieldName, value);
     }
 
 
     @Override
     public void putLong(String key, long value) {
-        mMap.put(key, value);
+        mMap.put(key, Long.valueOf(value));
     }
     @Override
     public void putLong(MessageParamField key, long value) {
-        mMap.put(key.dbFieldName, value);
+        putLong(key.dbFieldName, value);
     }
 
     @Override
@@ -286,16 +286,16 @@ public class MapEncoderAdpater implements EncoderDecoderAdapter {
     }
     @Override
     public void putFloat(MessageParamField key, float value){
-        mMap.put(key.dbFieldName, Float.valueOf( value));
+        putFloat(key.dbFieldName, value);
     }
 
     @Override
     public void putDouble(String key, double value) {
-        mMap.put(key, value);
+        mMap.put(key, Double.valueOf(value));
     }
     @Override
     public void putDouble(MessageParamField key, double value) {
-        mMap.put(key.dbFieldName, value);
+        putDouble(key.dbFieldName, value);
     }
 
 
@@ -306,10 +306,10 @@ public class MapEncoderAdpater implements EncoderDecoderAdapter {
 
     @Override
     public String toString() {
-        return "MapEncoderAdpater{" +
-                "action=" + action +
-                ", phone='" + phone + '\'' +
-                ", mMap=" + mMap +
-                '}';
+        return new StringBuilder().append( "MapEncoderAdpater{") //
+                .append( "action=" ).append( action ) //
+                .append(", phone='" ).append( phone ).append( '\'' ) //
+                .append(", mMap=" ).append( mMap ) //
+                .append( '}').toString();
     }
 }

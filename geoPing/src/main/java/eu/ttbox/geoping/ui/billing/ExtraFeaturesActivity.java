@@ -95,8 +95,8 @@ public class ExtraFeaturesActivity extends GeoPingSlidingMenuFragmentActivity {
             }
 
             if (purchase.getSku().equals(SKU_NO_AD_PER_YEAR)) {
-                Log.d(TAG, "Infinite gas subscription purchased.");
-                alert("Thank you for subscribing to infinite gas!");
+                Log.d(TAG, "NO_AD_PER_YEAR subscription purchased.");
+                alert("Thank you for subscribing to NO_AD_PER_YEAR!");
                 isAdSupressPerYearPurchase = true;
                 updateUi();
             }

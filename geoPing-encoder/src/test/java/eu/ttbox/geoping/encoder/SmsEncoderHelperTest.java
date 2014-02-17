@@ -1,8 +1,7 @@
 package eu.ttbox.geoping.encoder;
 
 
-
-import  org.junit.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 
@@ -45,20 +44,18 @@ public class SmsEncoderHelperTest {
         mapEncode.putLong(MessageParamField.LOC_TIME, dateTest);
 
         // Encode Message
-        String encoded =  SmsEncoderHelper.encodeSmsMessage(MessageActionEnum.LOC_DECLARATION, mapEncode, null);
+        String encoded = SmsEncoderHelper.encodeSmsMessage(MessageActionEnum.LOC_DECLARATION, mapEncode, null);
         System.out.println("Encoded Message : " + encoded);
         // Decode Message
-       
+
         String phone = "+4412345678";
-        List<MapEncoderAdpater> decodedMessages =  SmsEncoderHelper.decodeSmsMessage( new MapEncoderAdpater(), phone, encoded, null);
+        List<MapEncoderAdpater> decodedMessages = SmsEncoderHelper.decodeSmsMessage(new MapEncoderAdpater(), phone, encoded, null);
         Assert.assertNotNull(decodedMessages);
-        Assert.assertEquals(1, decodedMessages.size() );
-        MapEncoderAdpater mapDecode =  decodedMessages.get(0);
+        Assert.assertEquals(1, decodedMessages.size());
+        MapEncoderAdpater mapDecode = decodedMessages.get(0);
         AssertHelper.assertMap(mapEncode.getMap(), mapDecode.getMap(), false);
 
     }
-
-
 
 
 }
