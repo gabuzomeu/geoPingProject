@@ -50,6 +50,9 @@ public class AdmobHelper {
         }
         // Request Ad
         if (adView != null) {
+            // http://stackoverflow.com/questions/11790376/animated-mopub-admob-native-ads-overlayed-on-a-game-black-out-screen
+            adView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            // Listener
             adView.setAdListener(new AdListener() {
                 public void onAdOpened() {
                     Log.d(TAG, "### AdListener onAdOpened AdView");
