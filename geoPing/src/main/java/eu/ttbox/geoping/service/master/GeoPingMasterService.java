@@ -17,6 +17,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
 import com.google.analytics.tracking.android.Tracker;
 
 import java.lang.ref.WeakReference;
@@ -88,8 +89,7 @@ public class GeoPingMasterService extends IntentService {
         this.appPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         this.notifyGeoPingResponse = appPreferences.getBoolean(getString(R.string.pkey_shownotif_newparing_default), false);
         // Google Analytics
-        EasyTracker.getInstance().setContext(this);
-        tracker = EasyTracker.getTracker();
+        tracker =  EasyTracker.getInstance(this);
 
         Log.d(TAG, "#################################");
         Log.d(TAG, "### GeoPingMasterService Service Started.");
@@ -116,20 +116,20 @@ public class GeoPingMasterService extends IntentService {
             // Tracker
             // tracker.trackPageView("/action/SMS_GEOPING_REQUEST");
 
-            tracker.sendEvent("MasterService", // Category
+            tracker.send(MapBuilder.createEvent( "MasterService", // Category
                     "HandleIntent", // Action
                     "SMS_GEOPING_REQUEST", // Label
-                    0l); // Value
+                    0l).build()); // Value
         } else if (Intents.ACTION_SMS_PAIRING_RESQUEST.equals(action)) {
             String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
             long userId = intent.getLongExtra(Intents.EXTRA_SMS_USER_ID, -1);
             sendSmsPairingRequest(phone, userId);
             // Tracker
             // tracker.trackPageView("/action/SMS_PAIRING_RESQUEST");
-            tracker.sendEvent("MasterService", // Category
+            tracker.send(MapBuilder.createEvent("MasterService", // Category
                     "HandleIntent", // Action
                     "SMS_PAIRING_RESQUEST", // Label
-                    0l); // Value
+                    0l).build()); // Value
 //        } else if (Intents.ACTION_SMS_PAIRING_RESPONSE.equals(action)) {
 //            String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
 //            Bundle params = intent.getBundleExtra(Intents.EXTRA_SMS_PARAMS);
@@ -163,10 +163,10 @@ public class GeoPingMasterService extends IntentService {
                         consumeSmsPairingResponse(phone, userId);
                         // Tracker
                         // tracker.trackPageView("/action/SMS_PAIRING_RESPONSE");
-                        tracker.sendEvent("MasterService", // Category
+                        tracker.send(MapBuilder.createEvent("MasterService", // Category
                                 "HandleIntent", // Action
                                 "SMS_PAIRING_RESPONSE", // Label
-                                0l); // Value
+                                0l).build()); // Value
                     }
                     break;
                     // Read Sms
@@ -202,10 +202,10 @@ public class GeoPingMasterService extends IntentService {
                         break;
                 }
                 // Tracker
-                tracker.sendEvent("MasterService", // Category
+                tracker.send(MapBuilder.createEvent("MasterService", // Category
                         "HandleIntent", // Action
                         actionEnum.name(), // Label
-                        0l); // Value
+                        0l).build()); // Value
             }
         }
 

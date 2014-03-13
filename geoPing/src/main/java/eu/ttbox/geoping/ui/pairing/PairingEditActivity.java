@@ -101,14 +101,14 @@ public class PairingEditActivity extends ActionBarActivity {
     public void onStart() {
         super.onStart();
         // Tracker
-        EasyTracker.getInstance().activityStart(this);
+        EasyTracker.getInstance(this).activityStart(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         // Tracker
-        EasyTracker.getInstance().activityStop(this);
+        EasyTracker.getInstance(this).activityStop(this);
     }
 
     @Override

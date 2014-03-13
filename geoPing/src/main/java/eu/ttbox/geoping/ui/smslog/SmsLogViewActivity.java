@@ -31,8 +31,6 @@ public class SmsLogViewActivity extends ActionBarActivity {
         setContentView(R.layout.smslog_view_activity);
         // Add selector
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        // Tracker
-        EasyTracker.getInstance().activityStart(this);
     }
 
     @Override
@@ -53,14 +51,14 @@ public class SmsLogViewActivity extends ActionBarActivity {
     public void onStart() {
         super.onStart();
         // Tracker
-        EasyTracker.getInstance().activityStart(this);
+        EasyTracker.getInstance(this).activityStart(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         // Tracker
-        EasyTracker.getInstance().activityStop(this);
+        EasyTracker.getInstance(this).activityStop(this);
     }
 
     // ===========================================================

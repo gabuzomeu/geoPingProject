@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
 import com.google.analytics.tracking.android.Tracker;
 
 import java.util.List;
@@ -150,14 +151,14 @@ public class GeoPingPrefActivity extends PreferenceActivity //SlidingPreferenceA
     public void onStart() {
         super.onStart();
         // Tracker
-        EasyTracker.getInstance().activityStart(this);
+        EasyTracker.getInstance(this).activityStart(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         // Tracker
-        EasyTracker.getInstance().activityStop(this);
+        EasyTracker.getInstance(this).activityStop(this);
     }
 
     @Override
@@ -338,8 +339,8 @@ public class GeoPingPrefActivity extends PreferenceActivity //SlidingPreferenceA
         // Tracker
         // GeoPingApplication.getInstance().tracker().trackPageView("/Pref/" +
         // key);
-        Tracker tracker = EasyTracker.getTracker();
-        tracker.sendEvent("ui_pref", "changed", key, null);
+        Tracker tracker = EasyTracker.getInstance(this);
+        tracker.send(MapBuilder.createEvent( "ui_pref", "changed", key, null).build());
     }
 
     // ===========================================================
