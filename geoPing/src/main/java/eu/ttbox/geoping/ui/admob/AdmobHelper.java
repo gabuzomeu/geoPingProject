@@ -86,7 +86,7 @@ public class AdmobHelper {
         //    adView.setAdSize(AdSize.SMART_BANNER);
 
             AdRequest adRequest = new AdRequest.Builder()
-                    .addTestDevice("149D6C776DC12F380715698A396A64C4")
+              //      .addTestDevice("149D6C776DC12F380715698A396A64C4")
                     .build();
             adView.loadAd(adRequest);
             Log.d(TAG, "### Load adRequest AdView");
