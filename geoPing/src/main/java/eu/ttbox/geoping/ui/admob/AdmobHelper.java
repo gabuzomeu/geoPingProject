@@ -66,22 +66,22 @@ public class AdmobHelper {
                     switch (errorcode) {
                         case AdRequest.ERROR_CODE_INTERNAL_ERROR:
                             Log.d(TAG, "### ########################################################################## ###");
-                            Log.d(TAG, "### AdListener onAdFailedToLoad AdView : errorcode = ERROR_CODE_INTERNAL_ERROR ###" );
+                            Log.d(TAG, "### AdListener onAdFailedToLoad AdView : errorcode = ERROR_CODE_INTERNAL_ERROR ###");
                             Log.d(TAG, "### ########################################################################## ###");
                             break;
                         case AdRequest.ERROR_CODE_INVALID_REQUEST:
                             Log.d(TAG, "### ########################################################################### ###");
-                            Log.d(TAG, "### AdListener onAdFailedToLoad AdView : errorcode = ERROR_CODE_INVALID_REQUEST ###" );
+                            Log.d(TAG, "### AdListener onAdFailedToLoad AdView : errorcode = ERROR_CODE_INVALID_REQUEST ###");
                             Log.d(TAG, "### ########################################################################### ###");
                             break;
                         case AdRequest.ERROR_CODE_NETWORK_ERROR:
                             Log.d(TAG, "### ######################################################################### ###");
-                            Log.d(TAG, "### AdListener onAdFailedToLoad AdView : errorcode = ERROR_CODE_NETWORK_ERROR ###" );
+                            Log.d(TAG, "### AdListener onAdFailedToLoad AdView : errorcode = ERROR_CODE_NETWORK_ERROR ###");
                             Log.d(TAG, "### ######################################################################### ###");
                             break;
                         case AdRequest.ERROR_CODE_NO_FILL:
                             Log.d(TAG, "### ################################################################### ###");
-                            Log.d(TAG, "### AdListener onAdFailedToLoad AdView : errorcode = ERROR_CODE_NO_FILL ###" );
+                            Log.d(TAG, "### AdListener onAdFailedToLoad AdView : errorcode = ERROR_CODE_NO_FILL ###");
                             Log.d(TAG, "### ################################################################### ###");
                             break;
                         default:
@@ -92,12 +92,16 @@ public class AdmobHelper {
 
                 }
             });
-        //    adView.setAdUnitId(context.getString(R.string.admob_key));
-        //    adView.setAdSize(AdSize.SMART_BANNER);
+            //    adView.setAdUnitId(context.getString(R.string.admob_key));
+            //    adView.setAdSize(AdSize.SMART_BANNER);
+            AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
+            if (false) {
+                adRequestBuilder
+                        .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                        .addTestDevice("149D6C776DC12F380715698A396A64C4");
+            }
 
-            AdRequest adRequest = new AdRequest.Builder()
-              //      .addTestDevice("149D6C776DC12F380715698A396A64C4")
-                    .build();
+            AdRequest adRequest = adRequestBuilder.build();
             adView.loadAd(adRequest);
             Log.d(TAG, "### Load adRequest AdView");
         } else {
