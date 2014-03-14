@@ -34,14 +34,14 @@ public class GeoPingSlidingMenuFragmentActivity extends ActionBarActivity implem
         super.onStart();
         adView = AdmobHelper.bindAdMobView(this);
         // Tracker
-        EasyTracker.getInstance().activityStart(this);
+        EasyTracker.getInstance(this).activityStart(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         // Tracker
-        EasyTracker.getInstance().activityStop(this);
+        EasyTracker.getInstance(this).activityStop(this);
     }
 
 

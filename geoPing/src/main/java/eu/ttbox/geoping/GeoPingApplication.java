@@ -158,7 +158,7 @@ public class GeoPingApplication extends Application {
 
     @Override
     public void onTerminate() {
-        GAServiceManager.getInstance().dispatch();
+      //  GAServiceManager.getInstance().dispatch();
         super.onTerminate();
     }
 
