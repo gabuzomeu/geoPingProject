@@ -65,19 +65,29 @@ public class AdmobHelper {
                 public void onAdFailedToLoad(int errorcode) {
                     switch (errorcode) {
                         case AdRequest.ERROR_CODE_INTERNAL_ERROR:
-                            Log.d(TAG, "### AdListener onAdFailedToLoad AdView : errorcode = ERROR_CODE_INTERNAL_ERROR " );
+                            Log.d(TAG, "### ########################################################################## ###");
+                            Log.d(TAG, "### AdListener onAdFailedToLoad AdView : errorcode = ERROR_CODE_INTERNAL_ERROR ###" );
+                            Log.d(TAG, "### ########################################################################## ###");
                             break;
                         case AdRequest.ERROR_CODE_INVALID_REQUEST:
-                            Log.d(TAG, "### AdListener onAdFailedToLoad AdView : errorcode = ERROR_CODE_INVALID_REQUEST " );
+                            Log.d(TAG, "### ########################################################################### ###");
+                            Log.d(TAG, "### AdListener onAdFailedToLoad AdView : errorcode = ERROR_CODE_INVALID_REQUEST ###" );
+                            Log.d(TAG, "### ########################################################################### ###");
                             break;
                         case AdRequest.ERROR_CODE_NETWORK_ERROR:
-                            Log.d(TAG, "### AdListener onAdFailedToLoad AdView : errorcode = ERROR_CODE_NETWORK_ERROR " );
+                            Log.d(TAG, "### ######################################################################### ###");
+                            Log.d(TAG, "### AdListener onAdFailedToLoad AdView : errorcode = ERROR_CODE_NETWORK_ERROR ###" );
+                            Log.d(TAG, "### ######################################################################### ###");
                             break;
                         case AdRequest.ERROR_CODE_NO_FILL:
-                            Log.d(TAG, "### AdListener onAdFailedToLoad AdView : errorcode = ERROR_CODE_NO_FILL " );
+                            Log.d(TAG, "### ################################################################### ###");
+                            Log.d(TAG, "### AdListener onAdFailedToLoad AdView : errorcode = ERROR_CODE_NO_FILL ###" );
+                            Log.d(TAG, "### ################################################################### ###");
                             break;
                         default:
-                            Log.d(TAG, "### AdListener onAdFailedToLoad AdView : errorcode = " + errorcode);
+                            Log.d(TAG, "### ########################################################################### ###");
+                            Log.d(TAG, "### AdListener onAdFailedToLoad AdView : errorcode = " + errorcode + " ###");
+                            Log.d(TAG, "### ########################################################################### ###");
                     }
 
                 }
