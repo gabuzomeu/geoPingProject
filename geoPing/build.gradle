@@ -32,7 +32,7 @@ dependencies {
     compile project(':geoPing-encoder')
 //     compile osmdroid
 
-    compile('eu.ttbox.android.osm:osmLib:0.4.1@aar') {
+    compile('eu.ttbox.android.osm:osmLib:0.4.2@aar') {
         transitive = true
         //exclude group: 'com.google.android'
         exclude module: 'support-v4'

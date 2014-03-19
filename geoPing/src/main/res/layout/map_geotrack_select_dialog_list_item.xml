@@ -39,7 +39,8 @@
 <!--         android:text="@string/geoping" -->
 <!--         android:width="20dp" /> -->
 
-        <include
+
+    <include
             android:id="@+id/person_list_item_geoping_button"
             style="@style/entity_list_item"
             android:layout_width="48dp"
@@ -49,5 +50,17 @@
             layout="@layout/item_photo_editor"
             android:minWidth="60dip" 
             android:text="@string/geoping"  />
-    
+
+    <View
+        android:id="@+id/header_photo_subelt_divider"
+        android:layout_width="1dp"
+        android:layout_height="48dp"
+        android:background="@drawable/ic_divider_dashed_holo_dark"
+        android:layout_gravity="center_vertical"
+        android:layout_toLeftOf="@id/person_list_item_geoping_button"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
+        />
+
+
 </RelativeLayout>

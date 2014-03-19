@@ -14,6 +14,7 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 
+import eu.ttbox.geoping.BuildConfig;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.AppConstants;
 
@@ -28,10 +29,10 @@ public class AdmobHelper {
 
 
     public static AdView bindAdMobView(Activity context) {
-        AdView adView = null;
         // Admob
+        final View admob = context.findViewById(R.id.admob);
+        final AdView adView = (AdView) context.findViewById(R.id.adView);
         if (isAddBlocked(context)) {
-            View admob = context.findViewById(R.id.admob);
             Log.d(TAG, "### is Add Blocked adsContainer : " + admob);
             if (admob != null) {
                 admob.setVisibility(View.GONE);
@@ -39,14 +40,11 @@ public class AdmobHelper {
             }
         } else {
             // Container
-            View admob = context.findViewById(R.id.admob);
             Log.d(TAG, "### is Add Not Blocked adsContainer : " + admob);
             if (admob != null) {
                 admob.setVisibility(View.VISIBLE);
                 Log.d(TAG, "### is Add Not Blocked adsContainer ==> VISIBLE");
             }
-            // Find AdView
-            adView = (AdView) context.findViewById(R.id.adView);
         }
         // Request Ad
         if (adView != null) {
@@ -63,7 +61,11 @@ public class AdmobHelper {
                 }
 
                 public void onAdFailedToLoad(int errorcode) {
+                   if (admob!=null) {
+                       admob.setVisibility(View.GONE);
+                   }
                     switch (errorcode) {
+
                         case AdRequest.ERROR_CODE_INTERNAL_ERROR:
                             Log.d(TAG, "### ########################################################################## ###");
                             Log.d(TAG, "### AdListener onAdFailedToLoad AdView : errorcode = ERROR_CODE_INTERNAL_ERROR ###");
@@ -95,7 +97,7 @@ public class AdmobHelper {
             //    adView.setAdUnitId(context.getString(R.string.admob_key));
             //    adView.setAdSize(AdSize.SMART_BANNER);
             AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-            if (false) {
+            if (BuildConfig.DEBUG) {
                 adRequestBuilder
                         .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                         .addTestDevice("149D6C776DC12F380715698A396A64C4");

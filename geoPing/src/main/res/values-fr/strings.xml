@@ -155,9 +155,9 @@
     <string name="prefs_lockapp_lockpattern_max_retry">Maximum retry</string>
     <string name="prefs_lockapp_lockpattern_min_wired_dots">Minimum wired dots</string>
 
-    <string name="prefs_launcher_icon">Launcher Icon</string>
-    <string name="prefs_launcher_icon_summary_on">Launcher Icon is show</string>
-    <string name="prefs_launcher_icon_summary_off">Launcher Icon is hide</string>
+    <string name="prefs_launcher_icon">Icône de Lancement</string>
+    <string name="prefs_launcher_icon_summary_on">Ouverture par Icône</string>
+    <string name="prefs_launcher_icon_summary_off">Ouverture par SMS uniquement</string>
 
     <string name="prefs_widget_category">Widget Feature</string>
     <string name="prefs_widget_person_list">Person Widget Icon</string>

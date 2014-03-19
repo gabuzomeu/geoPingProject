@@ -15,9 +15,24 @@ public class ExtraFeatureHelper {
 
     private static final String TAG = "ExtraFeatureHelper";
 
+
     // ===========================================================
     // Extra Feature accessors
     // ===========================================================
+
+    public static ComponentName getComponentNameLaucherIcon(Context context ) {
+        ComponentName componentName = new ComponentName(context, LaucherMainActivity.class);
+        return componentName;
+    }
+    public static ComponentName getComponentNamePersonListWidget(Context context ) {
+        ComponentName componentName = new ComponentName(context, PersonWidgetProvider.class);
+        return componentName;
+    }
+    public static ComponentName getComponentNamePairingListWidget(Context context ) {
+        ComponentName componentName = new ComponentName(context, PairingWidgetProvider.class);
+        return componentName;
+    }
+
 
     public static boolean switchEnabledSettingLaucherIcon(Context context) {
         ComponentName componentName = new ComponentName(context, LaucherMainActivity.class);
@@ -26,22 +41,22 @@ public class ExtraFeatureHelper {
     }
 
     public static boolean isEnabledSettingLaucherIcon(Context context, Boolean wantedState) {
-        ComponentName componentName = new ComponentName(context, LaucherMainActivity.class);
+        ComponentName componentName = getComponentNameLaucherIcon(context);
         return isComponentEnabledSetting(context, componentName);
     }
 
     public static boolean enabledSettingLaucherIcon(Context context, Boolean wantedState) {
-        ComponentName componentName = new ComponentName(context, LaucherMainActivity.class);
+        ComponentName componentName = getComponentNameLaucherIcon(context);
         return enabledComponentEnabledSetting(context, componentName, wantedState);
     }
 
     public static boolean enabledSettingPesonListIcon(Context context, Boolean wantedState) {
-        ComponentName componentName = new ComponentName(context, PersonWidgetProvider.class);
+        ComponentName componentName = getComponentNamePersonListWidget(context);
         return enabledComponentEnabledSetting(context, componentName, wantedState);
     }
 
     public static boolean enabledSettingPairingListIcon(Context context, Boolean wantedState) {
-        ComponentName componentName = new ComponentName(context, PairingWidgetProvider.class);
+        ComponentName componentName = getComponentNamePairingListWidget(context);
         return enabledComponentEnabledSetting(context, componentName, wantedState);
     }
 
