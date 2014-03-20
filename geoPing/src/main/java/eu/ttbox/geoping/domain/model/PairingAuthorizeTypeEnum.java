@@ -15,7 +15,11 @@ public enum PairingAuthorizeTypeEnum {
     public int getCode() {
         return ordinal();
     }
-    
+
+    public String getCodeAsString() {
+        return Integer.valueOf(getCode()).toString();
+    }
+
     public static PairingAuthorizeTypeEnum getByCode(int code) {
         PairingAuthorizeTypeEnum[] valCodes =  PairingAuthorizeTypeEnum.values();
         if (code<0 || code>=valCodes.length) {

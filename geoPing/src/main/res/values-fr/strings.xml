@@ -158,6 +158,7 @@
     <string name="prefs_launcher_icon">Icône de Lancement</string>
     <string name="prefs_launcher_icon_summary_on">Ouverture par Icône</string>
     <string name="prefs_launcher_icon_summary_off">Ouverture par SMS uniquement</string>
+    <string name="prefs_launcher_icon_error_missing_pairing_command_authorize">Une personne doit être autorisé à accepté des commandes SMS</string>
 
     <string name="prefs_widget_category">Widget Feature</string>
     <string name="prefs_widget_person_list">Person Widget Icon</string>

@@ -149,6 +149,7 @@
     <string name="prefs_launcher_icon">Launcher Icon</string>
     <string name="prefs_launcher_icon_summary_on">Launcher Icon is show</string>
     <string name="prefs_launcher_icon_summary_off">Launcher Icon is hide</string>
+    <string name="prefs_launcher_icon_error_missing_pairing_command_authorize">A person sould be authorize to accept SMS command</string>
 
     <string name="prefs_widget_category">Widget Feature</string>
     <string name="prefs_widget_person_list">Person Widget Icon</string>

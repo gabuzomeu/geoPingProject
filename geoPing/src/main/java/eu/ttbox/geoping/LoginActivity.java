@@ -25,6 +25,9 @@ public class LoginActivity extends ActionBarActivity { //
 
     private static final String TAG = "LoginActivity";
 
+    private static final int AD_INTERSTITIAL_FREQUENCY = 20;
+
+
     private static final long LOCK_BASE_TIME_IN_MS = 30 * 1000;
     private static final String DEFAULT_USER = "Local_";
     // Service
@@ -512,9 +515,9 @@ public class LoginActivity extends ActionBarActivity { //
         int counterInc = markPrefLoginStatus();
         startActivity(mainActivity);
         if (!AdmobHelper.isAddBlocked(this)) {
-         //   if (counterInc%20 == 0) {
+            if (counterInc% AD_INTERSTITIAL_FREQUENCY == 0) {
                 AdmobHelper.displayInterstitialAd(this);
-         //   }
+             }
         }
         finish();
     }

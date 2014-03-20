@@ -6,7 +6,7 @@
         android:key="@string/pkey_create_pattern"
         android:title="@string/prefs_lockapp_lockpattern_create" />
 
-    <eu.ttbox.geoping.ui.prefs.comp.componentname.StarterIconCheckBoxPreference
+    <eu.ttbox.geoping.ui.prefs.lock.StarterIconCheckBoxPreference
         android:key="@string/pkey_launcher_icon"
         android:title="@string/prefs_launcher_icon"
         android:summaryOn="@string/prefs_launcher_icon_summary_on"
@@ -17,14 +17,14 @@
         android:icon="@android:drawable/ic_menu_my_calendar"
         android:title="@string/prefs_widget_category">
 
-        <eu.ttbox.geoping.ui.prefs.comp.componentname.WidgetPersonListCheckBoxPreference
+        <eu.ttbox.geoping.ui.prefs.lock.WidgetPersonListCheckBoxPreference
             android:key="@string/pkey_widget_person_list"
             android:title="@string/prefs_widget_person_list"
             android:summaryOn="@string/prefs_widget_person_list_summary_on"
             android:summaryOff="@string/prefs_widget_person_list_summary_off"
             android:defaultValue="@bool/postHoneycomb" />
 
-        <eu.ttbox.geoping.ui.prefs.comp.componentname.WidgetPairingListCheckBoxPreference
+        <eu.ttbox.geoping.ui.prefs.lock.WidgetPairingListCheckBoxPreference
             android:key="@string/pkey_widget_pairing_list"
             android:title="@string/prefs_widget_pairing_list"
             android:summaryOn="@string/prefs_widget_pairing_list_summary_on"

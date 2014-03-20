@@ -27,7 +27,7 @@ public abstract class AbstractComponentNameCheckBoxPreference extends CheckBoxPr
     }
 
 
-    abstract ComponentName getComponentNameBind();
+    public abstract ComponentName getComponentNameBind();
 
     protected boolean isChangeValueValid(boolean newValueBoolean) {
         return true;

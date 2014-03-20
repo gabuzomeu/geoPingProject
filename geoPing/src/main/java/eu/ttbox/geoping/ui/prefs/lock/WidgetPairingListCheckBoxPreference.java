@@ -1,4 +1,4 @@
-package eu.ttbox.geoping.ui.prefs.comp.componentname;
+package eu.ttbox.geoping.ui.prefs.lock;
 
 
 import android.content.ComponentName;
@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 
 import eu.ttbox.geoping.core.VersionUtils;
 import eu.ttbox.geoping.ui.billing.ExtraFeatureHelper;
+import eu.ttbox.geoping.ui.prefs.comp.componentname.AbstractComponentNameCheckBoxPreference;
 
 public class WidgetPairingListCheckBoxPreference extends AbstractComponentNameCheckBoxPreference {
 

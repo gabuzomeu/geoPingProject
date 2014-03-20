@@ -54,13 +54,15 @@ public class LockAppPreference extends Preference {
         super.onBindView(v);
         ViewHolder holder = getViewHolder(v);
 
-//        char[] pattern = SecurityPrefs.getPattern(getContext());
-//        if (pattern==null || pattern.length<1) {
-//            holder.actionView.setVisibility(View.GONE);
-//        } else {
-//            holder.actionView.setVisibility(View.VISIBLE);
-//        }
+        char[] pattern = SecurityPrefs.getPattern(getContext());
+        if (pattern==null || pattern.length<1) {
+            holder.actionView.setEnabled(false);
+        } else {
+            holder.actionView.setEnabled(true);
+        }
      }
+
+
 
     private ViewHolder getViewHolder(View v) {
         ViewHolder holder = (ViewHolder)v.getTag();
