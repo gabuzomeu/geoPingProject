@@ -7,12 +7,17 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.telephony.SignalStrength;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import eu.ttbox.geoping.core.Intents;
 
 /**
  * platform_frameworks_base : com.android.internal.policy.impl.keyguard.KeyguardUpdateMonitor
+ * Use http://developer.android.com/reference/android/telephony/SignalStrength.html ?
+ * http://stackoverflow.com/questions/15039728/listening-to-signalstrength-when-phone-sleeps
+ * http://alvinalexander.com/java/jwarehouse/android/telephony/java/com/android/internal/telephony/PhoneStateIntentReceiver.java.shtml
  */
 public class ReSentSmsMessageReceiver extends BroadcastReceiver {
 
@@ -52,7 +57,9 @@ public class ReSentSmsMessageReceiver extends BroadcastReceiver {
             CharSequence  mTelephonyPlmn = getTelephonyPlmnFrom(intent);
             CharSequence  mTelephonySpn = getTelephonySpnFrom(intent);
         } else if ( TelephonyIntents.ACTION_SIGNAL_STRENGTH_CHANGED.equals(action)) {
-
+           // int mSignalStrength = SignalStrength.newFromBundle(intent.getExtras());
+        } else if (TelephonyManager.ACTION_PHONE_STATE_CHANGED.equals(action)) {
+            // Log.d(TAG, "onReceiveIntent: ACTION_PHONE_STATE_CHANGED, state="   + intent.getStringExtra(Phone.STATE_KEY));
         }
     }
 
