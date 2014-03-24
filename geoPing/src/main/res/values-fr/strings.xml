@@ -108,12 +108,26 @@
     
     <!-- Prefs -->
     <string name="prefs_sms_category">Monitoring Sms</string>
-    
-    <string name="prefs_geoping_request">Demande de GeoPing</string>
-    <string name="prefs_block_geoping_pairing">Association</string>
-    <string name="prefs_block_geoping_pairing_summaryOff">Bloquer les nouvelles associations</string>
-    <string name="prefs_block_geoping_pairing_summaryOn">Autoriser les nouvelles associations</string>
-    
+
+    <!-- Prefs Pairing -->
+    <string name="prefs_pairing_config">Qui me suit configuration</string>
+    <string name="prefs_pairing_notification">Notification</string>
+    <string name="prefs_pairing_notification_sound">Son de la Notification</string>
+
+    <!-- Prefs Pairing Security -->
+    <string name="prefs_pairing_security">Sécurité des associations</string>
+    <string name="prefs_pairing_security_block_request">Association</string>
+    <string name="prefs_pairing_security_block_request_summaryOff">Bloquer les nouvelles associations</string>
+    <string name="prefs_pairing_security_block_request_summaryOn">Autoriser les nouvelles associations</string>
+
+    <!-- Prefs Geoping -->
+    <string name="prefs_geoping_config">Ou es tu configuration</string>
+    <!-- Prefs Geoping Notification-->
+    <string name="prefs_geoping_notification">Notification</string>
+    <string name="prefs_geoping_notification_sound">Son de la Notification</string>
+    <!-- Prefs Geoping Request-->
+    <string name="prefs_geoping_request">Requête de Localisation</string>
+
     <string name="prefs_show_geoping_notification">Afficher une notification</string>
     <string name="prefs_show_geoping_notification_summary">Pour les nouvelles associations</string>
 
@@ -127,7 +141,9 @@
     <string name="prefs_myLocation">Ma Position</string>
     <string name="prefs_myLocation_display_LatLng">Afficher les coordonnées</string>
 
-    <string name="prefs_geoping_geoPoint_category">GeoPoint</string>
+    <!-- Geoping Map prefs-->
+    <string name="prefs_geoping_map_category">Affichage cartographique</string>
+
     <string name="prefs_geoPoint_geocoding_auto">Geocoding automatique</string>
     
     <string name="prefs_developement">Développement</string>
@@ -150,16 +166,17 @@
     <string name="prefs_license_activity_title">"Licences open source"</string>
 
     <!-- Prefs LockApp -->
-    <string name="prefs_lockapp">Lock Application</string>
-    <string name="prefs_lockapp_lockpattern_create">Lock By Pattern</string>
-    <string name="prefs_lockapp_lockpattern_max_retry">Maximum retry</string>
-    <string name="prefs_lockapp_lockpattern_min_wired_dots">Minimum wired dots</string>
+    <string name="prefs_lockapp">"Vérouillage de l'application"</string>
+    <string name="prefs_lockapp_lockpattern_create">"Vérouillage par motif"</string>
+    <string name="prefs_lockapp_lockpattern_max_retry">"Nb Maximum d'essais"</string>
+    <string name="prefs_lockapp_lockpattern_min_wired_dots">"Nb Minimum de point du motif"</string>
 
     <string name="prefs_launcher_icon">Icône de Lancement</string>
     <string name="prefs_launcher_icon_summary_on">Ouverture par Icône</string>
     <string name="prefs_launcher_icon_summary_off">Ouverture par SMS uniquement</string>
     <string name="prefs_launcher_icon_error_missing_pairing_command_authorize">Une personne doit être autorisé à accepté des commandes SMS</string>
 
+    <!-- Prefs LockApp Widget -->
     <string name="prefs_widget_category">Widget Feature</string>
     <string name="prefs_widget_person_list">Person Widget Icon</string>
     <string name="prefs_widget_person_list_summary_on">Person Widget Icon is show</string>

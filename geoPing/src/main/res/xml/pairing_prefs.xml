@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/prefs_pairing_config">
+
+    <PreferenceCategory android:title="@string/prefs_pairing_notification">
+        <RingtonePreference
+            android:defaultValue="content://settings/system/notification_sound"
+            android:showDefault="true"
+            android:title="@string/prefs_pairing_notification_sound"
+            android:key="@string/pkey_pairing_notif_sound"
+            android:ringtoneType="notification"
+            android:dialogTitle="Change Sound"
+            />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/prefs_pairing_security">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="authorizeNewGeopingPairing"
+            android:summaryOff="@string/prefs_pairing_security_block_request_summaryOff"
+            android:summaryOn="@string/prefs_pairing_security_block_request_summaryOn"
+            android:title="@string/prefs_pairing_security_block_request" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/pkey_shownotif_newparing_default"
+            android:summary="@string/prefs_show_geoping_notification_summary"
+            android:title="@string/prefs_show_geoping_notification" />
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

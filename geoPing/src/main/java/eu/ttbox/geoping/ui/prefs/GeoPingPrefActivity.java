@@ -66,6 +66,7 @@ public class GeoPingPrefActivity extends PreferenceActivity //SlidingPreferenceA
             final boolean showDev = developmentPreferences.getBoolean(AppVersionPreference.PREF_SHOW_DEVMODE, false);
             // addPreferencesFromResource(R.xml.prefs);
             addPreferencesFromResource(R.xml.geoping_prefs);
+            addPreferencesFromResource(R.xml.pairing_prefs);
             addPreferencesFromResource(R.xml.map_prefs);
             // Lock Pattern
             addPreferencesFromResource(R.xml.lockpattern_prefs);

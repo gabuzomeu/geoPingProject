@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/prefs_geoping_config">
 
     <!-- <PreferenceCategory android:title="@string/prefs_sms_category" > -->
 
 
     <!-- </PreferenceCategory> -->
-    <PreferenceCategory android:title="@string/menu_pairing" >
+    <PreferenceCategory android:title="@string/prefs_geoping_request">
         <eu.ttbox.geoping.ui.prefs.comp.IntEditTextPreference
                 android:defaultValue="30"
                 android:key="requestTimeoutInS"
@@ -18,18 +19,16 @@
                 android:title="@string/prefs_geoping_request_accuracy_expected_m" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/prefs_geoping_request" >
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="authorizeNewGeopingPairing"
-            android:summaryOff="@string/prefs_block_geoping_pairing_summaryOff"
-            android:summaryOn="@string/prefs_block_geoping_pairing_summaryOn"
-            android:title="@string/prefs_block_geoping_pairing" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="@string/pkey_shownotif_newparing_default"
-            android:summary="@string/prefs_show_geoping_notification_summary"
-            android:title="@string/prefs_show_geoping_notification" />
+    <PreferenceCategory android:title="@string/prefs_geoping_notification" >
+        <RingtonePreference
+            android:defaultValue="content://settings/system/notification_sound"
+            android:showDefault="true"
+            android:title="@string/prefs_geoping_notification_sound"
+            android:key="@string/pkey_geoping_notif_sound"
+            android:ringtoneType="notification"
+            android:dialogTitle="Change Sound"
+            />
+
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="localSave"

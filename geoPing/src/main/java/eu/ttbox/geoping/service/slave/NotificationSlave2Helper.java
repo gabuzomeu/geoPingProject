@@ -6,8 +6,12 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
+import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -36,6 +40,7 @@ public class NotificationSlave2Helper {
     // Service
     private Context context;
     private NotificationManager mNotificationManager;
+    private SharedPreferences prefs;
 
     // ===========================================================
     // Constructor
@@ -45,6 +50,7 @@ public class NotificationSlave2Helper {
     public NotificationSlave2Helper(Context context) {
         this.context = context;
         this.mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
 
@@ -95,6 +101,8 @@ public class NotificationSlave2Helper {
                 builder.setNumber(msgUnreadCount);
             }
         }
+        // Sound
+        defineSound(context, builder);
 
         // Display Notif
         int notifId = getGeopingRequestNotificationId(phone);
@@ -110,6 +118,16 @@ public class NotificationSlave2Helper {
         mNotificationManager.notify(notifId, notification);
     }
 
+
+    private void defineSound(Context context, NotificationCompat.Builder builder) {
+            builder.setDefaults(Notification.DEFAULT_VIBRATE);
+            builder.setDefaults(Notification.DEFAULT_LIGHTS);
+            // Sound
+            String soundUri = prefs.getString(context.getString(R.string.pkey_pairing_notif_sound), "content://settings/system/notification_sound");
+            Log.d(TAG, "### Notif Geoping Sound Uri : " + soundUri);
+            Uri sound = Uri.parse(soundUri);
+            builder.setSound(sound, AudioManager.STREAM_NOTIFICATION);
+    }
 
     private int getGeopingRequestNotificationId(String  phone) {
         int notifId = SHOW_GEOPING_REQUEST_NOTIFICATION_ID;

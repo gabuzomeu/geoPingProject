@@ -105,12 +105,24 @@
 
     <!-- Prefs -->
     <string name="prefs_sms_category">Monitoring Sms</string>
-    
-    <string name="prefs_geoping_request">GeoPing solicitud</string>
-    <string name="prefs_block_geoping_pairing">Bloquear nueva asociacion de GeoPing</string>
-    <string name="prefs_block_geoping_pairing_summaryOff">Bloquear nueva asociacion de GeoPing</string>
-    <string name="prefs_block_geoping_pairing_summaryOn">Autorizar nueva asociacion de GeoPing</string>
-    
+
+    <!-- Prefs Pairing -->
+    <string name="prefs_pairing_config">Who follows me config</string>
+    <string name="prefs_pairing_notification">Notification</string>
+    <string name="prefs_pairing_notification_sound">Notification Sound</string>
+    <!-- Prefs Pairing Security -->
+    <string name="prefs_pairing_security">Security pairing</string>
+    <string name="prefs_pairing_security_block_request">Bloquear nueva asociacion de GeoPing</string>
+    <string name="prefs_pairing_security_block_request_summaryOff">Bloquear nueva asociacion de GeoPing</string>
+    <string name="prefs_pairing_security_block_request_summaryOn">Autorizar nueva asociacion de GeoPing</string>
+
+    <!-- Prefs Geoping -->
+    <string name="prefs_geoping_config">Where are you config</string>
+    <!-- Prefs Geoping Notification-->
+    <string name="prefs_geoping_notification">Notification</string>
+    <string name="prefs_geoping_notification_sound">Notification Sound</string>
+    <!-- Prefs Geoping Request-->
+    <string name="prefs_geoping_request">GeoLoc solicitud</string>
     <string name="prefs_show_geoping_notification">Mostrar una notificacion</string>
     <string name="prefs_show_geoping_notification_summary">Para las nuevas asociaciones</string>
     <string name="prefs_geoping_request_timeout_ms">Request Time Out in s</string>
@@ -122,7 +134,8 @@
     <string name="prefs_myLocation">Mi Posicion</string>
     <string name="prefs_myLocation_display_LatLng">Mostrar las coordenadas</string>
 
-    <string name="prefs_geoping_geoPoint_category">GeoPoint</string>
+    <!-- Geoping Map prefs-->
+    <string name="prefs_geoping_map_category">Map display</string>
     <string name="prefs_geoPoint_geocoding_auto">Geocoding automatico</string>
 
     <string name="prefs_developement">Desarrollo</string>

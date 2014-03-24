@@ -214,8 +214,8 @@ public class NotificationMasterHelper {
             builder.setDefaults(Notification.DEFAULT_VIBRATE);
             builder.setDefaults(Notification.DEFAULT_LIGHTS);
             // Sound
-            String soundUri = prefs.getString(context.getString(R.string.pkey_notif_sound), "content://settings/system/notification_sound");
-            Log.d(TAG, "### Notif Sound Uri : " + soundUri);
+            String soundUri = prefs.getString(context.getString(R.string.pkey_geoping_notif_sound), "content://settings/system/notification_sound");
+            Log.d(TAG, "### Notif Geoping Sound Uri : " + soundUri);
             Uri sound = Uri.parse(soundUri);
             builder.setSound(sound, AudioManager.STREAM_NOTIFICATION);
         }

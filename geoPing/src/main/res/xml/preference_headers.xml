@@ -3,8 +3,8 @@
 
     <header
         android:fragment="eu.ttbox.geoping.ui.prefs.GeoPingPrefActivity$PrefsFragment"
-        android:icon="@android:drawable/ic_menu_myplaces"
-        android:title="@string/prefs_geoping_request">
+        android:icon="@drawable/ic_action_user"
+        android:title="@string/prefs_geoping_config">
         <extra
             android:name="pref-resource"
             android:value="geoping_prefs" />
@@ -12,8 +12,18 @@
 
     <header
         android:fragment="eu.ttbox.geoping.ui.prefs.GeoPingPrefActivity$PrefsFragment"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="@string/prefs_pairing_config">
+        <extra
+            android:name="pref-resource"
+            android:value="pairing_prefs" />
+    </header>
+
+
+    <header
+        android:fragment="eu.ttbox.geoping.ui.prefs.GeoPingPrefActivity$PrefsFragment"
         android:icon="@drawable/ic_location_web_site"
-        android:title="@string/prefs_geoping_geoPoint_category">
+        android:title="@string/prefs_geoping_map_category">
         <extra
             android:name="pref-resource"
             android:value="map_prefs" />

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/prefs_geoping_map_category"  >
 
  
-    <PreferenceCategory android:title="@string/prefs_geoping_geoPoint_category" >
+    <PreferenceCategory android:title="@string/prefs_geoping_map_category" >
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="myLocationDisplayLatlng"
