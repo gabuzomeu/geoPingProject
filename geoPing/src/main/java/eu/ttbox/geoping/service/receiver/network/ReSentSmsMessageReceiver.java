@@ -56,10 +56,19 @@ public class ReSentSmsMessageReceiver extends BroadcastReceiver {
         } else if ( TelephonyIntents.SPN_STRINGS_UPDATED_ACTION.equals(action)) {
             CharSequence  mTelephonyPlmn = getTelephonyPlmnFrom(intent);
             CharSequence  mTelephonySpn = getTelephonySpnFrom(intent);
+            Log.d(TAG, "### onReceive Type : SPN_STRINGS_UPDATED_ACTION " );
+            printExtras(intent.getExtras());
+            Log.d(TAG, "### onReceive Type : SPN_STRINGS_UPDATED_ACTION (END)" );
         } else if ( TelephonyIntents.ACTION_SIGNAL_STRENGTH_CHANGED.equals(action)) {
            // int mSignalStrength = SignalStrength.newFromBundle(intent.getExtras());
+            Log.d(TAG, "### onReceive Type : ACTION_SIGNAL_STRENGTH_CHANGED " );
+            printExtras(intent.getExtras());
+            Log.d(TAG, "### onReceive Type : ACTION_SIGNAL_STRENGTH_CHANGED (END)" );
         } else if (TelephonyManager.ACTION_PHONE_STATE_CHANGED.equals(action)) {
             // Log.d(TAG, "onReceiveIntent: ACTION_PHONE_STATE_CHANGED, state="   + intent.getStringExtra(Phone.STATE_KEY));
+            Log.d(TAG, "### onReceive Type : ACTION_PHONE_STATE_CHANGED " );
+            printExtras(intent.getExtras());
+            Log.d(TAG, "### onReceive Type : ACTION_PHONE_STATE_CHANGED (END)" );
         }
     }
 

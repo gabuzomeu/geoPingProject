@@ -271,6 +271,7 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
     // GeoPing Request
     // ===========================================================
     private void manageGeopingRequest(Pairing pairing, Bundle config, Uri logUri) {
+
         // Request
         // registerGeoPingRequest(phone, params);
 
