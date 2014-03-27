@@ -38,8 +38,8 @@ dependencies {
         exclude module: 'support-v4'
         exclude module : 'google-play-services'
     }
-    compile "com.android.support:support-v13:19.0.+"
-    compile "com.android.support:appcompat-v7:19.0.+@aar"
+    compile "com.android.support:support-v13:19.1.+"
+    compile "com.android.support:appcompat-v7:19.1.+@aar"
     compile slidingmenu
 
     compile ('com.squareup.okhttp:okhttp:1.2.+@jar') { transitive = true }
