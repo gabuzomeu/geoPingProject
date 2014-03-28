@@ -16,16 +16,17 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceGroup;
 import android.preference.PreferenceManager;
+import android.text.InputType;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.analytics.tracking.android.EasyTracker;
-import com.google.analytics.tracking.android.MapBuilder;
-import com.google.analytics.tracking.android.Tracker;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import java.util.List;
 
+import eu.ttbox.geoping.GeoPingApplication;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.NotifToasts;
 import eu.ttbox.geoping.core.VersionUtils;
@@ -71,6 +72,10 @@ public class GeoPingPrefActivity extends PreferenceActivity //SlidingPreferenceA
             // Lock Pattern
             addPreferencesFromResource(R.xml.lockpattern_prefs);
             new CommandsPrefsHelper(this, this).init();
+            // Emergency Mode
+            addPreferencesFromResource(R.xml.emergency_prefs);
+
+            // Dev Mode
             if (showDev) {
                 addPreferencesFromResource(R.xml.development_prefs);
             }
@@ -115,8 +120,15 @@ public class GeoPingPrefActivity extends PreferenceActivity //SlidingPreferenceA
         if (pref instanceof EditTextPreference) {
             EditTextPreference editPref = (EditTextPreference) pref;
             String prefText = editPref.getText();
-            if (prefText != null && prefText.length() > 0)
-                pref.setSummary(prefText);
+           int  editInputType =  editPref.getEditText().getInputType();
+            if (prefText != null && prefText.length() > 0) {
+                if((editInputType & InputType.TYPE_NUMBER_VARIATION_PASSWORD) > 0) {
+                    pref.setSummary("XXXXX");
+                } else {
+                    pref.setSummary(prefText);
+                }
+
+            }
         } else if (pref instanceof ListPreference) {
             ListPreference listPref = (ListPreference) pref;
             pref.setSummary(listPref.getEntry());
@@ -148,19 +160,19 @@ public class GeoPingPrefActivity extends PreferenceActivity //SlidingPreferenceA
     // Tracking Event
     // ===========================================================
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Tracker
-        EasyTracker.getInstance(this).activityStart(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        // Tracker
-        EasyTracker.getInstance(this).activityStop(this);
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        // Tracker
+//        EasyTracker.getInstance(this).activityStart(this);
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        // Tracker
+//        EasyTracker.getInstance(this).activityStop(this);
+//    }
 
     @Override
     public void onResume() {
@@ -180,7 +192,11 @@ public class GeoPingPrefActivity extends PreferenceActivity //SlidingPreferenceA
             @Override
             @TargetApi(Build.VERSION_CODES.HONEYCOMB)
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                // Recompute All Sumaries
+                // TODO Recompute Only the changed Values  initSummaries(getPreferenceScreen());
+                // Recompute All Headers
                 invalidateHeaders();
+
             }
         };
         developmentPreferences.registerOnSharedPreferenceChangeListener(mDevelopmentPreferencesListener);
@@ -340,8 +356,12 @@ public class GeoPingPrefActivity extends PreferenceActivity //SlidingPreferenceA
         // Tracker
         // GeoPingApplication.getInstance().tracker().trackPageView("/Pref/" +
         // key);
-        Tracker tracker = EasyTracker.getInstance(this);
-        tracker.send(MapBuilder.createEvent( "ui_pref", "changed", key, null).build());
+        Tracker tracker =   tracker = GeoPingApplication.getGeoPingApplication(this).getTracker();
+        tracker.send(new HitBuilders.EventBuilder()//
+                .setCategory("ui_pref") // Category
+                .setAction( "changed") // Action
+                .setLabel(key) // Label
+                .build());
     }
 
     // ===========================================================

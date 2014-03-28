@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 
@@ -148,19 +147,19 @@ public class LoginActivity extends ActionBarActivity { //
     // Life Cycle
     // ===========================================================
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Tracker
-        EasyTracker.getInstance(this).activityStart(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        // Tracker
-        EasyTracker.getInstance(this).activityStop(this);
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        // Tracker
+//        EasyTracker.getInstance(this).activityStart(this);
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        // Tracker
+//        EasyTracker.getInstance(this).activityStop(this);
+//    }
 
     @Override
     public void onPause() {
@@ -515,9 +514,9 @@ public class LoginActivity extends ActionBarActivity { //
         int counterInc = markPrefLoginStatus();
         startActivity(mainActivity);
         if (!AdmobHelper.isAddBlocked(this)) {
-            if (counterInc% AD_INTERSTITIAL_FREQUENCY == 0) {
+            if (counterInc % AD_INTERSTITIAL_FREQUENCY == 0) {
                 AdmobHelper.displayInterstitialAd(this);
-             }
+            }
         }
         finish();
     }

@@ -54,6 +54,13 @@
             geoping:text="@string/menu_settings" />
 
         <eu.ttbox.geoping.ui.slidingmenu.SlindingMenuItemView
+            android:id="@+id/menu_emergency_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            geoping:src="@android:drawable/ic_dialog_alert"
+            geoping:text="@string/menu_emergency_mode" />
+
+        <eu.ttbox.geoping.ui.slidingmenu.SlindingMenuItemView
             android:id="@+id/menu_extra_feature"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" 

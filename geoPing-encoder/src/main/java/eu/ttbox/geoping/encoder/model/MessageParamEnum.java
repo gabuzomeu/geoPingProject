@@ -38,6 +38,8 @@ public enum MessageParamEnum implements IParamEncoder {
     ), //
     // Alarm
     ALARM('h', MessageParamField.ALARM),
+    // Emergency Mode
+    EMERGENCY_PASSWORD('k', MessageParamField.EMERGENCY_PASSWORD),
     // Spy Event
     //    EVT_SIM_PHONE('i', ParamTypeEncoding.STRING, "EVT_SIM_PHONE"),
     PHONE_NUMBER('n', MessageParamField.PHONE_NUMBER), //

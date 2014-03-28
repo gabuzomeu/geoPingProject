@@ -8,15 +8,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
-import com.google.analytics.tracking.android.EasyTracker;
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivityBase;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivityHelper;
 
 import eu.ttbox.geoping.R;
-import eu.ttbox.geoping.ui.admob.AdmobHelper;
 import eu.ttbox.geoping.ui.slidingmenu.SlidingMenuHelper;
 
 public class GeoPingSlidingMenuFragmentActivity extends ActionBarActivity implements SlidingActivityBase {
@@ -28,21 +25,22 @@ public class GeoPingSlidingMenuFragmentActivity extends ActionBarActivity implem
     // ===========================================================
     // Tracking Event
     // ===========================================================
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        adView = AdmobHelper.bindAdMobView(this);
-        // Tracker
-        EasyTracker.getInstance(this).activityStart(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        // Tracker
-        EasyTracker.getInstance(this).activityStop(this);
-    }
+//
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        adView = AdmobHelper.bindAdMobView(this);
+//        // Tracker
+//        Tracker tracker = GeoPingApplication.getGeoPingApplication(this).getTracker();
+//        EasyTracker.getInstance(this).activityStart(this);
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        // Tracker
+//        EasyTracker.getInstance(this).activityStop(this);
+//    }
 
 
     @Override

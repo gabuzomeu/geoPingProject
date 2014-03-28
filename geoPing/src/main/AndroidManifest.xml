@@ -136,6 +136,9 @@
         <!-- Pref -->
         <activity android:exported="false" android:name=".ui.prefs.GeoPingPrefActivity"/>
 
+        <!-- Emergency Mode -->
+        <activity android:exported="false" android:name=".ui.emergency.EmergencyModeActivity"/>
+
         <!-- Map -->
         <activity android:exported="false" android:label="@string/menu_map" android:launchMode="singleTask" android:name=".ui.map.ShowMapActivity" android:theme="@style/MapActionBar">
             <intent-filter>

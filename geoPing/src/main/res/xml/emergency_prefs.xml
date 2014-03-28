@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/prefs_emergency_category" >
+
+    <PreferenceCategory android:title="@string/prefs_emergency_category">
+        <EditTextPreference
+            android:inputType="numberPassword"
+            android:key="@string/pkey_emergency_password"
+            android:title="@string/prefs_emergency_password" />
+
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

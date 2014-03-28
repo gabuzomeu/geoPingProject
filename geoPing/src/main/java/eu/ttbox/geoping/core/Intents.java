@@ -260,10 +260,20 @@ public class Intents {
 
     // Sms Producer
     public static Intent sendSmsGeoPingRequest(Context context, String phoneNumber) {
-        return new Intent(context, GeoPingMasterService.class) //
+        return  sendSmsGeoPingRequest( context,  phoneNumber,null);
+    }
+
+    public static Intent sendSmsGeoPingRequest(Context context, String phoneNumber,  Bundle params) {
+        Intent intent= new Intent(context, GeoPingMasterService.class) //
                 .setAction(ACTION_SMS_GEOPING_REQUEST_SENDER)//
                 .putExtra(EXTRA_SMS_PHONE, phoneNumber);
+        if (params!=null) {
+            intent.putExtra(EXTRA_SMS_PARAMS, params);
+        }
+        return intent;
     }
+
+
 
     // Sms Producer
     public static Intent displayGeotrackOnMap(Context context, String phoneNumber) {

@@ -12,8 +12,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.google.analytics.tracking.android.EasyTracker;
-
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.PersonProvider;
@@ -110,19 +108,19 @@ public class PersonEditActivity extends ActionBarActivity {
     // Tracking Event
     // ===========================================================
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Tracker
-        EasyTracker.getInstance(this).activityStart(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        // Tracker
-        EasyTracker.getInstance(this).activityStop(this);
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        // Tracker
+//        EasyTracker.getInstance(this).activityStart(this);
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        // Tracker
+//        EasyTracker.getInstance(this).activityStop(this);
+//    }
 
 
     @Override

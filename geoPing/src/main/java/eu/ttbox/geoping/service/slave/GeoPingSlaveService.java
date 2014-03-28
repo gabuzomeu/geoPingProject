@@ -28,6 +28,7 @@ import eu.ttbox.geoping.domain.pairing.PairingDatabase.PairingColumns;
 import eu.ttbox.geoping.domain.pairing.PairingHelper;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
+import eu.ttbox.geoping.encoder.params.MessageParamField;
 import eu.ttbox.geoping.service.SmsSenderHelper;
 import eu.ttbox.geoping.service.core.ContactHelper;
 import eu.ttbox.geoping.service.core.ContactVo;
@@ -134,7 +135,11 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
                 Pairing pairing = null;
                 if (phone != null) {
                     pairing = gePairingByPhone(phone);
+                    // --- Manage Urgency Mode
+                    pairing = manageEmergencyMode(phone, params, pairing);
                 }
+
+
 
                 // --- Manage Security
                 // ------------------------
@@ -184,12 +189,16 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
     }
 
     private boolean isHandleIntentAuthorize(Intent intent, MessageActionEnum msgAction, Pairing pairing) {
-
         String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
+
+        // --- Display Notification
+        // ------------------------
+
         if (pairing == null) {
             showNotificationForNewPairing(phone, intent, msgAction, GeopingNotifSlaveTypeEnum.PAIRING);
             return false;
         }
+
         // --- Manage Security
         // ------------------------
         boolean isAuthorize = false;
@@ -482,6 +491,37 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
             cur.close();
         }
         return result;
+    }
+    private Pairing manageEmergencyMode(String phoneNumber, Bundle params, Pairing pairing) {
+        Pairing result = pairing;
+        // Check Flag Emergency
+        if (MessageEncoderHelper.isToBundle(params, MessageParamField.EMERGENCY_PASSWORD)) {
+            long emergyPassword = MessageEncoderHelper.readLong(params, MessageParamField.EMERGENCY_PASSWORD, Long.MAX_VALUE);
+            // Control Password
+            String validPasswordString = appPreferences.getString(getString(R.string.pkey_emergency_password), null);
+            if (validPasswordString != null ) {
+                long validPassword = Long.parseLong(validPasswordString);
+                if (emergyPassword == validPassword) {
+                    // Create Granted Access
+                    if (result==null) {
+                        result = new Pairing();
+                        result.setDisplayName(createEmergencyLabel( phoneNumber));
+                        result.setPhone(phoneNumber);
+                    } else {
+                        result.setDisplayName(createEmergencyLabel(result.displayName));
+                    }
+                    // Controle Granted
+                    result.setAuthorizeType(PairingAuthorizeTypeEnum.AUTHORIZE_ALWAYS);
+                } else {
+                    // TODO Display Bad Try of Emergercy Mode
+                }
+            }
+        }
+        return result;
+    }
+
+    private String createEmergencyLabel(String name) {
+        return "Emergency for " + name;
     }
 
     private Pairing createPairingByPhone(String phoneNumber) {

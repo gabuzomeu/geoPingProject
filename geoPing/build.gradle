@@ -17,7 +17,7 @@ List jackson = ['com.fasterxml.jackson.core:jackson-core:2.3.+@jar', 'com.faster
 // Google Apis
 List googlePlayServices = ['com.google.android.gms:play-services:4.+@aar']
 //List analytics = ['com.google.android.analytics:analytics:3@jar']
-List analytics = ['com.google.android.analytics:libGoogleAnalyticsServices:3.01@jar']
+//List analytics = ['com.google.android.analytics:libGoogleAnalyticsServices:3.01@jar']
 
 
 // Compatibility
@@ -47,7 +47,7 @@ dependencies {
 
 
     compile googlePlayServices
-    compile analytics
+//    compile analytics
   //  compile 'com.google.android.admob:admob:6.4.1-r11@jar'
 
     compile jackson

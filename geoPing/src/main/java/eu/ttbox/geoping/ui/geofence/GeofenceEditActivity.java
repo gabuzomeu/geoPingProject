@@ -12,10 +12,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.google.analytics.tracking.android.EasyTracker;
-
-import java.util.Locale;
-
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.model.CircleGeofence;
@@ -152,19 +148,19 @@ public class GeofenceEditActivity extends ActionBarActivity {
     // Tracking Event
     // ===========================================================
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Tracker
-        EasyTracker.getInstance(this).activityStart(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        // Tracker
-        EasyTracker.getInstance(this).activityStop(this);
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        // Tracker
+//        EasyTracker.getInstance(this).activityStart(this);
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        // Tracker
+//        EasyTracker.getInstance(this).activityStop(this);
+//    }
 
     // ===========================================================
     // Life Cycle

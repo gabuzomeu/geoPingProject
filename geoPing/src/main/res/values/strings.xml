@@ -68,6 +68,8 @@
     <string name="map_mode">Map Type</string>
     <string name="menu_geoping">GeoPing</string>
     <string name="menu_settings">Settings</string>
+    <string name="menu_emergency_mode">Emergency Mode</string>
+
     <string name="menu_map">Map</string>
     <string name="menu_quit">Quit</string>
     <string name="menu_person">Where are you?</string>
@@ -122,6 +124,11 @@
     <string name="prefs_geoping_localSave_summaryOff">Desactivated</string>
     <string name="prefs_myLocation">My position</string>
     <string name="prefs_myLocation_display_LatLng">Show the coordinates</string>
+
+
+    <!-- Geoping Emergency prefs-->
+    <string name="prefs_emergency_category">Emergency Mode</string>
+    <string name="prefs_emergency_password">Emergency Password</string>
 
     <!-- Geoping Map prefs-->
     <string name="prefs_geoping_map_category">Map Display</string>

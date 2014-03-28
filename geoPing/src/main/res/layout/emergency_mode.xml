@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+
+
+    <TextView
+        android:id="@+id/labelErmergencyPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/prefs_emergency_password"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <EditText
+        android:id="@+id/emergencyPasswordEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/labelErmergencyPassword"
+        android:layout_below="@+id/labelErmergencyPassword"
+        android:ems="10"
+        android:hint="@string/prefs_emergency_password"
+        android:inputType="numberPassword"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/person_phone"
+        style="@style/entity_edit"
+        android:layout_width="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/emergencyPasswordEdit"
+        android:hint="@string/person_phone"
+        android:inputType="phone" />
+
+
+    <Button
+        android:id="@+id/geoping_button_call"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/person_phone"
+        android:layout_marginTop="20dp"
+        android:text="@string/menu_geoping"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+</RelativeLayout>

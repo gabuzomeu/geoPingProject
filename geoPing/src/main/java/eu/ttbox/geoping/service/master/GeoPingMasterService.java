@@ -16,12 +16,12 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.analytics.tracking.android.EasyTracker;
-import com.google.analytics.tracking.android.MapBuilder;
-import com.google.analytics.tracking.android.Tracker;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import java.lang.ref.WeakReference;
 
+import eu.ttbox.geoping.GeoPingApplication;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.GeoTrackerProvider;
@@ -52,14 +52,15 @@ public class GeoPingMasterService extends IntentService {
     // ===========================================================
     private Tracker tracker;
 
-    private Handler uiHandler = new MyInnerHandler(this)    ;
+    private Handler uiHandler = new MyInnerHandler(this);
 
-    static class MyInnerHandler extends Handler{
+    static class MyInnerHandler extends Handler {
         WeakReference<GeoPingMasterService> mFrag;
 
         MyInnerHandler(GeoPingMasterService aFragment) {
             mFrag = new WeakReference<GeoPingMasterService>(aFragment);
         }
+
         @Override
         public void handleMessage(Message msg) {
             GeoPingMasterService theFrag = mFrag.get();
@@ -89,7 +90,7 @@ public class GeoPingMasterService extends IntentService {
         this.appPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         this.notifyGeoPingResponse = appPreferences.getBoolean(getString(R.string.pkey_shownotif_newparing_default), false);
         // Google Analytics
-        tracker =  EasyTracker.getInstance(this);
+        tracker = GeoPingApplication.getGeoPingApplication(this).getTracker();
 
         Log.d(TAG, "#################################");
         Log.d(TAG, "### GeoPingMasterService Service Started.");
@@ -116,20 +117,22 @@ public class GeoPingMasterService extends IntentService {
             // Tracker
             // tracker.trackPageView("/action/SMS_GEOPING_REQUEST");
 
-            tracker.send(MapBuilder.createEvent( "MasterService", // Category
-                    "HandleIntent", // Action
-                    "SMS_GEOPING_REQUEST", // Label
-                    0l).build()); // Value
+            tracker.send(new HitBuilders.EventBuilder() //
+                    .setCategory("MasterService") // Category
+                    .setAction("HandleIntent") // Action
+                    .setLabel("SMS_GEOPING_REQUEST") // Label
+                    .build()); // Value
         } else if (Intents.ACTION_SMS_PAIRING_RESQUEST.equals(action)) {
             String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
             long userId = intent.getLongExtra(Intents.EXTRA_SMS_USER_ID, -1);
             sendSmsPairingRequest(phone, userId);
             // Tracker
             // tracker.trackPageView("/action/SMS_PAIRING_RESQUEST");
-            tracker.send(MapBuilder.createEvent("MasterService", // Category
-                    "HandleIntent", // Action
-                    "SMS_PAIRING_RESQUEST", // Label
-                    0l).build()); // Value
+            tracker.send(new HitBuilders.EventBuilder() //
+                    .setCategory("MasterService") // Category
+                    .setAction("HandleIntent") // Action
+                    .setLabel("SMS_PAIRING_RESQUEST") // Label
+                    .build()); // Value
 //        } else if (Intents.ACTION_SMS_PAIRING_RESPONSE.equals(action)) {
 //            String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
 //            Bundle params = intent.getBundleExtra(Intents.EXTRA_SMS_PARAMS);
@@ -151,7 +154,7 @@ public class GeoPingMasterService extends IntentService {
                     case COMMAND_OPEN_APP: {
                         String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
                         Bundle params = intent.getBundleExtra(Intents.EXTRA_SMS_PARAMS);
-                        Log.d(TAG, "### Request Sending Sms for " +actionEnum+     " and Phone : " +phone );
+                        Log.d(TAG, "### Request Sending Sms for " + actionEnum + " and Phone : " + phone);
                         sendSmsCommand(actionEnum, phone, params);
                     }
                     break;
@@ -159,14 +162,15 @@ public class GeoPingMasterService extends IntentService {
                     case ACTION_GEO_PAIRING_RESPONSE: {
                         String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
                         Bundle params = intent.getBundleExtra(Intents.EXTRA_SMS_PARAMS);
-                        long userId =   MessageEncoderHelper.readLong(params, MessageParamEnum.PERSON_ID, -1);
+                        long userId = MessageEncoderHelper.readLong(params, MessageParamEnum.PERSON_ID, -1);
                         consumeSmsPairingResponse(phone, userId);
                         // Tracker
                         // tracker.trackPageView("/action/SMS_PAIRING_RESPONSE");
-                        tracker.send(MapBuilder.createEvent("MasterService", // Category
-                                "HandleIntent", // Action
-                                "SMS_PAIRING_RESPONSE", // Label
-                                0l).build()); // Value
+                        tracker.send(new HitBuilders.EventBuilder() //
+                                .setCategory("MasterService") // Category
+                                .setAction("HandleIntent") // Action
+                                .setLabel("SMS_PAIRING_RESPONSE") // Label
+                                .build()); // Value
                     }
                     break;
                     // Read Sms
@@ -201,11 +205,11 @@ public class GeoPingMasterService extends IntentService {
                         Log.w(TAG, "--- ------------------------------------ ---");
                         break;
                 }
-                // Tracker
-                tracker.send(MapBuilder.createEvent("MasterService", // Category
-                        "HandleIntent", // Action
-                        actionEnum.name(), // Label
-                        0l).build()); // Value
+                tracker.send(new HitBuilders.EventBuilder() //
+                        .setCategory("MasterService") // Category
+                        .setAction("HandleIntent") // Action
+                        .setLabel(actionEnum.name()) // Label
+                        .build()); // Value
             }
         }
 
@@ -292,7 +296,7 @@ public class GeoPingMasterService extends IntentService {
             Uri entityUri = Uri.withAppendedPath(PersonProvider.Constants.CONTENT_URI, String.valueOf(person.id));
             // getContentResolver().update(entityUri, values, null, null);
         }
-        Bundle params =  MessageEncoderHelper.writeToBundle(null,  MessageParamEnum.PERSON_ID,userId);
+        Bundle params = MessageEncoderHelper.writeToBundle(null, MessageParamEnum.PERSON_ID, userId);
         boolean isSend = sendSms(phone, MessageActionEnum.ACTION_GEO_PAIRING, params);
         if (isSend) {
             Message msg = uiHandler.obtainMessage(UI_MSG_TOAST, getResources().getString(R.string.toast_notif_sended_geoping_pairing, phone));
@@ -324,7 +328,7 @@ public class GeoPingMasterService extends IntentService {
         boolean isSend = false;
 
         if (phone == null || phone.length() < 1) {
-            Log.d(TAG, "### Not Sending Sms for Not Phone define"  );
+            Log.d(TAG, "### Not Sending Sms for Not Phone define");
             return false;
         }
 
@@ -414,11 +418,10 @@ public class GeoPingMasterService extends IntentService {
     // ===========================================================
 
 
-    private void showNotificationGeoPing(MessageActionEnum actionEnum, Uri geoTrackData, ContentValues values, GeoTrack geoTrack,  Bundle params) {
+    private void showNotificationGeoPing(MessageActionEnum actionEnum, Uri geoTrackData, ContentValues values, GeoTrack geoTrack, Bundle params) {
         NotificationMasterHelper helper = new NotificationMasterHelper(this);
-        helper.showNotificationGeoPing(actionEnum,   geoTrackData,   values,   geoTrack,    params);
+        helper.showNotificationGeoPing(actionEnum, geoTrackData, values, geoTrack, params);
     }
-
 
 
     public class LocalBinder extends Binder {
@@ -433,11 +436,9 @@ public class GeoPingMasterService extends IntentService {
     // ===========================================================
 
 
-
     // ===========================================================
     // Other
     // ===========================================================
-
 
 
 }

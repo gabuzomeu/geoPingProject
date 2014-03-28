@@ -13,7 +13,9 @@ import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.google.analytics.tracking.android.GAServiceManager;
+
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.core.VersionUtils;
@@ -43,6 +45,7 @@ public class GeoPingApplication extends Application {
     private SmsLogDatabase smsLogDatabase;
     private GeoTrackDatabase geoTrackDatabase;
     // private SecureDatabase secureDatabase;
+    private Tracker mTracker = null;
 
     private long lastActivityDate = Long.MIN_VALUE;
 
@@ -196,6 +199,27 @@ public class GeoPingApplication extends Application {
         catch (PackageManager.NameNotFoundException nnfe) {
             return 0;
         }
+    }
+
+
+    // ===========================================================
+    // Google Analytic
+    // ===========================================================
+
+    public Tracker getTracker() {
+        if (mTracker==null) {
+            createTracker();
+        }
+        return mTracker;
+    }
+
+    private synchronized Tracker createTracker() {
+        if (mTracker==null) {
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            Tracker t =   analytics.newTracker(R.xml.analytics_global_tracker) ;
+            mTracker = t;
+        }
+        return mTracker ;
     }
 
     // ===========================================================

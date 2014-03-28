@@ -36,8 +36,9 @@ import eu.ttbox.geoping.core.VersionUtils;
 import eu.ttbox.geoping.domain.PersonProvider;
 import eu.ttbox.geoping.domain.person.PersonDatabase.PersonColumns;
 import eu.ttbox.geoping.domain.person.PersonHelper;
-import eu.ttbox.geoping.ui.gcm.GcmActivity;
 import eu.ttbox.geoping.ui.billing.ExtraFeaturesActivity;
+import eu.ttbox.geoping.ui.emergency.EmergencyModeActivity;
+import eu.ttbox.geoping.ui.gcm.GcmActivity;
 import eu.ttbox.geoping.ui.geofence.GeofenceListActivity;
 import eu.ttbox.geoping.ui.map.ShowMapActivity;
 import eu.ttbox.geoping.ui.pairing.PairingListActivity;
@@ -60,11 +61,11 @@ public class GeopingSlidingItemMenuFragment extends Fragment {
     private SlidingPersonListAdapter personAdpater;
 
     private SparseArray<SlindingMenuItemView> menuItems;
-    private static int[] menuIds = new int[] { //
-      R.id.menuMap, R.id.menu_track_person, R.id.menu_pairing,R.id.menu_geofence , R.id.menu_smslog//
-      , R.id.menu_settings, R.id.menu_extra_feature //
-      , R.id.menu_gcm_message //
-     };
+    private static int[] menuIds = new int[]{ //
+            R.id.menuMap, R.id.menu_track_person, R.id.menu_pairing, R.id.menu_geofence, R.id.menu_smslog//
+            , R.id.menu_settings  , R.id.menu_emergency_mode, R.id.menu_extra_feature //
+            , R.id.menu_gcm_message //
+    };
 
 
     // Service
@@ -112,16 +113,16 @@ public class GeopingSlidingItemMenuFragment extends Fragment {
         this.menuItems = menuItems;
         // Dev activate screen
         // TODO For Dev Only Activate the Code 
-        if ( BuildConfig.DEBUG) {
-            for (int menuId : new int[] {R.id.menu_extra_feature, R.id.menu_gcm_message } ) {
-                SlindingMenuItemView menuItem =  menuItems.get(menuId);
-                if (menuItem!=null) {
+        if (BuildConfig.DEBUG) {
+            for (int menuId : new int[]{R.id.menu_extra_feature, R.id.menu_gcm_message}) {
+                SlindingMenuItemView menuItem = menuItems.get(menuId);
+                if (menuItem != null) {
                     menuItem.setVisibility(View.VISIBLE);
                 }
             }
-        } else  if (prefs.getBoolean( "inAppPay",false)) {
-            SlindingMenuItemView menuItem =  menuItems.get(R.id.menu_extra_feature);
-            if (menuItem!=null) {
+        } else if (prefs.getBoolean("inAppPay", false)) {
+            SlindingMenuItemView menuItem = menuItems.get(R.id.menu_extra_feature);
+            if (menuItem != null) {
                 menuItem.setVisibility(View.VISIBLE);
             }
         }
@@ -207,38 +208,39 @@ public class GeopingSlidingItemMenuFragment extends Fragment {
         Context context = getActivity();
         boolean isRootActivity = false;
         switch (itemId) {
-        case R.id.menu_settings:
-        case R.id.menu_pairing:
-        case R.id.menu_geofence:
-        case R.id.menu_track_person:
-        case R.id.menu_smslog:
-            isRootActivity = true;
-        case R.id.menu_extra_feature:
-        case R.id.menu_gcm_message:
-        case R.id.menuMap:
-            Class<? extends Activity> intentClass = getActivityClassByItemId(itemId);
-            if (intentClass != null) {
-                switchFragment();
-                // Activity
-                Class activityClass = getActivity().getClass();
-                if (!activityClass.isAssignableFrom(intentClass)) {
-                    Intent intentOption = new Intent(context, intentClass);
-                    clearActivityHistoryStack(intentOption, isRootActivity);
-                    // Create Stacks
-                    TaskStackBuilder stackBuilder = TaskStackBuilder.create(getActivity());
-                    stackBuilder.addParentStack(MainActivity.class);
-                    stackBuilder.addNextIntent(new Intent(getActivity(), MainActivity.class));
-                    stackBuilder.addNextIntent(intentOption);
-                    stackBuilder.startActivities();
+            case R.id.menu_emergency_mode:
+            case R.id.menu_settings:
+            case R.id.menu_pairing:
+            case R.id.menu_geofence:
+            case R.id.menu_track_person:
+            case R.id.menu_smslog:
+                isRootActivity = true;
+            case R.id.menu_extra_feature:
+            case R.id.menu_gcm_message:
+            case R.id.menuMap:
+                Class<? extends Activity> intentClass = getActivityClassByItemId(itemId);
+                if (intentClass != null) {
+                    switchFragment();
+                    // Activity
+                    Class activityClass = getActivity().getClass();
+                    if (!activityClass.isAssignableFrom(intentClass)) {
+                        Intent intentOption = new Intent(context, intentClass);
+                        clearActivityHistoryStack(intentOption, isRootActivity);
+                        // Create Stacks
+                        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getActivity());
+                        stackBuilder.addParentStack(MainActivity.class);
+                        stackBuilder.addNextIntent(new Intent(getActivity(), MainActivity.class));
+                        stackBuilder.addNextIntent(intentOption);
+                        stackBuilder.startActivities();
+                    }
+                    return true;
                 }
-                return true;
-            }
-            return false;
+                return false;
 
-        case R.id.menuAppComment:
-            switchFragment();
-            Intents.startActivityAppMarket(context);
-            return true;
+            case R.id.menuAppComment:
+                switchFragment();
+                Intents.startActivityAppMarket(context);
+                return true;
 
             // case R.id.menuAppShare:
             // Intent intentAppShare = new Intent(Intent.ACTION_SEND);
@@ -252,24 +254,26 @@ public class GeopingSlidingItemMenuFragment extends Fragment {
 
     private Class<? extends Activity> getActivityClassByItemId(int itemId) {
         switch (itemId) {
-        case R.id.menu_settings:
-            return GeoPingPrefActivity.class;
-        case R.id.menuMap:
-            return ShowMapActivity.class;
-        case R.id.menu_pairing:
-            return PairingListActivity.class;
-        case R.id.menu_geofence:
-            return GeofenceListActivity.class;
-        case R.id.menu_track_person:
-            return PersonListActivity.class;
-        case R.id.menu_smslog:
-            return SmsLogListActivity.class;
-        case R.id.menu_extra_feature:
-            return ExtraFeaturesActivity.class;
-        case R.id.menu_gcm_message:
-             return GcmActivity.class;
-        default:
-            return null;
+            case R.id.menu_emergency_mode:
+                return EmergencyModeActivity.class;
+            case R.id.menu_settings:
+                return GeoPingPrefActivity.class;
+            case R.id.menuMap:
+                return ShowMapActivity.class;
+            case R.id.menu_pairing:
+                return PairingListActivity.class;
+            case R.id.menu_geofence:
+                return GeofenceListActivity.class;
+            case R.id.menu_track_person:
+                return PersonListActivity.class;
+            case R.id.menu_smslog:
+                return SmsLogListActivity.class;
+            case R.id.menu_extra_feature:
+                return ExtraFeaturesActivity.class;
+            case R.id.menu_gcm_message:
+                return GcmActivity.class;
+            default:
+                return null;
         }
     }
 
@@ -326,7 +330,7 @@ public class GeopingSlidingItemMenuFragment extends Fragment {
                 personlayoutParams.height = (int) (count * scale * personItemHeight);
                 personListView.setLayoutParams(personlayoutParams);
                 Log.d(TAG, "personListView LayoutParams Before: " + personlayoutParams.height);
-            } else { 
+            } else {
                 if (View.GONE != personListTitleTextView.getVisibility()) {
                     personListTitleTextView.setVisibility(View.GONE);
                 }

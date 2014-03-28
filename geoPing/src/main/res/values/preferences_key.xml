@@ -5,4 +5,7 @@
     <string name="pkey_geoping_notif_sound">geoping_notif_sound</string>
     <string name="pkey_pairing_notif_sound">pairing_notif_sound</string>
 
+    <!-- Emergency Mode-->
+    <string name="pkey_emergency_password">emergency_password</string>
+
 </resources>

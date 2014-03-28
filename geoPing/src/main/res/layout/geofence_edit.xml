@@ -4,22 +4,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <TextView  android:id="@+id/labelGeofenceEditName"
+    <TextView  android:id="@+id/labelErmergencyPassword"
                android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/geofence_name"
            />
 
-    <EditText android:id="@+id/geofenceEditName"
+    <EditText android:id="@+id/emergencyPasswordEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="text"
             android:hint="@string/geofence_name"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:ems="10"
-            android:layout_below="@+id/labelGeofenceEditName"
-            android:layout_alignLeft="@+id/labelGeofenceEditName"/>
+            android:layout_below="@+id/labelErmergencyPassword"
+            android:layout_alignLeft="@+id/labelErmergencyPassword"/>
 
 
 
@@ -27,7 +27,7 @@
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:textAppearance="?android:attr/textAppearanceMedium"
-               android:layout_below="@+id/geofenceEditName"
+               android:layout_below="@+id/emergencyPasswordEdit"
                android:text="@string/geofence_transition"
                android:layout_marginTop="20dp"
             />
