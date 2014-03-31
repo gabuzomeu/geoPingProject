@@ -30,7 +30,7 @@ public class MessageParamEnumLabelHelper {
                 ,new LabelHolderDate(MessageParamEnum.EVT_DATE, R.string.geotrack_time_dateformat)  //
                 ,new LabelHolderDate(MessageParamEnum.DATE, R.string.geotrack_time_dateformat)  //
                 ,new LabelHolderLatLngE6(MessageParamEnum.GEO_E6, R.string.battery_percent)  //
-               // , new LabelHolderE6(MessageParamEnum.)
+             // , new LabelHolderE6(MessageParamEnum.)
 
         };
         // Construct Map

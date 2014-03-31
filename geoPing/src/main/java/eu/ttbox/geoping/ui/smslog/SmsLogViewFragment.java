@@ -285,13 +285,14 @@ public class SmsLogViewFragment extends Fragment {
             LayoutInflater layoutInflater = LayoutInflater.from(mContext);
             for (String key : bundle.keySet()) {
                 MessageParamEnum param =  MessageParamEnum.getByDbFieldName(key);
-
                // MessageParamField.
                 Log.d(TAG, "Read Json Params : " + key + " = " + bundle.get(key));
                 if (param == null) {
                     // No ref of this param
                     String val = String.valueOf(bundle.get(key));
-                    addParamTextLabel(layoutInflater, key, val);
+                   // Not necessary to display because it should be in the multifield
+                    Log.d(TAG, "Ignore display key " + key + " = " + val);
+                 //   addParamTextLabel(layoutInflater, key, val);
                 } else {
                     String label = MessageParamEnumLabelHelper.getString(getActivity(), param, bundle);
                     if (label != null) {
