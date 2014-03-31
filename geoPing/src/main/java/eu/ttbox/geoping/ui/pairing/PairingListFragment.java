@@ -29,10 +29,8 @@ import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.PairingProvider;
-import eu.ttbox.geoping.domain.PersonProvider;
 import eu.ttbox.geoping.domain.pairing.PairingDatabase.PairingColumns;
 import eu.ttbox.geoping.domain.pairing.PairingHelper;
-import eu.ttbox.geoping.domain.person.PersonHelper;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.service.slave.GeoPingSlaveLocationService;
 
@@ -84,8 +82,8 @@ public class PairingListFragment extends Fragment {
         // Service
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		// Bindings
-		listView = (ListView) v.findViewById(android.R.id.list);
-		listView.setEmptyView(v.findViewById(android.R.id.empty));
+		listView = (ListView) v.findViewById(R.id.pariringlist_list );
+		listView.setEmptyView(v.findViewById(R.id.pariringlist_empty));
 		addEntityButton = (Button) v.findViewById(R.id.add_pairing_button);
 		addEntityButtonHelp = (Button) v.findViewById(R.id.add_pairing_button_help);
         lockPairingButton= (ImageButton)v.findViewById(R.id.lock_pairing_button);
@@ -120,6 +118,7 @@ public class PairingListFragment extends Fragment {
 		Log.d(TAG, "onActivityCreated");
 		// Load data
 		getActivity().getSupportLoaderManager().initLoader(PAIRING_LIST_LOADER, null, pairingLoaderCallback);
+        // Lock Button
         loadLockPairingData();
 	}
 
@@ -146,15 +145,15 @@ public class PairingListFragment extends Fragment {
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        if (v.getId() == android.R.id.list) {
+        if (v.getId() == R.id.pariringlist_list) {
             ListView lv = (ListView) v;
             AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;
-
+            Log.d(TAG, "### onCreateContextMenu : " + menu);
             Cursor cursor = (Cursor) lv.getItemAtPosition(acmi.position);
             PairingHelper helper = new PairingHelper().initWrapper(cursor);
-            menu.add(Menu.NONE, R.id.menu_gcm_message, Menu.NONE, R.string.menu_geoping);
-            menu.add(Menu.NONE, R.id.menu_edit, Menu.NONE, R.string.menu_edit);
-            menu.add(Menu.NONE, R.id.menu_delete, Menu.NONE, R.string.menu_delete);
+            menu.add(Menu.NONE, R.id.menu_context_pairing_geoping_send, Menu.NONE, R.string.menu_geoping);
+            menu.add(Menu.NONE, R.id.menu_context_pairing_edit, Menu.NONE, R.string.menu_edit);
+            menu.add(Menu.NONE, R.id.menu_context_pairing_delete, Menu.NONE, R.string.menu_delete);
 
             //
             String titleMenu = helper.getDisplayName(cursor);
@@ -174,20 +173,25 @@ public class PairingListFragment extends Fragment {
         Cursor cursor = (Cursor) listView.getItemAtPosition(info.position);
         PairingHelper helper = new PairingHelper().initWrapper(cursor);
         //TODO implement menu
+        Log.d(TAG, "### onContextItemSelected : " + item);
         switch (item.getItemId()) {
-            case R.id.menu_gcm_message: {
+            case R.id.menu_context_pairing_geoping_send: {
+                Log.d(TAG, "### onContextItemSelected : menu_gcm_message" );
                 String phoneNumber = helper.getDisplayName(cursor);
                 GeoPingSlaveLocationService.runFindLocationAndSendInService(getActivity(), MessageActionEnum.LOC_DECLARATION,
                         new String[]{phoneNumber}, null, null);
             }
             return true;
 
-            case R.id.menu_edit: {
+            case R.id.menu_context_pairing_edit: {
+                Log.d(TAG, "### onContextItemSelected : menu_edit" );
+                String phoneNumber = helper.getDisplayName(cursor);
                 String entityId = helper.getPairingIdAsString(cursor);
                 onEditEntityClick(entityId);
             }
             return true;
-            case R.id.menu_delete: {
+            case R.id.menu_context_pairing_delete: {
+                Log.d(TAG, "### onContextItemSelected : menu_delete" );
                 // TODO https://www.timroes.de/2013/09/23/enhancedlistview-swipe-to-dismiss-with-undo/
                 // https://github.com/timroes/EnhancedListView/blob/master/EnhancedListView/src/main/res/layout/undo_popup.xml
                 //

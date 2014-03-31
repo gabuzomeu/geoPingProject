@@ -11,7 +11,17 @@
     
     
     <item name="config_id_slidingmenu_person_list_loader" type="id"/>
-    
+
+    <!-- Context Menu : Person List -->
+    <item name="menu_context_person_geoping_send" type="id"/>
+    <item name="menu_context_person_edit" type="id"/>
+    <item name="menu_context_person_delete" type="id"/>
+
+    <!-- Context Menu : Pairing List -->
+    <item name="menu_context_pairing_geoping_send" type="id"/>
+    <item name="menu_context_pairing_edit" type="id"/>
+    <item name="menu_context_pairing_delete" type="id"/>
+
     <!-- Master -->
     <item name="show_notification_new_geoping_response" type="id"/>
     <!-- Slave -->

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,7 +22,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
@@ -91,8 +89,8 @@ public class PersonListFragment extends Fragment {
 //		Log.i(TAG, "---------- onCreateView PersonListFragment");
 
         // Bindings
-        listView = (ListView) v.findViewById(android.R.id.list);
-        listView.setEmptyView(v.findViewById(android.R.id.empty));
+        listView = (ListView) v.findViewById(R.id.personlist_list);
+        listView.setEmptyView(v.findViewById(R.id.personlist_empty));
         // Button
         Button addPersonButton = (Button) v.findViewById(R.id.add_track_person_button);
         Button addPersonButtonHelp = (Button) v.findViewById(R.id.add_track_person_button_help);
@@ -147,16 +145,16 @@ public class PersonListFragment extends Fragment {
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        if (v.getId() == android.R.id.list) {
+        if (v.getId() == R.id.personlist_list) {
             ListView lv = (ListView) v;
             AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;
 
             Cursor cursor = (Cursor) lv.getItemAtPosition(acmi.position);
             PersonHelper helper = new PersonHelper().initWrapper(cursor);
-            menu.add(Menu.NONE, R.id.menu_gcm_message, Menu.NONE, R.string.menu_geoping);
+            menu.add(Menu.NONE, R.id.menu_context_person_geoping_send, Menu.NONE, R.string.menu_geoping);
             menu.add(Menu.NONE, R.id.menuMap, Menu.NONE, R.string.menu_map);
-            menu.add(Menu.NONE, R.id.menu_edit, Menu.NONE, R.string.menu_edit);
-            menu.add(Menu.NONE, R.id.menu_delete, Menu.NONE, R.string.menu_delete);
+            menu.add(Menu.NONE, R.id.menu_context_person_edit, Menu.NONE, R.string.menu_edit);
+            menu.add(Menu.NONE, R.id.menu_context_person_delete, Menu.NONE, R.string.menu_delete);
             //
             String titleMenu = helper.getPersonDisplayName(cursor);
             if (titleMenu == null) {
@@ -176,8 +174,9 @@ public class PersonListFragment extends Fragment {
         Cursor cursor = (Cursor) listView.getItemAtPosition(info.position);
         PersonHelper helper = new PersonHelper().initWrapper(cursor);
         //TODO implement menu
+        Log.d(TAG, "### onContextItemSelected : " + item);
         switch (item.getItemId()) {
-            case R.id.menu_gcm_message: {
+            case R.id.menu_context_person_geoping_send: {
                 String phoneNumber = helper.getPersonPhone(cursor);
                 getActivity().startService(Intents.sendSmsGeoPingRequest(getActivity(), phoneNumber));
             }
@@ -188,12 +187,12 @@ public class PersonListFragment extends Fragment {
                 Intents.startActivityShowOnMapPerson(listView, getActivity(), personId, phoneNumber);
             }
             return true;
-            case R.id.menu_edit: {
+            case R.id.menu_context_person_edit: {
                 String entityId = helper.getPersonIdAsString(cursor);
                 onEditEntityClick(entityId);
             }
             return true;
-            case R.id.menu_delete: {
+            case R.id.menu_context_person_delete: {
                 // TODO https://www.timroes.de/2013/09/23/enhancedlistview-swipe-to-dismiss-with-undo/
                 // https://github.com/timroes/EnhancedListView/blob/master/EnhancedListView/src/main/res/layout/undo_popup.xml
                 //
