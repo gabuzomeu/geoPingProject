@@ -168,6 +168,7 @@ public class SmsLogHelper {
     public String getSmsLogGeofencRequestId(Cursor cursor) {
         return cursor.getString(requestIdIdx);
     }
+
     public SmsLogTypeEnum getSmsLogType(Cursor cursor) {
         return SmsLogTypeEnum.getByCode(cursor.getInt(smsLogTypeIdx));
     }
@@ -207,6 +208,18 @@ public class SmsLogHelper {
 
     public String getMessageParams(Cursor cursor) {
         return cursor.getString(messageParamIdx);
+    }
+
+
+    public Bundle getMessageParamsAsBundle(Cursor cursor) {
+        Bundle bundle = null;
+        String msgParams = getMessageParams(cursor);
+        if (msgParams != null && msgParams.length() > 0) {
+            BundleEncoderAdapter dest = new BundleEncoderAdapter();
+            ParamEncoderHelper.decodeMessageAsMap(dest, msgParams);
+            bundle = dest.getMap();
+        }
+        return bundle;
     }
 
     public SmsLogHelper setTextSmsLogAction(TextView view, Cursor cursor) {

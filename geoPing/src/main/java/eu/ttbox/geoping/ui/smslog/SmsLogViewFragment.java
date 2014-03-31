@@ -253,7 +253,7 @@ public class SmsLogViewFragment extends Fragment {
         smsTypeTimeTextView.setText(smsTypeTime);
 
         // Params
-        String msgParams = helper.getMessageParams(cursor);
+        Bundle msgParams = helper.getMessageParamsAsBundle(cursor);
         bindMessageParams(msgParams);
 
         //TODO Name Person
@@ -265,13 +265,20 @@ public class SmsLogViewFragment extends Fragment {
     }
 
     private void bindMessageParams(String msgParams) {
-        Log.d(TAG, "Read Json Params : " + msgParams);
         if (msgParams != null && msgParams.length() > 0) {
             // Decode Params
             BundleEncoderAdapter dest = new BundleEncoderAdapter();
             ParamEncoderHelper.decodeMessageAsMap(dest, msgParams);
             Bundle bundle = dest.getMap();
-            // Clean of previous Parent
+            // Bind to Screen
+            bindMessageParams(bundle);
+        }
+    }
+
+    private void bindMessageParams(Bundle bundle) {
+        Log.d(TAG, "Read Json Params : " + bundle);
+        if (bundle != null && bundle.size() > 0) {
+             // Clean of previous Parent
             paramListView.removeAllViewsInLayout();
             // Insert Param In View
             LayoutInflater layoutInflater = LayoutInflater.from(mContext);

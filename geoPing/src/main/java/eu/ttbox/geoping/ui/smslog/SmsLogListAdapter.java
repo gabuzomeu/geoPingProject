@@ -3,6 +3,7 @@ package eu.ttbox.geoping.ui.smslog;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,9 @@ import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
 import eu.ttbox.geoping.domain.model.SmsLogTypeEnum;
 import eu.ttbox.geoping.domain.smslog.SmsLogHelper;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
+import eu.ttbox.geoping.encoder.model.MessageParamEnum;
+import eu.ttbox.geoping.encoder.params.MessageParamField;
+import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
 import eu.ttbox.geoping.ui.person.PhotoEditorView;
 import eu.ttbox.geoping.ui.person.PhotoThumbmailCache;
 
@@ -78,7 +82,7 @@ public class SmsLogListAdapter extends android.support.v4.widget.ResourceCursorA
         MessageActionEnum action = helper.getSmsMessageActionEnum(cursor);
         String actionLabel;
         if (action != null) {
-            actionLabel = getSmsActionLabel(action);
+            actionLabel = getSmsActionLabel(action, cursor);
             /*
             int ressourceTypeId = PhotoEditorView.GEOPING_TYPE_TRIANGLE;
             switch (action) {
@@ -175,8 +179,16 @@ public class SmsLogListAdapter extends android.support.v4.widget.ResourceCursorA
         return view;
     }
 
-    private String getSmsActionLabel( MessageActionEnum action) {
-        return MessageActionEnumLabelHelper.getString(mContext, action );
+    private String getSmsActionLabel( MessageActionEnum action,  Cursor cursor) {
+        String labelParam = null;
+        if (MessageActionEnum.GEOFENCE_ENTER.equals(action) || MessageActionEnum.GEOFENCE_EXIT.equals(action) ) {
+            Bundle msgParams = helper.getMessageParamsAsBundle(cursor);
+            if (msgParams.containsKey(  MessageParamEnum.GEOFENCE_NAME.name())) {
+                labelParam = msgParams.getString( MessageParamEnum.GEOFENCE_NAME.name());
+            }
+
+        }
+        return MessageActionEnumLabelHelper.getString(mContext, action, labelParam );
     }
 
 

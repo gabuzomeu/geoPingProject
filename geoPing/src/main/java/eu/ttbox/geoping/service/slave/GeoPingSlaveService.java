@@ -135,26 +135,26 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
                 Pairing pairing = null;
                 if (phone != null) {
                     pairing = gePairingByPhone(phone);
+                    Log.d(TAG, "### Search Pairing for phone " + phone + " ==> " + pairing);
                     // --- Manage Urgency Mode
                     pairing = manageEmergencyMode(phone, params, pairing);
                 }
 
 
-
                 // --- Manage Security
                 // ------------------------
-                boolean isIntentAuthorize  = isHandleIntentAuthorize(intent, msgAction, pairing);
+                boolean isIntentAuthorize = isHandleIntentAuthorize(intent, msgAction, pairing);
                 if (!isIntentAuthorize) {
                     Log.i(TAG, "Reject Intent request " + msgAction + " for pairing : " + pairing);
                     return;
                 }
 
-                 // Manage Action
+                // Manage Action
                 switch (msgAction) {
                     case GEOPING_REQUEST: {
                         // GeoPing Request
                         Uri logUri = intent.getParcelableExtra(Intents.EXTRA_SMSLOG_URI);
-                        manageGeopingRequest(pairing, params, logUri);
+                        manageGeopingRequest(pairing, msgAction, params, logUri);
                     }
                     break;
                     case COMMAND_OPEN_APP: {
@@ -190,7 +190,7 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
 
     private boolean isHandleIntentAuthorize(Intent intent, MessageActionEnum msgAction, Pairing pairing) {
         String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
-
+        Bundle params = intent.getBundleExtra(Intents.EXTRA_SMS_PARAMS);
         // --- Display Notification
         // ------------------------
 
@@ -213,7 +213,7 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
                 Log.i(TAG, "Reject Geoping request " + msgAction + " (Never Authorize) from phone " + pairing);
                 // Show Blocking Notification
                 if (showNotification) {
-                    showGeopingRequestNotification(pairing, intent, msgAction, false);
+                    showGeopingRequestNotification(pairing, msgAction, params, false);
                 }
                 isAuthorize = false;
             }
@@ -256,7 +256,7 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
     // Commande
     // ===========================================================
 
-    private void manageCommandOpenApplication(Pairing pairing, String phone , Bundle params) {
+    private void manageCommandOpenApplication(Pairing pairing, String phone, Bundle params) {
         Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
         loginIntent.putExtra(Intents.EXTRA_SMS_PHONE, phone);
         // Create Stack
@@ -279,7 +279,7 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
     // ===========================================================
     // GeoPing Request
     // ===========================================================
-    private void manageGeopingRequest(Pairing pairing, Bundle config, Uri logUri) {
+    private void manageGeopingRequest(Pairing pairing,  MessageActionEnum msgAction, Bundle config, Uri logUri) {
 
         // Request
         // registerGeoPingRequest(phone, params);
@@ -306,7 +306,7 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
         GeoPingSlaveLocationService.runFindLocationAndSendInService(this, MessageActionEnum.LOC, new String[]{phone}, null, config);
         // Display Notification GeoPing
         if (showNotification) {
-            showGeopingRequestNotification(pairing, config, true);
+            showGeopingRequestNotification(pairing, msgAction, config, true);
         }
 //            }
 //                break;
@@ -492,30 +492,32 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
         }
         return result;
     }
+
     private Pairing manageEmergencyMode(String phoneNumber, Bundle params, Pairing pairing) {
         Pairing result = pairing;
         // Check Flag Emergency
         if (MessageEncoderHelper.isToBundle(params, MessageParamField.EMERGENCY_PASSWORD)) {
+            Log.d(TAG, "### Manage Emergency Mode for pairing : " + pairing);
             long emergyPassword = MessageEncoderHelper.readLong(params, MessageParamField.EMERGENCY_PASSWORD, Long.MAX_VALUE);
             // Control Password
             String validPasswordString = appPreferences.getString(getString(R.string.pkey_emergency_password), null);
-            if (validPasswordString != null ) {
-                long validPassword = Long.parseLong(validPasswordString);
-                if (emergyPassword == validPassword) {
-                    // Create Granted Access
-                    if (result==null) {
-                        result = new Pairing();
-                        result.setDisplayName(createEmergencyLabel( phoneNumber));
-                        result.setPhone(phoneNumber);
-                    } else {
-                        result.setDisplayName(createEmergencyLabel(result.displayName));
-                    }
-                    // Controle Granted
-                    result.setAuthorizeType(PairingAuthorizeTypeEnum.AUTHORIZE_ALWAYS);
+            if (validPasswordString != null && (emergyPassword == Long.parseLong(validPasswordString))) {
+                // Create Granted Access
+                if (result == null) {
+                    result = new Pairing();
+                    result.setDisplayName(createEmergencyLabel(phoneNumber));
+                    result.setPhone(phoneNumber);
                 } else {
-                    // TODO Display Bad Try of Emergercy Mode
+                    result.setDisplayName(createEmergencyLabel(result.displayName));
                 }
+                // Controle Granted
+                result.setAuthorizeType(PairingAuthorizeTypeEnum.AUTHORIZE_ALWAYS);
+                Log.w(TAG, "### Emergercy Mode : Create Pairing ");
+            } else {
+                // TODO Display Bad Try of Emergercy Mode
+                Log.w(TAG, "### Emergercy Mode : Bad Password");
             }
+            Log.d(TAG, "### Return Emergency Mode for pairing : " + result);
         }
         return result;
     }
@@ -547,32 +549,26 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
     // ===========================================================
 
     @Deprecated
-     private void showGeopingRequestNotification(Pairing pairing, Bundle params, boolean authorizeIt) {
-        NotificationSlaveHelper notif = new NotificationSlaveHelper(this);
-        notif.showGeopingRequestNotification(pairing, params, authorizeIt);
-    }
-
-    @Deprecated
     private void showNotificationNewPingRequestConfirm(Pairing pairing, Bundle params, GeopingNotifSlaveTypeEnum onlyPairing) {
         NotificationSlavePairingHelper notif = new NotificationSlavePairingHelper(this);
         notif.showNotificationNewPingRequestConfirm(pairing, params, onlyPairing);
     }
 
 
-    private void showGeopingRequestNotification(Pairing pairing, Intent eventIntent, MessageActionEnum msgAction, boolean authorizeIt) {
+    private void showGeopingRequestNotification(Pairing pairing, MessageActionEnum msgAction, Bundle eventParam, boolean authorizeIt) {
         NotificationSlave2Helper notif = new NotificationSlave2Helper(this);
-        notif.showGeopingRequestNotification(pairing, eventIntent, msgAction, authorizeIt);
+        notif.showGeopingRequestNotification(pairing, msgAction, eventParam, authorizeIt);
     }
 
 
     private void showNotificationForNewPairing(String phone, Intent eventIntent, MessageActionEnum msgAction, GeopingNotifSlaveTypeEnum onlyPairing) {
         Pairing pairing = createPairingByPhone(phone);
-        showNotificationForNewPairing(pairing, eventIntent,msgAction, onlyPairing);
+        showNotificationForNewPairing(pairing, eventIntent, msgAction, onlyPairing);
     }
 
     private void showNotificationForNewPairing(Pairing pairing, Intent eventIntent, MessageActionEnum msgAction, GeopingNotifSlaveTypeEnum onlyPairing) {
         NotificationSlavePairing2Helper notif = new NotificationSlavePairing2Helper(this);
-        notif.showNotificationNewPingRequestConfirm(pairing, eventIntent, msgAction,onlyPairing);
+        notif.showNotificationNewPingRequestConfirm(pairing, eventIntent, msgAction, onlyPairing);
     }
     // ===========================================================
     // Binder

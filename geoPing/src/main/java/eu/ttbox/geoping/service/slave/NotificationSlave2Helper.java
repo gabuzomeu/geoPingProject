@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -58,7 +59,7 @@ public class NotificationSlave2Helper {
     // GeoPing Request Notification Builder
     // ===========================================================
 
-    public void showGeopingRequestNotification(Pairing pairing, Intent eventIntent, MessageActionEnum msgAction, boolean authorizeIt) {
+    public void showGeopingRequestNotification(Pairing pairing, MessageActionEnum msgAction, Bundle eventParam, boolean authorizeIt) {
         String phone = pairing.phone;
         // Contact Name
         NotifPersonVo person = ContactHelper.getNotifPairingVo(context, pairing);
