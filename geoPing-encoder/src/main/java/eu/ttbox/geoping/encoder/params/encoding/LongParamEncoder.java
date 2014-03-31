@@ -41,11 +41,11 @@ public class LongParamEncoder  implements IParamEncoder {
         boolean isWrite = false;
         Long value =  (Long) src.get(field.dbFieldName) ;
         if (value != null) {
-            String valueString = LongEncoded.toString(value, LongEncoded.MAX_RADIX);
+            String valueString = LongEncoded.toString(value, radix);
             if (isSmsFieldName) {
                 dest.append( smsFieldName);
             }
-            dest.append(value);
+            dest.append(valueString);
             isWrite = true;
         }
         return isWrite;
@@ -62,4 +62,17 @@ public class LongParamEncoder  implements IParamEncoder {
         dest.putLong(field.dbFieldName, decodedValue);
         return 1;
     }
+
+    // ===========================================================
+    //   Overide
+    // ===========================================================
+
+
+    @Override
+    public String toString() {
+        return "LongParamEncoder{" +
+                "radix=" + radix +
+                '}';
+    }
+
 }

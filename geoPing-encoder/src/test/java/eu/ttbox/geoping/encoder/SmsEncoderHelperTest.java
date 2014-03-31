@@ -42,6 +42,7 @@ public class SmsEncoderHelperTest {
         mapEncode.putInt(MessageParamField.LOC_ACCURACY, 120);
         mapEncode.putString(MessageParamField.LOC_PROVIDER, "gps");
         mapEncode.putLong(MessageParamField.LOC_TIME, dateTest);
+        mapEncode.putLong(MessageParamField.EMERGENCY_PASSWORD, 666);
 
         // Encode Message
         String encoded = SmsEncoderHelper.encodeSmsMessage(MessageActionEnum.LOC_DECLARATION, mapEncode, null);

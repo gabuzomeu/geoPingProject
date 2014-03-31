@@ -77,7 +77,7 @@ public class LongEncoded {
             if (i < max) {
                 digit = IntegerEncoded.digit(s.charAt(i++), radix);
                 if (digit < 0) {
-                    throw invalidLong(s);
+                    throw invalidLong(s, radix);
                 } else {
                     result = -digit;
                 }
@@ -115,5 +115,8 @@ public class LongEncoded {
         throw new NumberFormatException("Invalid long: \"" + s + "\"");
     }
 
+    private static NumberFormatException invalidLong(String s, int radix) {
+        throw new NumberFormatException("Invalid long: \"" + s + "\" for radix " + radix);
+    }
 
 }

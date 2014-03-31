@@ -24,7 +24,6 @@ import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
 import eu.ttbox.geoping.ui.core.validator.Form;
 import eu.ttbox.geoping.ui.core.validator.validate.ValidateTextView;
 import eu.ttbox.geoping.ui.core.validator.validator.NotEmptyValidator;
-import eu.ttbox.geoping.ui.person.validator.ExistPersonPhoneValidator;
 
 
 public class EmergencyModeFragment extends Fragment {
@@ -98,7 +97,6 @@ public class EmergencyModeFragment extends Fragment {
     }
 
 
-
     // ===========================================================
     // Action
     // ===========================================================
@@ -113,9 +111,9 @@ public class EmergencyModeFragment extends Fragment {
             // Read Param
             String password = passwordEdit.getText().toString();
             String phoneNumber = phoneEditText.getText().toString();
-            Toast.makeText(getActivity(), "Ouuuuahhh tu as cliqué (password=" + password +") vers tel : " + phoneNumber, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Ouuuuahhh tu as cliqué (password=" + password + ") vers tel : " + phoneNumber, Toast.LENGTH_SHORT).show();
             // Send  Geoping
-            Long passwordValue =  Long.valueOf(password);
+            Long passwordValue = Long.valueOf(password);
             Bundle params = MessageEncoderHelper.writeToBundle(null, MessageParamField.EMERGENCY_PASSWORD, passwordValue);
             context.startService(Intents.sendSmsGeoPingRequest(context, phoneNumber, params));
         }
