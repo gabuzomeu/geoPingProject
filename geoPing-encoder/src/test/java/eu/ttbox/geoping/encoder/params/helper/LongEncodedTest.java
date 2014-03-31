@@ -49,7 +49,7 @@ public class LongEncodedTest {
     }
 
     private void doEncodeDecodeTest(long i, int radix) {
-        doEncodeDecodeTest(i, radix, true);
+        doEncodeDecodeTest(i, radix, false);
     }
 
     private void doEncodeDecodeTest(long i, int radix, boolean printIt) {

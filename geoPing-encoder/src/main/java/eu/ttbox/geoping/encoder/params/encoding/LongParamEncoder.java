@@ -39,7 +39,19 @@ public class LongParamEncoder  implements IParamEncoder {
     @Override
     public boolean writeTo(EncoderAdapter src,  StringBuilder dest, MessageParamField field, char smsFieldName, boolean isSmsFieldName ) {
         boolean isWrite = false;
-        Long value =  (Long) src.get(field.dbFieldName) ;
+        Object valueObject = src.get(field.dbFieldName);
+        Long value = null;
+        if (valueObject instanceof Long) {
+            value = (Long) valueObject;
+        } else  if (valueObject instanceof String) {
+            // Consider that pass a String in radix 10
+            value = Long.valueOf((String)valueObject, 10);
+        } else  if (valueObject instanceof Integer) {
+            Integer valueInt = (Integer) valueObject;
+            value = Long.valueOf( valueInt.longValue());
+        } else {
+            throw new RuntimeException("Could not value as Long for " + field + " with value = " + valueObject);
+        }
         if (value != null) {
             String valueString = LongEncoded.toString(value, radix);
             if (isSmsFieldName) {

@@ -36,8 +36,8 @@ public class DateInSecondeParamEncoder implements IParamEncoder {
     //   Contructor
     // ===========================================================
 
-    public DateInSecondeParamEncoder( ) {
-        this( IntegerEncoded.MAX_RADIX);
+    public DateInSecondeParamEncoder() {
+        this(IntegerEncoded.MAX_RADIX);
     }
 
 
@@ -50,19 +50,20 @@ public class DateInSecondeParamEncoder implements IParamEncoder {
     // ===========================================================
 
     @Override
-    public boolean writeTo(EncoderAdapter src,  StringBuilder dest, MessageParamField field, char smsFieldName  ) {
+    public boolean writeTo(EncoderAdapter src, StringBuilder dest, MessageParamField field, char smsFieldName) {
         return writeTo(src, dest, field, smsFieldName, true);
     }
 
-        @Override
-    public boolean writeTo(EncoderAdapter src,  StringBuilder dest, MessageParamField field, char smsFieldName, boolean isSmsFieldName ) {
+    @Override
+    public boolean writeTo(EncoderAdapter src, StringBuilder dest, MessageParamField field, char smsFieldName, boolean isSmsFieldName) {
         boolean isWrite = false;
-        Long value =  (Long) src.get(field.dbFieldName) ;
-        if (value!= null) {
+        Object valueObject = src.get(field.dbFieldName);
+        Long value = (Long) valueObject;
+        if (value != null) {
             long dateValue = (value - DATE_ZERO) / 1000;
             String valueString = LongEncoded.toString(dateValue, radix);
             if (isSmsFieldName) {
-                dest.append( smsFieldName);
+                dest.append(smsFieldName);
             }
             dest.append(valueString);
             isWrite = true;
@@ -76,7 +77,7 @@ public class DateInSecondeParamEncoder implements IParamEncoder {
     // ===========================================================
 
     @Override
-    public int readTo(DecoderAdapter dest, String encoded, MessageParamField field ) {
+    public int readTo(DecoderAdapter dest, String encoded, MessageParamField field) {
         long result = LongEncoded.parseLong(encoded, radix);
         long dateAsLong = (result * 1000) + DATE_ZERO;
         dest.putLong(field.dbFieldName, dateAsLong);

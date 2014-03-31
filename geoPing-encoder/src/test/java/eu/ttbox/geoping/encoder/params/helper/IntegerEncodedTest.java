@@ -51,7 +51,7 @@ public class IntegerEncodedTest {
     }
 
     private void doEncodeDecodeTest(int i, int radix) {
-        doEncodeDecodeTest(i, radix, true);
+        doEncodeDecodeTest(i, radix, false);
     }
 
     private void doEncodeDecodeTest(int i, int radix, boolean printIt) {

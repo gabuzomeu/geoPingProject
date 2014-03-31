@@ -56,7 +56,7 @@ public class LongParamEncoderTest {
     }
 
     private void doEncodeDecodeTest(long i, LongParamEncoder service) {
-        doEncodeDecodeTest(i, service, true);
+        doEncodeDecodeTest(i, service, false);
     }
 
     private void doEncodeDecodeTest(long i,  LongParamEncoder service , boolean printIt) {
