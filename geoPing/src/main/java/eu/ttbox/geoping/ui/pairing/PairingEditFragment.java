@@ -502,6 +502,10 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         Uri uri;
         ContentResolver cr = getActivity().getContentResolver();
         if (entityUri == null) {
+            // Add value for checked
+            boolean isCheck = showNotificationCheckBox.isChecked(); 
+            values.put(PairingColumns.COL_SHOW_NOTIF, isCheck);
+            // Do Insert
             uri = cr.insert(PairingProvider.Constants.CONTENT_URI, values);
             this.entityUri = uri;
             String entityId = entityUri ==null ? null : entityUri.getLastPathSegment();
