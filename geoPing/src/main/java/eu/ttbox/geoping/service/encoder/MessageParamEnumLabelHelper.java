@@ -26,9 +26,11 @@ public class MessageParamEnumLabelHelper {
         // Init Label
         LabelHoder[] holders = new LabelHoder[]{
                 new LabelHolderSingleInt(MessageParamEnum.BATTERY, R.string.battery_percent)  //
+                ,new LabelHolderSingleInt(MessageParamEnum.ACCURACY, R.string.accuracy_precision_in_meter)  //
                 ,new LabelHolderDate(MessageParamEnum.EVT_DATE, R.string.geotrack_time_dateformat)  //
                 ,new LabelHolderDate(MessageParamEnum.DATE, R.string.geotrack_time_dateformat)  //
                 ,new LabelHolderLatLngE6(MessageParamEnum.GEO_E6, R.string.battery_percent)  //
+               // , new LabelHolderE6(MessageParamEnum.)
 
         };
         // Construct Map
@@ -185,6 +187,29 @@ public class MessageParamEnumLabelHelper {
             }
             return result;
         }
+
+    }
+
+    private static class LabelHolderE6 extends LabelHoder {
+
+
+        private LabelHolderE6(MessageParamEnum param, int labelResourceId) {
+            super(param, labelResourceId);
+        }
+
+        public String getString(Context context, Bundle bundle) {
+            String result = null;
+            final String key = param.type.dbFieldName;
+            if (bundle.containsKey(key)) {
+                final long value = bundle.getLong(key);
+                // result = context.getString(labelResourceId, value);
+                double valReal = value/AppConstants.E6;
+                result =  String.format(Locale.US, "%.6f", valReal );
+                // result = context.getString(labelResourceId, valReal);
+            }
+            return result;
+        }
+
 
     }
 

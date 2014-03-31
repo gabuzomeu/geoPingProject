@@ -32,6 +32,7 @@ import eu.ttbox.geoping.domain.smslog.SmsLogDatabase;
 import eu.ttbox.geoping.domain.smslog.SmsLogHelper;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
+import eu.ttbox.geoping.encoder.params.MessageParamField;
 import eu.ttbox.geoping.encoder.params.ParamEncoderHelper;
 import eu.ttbox.geoping.service.encoder.MessageParamEnumLabelHelper;
 import eu.ttbox.geoping.service.encoder.adpater.BundleEncoderAdapter;
@@ -283,7 +284,10 @@ public class SmsLogViewFragment extends Fragment {
             // Insert Param In View
             LayoutInflater layoutInflater = LayoutInflater.from(mContext);
             for (String key : bundle.keySet()) {
-                MessageParamEnum param = MessageParamEnum.getByEnumName(key);
+                MessageParamEnum param =  MessageParamEnum.getByDbFieldName(key);
+
+               // MessageParamField.
+                Log.d(TAG, "Read Json Params : " + key + " = " + bundle.get(key));
                 if (param == null) {
                     // No ref of this param
                     String val = String.valueOf(bundle.get(key));

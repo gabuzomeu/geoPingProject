@@ -13,6 +13,7 @@ import android.widget.TextView;
 import eu.ttbox.geoping.GeoPingApplication;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.MessageActionEnumLabelHelper;
+import eu.ttbox.geoping.domain.message.MessageHelper;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
 import eu.ttbox.geoping.domain.model.SmsLogTypeEnum;
 import eu.ttbox.geoping.domain.smslog.SmsLogHelper;
@@ -182,9 +183,11 @@ public class SmsLogListAdapter extends android.support.v4.widget.ResourceCursorA
     private String getSmsActionLabel( MessageActionEnum action,  Cursor cursor) {
         String labelParam = null;
         if (MessageActionEnum.GEOFENCE_ENTER.equals(action) || MessageActionEnum.GEOFENCE_EXIT.equals(action) ) {
+            // Convert Prop as Bundle
             Bundle msgParams = helper.getMessageParamsAsBundle(cursor);
-            if (msgParams.containsKey(  MessageParamEnum.GEOFENCE_NAME.name())) {
-                labelParam = msgParams.getString( MessageParamEnum.GEOFENCE_NAME.name());
+            // Search Values
+            if (MessageEncoderHelper.isToBundle(msgParams,  MessageParamEnum.GEOFENCE_NAME )) {
+                labelParam = MessageEncoderHelper.readString(msgParams, MessageParamField.GEOFENCE_NAME );
             }
 
         }
