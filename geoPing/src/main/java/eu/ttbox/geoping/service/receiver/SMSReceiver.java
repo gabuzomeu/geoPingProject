@@ -81,6 +81,7 @@ public class SMSReceiver extends BroadcastReceiver {
 		TextEncryptor textEncryptor = null;
 		if (MessageEncoderHelper.isGeoPingEncodedSmsMessageEncrypted(messageBody)) {
 			// TODO Find Encryptor
+			// textEncryptor = ??
 		}
         List<BundleEncoderAdapter> geoMsgs = MessageEncoderHelper.decodeSmsMessage(phoneNumber, messageBody, textEncryptor);
         // Check Valid Conversion
@@ -113,6 +114,8 @@ public class SMSReceiver extends BroadcastReceiver {
                 // --------------------------
                 intent.putExtra(Intents.EXTRA_SMSLOG_URI, logUri);
                 context.startService(intent);
+            } else {
+                Log.w(TAG, "No Intent for Bundle Message : " + msg);
             }
         }
 		return isConsume;
