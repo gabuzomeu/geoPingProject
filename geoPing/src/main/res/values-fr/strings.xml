@@ -175,8 +175,8 @@
     <string name="prefs_license_activity_title">"Licences open source"</string>
 
     <!-- Prefs LockApp -->
-    <string name="prefs_lockapp">"Vérouillage de l'application"</string>
-    <string name="prefs_lockapp_lockpattern_create">"Vérouillage par motif"</string>
+    <string name="prefs_lockapp">"Verrouillage de l'application"</string>
+    <string name="prefs_lockapp_lockpattern_create">"Verrouillage par motif"</string>
     <string name="prefs_lockapp_lockpattern_max_retry">"Nb Maximum d'essais"</string>
     <string name="prefs_lockapp_lockpattern_min_wired_dots">"Nb Minimum de point du motif"</string>
 
