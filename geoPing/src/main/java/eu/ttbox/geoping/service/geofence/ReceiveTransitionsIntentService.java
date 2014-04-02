@@ -15,6 +15,8 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationClient;
 
@@ -24,6 +26,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import eu.ttbox.geoping.BuildConfig;
 import eu.ttbox.geoping.MainActivity;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
@@ -50,13 +53,16 @@ import eu.ttbox.osm.core.LocationUtils;
  * form of an Intent containing the transition type and geofence id(s) that triggered
  * the event.
  */
-public class ReceiveTransitionsIntentService extends IntentService {
+public class ReceiveTransitionsIntentService extends IntentService
+        implements
+        GooglePlayServicesClient.ConnectionCallbacks,
+        GooglePlayServicesClient.OnConnectionFailedListener {
 
     private static final String TAG = "ReceiveTransitionsIntentService";
 
     // Service
     private LocationManager locationManager;
-
+   private LocationClient mLocationClient;
     /**
      * Sets an identifier for this class' background thread
      */
@@ -69,10 +75,20 @@ public class ReceiveTransitionsIntentService extends IntentService {
         super.onCreate();
         // Service
         this.locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        this.mLocationClient = new LocationClient(this, this, this);
+        this.mLocationClient.connect();
+    }
+
+    @Override
+    public void onDestroy() {
+        this.mLocationClient.disconnect();
+        super.onDestroy();
     }
 
     private void printExtras(Bundle extras) {
-        Intents.printExtras(TAG, extras);
+        if (BuildConfig.DEBUG) {
+            Intents.printExtras(TAG, extras);
+        }
     }
 
     /**
@@ -91,7 +107,7 @@ public class ReceiveTransitionsIntentService extends IntentService {
 
         Log.d(TAG, "--- ------------------------------------------------------- ---");
         Log.d(TAG, "--- Geofence onHandleIntent : " + intent);
-        //  printExtras(intent.getExtras());
+        printExtras(intent.getExtras());
         Log.d(TAG, "--- ------------------------------------------------------- ---");
 
         // First check for errors
@@ -177,7 +193,11 @@ public class ReceiveTransitionsIntentService extends IntentService {
         // Geofence Manage
         String[] phones = SpyNotificationHelper.searchListPhonesForGeofenceViolation(this, geofences, transitionType);
         if (phones != null && phones.length > 0) {
-            Location lastLocation = LocationUtils.getLastKnownLocation(locationManager);
+            // FixMe the last lac not enought
+           // Location lastLocation = LocationUtils.getLastKnownLocation(locationManager);
+            Location lastLocation = mLocationClient.getLastLocation();
+            Log.d(TAG,"Last Location - from LocationManager = " +  LocationUtils.getLastKnownLocation(locationManager));
+            Log.d(TAG,"Last Location - from LocationClient = " +  lastLocation);
             // TODO Compute Geofence Requests Id per User
             CircleGeofence geofenceRequest = getBestCircleGeofence(geofences);
             // Distance
@@ -310,8 +330,8 @@ public class ReceiveTransitionsIntentService extends IntentService {
             extrasBundles.putInt(GeoFenceDatabase.GeoFenceColumns.COL_TRANSITION, geofenceRequest.getTransitionType());
             // Alarm
             int alarmType = geofenceRequest.getAlarm();
-            if (alarmType>0) {
-                 extrasBundles.putInt(MessageParamField.ALARM.dbFieldName , alarmType);
+            if (alarmType > 0) {
+                extrasBundles.putInt(MessageParamField.ALARM.dbFieldName, alarmType);
             }
             // Name
             MessageEncoderHelper.writeToBundle(extrasBundles, MessageParamEnum.GEOFENCE_NAME, geofenceRequest.name);
@@ -328,10 +348,40 @@ public class ReceiveTransitionsIntentService extends IntentService {
             for (String phone : phones) {
                 SmsSenderHelper.sendSmsAndLogIt(this, SmsLogSideEnum.SLAVE, phone, eventType, params);
             }
+
             // TODO saveInLocalDb
         } else {
             GeoPingSlaveLocationService.runFindLocationAndSendInService(this, eventType, phones, extrasBundles, null);
         }
 
     }
+
+
+    // ===========================================================
+    //   GooglePlayServicesClient
+    // ===========================================================
+
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Log.d(TAG, "GooglePlayServicesClient onConnected");
+        printExtras(bundle);
+
+    }
+
+    @Override
+    public void onDisconnected() {
+        Log.d(TAG, "GooglePlayServicesClient onDisconnected");
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.e(TAG, "GooglePlayServicesClient onConnectionFailed with ErrorCode : " + connectionResult.getErrorCode() + " - " +  connectionResult.toString());
+    }
+
+
+    // ===========================================================
+    //   Other
+    // ===========================================================
+
 }

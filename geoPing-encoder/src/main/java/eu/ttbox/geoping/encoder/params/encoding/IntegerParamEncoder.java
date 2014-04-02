@@ -36,15 +36,18 @@ public class IntegerParamEncoder implements IParamEncoder {
     @Override
     public boolean writeTo(EncoderAdapter src, StringBuilder dest, MessageParamField field, char smsFieldName, boolean isSmsFieldName) {
         boolean isWrite = false;
+        Integer value = null;
+        // Try to read values
         Object valueObject = src.get(field.dbFieldName);
-        Integer value = (Integer) valueObject;
-        if (valueObject instanceof Integer) {
-            value = (Integer) valueObject;
-        } else if (valueObject instanceof String) {
-            // Consider that pass a String in radix 10
-            value = Integer.valueOf((String) valueObject, 10);
-        } else {
-            throw new RuntimeException("Could not value as Integer for " + field + " with value = " + valueObject);
+        if (valueObject != null) {
+            if (valueObject instanceof Integer) {
+                value = (Integer) valueObject;
+            } else if (valueObject instanceof String) {
+                // Consider that pass a String in radix 10
+                value = Integer.valueOf((String) valueObject, 10);
+            } else {
+                throw new RuntimeException("Could not value as Integer for " + field + " with value = " + valueObject);
+            }
         }
         if (value != null) {
             String valueString = IntegerEncoded.toString(value, radix);

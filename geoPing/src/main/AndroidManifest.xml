@@ -191,6 +191,13 @@
         <activity android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 
+        <!-- Location Receiver -->
+        <receiver android:name=".service.receiver.LocationChangeReceiver" android:exported="true">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.location.LocationManager.KEY_LOCATION_CHANGED" />-->
+            <!--</intent-filter>-->
+        </receiver>
+
         <!-- SMS Receiver -->
         <receiver android:name=".service.receiver.SMSReceiver" android:exported="true">
             <intent-filter android:priority="2147483647">
