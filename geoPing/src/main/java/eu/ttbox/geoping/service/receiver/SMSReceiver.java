@@ -54,10 +54,11 @@ public class SMSReceiver extends BroadcastReceiver {
 					for (SmsMessage message : messages) {
 						boolean isConsume = consumeMessage(context, message);
 						if (!isConsume) {
+                            Log.d(TAG, "Unconsume Message : " + message.getMessageBody());
 							deleteSms = false;
 						}
 						if (deleteSms) {
-							Log.d(TAG, "Cancel wanting abortBroadcast for unexpected Sms Message " + message.getMessageBody());
+							Log.d(TAG, "Cancel wanting abortBroadcast for unexpected Sms Message : " + message.getMessageBody());
 						}
 					}
 					if (deleteSms) {

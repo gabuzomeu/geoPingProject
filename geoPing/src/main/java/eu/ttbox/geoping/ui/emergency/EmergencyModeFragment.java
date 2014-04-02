@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import eu.ttbox.geoping.R;
@@ -39,11 +40,17 @@ public class EmergencyModeFragment extends Fragment {
     private EditText passwordEdit;
     private EditText phoneEditText;
     private Button geopingButton;
+    private ImageButton selectContact;
 
     //Validator
     private Form formValidator;
 
-
+    private View.OnClickListener selectContactClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            onClickGeoPingButton(v);
+        }
+    };
     // ===========================================================
     // Constructor
     // ===========================================================
@@ -52,6 +59,7 @@ public class EmergencyModeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
         View v = inflater.inflate(R.layout.emergency_mode, container, false);
+        // Binding
         passwordEdit = (EditText) v.findViewById(R.id.emergencyPasswordEdit);
         phoneEditText = (EditText) v.findViewById(R.id.person_phone);
         phoneEditText.setOnLongClickListener(new View.OnLongClickListener() {
@@ -61,13 +69,9 @@ public class EmergencyModeFragment extends Fragment {
             }
         });
         geopingButton = (Button) v.findViewById(R.id.geoping_button_call);
-        geopingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickGeoPingButton(v);
-            }
-        });
-
+        geopingButton.setOnClickListener(selectContactClickListener);
+        selectContact = (ImageButton)v.findViewById(R.id.select_contact_button);
+        selectContact.setOnClickListener(selectContactClickListener);
         Log.d(TAG, "Binding end");
         // Form
         formValidator = createValidator(getActivity());
