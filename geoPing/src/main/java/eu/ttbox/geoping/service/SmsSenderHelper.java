@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import eu.ttbox.geoping.GeoPingApplication;
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.domain.SmsLogProvider;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
@@ -22,6 +23,7 @@ import eu.ttbox.geoping.domain.model.SmsLogTypeEnum;
 import eu.ttbox.geoping.domain.smslog.SmsLogDatabase.SmsLogColumns;
 import eu.ttbox.geoping.domain.smslog.SmsLogHelper;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
+import eu.ttbox.geoping.encoder.model.MessageParamEnum;
 import eu.ttbox.geoping.encoder.params.MessageParamField;
 import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
 import eu.ttbox.geoping.service.encoder.adpater.BundleEncoderAdapter;
@@ -62,8 +64,25 @@ public class SmsSenderHelper {
         return phones;
     }
 
-    public static Uri sendSmsAndLogIt(Context context, SmsLogSideEnum side, String phone, MessageActionEnum action, Bundle params) {
+    public static Uri[] sendSmsAndLogIt(Context context, SmsLogSideEnum side, String[] phones, MessageActionEnum action, Bundle eventParams) {
+        int phoneSize = phones.length;
+        Uri[] uris = new Uri[phoneSize];
+        for (int i = 0; i < phoneSize; i++) {
+            String phone = phones[i];
+            uris[i] = SmsSenderHelper.sendSmsAndLogIt(context, side, phone, action, eventParams);
+        }
+        return uris;
+    }
+
+    public static Uri sendSmsAndLogIt(Context context, SmsLogSideEnum side, String phone, MessageActionEnum action, Bundle eventParams) {
         Uri isSend = null;
+        Bundle params = eventParams == null ? new Bundle() : eventParams;
+        // Complete with App version
+        if (!MessageEncoderHelper.isToBundle(params, MessageParamEnum.APP_VERSION)) {
+            int appVersion = GeoPingApplication.getGeoPingApplication(context).versionCode();
+            MessageEncoderHelper.writeToBundle(params, MessageParamEnum.APP_VERSION, appVersion);
+        }
+        // Encode Message
         String encrypedMsg = MessageEncoderHelper.encodeSmsMessage(action, params);
         Log.d(TAG, String.format("Send Request SmsMessage to %s : %s (%s)", phone, action, encrypedMsg));
 
@@ -82,11 +101,13 @@ public class SmsSenderHelper {
                 PendingIntent sendIntent = PendingIntent.getBroadcast(context, 0, //
                         new Intent(MessageAcknowledgeReceiver.ACTION_SEND_ACK).setData(logUri) //
                                 .putExtra(EXTRA_MSG_PART_COUNT, msgSplitCount).putExtra(EXTRA_MSG_PART_ID, 1) //
-                        , 0);
+                        , 0
+                );
                 PendingIntent deliveryIntent = PendingIntent.getBroadcast(context, 0, //
                         new Intent(MessageAcknowledgeReceiver.ACTION_DELIVERY_ACK).setData(logUri) //
                                 .putExtra(EXTRA_MSG_PART_COUNT, msgSplitCount).putExtra(EXTRA_MSG_PART_ID, 1) //
-                        , 0);
+                        , 0
+                );
                 // Send Message
                 smsManager.sendTextMessage(phone, null, encrypedMsg, sendIntent, deliveryIntent);
                 isSend = logUri;
@@ -100,11 +121,13 @@ public class SmsSenderHelper {
                     PendingIntent sendIntent = PendingIntent.getBroadcast(context, 0, //
                             new Intent(MessageAcknowledgeReceiver.ACTION_SEND_ACK).setData(logUri) //
                                     .putExtra(EXTRA_MSG_PART_COUNT, msgSplitCount).putExtra(EXTRA_MSG_PART_ID, msgId) //
-                            , 0); //  PendingIntent.FLAG_CANCEL_CURRENT
+                            , 0
+                    ); //  PendingIntent.FLAG_CANCEL_CURRENT
                     PendingIntent deliveryIntent = PendingIntent.getBroadcast(context, 0, //
                             new Intent(MessageAcknowledgeReceiver.ACTION_DELIVERY_ACK).setData(logUri) //
                                     .putExtra(EXTRA_MSG_PART_COUNT, msgSplitCount).putExtra(EXTRA_MSG_PART_ID, msgId) //
-                            , 0);
+                            , 0
+                    );
                     sentIntents.add(sendIntent);
                     deliveryIntents.add(deliveryIntent);
                 }

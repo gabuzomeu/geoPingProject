@@ -127,10 +127,14 @@ public class GeoTrackHelper {
 		return initialValues;
 	}
 
-	public static Bundle getBundleValues(GeoTrack geoTrack) {
+    public static Bundle getBundleValues(GeoTrack geoTrack, Bundle previous) {
+        BundleWrapper wrapper = (BundleWrapper) getWrapperValues(geoTrack, new BundleWrapper(previous), false);
+        return wrapper.getWrappedValue();
+    }
+
+    public static Bundle getBundleValues(GeoTrack geoTrack) {
 		BundleWrapper wrapper = (BundleWrapper) getWrapperValues(geoTrack, new BundleWrapper(GeoTrackColumns.ALL_COLS.length), false);
-		Bundle bundle = wrapper.getWrappedValue();
-		return bundle;
+		return wrapper.getWrappedValue();
 	}
 
 	private static HelperWrapper<?> getWrapperValues(GeoTrack geoTrack, HelperWrapper<?> initialValues, boolean noHasCheck) {
@@ -176,6 +180,7 @@ public class GeoTrackHelper {
 		if (noHasCheck || geoTrack.hasEventTime()) {
 			initialValues.putLong(GeoTrackColumns.COL_EVT_TIME, geoTrack.eventTime);
 		}
+
 		initialValues.putString(GeoTrackColumns.COL_EVT_TYPE, geoTrack.eventType);
 		return initialValues;
 	}

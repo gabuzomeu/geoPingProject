@@ -11,6 +11,14 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
+import eu.ttbox.geoping.BuildConfig;
+import eu.ttbox.geoping.core.Intents;
+import eu.ttbox.geoping.domain.geotrack.GeoTrackHelper;
+import eu.ttbox.geoping.domain.model.GeoTrack;
+import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
+import eu.ttbox.geoping.encoder.model.MessageActionEnum;
+import eu.ttbox.geoping.service.SmsSenderHelper;
+
 /**
  * https://code.google.com/p/android-protips-location/source/browse/trunk/src/com/radioactiveyak/location_best_practices/receivers/LocationChangedReceiver.java
  */
@@ -27,20 +35,24 @@ public class LocationChangeReceiver extends BroadcastReceiver {
     // ===========================================================
 
 
-    public static PendingIntent createPendingIntent(Context context) {
+    public static PendingIntent createPendingIntent(Context context, String[] phones, Bundle eventParams) {
         Intent i = new Intent(context, LocationChangeReceiver.class);
+        // TODO        i.setAction()
+        i.putExtra(Intents.EXTRA_SMS_PHONE, phones);
+        i.putExtra(Intents.EXTRA_SMS_PARAMS, eventParams);
+        // Pending
         PendingIntent pi = PendingIntent.getBroadcast(context, REQUEST_CODE_NOT_USED, i,
                 PendingIntent.FLAG_CANCEL_CURRENT);
         return pi;
     }
 
-    public static void requestLocationUpdates(Context context, LocationManager locationManager) {
-        PendingIntent pi = createPendingIntent(context);
+    public static void requestLocationUpdates(Context context, LocationManager locationManager, String[] phones, Bundle eventParams) {
+        PendingIntent pi = createPendingIntent(context, phones, eventParams);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, pi);
     }
 
-    public static void requestSingleUpdate(Context context, LocationManager locationManager) {
-        PendingIntent pi = createPendingIntent(context);
+    public static void requestSingleUpdate(Context context, LocationManager locationManager, String[] phones, Bundle eventParams) {
+        PendingIntent pi = createPendingIntent(context, phones, eventParams);
         Criteria criteria = new Criteria();
         criteria.setAltitudeRequired(false);
         criteria.setBearingRequired(false);
@@ -51,30 +63,66 @@ public class LocationChangeReceiver extends BroadcastReceiver {
     }
 
 
+
+    // ===========================================================
+    //   Printer
+    // ===========================================================
+
+    private void printExtras(Bundle extras) {
+        if (BuildConfig.DEBUG) {
+            Intents.printExtras(TAG, extras);
+        }
+    }
+
+
     // ===========================================================
     //   Receiver
     // ===========================================================
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        //
         String action = intent.getAction();
-        // Key
-        String locationKey = LocationManager.KEY_LOCATION_CHANGED;
-        String providerEnabledKey = LocationManager.KEY_PROVIDER_ENABLED;
+        Bundle b = intent.getExtras();
+        // Log
+        Log.d(TAG, "--- ------------------------------------------------------- ---");
+        Log.d(TAG, "--- Location onReceive : " + intent);
+        printExtras(intent.getExtras());
+        Log.d(TAG, "--- ------------------------------------------------------- ---");
+
+        // Action
+        MessageActionEnum eventType = null;// TODO
+        // Read Intent
+        String[] phones = b.getStringArray(Intents.EXTRA_SMS_PHONE);
+        Bundle extrasBundles = b.getBundle(Intents.EXTRA_SMS_PARAMS);
+        // Location
+        Location location = null;
+        if (intent.hasExtra(LocationManager.KEY_LOCATION_CHANGED)) {
+            location = (Location) b.get(LocationManager.KEY_LOCATION_CHANGED);
+            Log.d(TAG, "### Receive Location : " + location);
+        }
         // Provider
-        if (intent.hasExtra(providerEnabledKey)) {
-            if (!intent.getBooleanExtra(providerEnabledKey, true)) {
-               // Intent providerDisabledIntent = new Intent(PlacesConstants.ACTIVE_LOCATION_UPDATE_PROVIDER_DISABLED);
-               // context.sendBroadcast(providerDisabledIntent);
+        if (intent.hasExtra(LocationManager.KEY_PROVIDER_ENABLED)) {
+            if (!intent.getBooleanExtra(LocationManager.KEY_PROVIDER_ENABLED, true)) {
+                // Intent providerDisabledIntent = new Intent(PlacesConstants.ACTIVE_LOCATION_UPDATE_PROVIDER_DISABLED);
+                // context.sendBroadcast(providerDisabledIntent);
             }
         }
-        // Location
-        if (intent.hasExtra(locationKey)) {
-            Bundle b = intent.getExtras();
-            Location location = (Location)b.get(locationKey);
-            Log.d(TAG, "Actively Updating place list for Location : " + location);
+
+        // Send Sms
+        if (location != null) {
+            // Converter Location
+            GeoTrack geotrack = new GeoTrack(null, location);
+            Bundle params = GeoTrackHelper.getBundleValues(geotrack);
+            // Add All Specific extra values
+            if (extrasBundles != null && !extrasBundles.isEmpty()) {
+                params.putAll(extrasBundles);
+            }
+            SmsSenderHelper.sendSmsAndLogIt(context, SmsLogSideEnum.SLAVE, phones, eventType, params);
+            // TODO saveInLocalDb
+
         }
+
+
     }
-
-
 }

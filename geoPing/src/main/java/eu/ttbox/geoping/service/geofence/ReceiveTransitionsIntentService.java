@@ -238,7 +238,6 @@ public class ReceiveTransitionsIntentService extends IntentService
             }
         }
         return result;
-
     }
 
     private void showNotification(List<CircleGeofence> geofences, MessageActionEnum transitionType) {
@@ -306,36 +305,42 @@ public class ReceiveTransitionsIntentService extends IntentService
         }
     }
 
+    public Bundle convertAsBundle(CircleGeofence geofenceRequest, Bundle eventParams) {
+        Bundle extrasBundles = eventParams == null ? new Bundle() : eventParams;
+        if (!MessageEncoderHelper.isToBundle(extrasBundles, MessageParamEnum.EVT_DATE)) {
+            MessageEncoderHelper.writeToBundle(extrasBundles, MessageParamEnum.EVT_DATE, System.currentTimeMillis());
+        }
+        if (geofenceRequest != null) {
+            if (!extrasBundles.containsKey(SmsLogDatabase.SmsLogColumns.COL_REQUEST_ID)) {
+                // Geofence Id
+                extrasBundles.putString(SmsLogDatabase.SmsLogColumns.COL_REQUEST_ID, geofenceRequest.requestId);
+                // Geofence Reference
+                extrasBundles.putInt(GeoFenceDatabase.GeoFenceColumns.COL_LATITUDE_E6, geofenceRequest.getLatitudeE6());
+                extrasBundles.putInt(GeoFenceDatabase.GeoFenceColumns.COL_LONGITUDE_E6, geofenceRequest.getLongitudeE6());
+                extrasBundles.putInt(GeoFenceDatabase.GeoFenceColumns.COL_RADIUS, geofenceRequest.getRadiusInMeters());
+                extrasBundles.putInt(GeoFenceDatabase.GeoFenceColumns.COL_TRANSITION, geofenceRequest.getTransitionType());
+                // Alarm
+                int alarmType = geofenceRequest.getAlarm();
+                if (alarmType > 0) {
+                    extrasBundles.putInt(MessageParamField.ALARM.dbFieldName, alarmType);
+                }
+                // Name
+                MessageEncoderHelper.writeToBundle(extrasBundles, MessageParamEnum.GEOFENCE_NAME, geofenceRequest.name);
+            }
+        }
+        return extrasBundles;
+    }
 
     public void sendEventSpySmsMessage(CircleGeofence geofenceRequest, MessageActionEnum eventType, String[] phones,
                                        Bundle eventParams, Location location) {
         if (phones == null || phones.length < 1) {
             Log.w(TAG, "Geofence violation detected but nobody to warning");
+            return;
         }
         Log.d(TAG, "EventSpy Notification  : " + eventType + " for " + phones.length + " phones destinations");
         // Send SMS
-        Bundle extrasBundles = eventParams == null ? new Bundle() : eventParams;
-        if (!MessageEncoderHelper.isToBundle(extrasBundles, MessageParamEnum.EVT_DATE)) {
-            MessageEncoderHelper.writeToBundle(extrasBundles, MessageParamEnum.EVT_DATE, System.currentTimeMillis());
-        }
-        if (!extrasBundles.containsKey(SmsLogDatabase.SmsLogColumns.COL_REQUEST_ID)) {
-            extrasBundles.putString(SmsLogDatabase.SmsLogColumns.COL_REQUEST_ID, geofenceRequest.requestId);
-        }
-        //
-        if (geofenceRequest != null) {
-            // Geofence Refenrence
-            extrasBundles.putInt(GeoFenceDatabase.GeoFenceColumns.COL_LATITUDE_E6, geofenceRequest.getLatitudeE6());
-            extrasBundles.putInt(GeoFenceDatabase.GeoFenceColumns.COL_LONGITUDE_E6, geofenceRequest.getLongitudeE6());
-            extrasBundles.putInt(GeoFenceDatabase.GeoFenceColumns.COL_RADIUS, geofenceRequest.getRadiusInMeters());
-            extrasBundles.putInt(GeoFenceDatabase.GeoFenceColumns.COL_TRANSITION, geofenceRequest.getTransitionType());
-            // Alarm
-            int alarmType = geofenceRequest.getAlarm();
-            if (alarmType > 0) {
-                extrasBundles.putInt(MessageParamField.ALARM.dbFieldName, alarmType);
-            }
-            // Name
-            MessageEncoderHelper.writeToBundle(extrasBundles, MessageParamEnum.GEOFENCE_NAME, geofenceRequest.name);
-        }
+        Bundle extrasBundles =convertAsBundle(geofenceRequest,   eventParams);
+
         if (location != null) {
             // Converter Location
             GeoTrack geotrack = new GeoTrack(null, location);
@@ -345,9 +350,8 @@ public class ReceiveTransitionsIntentService extends IntentService
                 params.putAll(extrasBundles);
             }
             // Not time to get GeoLoc, send it direct
-            for (String phone : phones) {
-                SmsSenderHelper.sendSmsAndLogIt(this, SmsLogSideEnum.SLAVE, phone, eventType, params);
-            }
+            SmsSenderHelper.sendSmsAndLogIt(this, SmsLogSideEnum.SLAVE, phones, eventType, params);
+
 
             // TODO saveInLocalDb
         } else {
