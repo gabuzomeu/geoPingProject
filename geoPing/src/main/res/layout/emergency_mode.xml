@@ -7,7 +7,7 @@
 
 
     <TextView
-        android:id="@+id/titleErmergencyPassword"
+        android:id="@+id/titleErmergency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
@@ -17,13 +17,13 @@
         android:text="@string/menu_emergency_mode"  />
 
 
-
     <TextView
-        android:id="@+id/labelErmergencyPassword"
+        android:id="@+id/labelErmergencyModeDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/titleErmergencyPassword"
-        android:text="@string/prefs_emergency_password"
+        android:layout_below="@id/titleErmergency"
+        android:text="@string/prefs_emergency_desription"
+        android:paddingTop="10dp"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <EditText
@@ -31,8 +31,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/labelErmergencyPassword"
-        android:layout_below="@id/labelErmergencyPassword"
+        android:layout_below="@id/labelErmergencyModeDescription"
         android:ems="10"
+        android:paddingTop="20dp"
         android:hint="@string/prefs_emergency_password"
         android:inputType="numberPassword"
         android:textAppearance="?android:attr/textAppearanceMedium" />

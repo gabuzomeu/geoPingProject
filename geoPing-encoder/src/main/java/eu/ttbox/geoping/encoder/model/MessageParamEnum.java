@@ -12,6 +12,9 @@ import eu.ttbox.geoping.encoder.params.ParamTypeEncoding;
 public enum MessageParamEnum implements IParamEncoder {
 
 
+    // Application Version
+    APP_VERSION('v', MessageParamField.APP_VERSION), //
+
     // Loc
     PROVIDER('p', MessageParamField.LOC_PROVIDER), //
 

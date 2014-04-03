@@ -139,6 +139,7 @@
     <!-- Geoping Emergency prefs-->
     <string name="prefs_emergency_category">Mode Urgence</string>
     <string name="prefs_emergency_password">Emergency Password</string>
+    <string name="prefs_emergency_desription">The Emergency Mode permit to send GeoPing, without previous association, thank to the password recorded in the Settings</string>
 
 
     <!-- Geoping Map prefs-->
@@ -205,7 +206,7 @@
     <!-- GeoTrack -->
     <string name="geotrack_time_dateformat">%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS</string>
     <string name="battery_percent">Battery %s%%</string>
-
+    <string name="accuracy_precision_in_meter">+/- %sm</string>
 
     <!-- Map My Location Dialog -->
     <string name="accuracy_separator">+/-</string> <!-- +/- &#8723; -->

@@ -21,7 +21,8 @@ public class GpsProviderParamEncoder implements IParamEncoder {
     private static String[][] locProviders = new String[][] { //
             { "gps", "g" }, //
             { "network", "n" }, //
-            { "passive", "p" } //
+            { "passive", "p" }, //
+            { "fused", "f" }, //
     };
 
     static {

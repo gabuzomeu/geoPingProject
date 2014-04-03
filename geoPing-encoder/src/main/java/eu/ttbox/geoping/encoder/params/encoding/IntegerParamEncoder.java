@@ -35,7 +35,6 @@ public class IntegerParamEncoder implements IParamEncoder {
 
     @Override
     public boolean writeTo(EncoderAdapter src, StringBuilder dest, MessageParamField field, char smsFieldName, boolean isSmsFieldName) {
-        boolean isWrite = false;
         Integer value = null;
         // Try to read values
         Object valueObject = src.get(field.dbFieldName);
@@ -49,6 +48,12 @@ public class IntegerParamEncoder implements IParamEncoder {
                 throw new RuntimeException("Could not value as Integer for " + field + " with value = " + valueObject);
             }
         }
+        boolean isWrite = writeTo(value, dest, smsFieldName, isSmsFieldName);
+        return isWrite;
+    }
+
+    public boolean writeTo(Integer value, StringBuilder dest, char smsFieldName, boolean isSmsFieldName) {
+        boolean isWrite = false;
         if (value != null) {
             String valueString = IntegerEncoded.toString(value, radix);
             if (isSmsFieldName) {
@@ -66,9 +71,14 @@ public class IntegerParamEncoder implements IParamEncoder {
 
     @Override
     public int readTo(DecoderAdapter dest, String encoded, MessageParamField field) {
-        int decodedValue = IntegerEncoded.parseInt(encoded, radix);
+        int decodedValue = parseEncodedValue(encoded);
         dest.putInt(field.dbFieldName, decodedValue);
         return 1;
+    }
+
+    public int parseEncodedValue(String encoded) {
+        int decodedValue = IntegerEncoded.parseInt(encoded, radix);
+        return decodedValue;
     }
 
     // ===========================================================

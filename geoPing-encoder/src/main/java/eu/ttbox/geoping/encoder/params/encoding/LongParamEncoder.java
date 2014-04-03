@@ -37,7 +37,6 @@ public class LongParamEncoder implements IParamEncoder {
 
     @Override
     public boolean writeTo(EncoderAdapter src, StringBuilder dest, MessageParamField field, char smsFieldName, boolean isSmsFieldName) {
-        boolean isWrite = false;
         Long value = null;
         // Try to read value
         Object valueObject = src.get(field.dbFieldName);
@@ -54,6 +53,12 @@ public class LongParamEncoder implements IParamEncoder {
                 throw new RuntimeException("Could not value as Long for " + field + " with value = " + valueObject);
             }
         }
+        boolean isWrite = writeTo(value, dest, smsFieldName, isSmsFieldName);
+        return isWrite;
+    }
+
+    public boolean writeTo(Long value, StringBuilder dest, char smsFieldName, boolean isSmsFieldName) {
+        boolean isWrite = false;
         if (value != null) {
             String valueString = LongEncoded.toString(value, radix);
             if (isSmsFieldName) {
@@ -72,9 +77,14 @@ public class LongParamEncoder implements IParamEncoder {
 
     @Override
     public int readTo(DecoderAdapter dest, String encoded, MessageParamField field) {
-        long decodedValue = LongEncoded.parseLong(encoded, radix);
+        long decodedValue = parseEncodedValue(encoded);
         dest.putLong(field.dbFieldName, decodedValue);
         return 1;
+    }
+
+    public long parseEncodedValue(String encoded) {
+        long decodedValue = LongEncoded.parseLong(encoded, radix);
+        return decodedValue;
     }
 
     // ===========================================================

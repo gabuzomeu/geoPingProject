@@ -9,6 +9,8 @@ public class MessageParamField implements IParamEncoder {
 
     public static final MessageParamField COL_PERSON_ID = type("PERSON_ID", ParamTypeEncoding.LONG);
 
+    public static final MessageParamField APP_VERSION = type("APP_VERSION", ParamTypeEncoding.APP_VERSION);
+
     public static final MessageParamField LOC_TIME = type("TIME", ParamTypeEncoding.DATE);
     public static final MessageParamField LOC_PROVIDER = type("PROVIDER", ParamTypeEncoding.GPS_PROVIDER);
     public static final MessageParamField LOC_LATITUDE_E6 = type("LAT_E6", ParamTypeEncoding.INT);
