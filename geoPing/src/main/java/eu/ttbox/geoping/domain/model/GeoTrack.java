@@ -9,12 +9,11 @@ import java.util.Date;
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.domain.cache.ZoomLevelComputeCache;
 
-public class GeoTrack implements Comparable<GeoTrack>{
+public class GeoTrack implements Comparable<GeoTrack> {
 
- 
-    
+
     public long id = AppConstants.UNSET_ID;
-    public long personId =  AppConstants.UNSET_ID;
+    public long personId = AppConstants.UNSET_ID;
 
     public String phone;
     public String provider;
@@ -29,14 +28,14 @@ public class GeoTrack implements Comparable<GeoTrack>{
 
     // Optionnal
     public int batteryLevelInPercent = -1;
-    public String requesterPersonPhone ;
-    
+    public String requesterPersonPhone;
+
     // Optionnal
     private int altitude;
     public int accuracy = -1;
     public int bearing = -1;
     public int speed = -1;
-    
+
     // Event
     public long eventTime = AppConstants.UNSET_TIME;
     public String eventType;
@@ -57,20 +56,20 @@ public class GeoTrack implements Comparable<GeoTrack>{
 
     public GeoTrack(String phone, Location loc) {
         this.phone = phone;
-        this.provider = loc.getProvider(); 
+        this.provider = loc.getProvider();
         setTime(loc.getTime());
         setLatitude(loc.getLatitude());
         setLongitude(loc.getLongitude());
-         setAccuracy((int) loc.getAccuracy());
+        setAccuracy((int) loc.getAccuracy());
         if (loc.hasAltitude()) {
-            setAltitude((int)loc.getAltitude()); 
+            setAltitude((int) loc.getAltitude());
         }
         if (loc.hasBearing()) {
             setBearing((int) loc.getBearing());
-         }
+        }
         if (loc.hasSpeed()) {
-            setSpeed( (int) loc.getSpeed());
-         }
+            setSpeed((int) loc.getSpeed());
+        }
     }
 
     public Location asLocation() {
@@ -132,7 +131,7 @@ public class GeoTrack implements Comparable<GeoTrack>{
         return time;
     }
 
-  
+
     public Date getTimeAsDate() {
         if (time == AppConstants.UNSET_TIME) {
             return null;
@@ -145,8 +144,7 @@ public class GeoTrack implements Comparable<GeoTrack>{
         this.time = time;
         return this;
     }
-    
-    
+
 
     public double getLatitude() {
         return latitudeE6 / AppConstants.E6;
@@ -254,7 +252,6 @@ public class GeoTrack implements Comparable<GeoTrack>{
         return this;
     }
 
-    
 
     public int getBatteryLevelInPercent() {
         return batteryLevelInPercent;
@@ -273,36 +270,41 @@ public class GeoTrack implements Comparable<GeoTrack>{
         this.requesterPersonPhone = requesterPersonPhone;
         return this;
     }
-    
-    
+
+
     public GeoTrack setEventTime(long time) {
         this.eventTime = time;
         return this;
     }
-    
+
 
     public GeoTrack setEventType(String eventType) {
-		this.eventType = eventType;
-		 return this;
-	}
+        this.eventType = eventType;
+        return this;
+    }
 
-    
+
     // ===========================================================
     // Setter Value Test
     // ===========================================================
 
 
-	public boolean hasTime() {
-        return  time != AppConstants.UNSET_TIME;
+    public boolean hasTime() {
+        return time != AppConstants.UNSET_TIME;
     }
-	public boolean hasEventTime() {
-        return  eventTime != AppConstants.UNSET_TIME;
+
+    public boolean hasEventTime() {
+        return eventTime != AppConstants.UNSET_TIME;
     }
-    
+
+    public boolean hasEventType() {
+        return eventType != null;
+    }
+
     public boolean hasProvider() {
         return provider != null;
     }
-    
+
     public boolean hasPersonId() {
         return personId != -1L;
     }
@@ -310,6 +312,8 @@ public class GeoTrack implements Comparable<GeoTrack>{
     public boolean hasPhone() {
         return phone != null;
     }
+
+
 
     public boolean hasLatitude() {
         return hasLatitude;
@@ -327,8 +331,6 @@ public class GeoTrack implements Comparable<GeoTrack>{
         return hasLatitude && hasLlongitude;
     }
 
-
-    
     public boolean hasAccuracy() {
         return this.accuracy != -1;
     }
@@ -341,14 +343,16 @@ public class GeoTrack implements Comparable<GeoTrack>{
         return this.speed != -1;
     }
 
+
     public boolean hasAddress() {
         return this.address != null && this.address.length() > 0;
     }
-    
-    public boolean hasRequesterPersonPhone() {  
+
+    public boolean hasRequesterPersonPhone() {
         return this.requesterPersonPhone != null && this.requesterPersonPhone.length() > 0;
     }
-    public boolean hasBatteryLevelInPercent() { 
+
+    public boolean hasBatteryLevelInPercent() {
         return this.batteryLevelInPercent > -1;
     }
 
@@ -357,9 +361,9 @@ public class GeoTrack implements Comparable<GeoTrack>{
     // ===========================================================
 
     public boolean isValid() {
-    	return hasLatitude()&& hasLongitude();
+        return hasLatitude() && hasLongitude();
     }
-    
+
     private void clearLatLngCache() {
         cachedGeoPoint = null;
         cachedZoomLevelComputeCache = null;
@@ -368,7 +372,7 @@ public class GeoTrack implements Comparable<GeoTrack>{
     public float computeGroundResolutionInMForZoomLevel(int zoomLevel) {
         if (cachedZoomLevelComputeCache == null) {
             cachedZoomLevelComputeCache = new ZoomLevelComputeCache(getLatitude());
-         }
+        }
         return cachedZoomLevelComputeCache.computeGroundResolutionInMForZoomLevel(zoomLevel);
     }
 
@@ -395,9 +399,7 @@ public class GeoTrack implements Comparable<GeoTrack>{
     public int compareTo(GeoTrack another) {
         long rhs = another.time;
         return time < rhs ? -1 : (time == rhs ? 0 : 1);
-     }
-
-  
+    }
 
 
 }

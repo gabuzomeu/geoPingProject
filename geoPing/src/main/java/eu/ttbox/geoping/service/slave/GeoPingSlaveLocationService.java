@@ -449,18 +449,24 @@ public class GeoPingSlaveLocationService extends WorkerService implements Shared
             SmsSenderHelper.sendSmsAndLogIt(this, SmsLogSideEnum.SLAVE,  phone, smsAction, params);
             if (saveInLocalDb) {
                 geotrack.requesterPersonPhone = phone;
-                saveInLocalDb(geotrack);
+                saveInLocalDb(geotrack, phone);
             }
         }
     }
 
-    private void saveInLocalDb(GeoTrack geotrack) {
+    private void saveInLocalDb(GeoTrack geotrack, String phone) {
         if (geotrack == null) {
             return;
         }
+        // Add Phone
+        String previous =  geotrack.requesterPersonPhone;
+        geotrack.requesterPersonPhone = phone;
+        // Convert
         ContentValues values = GeoTrackHelper.getContentValues(geotrack);
         values.put(GeoTrackColumns.COL_PHONE, AppConstants.KEY_DB_LOCAL);
         getContentResolver().insert(GeoTrackerProvider.Constants.CONTENT_URI, values);
+        // restore
+        geotrack.requesterPersonPhone = previous;
     }
 
     // ===========================================================
