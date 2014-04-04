@@ -25,6 +25,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import eu.ttbox.geoping.BuildConfig;
 import eu.ttbox.geoping.MainActivity;
@@ -45,25 +48,23 @@ import eu.ttbox.geoping.encoder.params.MessageParamField;
 import eu.ttbox.geoping.service.SmsSenderHelper;
 import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
 import eu.ttbox.geoping.service.receiver.LocationChangeReceiver;
-import eu.ttbox.geoping.service.slave.GeoPingSlaveLocationService;
 import eu.ttbox.geoping.service.slave.eventspy.SpyNotificationHelper;
-import eu.ttbox.osm.core.LocationUtils;
+import eu.ttbox.geoping.utils.lastlocation.LastLocationFinder;
+import eu.ttbox.geoping.utils.sensor.BatterySensorReplyFutur;
 
 /**
  * This class receives geofence transition events from Location Services, in the
  * form of an Intent containing the transition type and geofence id(s) that triggered
  * the event.
  */
-public class ReceiveTransitionsIntentService extends IntentService
-        implements
-        GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener {
+public class ReceiveTransitionsIntentService extends IntentService {
 
     private static final String TAG = "ReceiveTransitionsIntentService";
 
     // Service
     private LocationManager locationManager;
-   private LocationClient mLocationClient;
+    private LastLocationFinder mLocationClient;
+
     /**
      * Sets an identifier for this class' background thread
      */
@@ -76,13 +77,12 @@ public class ReceiveTransitionsIntentService extends IntentService
         super.onCreate();
         // Service
         this.locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        this.mLocationClient = new LocationClient(this, this, this);
-        this.mLocationClient.connect();
+        this.mLocationClient = new LastLocationFinder(this);
     }
 
     @Override
     public void onDestroy() {
-        this.mLocationClient.disconnect();
+        this.mLocationClient.onStop();
         super.onDestroy();
     }
 
@@ -106,10 +106,10 @@ public class ReceiveTransitionsIntentService extends IntentService
         // Give it the category for all intents sent by the Intent Service
         broadcastIntent.addCategory(GeofenceUtils.CATEGORY_LOCATION_SERVICES);
 
-        Log.d(TAG, "--- ------------------------------------------------------- ---");
-        Log.d(TAG, "--- Geofence onHandleIntent : " + intent);
+        Log.d(TAG, "### ------------------------------------------------------- ###");
+        Log.d(TAG, "### Geofence onHandleIntent : " + intent);
         printExtras(intent.getExtras());
-        Log.d(TAG, "--- ------------------------------------------------------- ---");
+        Log.d(TAG, "### ------------------------------------------------------- ###");
 
         // First check for errors
         if (LocationClient.hasError(intent)) {
@@ -124,6 +124,7 @@ public class ReceiveTransitionsIntentService extends IntentService
             // Broadcast the error *locally* to other components in this app
             LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
         } else {
+            //Future<Location> location = LastLocationFinder.getLastBestLocation(this, );
             // If there's no error, get the transition type and create a notification
             // Get the type of transition (entry or exit)
             int transition = LocationClient.getGeofenceTransition(intent);
@@ -137,11 +138,11 @@ public class ReceiveTransitionsIntentService extends IntentService
                 String[] geofenceIds = extractGeofenceRequestsId(geofences);
                 sendNotification(transitionType, geofenceIds);
                 // Log the transition type and a message
-                Log.d(TAG, "GeoFence Violation : " + transitionType + " for " + geofences.size() + " geofences (like" + geofences.get(0));
+                Log.d(TAG, "### GeoFence Violation : " + transitionType + " for " + geofences.size() + " geofences (like" + geofences.get(0));
             } else {
                 // An invalid transition was reported
                 // Always log as an error
-                Log.e(TAG, "Geofence transition error. Invalid type " + transition +
+                Log.e(TAG, "### Geofence transition error. Invalid type " + transition +
                         " in geofences %2$s");
             }
         }
@@ -152,7 +153,7 @@ public class ReceiveTransitionsIntentService extends IntentService
         for (int index = 0; index < geofences.size(); index++) {
             Geofence geofence = geofences.get(index);
             geofenceIds[index] = geofence.getRequestId();
-            Log.d(TAG, "--- Geofence offence : " + geofence);
+            Log.d(TAG, "### Geofence offence : " + geofence);
         }
         return geofenceIds;
     }
@@ -188,29 +189,23 @@ public class ReceiveTransitionsIntentService extends IntentService
         // Compute afected geoFence
         List<CircleGeofence> geofences = getCircleGeofenceFromRequestIds(geofenceRequestIds);
         if (geofences == null || geofences.size() < 1) {
-            Log.w(TAG, "No CircleGeofence in Db for request Ids : " + Arrays.toString(geofenceRequestIds));
+            Log.w(TAG, "### No CircleGeofence in Db for request Ids : " + Arrays.toString(geofenceRequestIds));
             return;
         }
+        // Battery compute
+        BatterySensorReplyFutur battery = new BatterySensorReplyFutur(this);
+
         // Geofence Manage
         String[] phones = SpyNotificationHelper.searchListPhonesForGeofenceViolation(this, geofences, transitionType);
         if (phones != null && phones.length > 0) {
-            // FixMe the last lac not enought
-           // Location lastLocation = LocationUtils.getLastKnownLocation(locationManager);
-            // FIXME java.lang.IllegalStateException: Not connected. Call connect() and wait for onConnected() to be called.
-            Location lastLocation = null;
-            if (mLocationClient.isConnected()) {
-                lastLocation = mLocationClient.getLastLocation();
-            }
-            Log.d(TAG,"Last Location - from LocationManager = " +  LocationUtils.getLastKnownLocation(locationManager));
-            Log.d(TAG,"Last Location - from LocationClient = " +  lastLocation);
             // TODO Compute Geofence Requests Id per User
             CircleGeofence geofenceRequest = getBestCircleGeofence(geofences);
             // Distance
-           // int distanceToCenter = computeDistanceToCenter(   geofenceRequest,    lastLocation );
+            // int distanceToCenter = computeDistanceToCenter(   geofenceRequest,    lastLocation );
             // Send Sms
-            sendEventSpySmsMessage(geofenceRequest, transitionType, phones, null, lastLocation);
+            sendEventSpySmsMessage(geofenceRequest, transitionType, phones, null,    battery);
         } else {
-            Log.w(TAG, "No Person assoiated to Geofences : " + geofenceRequestIds);
+            Log.w(TAG, "### No Person assoiated to Geofences : " + geofenceRequestIds);
         }
 
         // Display Local Notification
@@ -218,13 +213,13 @@ public class ReceiveTransitionsIntentService extends IntentService
 
     }
 
-    private int computeDistanceToCenter( CircleGeofence geofenceRequest,  Location lastLocation ) {
+    private int computeDistanceToCenter(CircleGeofence geofenceRequest, Location lastLocation) {
         int distanceToCenter = -1;
         Location centerLoc = geofenceRequest.getCenterAsLocation();
         if (lastLocation != null) {
-              distanceToCenter = Math.round(centerLoc.distanceTo(lastLocation));
+            distanceToCenter = Math.round(centerLoc.distanceTo(lastLocation));
             if (distanceToCenter < geofenceRequest.radiusInMeters) {
-                Log.w(TAG, "Distance to Center is < to radius : " + distanceToCenter + "m < " + geofenceRequest.radiusInMeters + "m");
+                Log.w(TAG, "### Distance to Center is < to radius : " + distanceToCenter + "m < " + geofenceRequest.radiusInMeters + "m");
             }
         }
         return distanceToCenter;
@@ -342,19 +337,42 @@ public class ReceiveTransitionsIntentService extends IntentService
         return extrasBundles;
     }
 
+    private Location getLastLocation() {
+        Location lastLocation = null;
+        try {
+            lastLocation = mLocationClient.getLastLocation().get(1, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            Log.e(TAG, "Ignore InterruptedException : " + e.getMessage(), e);
+        } catch (ExecutionException e) {
+            Log.e(TAG, "Ignore ExecutionException : " + e.getMessage(), e);
+        } catch (TimeoutException e) {
+            Log.e(TAG, "Ignore TimeoutException : " + e.getMessage(), e);
+        }
+
+        //        Log.d(TAG,"Last Location - from LocationManager = " +  LocationUtils.getLastKnownLocation(locationManager));
+        Log.d(TAG, "Last Location - from LocationClient = " + lastLocation);
+
+
+        return lastLocation;
+    }
+
     public void sendEventSpySmsMessage(CircleGeofence geofenceRequest, MessageActionEnum eventType, String[] phones,
-                                       Bundle eventParams, Location location) {
+                                       Bundle eventParams,  BatterySensorReplyFutur battery) {
         if (phones == null || phones.length < 1) {
             Log.w(TAG, "Geofence violation detected but nobody to warning");
             return;
         }
-        Log.d(TAG, "EventSpy Notification  : " + eventType + " for " + phones.length + " phones destinations");
+        Log.d(TAG, "### EventSpy Notification  : " + eventType + " for " + phones.length + " phones destinations");
         // Send SMS
-        Bundle extrasBundles =convertAsBundle(geofenceRequest,   eventParams);
+        Bundle extrasBundles = convertAsBundle(geofenceRequest, eventParams);
+        // Read Location
+        Location location = getLastLocation();
 
         if (location != null) {
             // Converter Location
             GeoTrack geotrack = new GeoTrack(null, location);
+            // Battery
+            geotrack.batteryLevelInPercent = battery.getOrNull(100, TimeUnit.MILLISECONDS);
             Bundle params = GeoTrackHelper.getBundleValues(geotrack);
             // Add All Specific extra values
             if (extrasBundles != null && !extrasBundles.isEmpty()) {
@@ -365,35 +383,11 @@ public class ReceiveTransitionsIntentService extends IntentService
             // TODO saveInLocalDb
 
         } else {
-            LocationChangeReceiver.requestSingleUpdate(this, locationManager, phones, eventType,extrasBundles);
+            LocationChangeReceiver.requestSingleUpdate(this, locationManager, phones, eventType, extrasBundles);
 //            GeoPingSlaveLocationService.runFindLocationAndSendInService(this, eventType, phones, extrasBundles, null);
         }
 
     }
-
-
-    // ===========================================================
-    //   GooglePlayServicesClient
-    // ===========================================================
-
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        Log.d(TAG, "GooglePlayServicesClient onConnected");
-        printExtras(bundle);
-
-    }
-
-    @Override
-    public void onDisconnected() {
-        Log.d(TAG, "GooglePlayServicesClient onDisconnected");
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e(TAG, "GooglePlayServicesClient onConnectionFailed with ErrorCode : " + connectionResult.getErrorCode() + " - " +  connectionResult.toString());
-    }
-
 
     // ===========================================================
     //   Other

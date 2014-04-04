@@ -1,12 +1,14 @@
-package eu.ttbox.geoping.service.geofence;
+package eu.ttbox.geoping.utils.lastlocation.retryfutur;
 
 
+import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 
 import java.util.concurrent.ArrayBlockingQueue;
@@ -15,6 +17,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * http://www.nurkiewicz.com/2013/02/implementing-custom-future.html
@@ -33,15 +36,32 @@ public class LocationClientReplyFutur implements Future<Location>,
     private LocationClient mLocationClient;
 
     // Instance
+    private final AtomicInteger counterCall = new AtomicInteger();
     private final BlockingQueue<Location> reply = new ArrayBlockingQueue<Location>(1);
     private volatile State state = State.WAITING;
 
-    public LocationClientReplyFutur(LocationClient locationClient) {
-        this.mLocationClient = locationClient;
-        mLocationClient.registerConnectionCallbacks(this);
-        mLocationClient.registerConnectionFailedListener(this);
+
+    // ===========================================================
+    //   Constructor
+    // ===========================================================
+
+
+    public LocationClientReplyFutur(LocationClient mLocationClient) {
+        this.mLocationClient = mLocationClient;
+        init();
     }
 
+
+    private void init() {
+        this.mLocationClient.registerConnectionCallbacks(this);
+        this.mLocationClient.registerConnectionFailedListener(this);
+    }
+
+
+    private void cleanUp() {
+        this.mLocationClient.unregisterConnectionCallbacks(this);
+        this.mLocationClient.unregisterConnectionFailedListener(this);
+    }
 
     // ===========================================================
     //   ConnectionCallbacks  OnConnectionFailedListener
@@ -50,6 +70,7 @@ public class LocationClientReplyFutur implements Future<Location>,
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         this.state = State.CANCELLED;
+        cleanUp();
     }
 
     // ===========================================================
@@ -61,7 +82,9 @@ public class LocationClientReplyFutur implements Future<Location>,
     public void onConnected(Bundle bundle) {
         Location lastLoc = mLocationClient.getLastLocation();
         try {
-            reply.put(lastLoc);
+            while (counterCall.getAndDecrement()>0) {
+                reply.put(lastLoc);
+            }
             // Register
             state = State.DONE;
             cleanUp();
@@ -78,24 +101,8 @@ public class LocationClientReplyFutur implements Future<Location>,
 
 
     // ===========================================================
-    //   LocationClient
-    // ===========================================================
-    private boolean isLocationClientAvailable() {
-        return mLocationClient != null && (mLocationClient.isConnected() || mLocationClient.isConnecting());
-    }
-
-
-    private void cleanUp() {
-        if (mLocationClient!=null) {
-            mLocationClient.unregisterConnectionCallbacks(this);
-            mLocationClient.unregisterConnectionFailedListener(this);
-        }
-    }
-
-    // ===========================================================
     //   Furtur
     // ===========================================================
-
 
     @Override
     public boolean cancel(boolean mayInterruptIfRunning) {
@@ -117,22 +124,41 @@ public class LocationClientReplyFutur implements Future<Location>,
 
     @Override
     public Location get() throws InterruptedException, ExecutionException {
-        if (isLocationClientAvailable()) {
+        if (mLocationClient.isConnected()) {
+            return mLocationClient.getLastLocation();
+        } else {
+            counterCall.incrementAndGet();
             return this.reply.take();
         }
-        return null;
     }
 
     @Override
     public Location get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
         Location replyOrNull = null;
-        if (isLocationClientAvailable()) {
+        if (mLocationClient.isConnected()) {
+            replyOrNull =  mLocationClient.getLastLocation();
+        } else {
+            counterCall.incrementAndGet();
             replyOrNull = reply.poll(timeout, unit);
-//        if (replyOrNull == null) {
-//            throw new TimeoutException();
-//        }
+            if (replyOrNull == null) {
+                counterCall.getAndDecrement();
+                throw new TimeoutException();
+            }
         }
         return replyOrNull;
+    }
 
+    public Location getOrNull(long timeout, TimeUnit unit)  {
+        Location replyOrNull = null;
+        try {
+            replyOrNull = get(timeout, unit);
+        } catch (InterruptedException e) {
+            Log.d(TAG, "Ignore InterruptedException : " + e.getMessage());
+        } catch (ExecutionException e) {
+            Log.d(TAG, "ExecutionException : " + e.getMessage());
+        } catch (TimeoutException e) {
+            Log.d(TAG, "TimeoutException : " + e.getMessage());
+        }
+        return replyOrNull;
     }
 }

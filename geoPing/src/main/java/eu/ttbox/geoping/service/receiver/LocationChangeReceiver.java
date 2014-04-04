@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import java.util.concurrent.TimeUnit;
+
 import eu.ttbox.geoping.BuildConfig;
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.core.Intents;
@@ -25,7 +27,7 @@ import eu.ttbox.geoping.domain.model.GeoTrack;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.service.SmsSenderHelper;
-import eu.ttbox.geoping.service.sensor.BatterySensorStaticAccessor;
+import eu.ttbox.geoping.utils.sensor.BatterySensorReplyFutur;
 
 /**
  * https://code.google.com/p/android-protips-location/source/browse/trunk/src/com/radioactiveyak/location_best_practices/receivers/LocationChangedReceiver.java
@@ -88,7 +90,7 @@ public class LocationChangeReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        BatterySensorStaticAccessor.BatteryLevelReceiver battery = BatterySensorStaticAccessor.batteryLevel(context);
+        BatterySensorReplyFutur battery = new BatterySensorReplyFutur(context);
         //
         String action = intent.getAction();
         Bundle b = intent.getExtras();
@@ -124,9 +126,8 @@ public class LocationChangeReceiver extends BroadcastReceiver {
             // Converter Location
             GeoTrack geotrack = new GeoTrack(null, location);
             // Read Battery
-            if (battery.isDone()) {
-                geotrack.batteryLevelInPercent = battery.getBatteryLevel();
-            }
+            geotrack.batteryLevelInPercent = battery.getOrNull(1, TimeUnit.SECONDS);
+            // Convert Result
             Bundle params = GeoTrackHelper.getBundleValues(geotrack);
             // Add All Specific extra values
             if (extrasBundles != null && !extrasBundles.isEmpty()) {
