@@ -44,6 +44,7 @@ import eu.ttbox.geoping.encoder.model.MessageParamEnum;
 import eu.ttbox.geoping.encoder.params.MessageParamField;
 import eu.ttbox.geoping.service.SmsSenderHelper;
 import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
+import eu.ttbox.geoping.service.receiver.LocationChangeReceiver;
 import eu.ttbox.geoping.service.slave.GeoPingSlaveLocationService;
 import eu.ttbox.geoping.service.slave.eventspy.SpyNotificationHelper;
 import eu.ttbox.osm.core.LocationUtils;
@@ -195,19 +196,17 @@ public class ReceiveTransitionsIntentService extends IntentService
         if (phones != null && phones.length > 0) {
             // FixMe the last lac not enought
            // Location lastLocation = LocationUtils.getLastKnownLocation(locationManager);
-            Location lastLocation = mLocationClient.getLastLocation();
+            // FIXME java.lang.IllegalStateException: Not connected. Call connect() and wait for onConnected() to be called.
+            Location lastLocation = null;
+            if (mLocationClient.isConnected()) {
+                lastLocation = mLocationClient.getLastLocation();
+            }
             Log.d(TAG,"Last Location - from LocationManager = " +  LocationUtils.getLastKnownLocation(locationManager));
             Log.d(TAG,"Last Location - from LocationClient = " +  lastLocation);
             // TODO Compute Geofence Requests Id per User
             CircleGeofence geofenceRequest = getBestCircleGeofence(geofences);
             // Distance
-            Location centerLoc = geofenceRequest.getCenterAsLocation();
-            if (lastLocation != null) {
-                int distanceToCenter = Math.round(centerLoc.distanceTo(lastLocation));
-                if (distanceToCenter < geofenceRequest.radiusInMeters) {
-                    Log.w(TAG, "Distance to Center is < to radius : " + distanceToCenter + "m < " + geofenceRequest.radiusInMeters + "m");
-                }
-            }
+           // int distanceToCenter = computeDistanceToCenter(   geofenceRequest,    lastLocation );
             // Send Sms
             sendEventSpySmsMessage(geofenceRequest, transitionType, phones, null, lastLocation);
         } else {
@@ -217,6 +216,18 @@ public class ReceiveTransitionsIntentService extends IntentService
         // Display Local Notification
         //TODO  showNotification(geofences, transitionType);
 
+    }
+
+    private int computeDistanceToCenter( CircleGeofence geofenceRequest,  Location lastLocation ) {
+        int distanceToCenter = -1;
+        Location centerLoc = geofenceRequest.getCenterAsLocation();
+        if (lastLocation != null) {
+              distanceToCenter = Math.round(centerLoc.distanceTo(lastLocation));
+            if (distanceToCenter < geofenceRequest.radiusInMeters) {
+                Log.w(TAG, "Distance to Center is < to radius : " + distanceToCenter + "m < " + geofenceRequest.radiusInMeters + "m");
+            }
+        }
+        return distanceToCenter;
     }
 
     private CircleGeofence getBestCircleGeofence(List<CircleGeofence> geofences) {
@@ -351,11 +362,11 @@ public class ReceiveTransitionsIntentService extends IntentService
             }
             // Not time to get GeoLoc, send it direct
             SmsSenderHelper.sendSmsAndLogIt(this, SmsLogSideEnum.SLAVE, phones, eventType, params);
-
-
             // TODO saveInLocalDb
+
         } else {
-            GeoPingSlaveLocationService.runFindLocationAndSendInService(this, eventType, phones, extrasBundles, null);
+            LocationChangeReceiver.requestSingleUpdate(this, locationManager, phones, eventType,extrasBundles);
+//            GeoPingSlaveLocationService.runFindLocationAndSendInService(this, eventType, phones, extrasBundles, null);
         }
 
     }

@@ -353,6 +353,7 @@ public class GeoPingMasterService extends IntentService {
     // ===========================================================
     // Consume Alert Change Sim
     // ===========================================================
+
     private boolean consumeSimChange(Bundle bundle) {
         boolean isConsume = false;
         String phone = bundle.getString(Intents.EXTRA_SMS_PHONE);
@@ -388,6 +389,16 @@ public class GeoPingMasterService extends IntentService {
             isConsume = true;
         }
         return isConsume;
+    }
+
+    // ===========================================================
+    // Check App Version
+    // ===========================================================
+
+
+
+    private void checkAppVersion( Bundle bundle) {
+
     }
 
     // ===========================================================

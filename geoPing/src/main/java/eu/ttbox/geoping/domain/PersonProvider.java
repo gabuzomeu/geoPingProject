@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import java.util.Locale;
+
 import eu.ttbox.geoping.domain.person.PersonDatabase;
 import eu.ttbox.geoping.domain.person.PersonDatabase.PersonColumns;
 
@@ -134,7 +136,7 @@ public class PersonProvider extends ContentProvider {
     }
      
     private Cursor getSuggestions(String query) {
-        query = query.toLowerCase();
+        query = query.toLowerCase(Locale.getDefault());
         String[] columns = new String[] { PersonDatabase.PersonColumns.COL_ID, //
                 PersonDatabase.PersonColumns.COL_NAME, PersonDatabase.PersonColumns.COL_PHONE, //
                 SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_2, //

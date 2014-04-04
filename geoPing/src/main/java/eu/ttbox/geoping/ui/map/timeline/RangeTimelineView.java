@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.ui.widget.comp.RangeSeekBar;
@@ -124,7 +126,7 @@ public class RangeTimelineView extends RelativeLayout {
         int hours = x;// % 24;
         // x /= 24;
         // hours = x*24 + hours;
-        return String.format("%02d:%02d:%02d", hours, minutes, seconde);
+        return String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconde);
     }
     
     // ===========================================================

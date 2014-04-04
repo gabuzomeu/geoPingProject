@@ -30,7 +30,6 @@
         android:id="@+id/emergencyPasswordEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/labelErmergencyPassword"
         android:layout_below="@id/labelErmergencyModeDescription"
         android:ems="10"
         android:paddingTop="20dp"

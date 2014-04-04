@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import java.util.Locale;
+
 import eu.ttbox.geoping.domain.message.MessageDatabase;
 import eu.ttbox.geoping.domain.message.MessageDatabase.MessageColumns;
 
@@ -108,7 +110,7 @@ public class MessageProvider extends ContentProvider {
     }
 
     private Cursor getSuggestions(String query) {
-        query = query.toLowerCase();
+        query = query.toLowerCase(Locale.getDefault());
         String[] columns = new String[] { MessageDatabase.MessageColumns.COL_ID, //
         		MessageDatabase.MessageColumns.COL_NAME, MessageDatabase.MessageColumns.COL_PHONE, //
                 SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_2, //

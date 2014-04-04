@@ -13,6 +13,8 @@ import android.telephony.SmsMessage;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.util.Locale;
+
 import eu.ttbox.geoping.domain.model.SmsLogTypeEnum;
 import eu.ttbox.geoping.domain.smslog.SmsLogDatabase.SmsLogColumns;
 
@@ -75,7 +77,7 @@ public class MessageAcknowledgeReceiver extends BroadcastReceiver {
                     Log.d(TAG, "Message Acknowledge extras : " + key + " = Status         : " + message.getStatus());
                     Log.d(TAG, "Message Acknowledge extras : " + key + " = Status On Icc  : " + message.getStatusOnIcc());
                     Log.d(TAG, "Message Acknowledge extras : " + key + " = TimestampMilli : " + message.getTimestampMillis());
-                    String timeAsString = String.format("Date %1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS,%1$tL", //
+                    String timeAsString = String.format(Locale.getDefault(), "Date %1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS,%1$tL", //
                             message.getTimestampMillis());
                     Log.d(TAG, "Message Acknowledge extras : " + key + " = TimestampMilli : " + String.format("Date %1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS,%1$tL", //
                             message.getTimestampMillis()));

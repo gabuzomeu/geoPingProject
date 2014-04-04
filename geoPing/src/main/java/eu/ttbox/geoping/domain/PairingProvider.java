@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import java.util.Locale;
+
 import eu.ttbox.geoping.domain.pairing.PairingDatabase;
 import eu.ttbox.geoping.domain.pairing.PairingDatabase.PairingColumns;
 
@@ -127,7 +129,7 @@ public class PairingProvider extends ContentProvider {
   
 
     private Cursor getSuggestions(String query) {
-        query = query.toLowerCase();
+        query = query.toLowerCase(Locale.getDefault());
         String[] columns = new String[] { PairingColumns.COL_ID, //
                 PairingColumns.COL_NAME, PairingColumns.COL_PHONE, //
                 SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_2, //

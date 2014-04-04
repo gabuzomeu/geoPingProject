@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 import eu.ttbox.geoping.GeoPingApplication;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.MessageActionEnumLabelHelper;
@@ -116,7 +118,7 @@ public class SmsLogListAdapter extends android.support.v4.widget.ResourceCursorA
         }
         // Time
         long time = helper.getSmsLogTime(cursor);
-        String timeFormat = String.format("%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS", time);
+        String timeFormat = String.format(Locale.getDefault(), "%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS", time);
         holder.timeText.setText(timeFormat);
 
         // Time relative
