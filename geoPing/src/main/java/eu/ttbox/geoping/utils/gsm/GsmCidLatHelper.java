@@ -1,4 +1,4 @@
-package eu.ttbox.geoping.service.master;
+package eu.ttbox.geoping.utils.gsm;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
+@Deprecated
 public class GsmCidLatHelper {
 
     

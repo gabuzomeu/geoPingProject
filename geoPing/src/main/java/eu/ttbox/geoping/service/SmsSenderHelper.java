@@ -25,8 +25,8 @@ import eu.ttbox.geoping.domain.smslog.SmsLogHelper;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
 import eu.ttbox.geoping.encoder.params.MessageParamField;
-import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
-import eu.ttbox.geoping.service.encoder.adpater.BundleEncoderAdapter;
+import eu.ttbox.geoping.utils.encoder.MessageEncoderHelper;
+import eu.ttbox.geoping.utils.encoder.adpater.BundleEncoderAdapter;
 import eu.ttbox.geoping.service.receiver.MessageAcknowledgeReceiver;
 
 public class SmsSenderHelper {

@@ -1,4 +1,4 @@
-package eu.ttbox.geoping.service.encoder.gmap;
+package eu.ttbox.geoping.utils.encoder.gmap;
 
 import android.os.Bundle;
 

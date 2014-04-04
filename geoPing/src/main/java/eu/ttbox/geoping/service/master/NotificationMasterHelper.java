@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -35,10 +34,9 @@ import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
 import eu.ttbox.geoping.service.core.ContactHelper;
 import eu.ttbox.geoping.service.core.NotifPersonVo;
-import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
-import eu.ttbox.geoping.service.encoder.MessageParamEnumLabelHelper;
+import eu.ttbox.geoping.utils.encoder.MessageEncoderHelper;
+import eu.ttbox.geoping.utils.encoder.MessageParamEnumLabelHelper;
 import eu.ttbox.geoping.service.receiver.LogReadHistoryService;
-import eu.ttbox.geoping.service.receiver.player.AlarmPlayerService;
 
 public class NotificationMasterHelper {
 

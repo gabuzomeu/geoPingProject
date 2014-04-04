@@ -19,8 +19,8 @@ import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
 import eu.ttbox.geoping.domain.model.SmsLogTypeEnum;
 import eu.ttbox.geoping.encoder.crypto.TextEncryptor;
 import eu.ttbox.geoping.service.SmsSenderHelper;
-import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
-import eu.ttbox.geoping.service.encoder.adpater.BundleEncoderAdapter;
+import eu.ttbox.geoping.utils.encoder.MessageEncoderHelper;
+import eu.ttbox.geoping.utils.encoder.adpater.BundleEncoderAdapter;
 
 /**
  *<a href="http://www.tutos-android.com/broadcast-receiver-android">broadcast-receiver-android</a>

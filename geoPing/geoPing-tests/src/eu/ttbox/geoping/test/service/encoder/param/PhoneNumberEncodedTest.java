@@ -9,7 +9,7 @@ import eu.ttbox.geoping.encoder.model.MessageParamEnum;
 import eu.ttbox.geoping.encoder.params.ParamEncoderHelper;
 import eu.ttbox.geoping.service.billing.util.Base64;
 import eu.ttbox.geoping.service.billing.util.Base64DecoderException;
-import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
+import eu.ttbox.geoping.utils.encoder.MessageEncoderHelper;
 
 public class PhoneNumberEncodedTest extends AndroidTestCase {
     public static final String TAG = "PhoneNumberEncodedTest";

@@ -32,7 +32,7 @@ import eu.ttbox.geoping.encoder.params.MessageParamField;
 import eu.ttbox.geoping.service.SmsSenderHelper;
 import eu.ttbox.geoping.service.core.ContactHelper;
 import eu.ttbox.geoping.service.core.ContactVo;
-import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
+import eu.ttbox.geoping.utils.encoder.MessageEncoderHelper;
 import eu.ttbox.geoping.service.receiver.LogReadHistoryService;
 import eu.ttbox.geoping.service.receiver.player.AlarmPlayerService;
 import eu.ttbox.geoping.service.slave.receiver.AuthorizePhoneTypeEnum;

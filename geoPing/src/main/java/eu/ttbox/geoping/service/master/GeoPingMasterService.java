@@ -35,7 +35,7 @@ import eu.ttbox.geoping.domain.person.PersonHelper;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
 import eu.ttbox.geoping.service.SmsSenderHelper;
-import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
+import eu.ttbox.geoping.utils.encoder.MessageEncoderHelper;
 
 public class GeoPingMasterService extends IntentService {
 

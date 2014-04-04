@@ -20,7 +20,7 @@ import eu.ttbox.geoping.domain.model.GeoTrack;
 import eu.ttbox.geoping.domain.model.Person;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
-import eu.ttbox.geoping.service.encoder.MessageParamEnumLabelHelper;
+import eu.ttbox.geoping.utils.encoder.MessageParamEnumLabelHelper;
 import eu.ttbox.geoping.ui.person.PersonColorDrawableHelper;
 import eu.ttbox.osm.core.ExternalIntents;
 import eu.ttbox.osm.core.layout.BubbleLimitLinearLayout;

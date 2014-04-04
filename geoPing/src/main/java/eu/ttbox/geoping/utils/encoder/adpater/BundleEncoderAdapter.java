@@ -1,4 +1,4 @@
-package eu.ttbox.geoping.service.encoder.adpater;
+package eu.ttbox.geoping.utils.encoder.adpater;
 
 
 import android.os.Bundle;

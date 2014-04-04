@@ -1,4 +1,4 @@
-package eu.ttbox.geoping.service.encoder;
+package eu.ttbox.geoping.utils.encoder;
 
 
 import android.content.Context;

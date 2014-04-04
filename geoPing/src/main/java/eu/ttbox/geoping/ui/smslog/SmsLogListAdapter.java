@@ -15,14 +15,13 @@ import java.util.Locale;
 import eu.ttbox.geoping.GeoPingApplication;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.MessageActionEnumLabelHelper;
-import eu.ttbox.geoping.domain.message.MessageHelper;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
 import eu.ttbox.geoping.domain.model.SmsLogTypeEnum;
 import eu.ttbox.geoping.domain.smslog.SmsLogHelper;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
 import eu.ttbox.geoping.encoder.params.MessageParamField;
-import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
+import eu.ttbox.geoping.utils.encoder.MessageEncoderHelper;
 import eu.ttbox.geoping.ui.person.PhotoEditorView;
 import eu.ttbox.geoping.ui.person.PhotoThumbmailCache;
 

@@ -7,6 +7,7 @@ package eu.ttbox.geoping.service.gmap;
  *  https://github.com/iamamused/Google-Maps-Directions-API-Java-Parser
  *  
  */
+@Deprecated
 public class GMapService {
 
     public static final String TAG = "[MapService]";

@@ -21,7 +21,7 @@ import android.widget.Toast;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.encoder.params.MessageParamField;
-import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
+import eu.ttbox.geoping.utils.encoder.MessageEncoderHelper;
 import eu.ttbox.geoping.ui.core.validator.Form;
 import eu.ttbox.geoping.ui.core.validator.validate.ValidateTextView;
 import eu.ttbox.geoping.ui.core.validator.validator.NotEmptyValidator;

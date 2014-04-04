@@ -15,8 +15,6 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationClient;
 
@@ -46,7 +44,7 @@ import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
 import eu.ttbox.geoping.encoder.params.MessageParamField;
 import eu.ttbox.geoping.service.SmsSenderHelper;
-import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
+import eu.ttbox.geoping.utils.encoder.MessageEncoderHelper;
 import eu.ttbox.geoping.service.receiver.LocationChangeReceiver;
 import eu.ttbox.geoping.service.slave.eventspy.SpyNotificationHelper;
 import eu.ttbox.geoping.utils.lastlocation.LastLocationFinder;

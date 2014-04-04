@@ -32,10 +32,9 @@ import eu.ttbox.geoping.domain.smslog.SmsLogDatabase;
 import eu.ttbox.geoping.domain.smslog.SmsLogHelper;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
-import eu.ttbox.geoping.encoder.params.MessageParamField;
 import eu.ttbox.geoping.encoder.params.ParamEncoderHelper;
-import eu.ttbox.geoping.service.encoder.MessageParamEnumLabelHelper;
-import eu.ttbox.geoping.service.encoder.adpater.BundleEncoderAdapter;
+import eu.ttbox.geoping.utils.encoder.MessageParamEnumLabelHelper;
+import eu.ttbox.geoping.utils.encoder.adpater.BundleEncoderAdapter;
 import eu.ttbox.geoping.ui.person.PhotoHeaderBinderHelper;
 import eu.ttbox.geoping.ui.person.PhotoThumbmailCache;
 

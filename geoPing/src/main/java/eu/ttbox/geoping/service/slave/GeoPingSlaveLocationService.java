@@ -41,7 +41,7 @@ import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
 import eu.ttbox.geoping.service.SmsSenderHelper;
 import eu.ttbox.geoping.service.core.WorkerService;
-import eu.ttbox.geoping.service.encoder.MessageEncoderHelper;
+import eu.ttbox.geoping.utils.encoder.MessageEncoderHelper;
 import eu.ttbox.osm.core.LocationUtils;
 import eu.ttbox.osm.ui.map.mylocation.sensor.v2.OsmAndLocationProvider;
 import eu.ttbox.osm.ui.map.mylocation.sensor.v2.OsmLocation;

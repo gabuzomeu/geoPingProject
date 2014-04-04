@@ -6,7 +6,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-import eu.ttbox.geoping.service.encoder.params.GeoPingLocationProviders.ProviderEnum;
+import eu.ttbox.geoping.utils.encoder.params.GeoPingLocationProviders.ProviderEnum;
 
 public class GeoPingLocationProvidersTest extends AndroidTestCase {
 
