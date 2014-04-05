@@ -17,7 +17,7 @@ import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.service.slave.GeoPingSlaveLocationService;
 import eu.ttbox.geoping.ui.person.PhotoEditorView;
 import eu.ttbox.geoping.ui.person.PhotoEditorView.EditorListener;
-import eu.ttbox.geoping.ui.person.PhotoThumbmailCache;
+import eu.ttbox.geoping.utils.contact.PhotoThumbmailCache;
 
 public class PairingListAdapter extends android.support.v4.widget.ResourceCursorAdapter {
 

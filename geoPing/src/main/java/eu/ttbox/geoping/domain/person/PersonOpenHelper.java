@@ -19,6 +19,7 @@ import eu.ttbox.geoping.domain.person.PersonDatabase.PersonColumns;
  * <ul>
  * <li>Db version 5 : Geoping 0.1.5 (37)</li>
  * <li>Db version 6 : Geoping 0.1.6 (39)</li>
+ * <li>Db version 7 : Geoping 0.4.0 (62+) : Ajout de app version</li>
  * </ul>
  *  
  *
@@ -28,7 +29,7 @@ public class PersonOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = "PersonOpenHelper";
 
     public static final String DATABASE_NAME = "person.db";
-    public static final int DATABASE_VERSION = 6;
+    public static final int DATABASE_VERSION = 7;
 
     // ===========================================================
     // Table
@@ -57,6 +58,9 @@ public class PersonOpenHelper extends SQLiteOpenHelper {
             + ", " + PersonColumns.COL_COLOR + " INTEGER"//
             + ", " + PersonColumns.COL_CONTACT_ID + " INTEGER"//
             + ", " + PersonColumns.COL_PAIRING_TIME + " INTEGER"//
+            // App Version
+            + ", " + PersonColumns.COL_APP_VERSION + " INTEGER"//
+            + ", " + PersonColumns.COL_APP_VERSION_TIME + " INTEGER"//
             // Encryption
             + ", " + PersonColumns.COL_ENCRYPTION_PUBKEY + " TEXT"//
             + ", " + PersonColumns.COL_ENCRYPTION_PRIVKEY + " TEXT"//

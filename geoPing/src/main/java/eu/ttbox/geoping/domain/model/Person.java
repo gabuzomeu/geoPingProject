@@ -15,8 +15,11 @@ public class Person {
 	public long pairingTime;
 	// Config
     public int color;
-	
-	// Encryption
+    // App Version
+    public int appVersion;
+    public long appVersionTime= AppConstants.UNSET_TIME;
+
+    // Encryption
 	public String encryptionPubKey;
 	public String encryptionPrivKey;
 	public String encryptionRemotePubKey;
@@ -69,8 +72,26 @@ public class Person {
 		this.encryptionRemoteTime =timeInMs;
 		return this;
 	}
-	
-	@Override
+
+    public int getAppVersion() {
+        return appVersion;
+    }
+
+    public Person setAppVersion(int appVersion) {
+        this.appVersion = appVersion;
+        return this;
+    }
+
+    public long getAppVersionTime() {
+        return appVersionTime;
+    }
+
+    public Person setAppVersionTime(long appVersionTime) {
+        this.appVersionTime = appVersionTime;
+        return this;
+    }
+
+    @Override
 	public String toString() {
 		return "Person [id=" + id + ", displayName=" + displayName + ", phone=" + phone + "]";
 	}

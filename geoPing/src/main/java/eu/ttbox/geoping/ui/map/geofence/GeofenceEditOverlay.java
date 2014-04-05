@@ -38,6 +38,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.domain.GeoFenceProvider;
 import eu.ttbox.geoping.domain.model.CircleGeofence;
+import eu.ttbox.geoping.domain.pairing.GeoFenceDatabase;
 import eu.ttbox.geoping.domain.pairing.GeoFenceHelper;
 import eu.ttbox.geoping.service.geofence.GeofenceUtils;
 import eu.ttbox.osm.core.AppConstants;
@@ -57,7 +58,7 @@ public class GeofenceEditOverlay extends Overlay {
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             String selection = null;
             String[] selectionArgs = null;
-            String sortOrder = null;
+            String sortOrder = GeoFenceDatabase.ORDER_BY_RADIUS_DESC;
             // Loader
             CursorLoader cursorLoader = new CursorLoader(context, GeoFenceProvider.Constants.CONTENT_URI, null, selection, selectionArgs, sortOrder);
             return cursorLoader;

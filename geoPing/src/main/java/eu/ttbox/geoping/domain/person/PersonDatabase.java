@@ -17,7 +17,7 @@ import eu.ttbox.geoping.core.PhoneNumberUtils;
 import eu.ttbox.geoping.domain.EncryptionColumns;
 
 public class PersonDatabase {
- 
+
     private static final String TAG = "PersonDatabase";
 
     public static final String TABLE_PERSON_FTS = "personTS";
@@ -34,13 +34,17 @@ public class PersonDatabase {
         public static final String COL_COLOR = "COLOR";
         public static final String COL_CONTACT_ID = "CONTACT_ID";
         public static final String COL_PAIRING_TIME = "COL_PAIRING_TIME";
+        // App Version
+        public static final String COL_APP_VERSION = "COL_APP_VERSION";
+        public static final String COL_APP_VERSION_TIME = "COL_APP_VERSION_TIME";
         // All Cols
-        public static final String[] ALL_COLS = new String[] { //
-        COL_ID, COL_NAME //
+        public static final String[] ALL_COLS = new String[]{ //
+                COL_ID, COL_NAME //
                 , COL_EMAIL, COL_PERSON_UUID //
                 , COL_PHONE, COL_PHONE_NORMALIZED, COL_PHONE_MIN_MATCH //
                 , COL_COLOR, COL_PAIRING_TIME //
                 , COL_CONTACT_ID //
+                , COL_APP_VERSION, COL_APP_VERSION_TIME //
                 , COL_ENCRYPTION_PUBKEY, COL_ENCRYPTION_PRIVKEY, COL_ENCRYPTION_REMOTE_PUBKEY //
         };
         // Where Clause
@@ -65,7 +69,7 @@ public class PersonDatabase {
         // Add Identity Column
         for (String col : PersonColumns.ALL_COLS) {
 //            if (!col.equals(PersonColumns.COL_ID)) {
-                map.put(col, col);
+            map.put(col, col);
 //            }
         }
         // Add Suggest Aliases
@@ -79,14 +83,14 @@ public class PersonDatabase {
 
     public Cursor getEntityById(String rowId, String[] columns) {
         String selection = "rowid = ?";
-        String[] selectionArgs = new String[] { rowId };
+        String[] selectionArgs = new String[]{rowId};
         return queryEntities(columns, selection, selectionArgs, null);
     }
 
     public Cursor getEntityMatches(String[] projection, String query, String order) {
         String selection = PersonColumns.COL_NAME + " MATCH ?";
         String queryString = new StringBuilder(query).append("*").toString();
-        String[] selectionArgs = new String[] { queryString };
+        String[] selectionArgs = new String[]{queryString};
         return queryEntities(projection, selection, selectionArgs, order);
     }
 
@@ -108,12 +112,12 @@ public class PersonDatabase {
         String[] selectionArgs = null;
         if (TextUtils.isEmpty(pSelection)) {
             selection = String.format("%s = ?", PersonColumns.COL_PHONE_MIN_MATCH);
-            selectionArgs = new String[] { minMatch };
+            selectionArgs = new String[]{minMatch};
         } else {
             selection = String.format("%s = ? and (%s)", PersonColumns.COL_PHONE_MIN_MATCH, pSelection);
-            int pSelectionArgSize = pSelectionArgs!=null? pSelectionArgs.length: 0;
+            int pSelectionArgSize = pSelectionArgs != null ? pSelectionArgs.length : 0;
             selectionArgs = new String[pSelectionArgSize + 1];
-            if (pSelectionArgSize>0) {
+            if (pSelectionArgSize > 0) {
                 System.arraycopy(pSelectionArgs, 0, selectionArgs, 1, pSelectionArgSize);
             }
             selectionArgs[0] = minMatch;

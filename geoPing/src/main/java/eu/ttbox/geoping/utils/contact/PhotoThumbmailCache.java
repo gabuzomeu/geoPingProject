@@ -1,4 +1,4 @@
-package eu.ttbox.geoping.ui.person;
+package eu.ttbox.geoping.utils.contact;
 
 import android.content.ComponentCallbacks2;
 import android.content.ContentResolver;
@@ -13,8 +13,7 @@ import android.widget.ImageView;
 
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import eu.ttbox.geoping.service.core.ContactHelper;
-import eu.ttbox.geoping.service.core.ContactVo;
+import eu.ttbox.geoping.ui.person.PhotoEditorView;
 
 public class PhotoThumbmailCache extends LruCache<String, Bitmap> {
 

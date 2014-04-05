@@ -19,8 +19,8 @@ import java.util.concurrent.Future;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
-import eu.ttbox.geoping.service.core.ContactHelper;
-import eu.ttbox.geoping.service.core.NotifPersonVo;
+import eu.ttbox.geoping.utils.contact.ContactHelper;
+import eu.ttbox.geoping.utils.contact.NotifPersonVo;
 
 public class NotificationAlarmHelper {
 

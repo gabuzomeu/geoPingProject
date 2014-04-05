@@ -398,7 +398,9 @@ public class GeoPingMasterService extends IntentService {
 
 
     private void checkAppVersion( Bundle bundle) {
-
+        if (MessageEncoderHelper.isToBundle(bundle,MessageParamEnum.APP_VERSION)) {
+            int remoteVersion = MessageEncoderHelper.readInt(bundle, MessageParamEnum.APP_VERSION, Integer.MIN_VALUE);
+        }
     }
 
     // ===========================================================

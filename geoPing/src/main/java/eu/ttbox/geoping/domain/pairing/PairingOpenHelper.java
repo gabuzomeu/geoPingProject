@@ -14,6 +14,7 @@ import eu.ttbox.geoping.domain.core.UpgradeDbHelper;
 import eu.ttbox.geoping.domain.pairing.GeoFenceDatabase.GeoFenceColumns;
 import eu.ttbox.geoping.domain.pairing.PairingDatabase.PairingColumns;
 import eu.ttbox.geoping.domain.person.PersonDatabase.PersonColumns;
+
 /**
  * <ul>
  * <li>Db version 5 : Geoping 0.1.5 (37)</li>
@@ -21,16 +22,15 @@ import eu.ttbox.geoping.domain.person.PersonDatabase.PersonColumns;
  * <li>Db version 7 : Geoping 0.2.0 (52)</li>
  * <li>Db version 8 : Geoping 0.2.2 (??)</li>
  * <li>Db version 9 : Geoping 0.3.0 (??) : Ajout de contact Id</li>
+ * <li>Db version 11 : Geoping 0.4.0 (62+) : Ajout de app version </li>
  * </ul>
- *  
- *
  */
 public class PairingOpenHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "PairingOpenHelper";
 
     public static final String DATABASE_NAME = "pairing.db";
-    public static final int DATABASE_VERSION = 10;
+    public static final int DATABASE_VERSION = 11;
 
     // ===========================================================
     // Table
@@ -53,6 +53,9 @@ public class PairingOpenHelper extends SQLiteOpenHelper {
             + ", " + PairingColumns.COL_NOTIF_BATTERY_LOW + " INTEGER"//
             + ", " + PairingColumns.COL_NOTIF_SIM_CHANGE + " INTEGER"//
             + ", " + PairingColumns.COL_NOTIF_PHONE_CALL + " INTEGER"//
+            // App Version
+            + ", " + PairingColumns.COL_APP_VERSION + " INTEGER"//
+            + ", " + PairingColumns.COL_APP_VERSION_TIME + " INTEGER"//
             // Encryption
             + ", " + PairingColumns.COL_ENCRYPTION_PUBKEY + " TEXT"//
             + ", " + PairingColumns.COL_ENCRYPTION_PRIVKEY + " TEXT"//
@@ -89,7 +92,7 @@ public class PairingOpenHelper extends SQLiteOpenHelper {
             // Alarm
             + ", " + GeoFenceColumns.COL_ALARM + " INTEGER " //
             // Address
-            + ", " + GeoFenceColumns.COL_ADDRESS  + " TEXT " //
+            + ", " + GeoFenceColumns.COL_ADDRESS + " TEXT " //
             // Tracking Info
             + ", " + GeoFenceColumns.COL_VERSION_UPDATE_DATE + " INTEGER NOT NULL " //
             + " );";
@@ -105,11 +108,10 @@ public class PairingOpenHelper extends SQLiteOpenHelper {
     // GeoFence
     private static final String INDEX_GEOFENCE_REQUEST_ID = "IDX_GEOFENCE_REQUEST_ID";
     private static final String CREATE_INDEX_GEOFENCE_REQUEST_ID = "CREATE UNIQUE INDEX IF NOT EXISTS " + INDEX_GEOFENCE_REQUEST_ID + " on " + GeoFenceDatabase.TABLE_GEOFENCE + "(" //
-            + GeoFenceColumns.COL_REQUEST_ID  
+            + GeoFenceColumns.COL_REQUEST_ID
             + ");";
-     
 
-    
+
     // ===========================================================
     // Constructors
     // ===========================================================
@@ -140,7 +142,7 @@ public class PairingOpenHelper extends SQLiteOpenHelper {
         db.execSQL("DROP INDEX IF EXISTS " + INDEX_GEOFENCE_REQUEST_ID + ";");
         // Table
         db.execSQL("DROP TABLE IF EXISTS " + PairingDatabase.TABLE_PAIRING_FTS);
-        db.execSQL("DROP TABLE IF EXISTS " + GeoFenceDatabase.TABLE_GEOFENCE  + ";");
+        db.execSQL("DROP TABLE IF EXISTS " + GeoFenceDatabase.TABLE_GEOFENCE + ";");
     }
 
     @Override
@@ -151,22 +153,22 @@ public class PairingOpenHelper extends SQLiteOpenHelper {
         ArrayList<ContentValues> oldPairingRows = null;
         ArrayList<ContentValues> oldGeofenceRows = null;
         if (oldVersion <= 5) {
-            String[] stringColums = new String[] { //
-            PairingColumns.COL_NAME, PairingColumns.COL_PHONE, PairingColumns.COL_PHONE_NORMALIZED, PairingColumns.COL_PHONE_MIN_MATCH //
+            String[] stringColums = new String[]{ //
+                    PairingColumns.COL_NAME, PairingColumns.COL_PHONE, PairingColumns.COL_PHONE_NORMALIZED, PairingColumns.COL_PHONE_MIN_MATCH //
             };
-            String[] intColums = new String[] { //
-            PairingColumns.COL_AUTHORIZE_TYPE, PairingColumns.COL_SHOW_NOTIF // init
+            String[] intColums = new String[]{ //
+                    PairingColumns.COL_AUTHORIZE_TYPE, PairingColumns.COL_SHOW_NOTIF // init
             };
-            String[] longColums = new String[] { PairingColumns.COL_PAIRING_TIME };
+            String[] longColums = new String[]{PairingColumns.COL_PAIRING_TIME};
             oldPairingRows = UpgradeDbHelper.copyTable(db, "pairingFTS", stringColums, intColums, longColums);
             // Drop All Table
             db.execSQL("DROP TABLE IF EXISTS pairingFTS");
         } else {
 //            oldPairingRows = UpgradeDbHelper.copyTable(db, PairingDatabase.TABLE_PAIRING_FTS, PairingColumns.ALL_COLS, new String[0], new String[0]);
 //            oldGeofenceRows = UpgradeDbHelper.copyTable(db, GeoFenceDatabase.TABLE_GEOFENCE, GeoFenceColumns.ALL_COLS, new String[0], new String[0]);
-            oldPairingRows = UpgradeDbHelper.copyTable(db, PairingDatabase.TABLE_PAIRING_FTS );
-            oldGeofenceRows = UpgradeDbHelper.copyTable(db, GeoFenceDatabase.TABLE_GEOFENCE );
-         }
+            oldPairingRows = UpgradeDbHelper.copyTable(db, PairingDatabase.TABLE_PAIRING_FTS);
+            oldGeofenceRows = UpgradeDbHelper.copyTable(db, GeoFenceDatabase.TABLE_GEOFENCE);
+        }
         // Create the new Table
         // ----------------------
         onLocalDrop(db);

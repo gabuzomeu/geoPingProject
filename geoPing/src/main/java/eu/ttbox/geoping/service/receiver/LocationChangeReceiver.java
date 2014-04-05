@@ -90,7 +90,6 @@ public class LocationChangeReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        BatterySensorReplyFutur battery = new BatterySensorReplyFutur(context);
         //
         String action = intent.getAction();
         Bundle b = intent.getExtras();
@@ -99,6 +98,10 @@ public class LocationChangeReceiver extends BroadcastReceiver {
         Log.d(TAG, "--- Location onReceive : " + intent);
         printExtras(intent.getExtras());
         Log.d(TAG, "--- ------------------------------------------------------- ---");
+        // Battery
+        // FIXME ReceiverCallNotAllowedException: IntentReceiver components are not allowed to register to receive intents
+        BatterySensorReplyFutur battery = null;//new BatterySensorReplyFutur(context);
+
 
         // Action
         String smsAction = intent.getStringExtra(Intents.EXTRA_SMS_ACTION);
@@ -126,7 +129,9 @@ public class LocationChangeReceiver extends BroadcastReceiver {
             // Converter Location
             GeoTrack geotrack = new GeoTrack(null, location);
             // Read Battery
-            geotrack.batteryLevelInPercent = battery.getOrNull(1, TimeUnit.SECONDS);
+            if (battery!=null) {
+                geotrack.batteryLevelInPercent = battery.getOrNull(1, TimeUnit.SECONDS);
+            }
             // Convert Result
             Bundle params = GeoTrackHelper.getBundleValues(geotrack);
             // Add All Specific extra values

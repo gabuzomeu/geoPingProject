@@ -1,13 +1,10 @@
 package eu.ttbox.geoping.ui.emergency;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,10 +18,12 @@ import android.widget.Toast;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.encoder.params.MessageParamField;
-import eu.ttbox.geoping.utils.encoder.MessageEncoderHelper;
 import eu.ttbox.geoping.ui.core.validator.Form;
 import eu.ttbox.geoping.ui.core.validator.validate.ValidateTextView;
 import eu.ttbox.geoping.ui.core.validator.validator.NotEmptyValidator;
+import eu.ttbox.geoping.utils.contact.ContactHelper;
+import eu.ttbox.geoping.utils.contact.ContactPickVo;
+import eu.ttbox.geoping.utils.encoder.MessageEncoderHelper;
 
 
 public class EmergencyModeFragment extends Fragment {
@@ -70,7 +69,7 @@ public class EmergencyModeFragment extends Fragment {
         });
         geopingButton = (Button) v.findViewById(R.id.geoping_button_call);
         geopingButton.setOnClickListener(selectContactClickListener);
-        selectContact = (ImageButton)v.findViewById(R.id.select_contact_button);
+        selectContact = (ImageButton) v.findViewById(R.id.select_contact_button);
         selectContact.setOnClickListener(selectContactClickListener);
         Log.d(TAG, "Binding end");
         // Form
@@ -130,12 +129,7 @@ public class EmergencyModeFragment extends Fragment {
     // ===========================================================
 
     public boolean onSelectContactClick(View v) {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
-
-        // Intent intent = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);
-        startActivityForResult(intent, PICK_CONTACT);
-        return true;
+        return ContactHelper.pickContactPhone(this, PICK_CONTACT);
     }
 
     @Override
@@ -162,38 +156,11 @@ public class EmergencyModeFragment extends Fragment {
      * @param contactData
      */
     public void saveContactData(Uri contactData) {
-        String selection = null;
-        String[] selectionArgs = null;
-        Log.d(TAG, "Select contact Uri : " + contactData);
-        ContentResolver cr = getActivity().getContentResolver();
-        Cursor c = getActivity().getContentResolver().query(contactData, new String[]{ //
-                // BaseColumns._ID , //
-                ContactsContract.Data.CONTACT_ID, //
-                ContactsContract.CommonDataKinds.Identity.DISPLAY_NAME, //
-                ContactsContract.CommonDataKinds.Phone.NUMBER, //
-                ContactsContract.Contacts.LOOKUP_KEY, //
-                ContactsContract.CommonDataKinds.Phone.TYPE}, selection, selectionArgs, null);
-        // Uri contactLookupUri = ContactsContract.Data.getContactLookupUri(cr,
-        // contactData);
+        ContactPickVo contactPick = ContactHelper.loadContactPick(getActivity(), contactData);
+        Log.d(TAG, "Select contact Uri : " + contactData + " ==> Contact Id : " + contactPick.contactId);
+        // Check If exist in db
+        phoneEditText.setText(contactPick.phone);
 
-        try {
-            // Read value
-            if (c != null && c.moveToFirst()) {
-                String contactId = c.getString(0);
-                String name = c.getString(1);
-                String phone = c.getString(2);
-                // String lookupKey = c.getString(3);
-                // Uri lookupUri =  ContactsContract.Contacts.getLookupUri(Long.valueOf(contactId), lookupKey);
-                // int type = c.getInt(4);
-                Log.d(TAG, "Select contact Uri : " + contactData + " ==> Contact Id : " + contactId);
-                // Check If exist in db
-                phoneEditText.setText(phone);
-            }
-        } finally {
-            if (c != null) {
-                c.close();
-            }
-        }
     }
 
     // ===========================================================

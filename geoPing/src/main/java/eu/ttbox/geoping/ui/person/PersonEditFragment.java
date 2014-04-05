@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -41,6 +40,9 @@ import eu.ttbox.geoping.ui.core.validator.validator.NotEmptyValidator;
 import eu.ttbox.geoping.ui.person.colorpicker.ColorPickerDialog;
 import eu.ttbox.geoping.ui.person.holocolorpicker.HoloColorPickerDialog;
 import eu.ttbox.geoping.ui.person.validator.ExistPersonPhoneValidator;
+import eu.ttbox.geoping.utils.contact.ContactHelper;
+import eu.ttbox.geoping.utils.contact.ContactPickVo;
+import eu.ttbox.geoping.utils.contact.PhotoThumbmailCache;
 
 public class PersonEditFragment extends Fragment implements ColorPickerDialog.OnColorChangedListener {
 
@@ -148,7 +150,6 @@ public class PersonEditFragment extends Fragment implements ColorPickerDialog.On
     }
 
 
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -169,7 +170,7 @@ public class PersonEditFragment extends Fragment implements ColorPickerDialog.On
         formValidator.addValidates(nameTextField);
 
         // Phone
-          existValidator = new ExistPersonPhoneValidator(getActivity(), entityId);
+        existValidator = new ExistPersonPhoneValidator(getActivity(), entityId);
         ValidateTextView phoneTextField = new ValidateTextView(phoneEditText)//
                 .addValidator(new NotEmptyValidator()) //
                 .addValidator(existValidator) //
@@ -219,8 +220,6 @@ public class PersonEditFragment extends Fragment implements ColorPickerDialog.On
     }
 
 
-
-
     public void setOnPersonSelectListener(OnPersonSelectListener onPersonSelectListener) {
         this.onPersonSelectListener = onPersonSelectListener;
     }
@@ -259,7 +258,7 @@ public class PersonEditFragment extends Fragment implements ColorPickerDialog.On
 
         String name = nameEditText.getText().toString();
         String phone = phoneEditText.getText().toString();
-        Uri uri = doSavePerson(name, phone, contactId );
+        Uri uri = doSavePerson(name, phone, contactId);
         if (uri != null) {
             getActivity().setResult(Activity.RESULT_OK);
             getActivity().finish();
@@ -331,11 +330,7 @@ public class PersonEditFragment extends Fragment implements ColorPickerDialog.On
      * @param v
      */
     public void onSelectContactClick(View v) {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
-
-        // Intent intent = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);
-        startActivityForResult(intent, PICK_CONTACT);
+        ContactHelper.pickContactPhone(this, PICK_CONTACT);
     }
 
     // ===========================================================
@@ -395,48 +390,21 @@ public class PersonEditFragment extends Fragment implements ColorPickerDialog.On
      * @param contactData
      */
     public void saveContactData(Uri contactData) {
-        String selection = null;
-        String[] selectionArgs = null;
-        Log.d(TAG, "Select contact Uri : " + contactData);
-        ContentResolver cr = getActivity().getContentResolver();
-        Cursor c = getActivity().getContentResolver().query(contactData, new String[]{ //
-                // BaseColumns._ID , //
-                ContactsContract.Data.CONTACT_ID, //
-                ContactsContract.CommonDataKinds.Identity.DISPLAY_NAME, //
-                ContactsContract.CommonDataKinds.Phone.NUMBER, //
-                ContactsContract.Contacts.LOOKUP_KEY, //
-                ContactsContract.CommonDataKinds.Phone.TYPE}, selection, selectionArgs, null);
-        // Uri contactLookupUri = ContactsContract.Data.getContactLookupUri(cr,
-        // contactData);
 
-        try {
-            // Read value
-            if (c != null && c.moveToFirst()) {
-                String contactId = c.getString(0);
-                String name = c.getString(1);
-                String phone = c.getString(2);
-               // String lookupKey = c.getString(3);
-               // Uri lookupUri =  ContactsContract.Contacts.getLookupUri(Long.valueOf(contactId), lookupKey);
-                // int type = c.getInt(4);
-                Log.d(TAG, "Select contact Uri : " + contactData + " ==> Contact Id : " + contactId);
-                // Log.d(TAG, "Select contact Uri : " + contactData +
-                // " ==> Lookup Uri : " + contactLookupUri);
-                // Check If exist in db
-                String checkExistId = checkExistEntityId(cr, phone);
-                // Save The select person
-                if (checkExistId == null) {
-                    Uri uri = doSavePerson(name, phone, contactId );
-                } else {
-                    Log.i(TAG, "Found existing Entity [" + checkExistId + "] for Phone : " + phone);
-                    loadEntity(checkExistId);
-                }
-                // showSelectedNumber(type, number);
-            }
-        } finally {
-            if (c != null) {
-                c.close();
-            }
+        ContactPickVo contactPick = ContactHelper.loadContactPick(getActivity(), contactData);
+        Log.d(TAG, "Select contact Uri : " + contactData + " ==> Contact Id : " + contactPick.contactId);
+
+        // Check If exist in db
+        ContentResolver cr = getActivity().getContentResolver();
+        String checkExistId = checkExistEntityId(cr, contactPick.phone);
+        // Save The select person
+        if (checkExistId == null) {
+            Uri uri = doSavePerson(contactPick.name, contactPick.phone, contactId);
+        } else {
+            Log.i(TAG, "Found existing Entity [" + checkExistId + "] for Phone : " + contactPick.phone);
+            loadEntity(checkExistId);
         }
+        // showSelectedNumber(type, number);
     }
 
     private String checkExistEntityId(ContentResolver cr, String phone) {
@@ -484,10 +452,10 @@ public class PersonEditFragment extends Fragment implements ColorPickerDialog.On
         return name;
     }
 
-    private Uri doSavePerson(String nameDirty, String phoneDirty, String contactId ) {
+    private Uri doSavePerson(String nameDirty, String phoneDirty, String contactId) {
         String phone = cleanPhone(phoneDirty);
         String name = trimToNull(nameDirty);
-        setPerson(name, phone, contactId );
+        setPerson(name, phone, contactId);
         // Validate
         if (!formValidator.validate()) {
             return null;
@@ -497,7 +465,7 @@ public class PersonEditFragment extends Fragment implements ColorPickerDialog.On
         values.put(PersonColumns.COL_NAME, name);
         values.put(PersonColumns.COL_PHONE, phone);
         values.put(PersonColumns.COL_COLOR, mPaint.getColor());
-        if (contactId!=null) {
+        if (contactId != null) {
             values.put(PersonColumns.COL_CONTACT_ID, contactId);
         }
 
@@ -529,12 +497,12 @@ public class PersonEditFragment extends Fragment implements ColorPickerDialog.On
         return uri;
     }
 
-    private void setPerson(String name, String phone, String contactId ) {
+    private void setPerson(String name, String phone, String contactId) {
         nameEditText.setText(name);
         phoneEditText.setText(phone);
         this.contactId = contactId;
         // Photo
-        photoCache.loadPhoto(getActivity(), photoImageView  ,    contactId, phone);
+        photoCache.loadPhoto(getActivity(), photoImageView, contactId, phone);
     }
 
     private Uri getUriEntity() {
@@ -591,7 +559,7 @@ public class PersonEditFragment extends Fragment implements ColorPickerDialog.On
                     onPersonSelectListener.onPersonSelect(String.valueOf(personId), personPhone);
                 }
                 // Photo
-                photoCache.loadPhoto(getActivity(), photoImageView  ,    contactId, personPhone);
+                photoCache.loadPhoto(getActivity(), photoImageView, contactId, personPhone);
             }
         }
 

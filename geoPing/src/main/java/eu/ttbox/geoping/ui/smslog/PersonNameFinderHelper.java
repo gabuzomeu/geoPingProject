@@ -17,8 +17,8 @@ import eu.ttbox.geoping.domain.PersonProvider;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
 import eu.ttbox.geoping.domain.pairing.PairingDatabase;
 import eu.ttbox.geoping.domain.person.PersonDatabase;
-import eu.ttbox.geoping.service.core.ContactHelper;
-import eu.ttbox.geoping.service.core.ContactVo;
+import eu.ttbox.geoping.utils.contact.ContactHelper;
+import eu.ttbox.geoping.utils.contact.ContactVo;
 
 
 public class PersonNameFinderHelper {

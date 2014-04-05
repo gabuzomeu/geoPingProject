@@ -13,7 +13,7 @@ import eu.ttbox.geoping.domain.person.PersonHelper;
 import eu.ttbox.geoping.ui.person.PersonColorDrawableHelper;
 import eu.ttbox.geoping.ui.person.PhotoEditorView;
 import eu.ttbox.geoping.ui.person.PhotoEditorView.EditorListener;
-import eu.ttbox.geoping.ui.person.PhotoThumbmailCache;
+import eu.ttbox.geoping.utils.contact.PhotoThumbmailCache;
 
 
 public class SlidingPersonListAdapter extends android.support.v4.widget.ResourceCursorAdapter {

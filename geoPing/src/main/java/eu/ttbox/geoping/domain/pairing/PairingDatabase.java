@@ -43,6 +43,9 @@ public class PairingDatabase {
         public static final String COL_AUTHORIZE_TYPE = "AUTHORIZE_TYPE";
         public static final String COL_SHOW_NOTIF = "SHOW_NOTIF";
         public static final String COL_PAIRING_TIME = "COL_PAIRING_TIME";
+        // App Version
+        public static final String COL_APP_VERSION = "COL_APP_VERSION";
+        public static final String COL_APP_VERSION_TIME = "COL_APP_VERSION_TIME";
 
         // Notification
         public static final String COL_NOTIF_SHUTDOWN = "COL_NOTIF_SHUTDOWN";
@@ -58,14 +61,15 @@ public class PairingDatabase {
         // "COL_ENCRYPTION_REMOTE_PUBKEY";
 
         // All Cols
-        public static final String[] NOTIFS_COLS = new String[] { //
-        COL_NOTIF_SHUTDOWN, COL_NOTIF_BATTERY_LOW, COL_NOTIF_SIM_CHANGE, COL_NOTIF_PHONE_CALL //
+        public static final String[] NOTIFS_COLS = new String[]{ //
+                COL_NOTIF_SHUTDOWN, COL_NOTIF_BATTERY_LOW, COL_NOTIF_SIM_CHANGE, COL_NOTIF_PHONE_CALL //
         };
-        public static final String[] ALL_COLS = new String[] { //
-        COL_ID, COL_NAME, COL_PHONE, COL_CONTACT_ID//
+        public static final String[] ALL_COLS = new String[]{ //
+                COL_ID, COL_NAME, COL_PHONE, COL_CONTACT_ID//
                 , COL_EMAIL, COL_PERSON_UUID //
                 , COL_PHONE_NORMALIZED, COL_PHONE_MIN_MATCH //
                 , COL_AUTHORIZE_TYPE, COL_SHOW_NOTIF, COL_PAIRING_TIME //
+                , COL_APP_VERSION, COL_APP_VERSION_TIME //
                 , COL_NOTIF_SHUTDOWN, COL_NOTIF_BATTERY_LOW, COL_NOTIF_SIM_CHANGE, COL_NOTIF_PHONE_CALL //
                 , COL_ENCRYPTION_PUBKEY, COL_ENCRYPTION_PRIVKEY, COL_ENCRYPTION_REMOTE_PUBKEY //
         };
@@ -90,7 +94,7 @@ public class PairingDatabase {
         // Add Identity Column
         for (String col : PairingColumns.ALL_COLS) {
 //            if (!col.equals(PairingColumns.COL_ID)) {
-                map.put(col, col);
+            map.put(col, col);
 //            }
         }
         // Add Suggest Aliases
@@ -104,14 +108,14 @@ public class PairingDatabase {
 
     public Cursor getEntityById(String rowId, String[] columns) {
         String selection = "rowid = ?";
-        String[] selectionArgs = new String[] { rowId };
+        String[] selectionArgs = new String[]{rowId};
         return queryEntities(columns, selection, selectionArgs, null);
     }
 
     public Cursor getEntityMatches(String[] projection, String query, String order) {
         String selection = PairingColumns.COL_NAME + " MATCH ?";
         String queryString = new StringBuilder(query).append("*").toString();
-        String[] selectionArgs = new String[] { queryString };
+        String[] selectionArgs = new String[]{queryString};
         return queryEntities(projection, selection, selectionArgs, order);
     }
 
@@ -156,12 +160,12 @@ public class PairingDatabase {
         String[] selectionArgs = null;
         if (TextUtils.isEmpty(pSelection)) {
             selection = String.format("%s = ?", PairingColumns.COL_PHONE_MIN_MATCH);
-            selectionArgs = new String[] { minMatch };
+            selectionArgs = new String[]{minMatch};
         } else {
             selection = String.format("%s = ? and (%s)", PairingColumns.COL_PHONE_MIN_MATCH, pSelection);
-            int pSelectionArgSize = pSelectionArgs!=null? pSelectionArgs.length : 0;
+            int pSelectionArgSize = pSelectionArgs != null ? pSelectionArgs.length : 0;
             selectionArgs = new String[pSelectionArgSize + 1];
-            if (pSelectionArgSize>0) {
+            if (pSelectionArgSize > 0) {
                 System.arraycopy(pSelectionArgs, 0, selectionArgs, 1, pSelectionArgSize);
             }
             selectionArgs[0] = minMatch;
@@ -249,7 +253,7 @@ public class PairingDatabase {
         // FIXME Do a smaller request
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(TABLE_PAIRING_FTS);
-        final String[] projection = new String[] { "DISTINCT " + notifColumnName };
+        final String[] projection = new String[]{"DISTINCT " + notifColumnName};
         Cursor c = builder.query(mDatabaseOpenHelper.getReadableDatabase(), projection, null, null, null, null, null);
         try {
             while (c.moveToNext()) {
@@ -267,7 +271,7 @@ public class PairingDatabase {
         for (String notif : PairingColumns.NOTIFS_COLS) {
             if (values.containsKey(notif)) {
                 Boolean isWantedActif = values.getAsBoolean(notif);
-                isWantedActif = isWantedActif!=null ? isWantedActif : Boolean.FALSE;
+                isWantedActif = isWantedActif != null ? isWantedActif : Boolean.FALSE;
                 enabledSettingSpyNotificationService(context, notif, isWantedActif);
             }
         }
@@ -276,13 +280,13 @@ public class PairingDatabase {
     private ComponentName[] getSpyNotificationServiceClassForColumnName(Context context, String notifColumnName) {
         ComponentName[] serviceClass = null;
         if (PairingColumns.COL_NOTIF_SHUTDOWN.equals(notifColumnName)) {
-            serviceClass = new ComponentName[] { new ComponentName(context, ShutdownReceiver.class), new ComponentName(context, BootCompleteReceiver.class) };
+            serviceClass = new ComponentName[]{new ComponentName(context, ShutdownReceiver.class), new ComponentName(context, BootCompleteReceiver.class)};
         } else if (PairingColumns.COL_NOTIF_BATTERY_LOW.equals(notifColumnName)) {
-            serviceClass = new ComponentName[] { new ComponentName(context, LowBatteryReceiver.class) };
+            serviceClass = new ComponentName[]{new ComponentName(context, LowBatteryReceiver.class)};
         } else if (PairingColumns.COL_NOTIF_SIM_CHANGE.equals(notifColumnName)) {
-            serviceClass = new ComponentName[] { new ComponentName(context, SimChangeReceiver.class) };
+            serviceClass = new ComponentName[]{new ComponentName(context, SimChangeReceiver.class)};
         } else if (PairingColumns.COL_NOTIF_PHONE_CALL.equals(notifColumnName)) {
-            serviceClass = new ComponentName[] { new ComponentName(context, PhoneCallReceiver.class) };
+            serviceClass = new ComponentName[]{new ComponentName(context, PhoneCallReceiver.class)};
         }
 
         return serviceClass;
@@ -298,38 +302,38 @@ public class PairingDatabase {
         PackageManager pm = context.getPackageManager();
         int setting = pm.getComponentEnabledSetting(serviceClass[0]);
         switch (setting) {
-        case PackageManager.COMPONENT_ENABLED_STATE_DEFAULT:
-        case PackageManager.COMPONENT_ENABLED_STATE_ENABLED:
-            if (!wantedState) {
-                // check the global status
-                boolean globalState = getSpyNotificationGlobalStatus(context, notifColumnName);
-                if (!globalState) {
+            case PackageManager.COMPONENT_ENABLED_STATE_DEFAULT:
+            case PackageManager.COMPONENT_ENABLED_STATE_ENABLED:
+                if (!wantedState) {
+                    // check the global status
+                    boolean globalState = getSpyNotificationGlobalStatus(context, notifColumnName);
+                    if (!globalState) {
+                        for (ComponentName receiver : serviceClass) {
+                            Log.i(TAG, "Disable component " + receiver);
+                            pm.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+                        }
+                    }
+                }
+                break;
+            case PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER:
+            case PackageManager.COMPONENT_ENABLED_STATE_DISABLED:
+                if (wantedState) {
+                    if (PairingColumns.COL_NOTIF_SIM_CHANGE.equals(notifColumnName)) {
+                        // Save Data needed for Receiver
+                        String phone = SimChangeReceiver.savePrefsPhoneNumber(context);
+                        if (phone == null) {
+                            // TODO Notify Error
+                        }
+                    }
+                    // Enable component
                     for (ComponentName receiver : serviceClass) {
-                        Log.i(TAG, "Disable component " + receiver);
-                        pm.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+                        Log.i(TAG, "Enable component " + receiver);
+                        pm.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
                     }
                 }
-            }
-            break;
-        case PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER:
-        case PackageManager.COMPONENT_ENABLED_STATE_DISABLED:
-            if (wantedState) {
-                if (PairingColumns.COL_NOTIF_SIM_CHANGE.equals(notifColumnName)) {
-                    // Save Data needed for Receiver
-                    String phone = SimChangeReceiver.savePrefsPhoneNumber(context);
-                    if (phone == null) {
-                        // TODO Notify Error
-                    }
-                }
-                // Enable component
-                for (ComponentName receiver : serviceClass) {
-                    Log.i(TAG, "Enable component " + receiver);
-                    pm.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-                }
-            }
-            break;
-        default:
-            break;
+                break;
+            default:
+                break;
         }
     }
 

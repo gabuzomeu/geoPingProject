@@ -16,11 +16,11 @@ import android.view.MenuItem;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
-import java.util.Locale;
-
 import eu.ttbox.geoping.core.VersionUtils;
 import eu.ttbox.geoping.ui.GeoPingSlidingMenuFragmentActivity;
 import eu.ttbox.geoping.ui.MenuOptionsItemSelectionHelper;
+import eu.ttbox.geoping.ui.core.animation.ViewPagerAnimatedFactory;
+import eu.ttbox.geoping.ui.core.animation.transformer.ViewPagerZoomOutPageTransformer;
 import eu.ttbox.geoping.ui.pairing.PairingListFragment;
 import eu.ttbox.geoping.ui.person.PersonListFragment;
 import eu.ttbox.geoping.ui.smslog.SmsLogListFragment;
@@ -83,6 +83,7 @@ public class MainActivity extends GeoPingSlidingMenuFragmentActivity { //
          // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        ViewPagerAnimatedFactory.aniamted(mViewPager);
 
         // SlidingMenu
 //        slidingMenu = SlidingMenuHelper.newInstance(this);

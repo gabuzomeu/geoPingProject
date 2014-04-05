@@ -1,8 +1,10 @@
-package eu.ttbox.geoping.service.core;
+package eu.ttbox.geoping.utils.contact;
+
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -11,6 +13,7 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.PhoneLookup;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -26,10 +29,9 @@ import eu.ttbox.geoping.domain.model.Pairing;
 import eu.ttbox.geoping.domain.model.Person;
 import eu.ttbox.geoping.domain.pairing.PairingHelper;
 import eu.ttbox.geoping.domain.person.PersonHelper;
-import eu.ttbox.geoping.ui.person.PhotoThumbmailCache;
 
 /**
- *  Woking With Contact <a href="http://www.higherpass.com/Android/Tutorials/Working-With-Android-Contacts/>Working-With-Android-Contacts</a>
+ * Woking With Contact <a href="http://www.higherpass.com/Android/Tutorials/Working-With-Android-Contacts/>Working-With-Android-Contacts</a>
  */
 public class ContactHelper {
 
@@ -37,6 +39,47 @@ public class ContactHelper {
 
     private static final String PERMISSION_READ_CONTACTS = AndroidPermissions.READ_CONTACTS;
 
+
+    // ===========================================================
+    // Pick Contact
+    // ===========================================================
+    public static boolean pickContactPhone(Fragment context, int resultCode) {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
+
+        // Intent intent = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);
+        context.startActivityForResult(intent, resultCode);
+        return true;
+    }
+
+    public static ContactPickVo loadContactPick(Context context, Uri contactData) {
+        Log.d(TAG, "Select contact Uri : " + contactData);
+        String selection = null;
+        String[] selectionArgs = null;
+        ContentResolver cr = context.getContentResolver();
+        Cursor c = cr.query(contactData, new String[]{ //
+                ContactsContract.Data.CONTACT_ID, //
+                ContactsContract.CommonDataKinds.Identity.DISPLAY_NAME, //
+                ContactsContract.CommonDataKinds.Phone.NUMBER, //
+                ContactsContract.Contacts.LOOKUP_KEY, //
+                ContactsContract.CommonDataKinds.Phone.TYPE}, selection, selectionArgs, null);
+        // read
+        ContactPickVo result = null;
+        try {
+            // Read value
+            if (c != null && c.moveToFirst()) {
+                result = new ContactPickVo();
+                result.contactId = c.getString(0);
+                result.name = c.getString(1);
+                result.phone = c.getString(2);
+                result.lookupKey = c.getString(3);
+                result.phoneType = c.getInt(4);
+            }
+        } finally {
+            c.close();
+        }
+        return result;
+    }
 
     // ===========================================================
     // Photo
@@ -86,7 +129,7 @@ public class ContactHelper {
         Log.d(TAG, "Open Photo for Contact Id : " + contactId);
         Uri contactUri = ContentUris.withAppendedId(Contacts.CONTENT_URI, contactId);
         Uri photoUri = Uri.withAppendedPath(contactUri, Contacts.Photo.CONTENT_DIRECTORY);
-        Cursor cursor = context.getContentResolver().query(photoUri, new String[] { Contacts.Photo.PHOTO }, null, null, null);
+        Cursor cursor = context.getContentResolver().query(photoUri, new String[]{Contacts.Photo.PHOTO}, null, null, null);
         if (cursor == null) {
             return null;
         }
@@ -110,7 +153,7 @@ public class ContactHelper {
 
     /**
      * <a href="http://developer.android.com/reference/android/provider/ContactsContract.PhoneLookup.html"> PhoneLookup</a>
-     * 
+     *
      * @param context
      * @param phoneNumber
      * @return
@@ -121,7 +164,7 @@ public class ContactHelper {
         if (isPermissionReadContact(context)) {
             Log.d(TAG, String.format("Search Contact Name for Phone [%s]", phoneNumber));
             Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
-            Cursor cur = context.getContentResolver().query(uri, new String[] { PhoneLookup.DISPLAY_NAME, PhoneLookup._ID, PhoneLookup.LOOKUP_KEY }, null, null, null);
+            Cursor cur = context.getContentResolver().query(uri, new String[]{PhoneLookup.DISPLAY_NAME, PhoneLookup._ID, PhoneLookup.LOOKUP_KEY}, null, null, null);
             try {
                 if (cur != null && cur.moveToFirst()) {
                     contactName = cur.getString(cur.getColumnIndex(PhoneLookup.DISPLAY_NAME));
@@ -140,7 +183,7 @@ public class ContactHelper {
     }
 
     private static boolean isPermissionReadContact(Context context) {
-        PackageManager pm =  context.getPackageManager();
+        PackageManager pm = context.getPackageManager();
         if (pm != null) {
             return PackageManager.PERMISSION_GRANTED == pm.checkPermission(PERMISSION_READ_CONTACTS, context.getPackageName());
         }
@@ -148,13 +191,12 @@ public class ContactHelper {
     }
 
 
-
     // ===========================================================
     // GeoPing Contact
     // ===========================================================
 
     private static PhotoThumbmailCache getPhotoCache(Context context) {
-         PhotoThumbmailCache photoCache = ((GeoPingApplication) context.getApplicationContext()).getPhotoThumbmailCache();
+        PhotoThumbmailCache photoCache = ((GeoPingApplication) context.getApplicationContext()).getPhotoThumbmailCache();
         return photoCache;
     }
 
@@ -163,7 +205,7 @@ public class ContactHelper {
         return getNotifPersonVo(context, photoCache, phone);
     }
 
-    public static NotifPersonVo getNotifPersonVo(Context context,  PhotoThumbmailCache photoCache, String phone) {
+    public static NotifPersonVo getNotifPersonVo(Context context, PhotoThumbmailCache photoCache, String phone) {
         // Contact Name
         Person person = searchPersonForPhone(context, phone);
         String contactDisplayName = phone;
@@ -195,9 +237,9 @@ public class ContactHelper {
         return getNotifPairingVo(context, photoCache, person);
     }
 
-    public static NotifPersonVo getNotifPairingVo(Context context,  PhotoThumbmailCache photoCache ,   Pairing person ) {
+    public static NotifPersonVo getNotifPairingVo(Context context, PhotoThumbmailCache photoCache, Pairing person) {
         // Contact Name
-        String phone =  person !=null ? person.phone : null;
+        String phone = person != null ? person.phone : null;
         String contactDisplayName = phone;
         Bitmap photo = null;
         if (person != null) {

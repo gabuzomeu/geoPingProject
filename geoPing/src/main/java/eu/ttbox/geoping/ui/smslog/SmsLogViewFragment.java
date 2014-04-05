@@ -36,7 +36,7 @@ import eu.ttbox.geoping.encoder.params.ParamEncoderHelper;
 import eu.ttbox.geoping.utils.encoder.MessageParamEnumLabelHelper;
 import eu.ttbox.geoping.utils.encoder.adpater.BundleEncoderAdapter;
 import eu.ttbox.geoping.ui.person.PhotoHeaderBinderHelper;
-import eu.ttbox.geoping.ui.person.PhotoThumbmailCache;
+import eu.ttbox.geoping.utils.contact.PhotoThumbmailCache;
 
 
 public class SmsLogViewFragment extends Fragment {

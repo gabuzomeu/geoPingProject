@@ -26,6 +26,7 @@ import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.service.master.GeoPingMasterService;
+import eu.ttbox.geoping.utils.contact.PhotoThumbmailCache;
 
 
 public class PersonRemoteControlFragment extends Fragment {

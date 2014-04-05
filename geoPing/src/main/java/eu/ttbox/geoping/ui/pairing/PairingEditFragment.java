@@ -11,7 +11,6 @@ import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -45,7 +44,9 @@ import eu.ttbox.geoping.ui.core.validator.validate.ValidateTextView;
 import eu.ttbox.geoping.ui.core.validator.validator.NotEmptyValidator;
 import eu.ttbox.geoping.ui.pairing.validator.ExistPairingPhoneValidator;
 import eu.ttbox.geoping.ui.person.PhotoEditorView;
-import eu.ttbox.geoping.ui.person.PhotoThumbmailCache;
+import eu.ttbox.geoping.utils.contact.ContactHelper;
+import eu.ttbox.geoping.utils.contact.ContactPickVo;
+import eu.ttbox.geoping.utils.contact.PhotoThumbmailCache;
 
 public class PairingEditFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -81,7 +82,7 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
 
     //Validator
     private Form formValidator;
-    private ExistPairingPhoneValidator  existValidator;
+    private ExistPairingPhoneValidator existValidator;
 
     // Image
     private PhotoEditorView photoImageView;
@@ -205,11 +206,11 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         formValidator.addValidates(nameTextField);
 
         // Phone
-        String entityId = entityUri ==null ? null : entityUri.getLastPathSegment();
+        String entityId = entityUri == null ? null : entityUri.getLastPathSegment();
         existValidator = new ExistPairingPhoneValidator(getActivity(), entityId);
         ValidateTextView phoneTextField = new ValidateTextView(phoneEditText)//
                 .addValidator(new NotEmptyValidator()) //
-                .addValidator(existValidator)  ;
+                .addValidator(existValidator);
         formValidator.addValidates(phoneTextField);
 
 
@@ -229,18 +230,18 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case R.id.menu_save:
-            onSaveClick();
-            return true;
-        case R.id.menu_delete:
-            onDeleteClick();
-            return true;
-        case R.id.menu_select_contact:
-            onSelectContactClick(null);
-            return true;
-        case R.id.menu_cancel:
-            onCancelClick();
-            return true;
+            case R.id.menu_save:
+                onSaveClick();
+                return true;
+            case R.id.menu_delete:
+                onDeleteClick();
+                return true;
+            case R.id.menu_select_contact:
+                onSelectContactClick(null);
+                return true;
+            case R.id.menu_cancel:
+                onCancelClick();
+                return true;
         }
         return false;
     }
@@ -291,7 +292,7 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         // Uri.withAppendedPath(PairingProvider.Constants.CONTENT_URI,
         // entityId);
         this.entityUri = entityUri;
-        String entityId = entityUri ==null ? null : entityUri.getLastPathSegment();
+        String entityId = entityUri == null ? null : entityUri.getLastPathSegment();
         existValidator.setEntityId(entityId);
         Bundle bundle = new Bundle();
         bundle.putString(Intents.EXTRA_DATA_URI, entityUri.toString());
@@ -332,7 +333,7 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
 
         // Do Save
         Uri uri = doSavePairing(name, phone, authType, contactId);
-        if (uri!=null) {
+        if (uri != null) {
             getActivity().setResult(Activity.RESULT_OK);
             getActivity().finish();
         }
@@ -346,17 +347,11 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
     /**
      * {link http://www.higherpass.com/Android/Tutorials/Working-With-Android-
      * Contacts/}
-     * 
+     *
      * @param v
      */
     public void onSelectContactClick(View v) {
-        // String phoneNumber = phoneEditText.getText().toString();
-        // Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI,
-        // Uri.encode(phoneNumber));
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
-        // run
-        startActivityForResult(intent, PICK_CONTACT);
+        ContactHelper.pickContactPhone(this, PICK_CONTACT);
     }
 
     public void onPairingClick(View v) {
@@ -383,41 +378,26 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
     // ===========================================================
 
     public void saveContactData(Uri contactData) {
-        String selection = null;
-        String[] selectionArgs = null;
+        ContactPickVo contactPick = ContactHelper.loadContactPick(getActivity(), contactData);
         ContentResolver cr = getActivity().getContentResolver();
-        Cursor c = cr.query(contactData, new String[] { //
-                ContactsContract.Data.CONTACT_ID, //
-                ContactsContract.CommonDataKinds.Identity.DISPLAY_NAME, //
-                        ContactsContract.CommonDataKinds.Phone.NUMBER, //
-                        ContactsContract.CommonDataKinds.Phone.TYPE }, selection, selectionArgs, null);
-        try {
-            // Read value
-            if (c != null && c.moveToFirst()) {
-                String contactId = c.getString(0);
-                String name = c.getString(1);
-                String phone = c.getString(2);
-                int type = c.getInt(3);
-                // Check If exist in db
-                String checkExistId = checkExistEntityId(cr, phone);
-                // Save The select person
-                if (checkExistId == null) {
-                    Uri uri = doSavePairing(name, phone, null, contactId);
-                } else {
-                    Log.i(TAG, "Found existing Entity [" + checkExistId + "] for Phone : " + phone);
-                    Uri checkExistUri = Uri.withAppendedPath(PairingProvider.Constants.CONTENT_URI, checkExistId);
-                    loadEntity(checkExistUri);
-                }
-                // showSelectedNumber(type, number);
-            }
-        } finally {
-            c.close();
+        // Check If exist in db
+        String checkExistId = checkExistEntityId(cr, contactPick.phone);
+        // Save The select person
+        if (checkExistId == null) {
+            Uri uri = doSavePairing(contactPick.name, contactPick.phone, null, contactId);
+        } else {
+            Log.i(TAG, "Found existing Entity [" + checkExistId + "] for Phone : " + contactPick.phone);
+            Uri checkExistUri = Uri.withAppendedPath(PairingProvider.Constants.CONTENT_URI, checkExistId);
+            loadEntity(checkExistUri);
         }
+        // showSelectedNumber(type, number);
     }
+
+
 
     private String checkExistEntityId(ContentResolver cr, String phone) {
         Uri checkExistUri = PairingProvider.Constants.getUriPhoneFilter(phone);
-        String[] checkExistProjections = new String[] { PairingColumns.COL_ID };
+        String[] checkExistProjections = new String[]{PairingColumns.COL_ID};
         Cursor checkExistCursor = cr.query(checkExistUri, checkExistProjections, null, null, null);
         String checkExistId = null;
         try {
@@ -437,21 +417,21 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         PairingAuthorizeTypeEnum authType = null;
         // Check which radio button was clicked
         switch (view.getId()) {
-        case R.id.pairing_authorize_type_radio_ask:
-            if (checked)
-                authType = PairingAuthorizeTypeEnum.AUTHORIZE_REQUEST;
-            showNotificationCheckBox.setVisibility(View.GONE);
-            break;
-        case R.id.pairing_authorize_type_radio_always:
-            if (checked)
-                authType = PairingAuthorizeTypeEnum.AUTHORIZE_ALWAYS;
-            showNotificationCheckBox.setVisibility(View.VISIBLE);
-            break;
-        case R.id.pairing_authorize_type_radio_never:
-            if (checked)
-                authType = PairingAuthorizeTypeEnum.AUTHORIZE_NEVER;
-            showNotificationCheckBox.setVisibility(View.VISIBLE);
-            break;
+            case R.id.pairing_authorize_type_radio_ask:
+                if (checked)
+                    authType = PairingAuthorizeTypeEnum.AUTHORIZE_REQUEST;
+                showNotificationCheckBox.setVisibility(View.GONE);
+                break;
+            case R.id.pairing_authorize_type_radio_always:
+                if (checked)
+                    authType = PairingAuthorizeTypeEnum.AUTHORIZE_ALWAYS;
+                showNotificationCheckBox.setVisibility(View.VISIBLE);
+                break;
+            case R.id.pairing_authorize_type_radio_never:
+                if (checked)
+                    authType = PairingAuthorizeTypeEnum.AUTHORIZE_NEVER;
+                showNotificationCheckBox.setVisibility(View.VISIBLE);
+                break;
         }
         if (authType != null && entityUri != null) {
             ContentValues values = authType.writeTo(null);
@@ -490,7 +470,7 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         ContentValues values = new ContentValues();
         values.put(PairingColumns.COL_NAME, name);
         values.put(PairingColumns.COL_PHONE, phone);
-        if (contactId!=null) {
+        if (contactId != null) {
             values.put(PairingColumns.COL_CONTACT_ID, contactId);
         }
         if (authorizeType != null) {
@@ -508,12 +488,12 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
             // Do Insert
             uri = cr.insert(PairingProvider.Constants.CONTENT_URI, values);
             this.entityUri = uri;
-            String entityId = entityUri ==null ? null : entityUri.getLastPathSegment();
-            existValidator.setEntityId( entityId );
+            String entityId = entityUri == null ? null : entityUri.getLastPathSegment();
+            existValidator.setEntityId(entityId);
             getActivity().setResult(Activity.RESULT_OK);
         } else {
             uri = entityUri;
-            int count =cr.update(uri, values, null, null);
+            int count = cr.update(uri, values, null, null);
             if (count != 1) {
                 Log.e(TAG, String.format("Error, %s entities was updates for Expected One", count));
             }
@@ -541,12 +521,12 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         super.onActivityResult(reqCode, resultCode, data);
 
         switch (reqCode) {
-        case (PairingEditFragment.PICK_CONTACT):
-            if (resultCode == Activity.RESULT_OK) {
-                Uri contactData = data.getData();
-                saveContactData(contactData);
-                // finish();
-            }
+            case (PairingEditFragment.PICK_CONTACT):
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri contactData = data.getData();
+                    saveContactData(contactData);
+                    // finish();
+                }
         }
     }
 
@@ -554,35 +534,35 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
     // LoaderManager
     // ===========================================================
 
-    private final LoaderManager.LoaderCallbacks<Cursor> pairingLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
+private final LoaderManager.LoaderCallbacks<Cursor> pairingLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
 
-        @Override
-        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            Log.d(TAG, "onCreateLoader");
-            String entityId = args.getString(Intents.EXTRA_DATA_URI);
-            Uri entityUri = Uri.parse(entityId);
-            // Loader
-            CursorLoader cursorLoader = new CursorLoader(getActivity(), entityUri, null, null, null, null);
-            return cursorLoader;
-        }
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Log.d(TAG, "onCreateLoader");
+        String entityId = args.getString(Intents.EXTRA_DATA_URI);
+        Uri entityUri = Uri.parse(entityId);
+        // Loader
+        CursorLoader cursorLoader = new CursorLoader(getActivity(), entityUri, null, null, null, null);
+        return cursorLoader;
+    }
 
-        @Override
-        public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-            Log.d(TAG, "onLoadFinished with cursor result count : " + cursor.getCount());
-            // Display List
-            if (cursor.moveToFirst()) {
-                // Data
-                PairingHelper helper = new PairingHelper().initWrapper(cursor);
-                // Data
-                contactId = helper.getContactId(cursor);
-                String pairingPhone = helper.getPairingPhone(cursor);
-                // Binding
-                phoneEditText.setText(pairingPhone);
-                       helper.setTextPairingName(nameEditText, cursor)//
-                        .setCheckBoxPairingShowNotif(showNotificationCheckBox, cursor);
-                // Pairing
-                PairingAuthorizeTypeEnum authType = helper.getPairingAuthorizeTypeEnum(cursor);
-                switch (authType) {
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        Log.d(TAG, "onLoadFinished with cursor result count : " + cursor.getCount());
+        // Display List
+        if (cursor.moveToFirst()) {
+            // Data
+            PairingHelper helper = new PairingHelper().initWrapper(cursor);
+            // Data
+            contactId = helper.getContactId(cursor);
+            String pairingPhone = helper.getPairingPhone(cursor);
+            // Binding
+            phoneEditText.setText(pairingPhone);
+            helper.setTextPairingName(nameEditText, cursor)//
+                    .setCheckBoxPairingShowNotif(showNotificationCheckBox, cursor);
+            // Pairing
+            PairingAuthorizeTypeEnum authType = helper.getPairingAuthorizeTypeEnum(cursor);
+            switch (authType) {
                 case AUTHORIZE_REQUEST:
                     authorizeTypeAskRadioButton.setChecked(true);
                     break;
@@ -595,28 +575,27 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
 
                 default:
                     break;
-                }
-                // Notif
-                if (PairingAuthorizeTypeEnum.AUTHORIZE_REQUEST.equals(authType)) {
-                    showNotificationCheckBox.setVisibility(View.GONE);
-                }
-                // Notify listener
-                if (onPairingSelectListener != null) {
-                    Uri pairingUri = entityUri;
-                    onPairingSelectListener.onPersonSelect(pairingUri, pairingPhone);
-                }
-                // Photo
-                photoCache.loadPhoto(getActivity(), photoImageView,  contactId, pairingPhone);
             }
+            // Notif
+            if (PairingAuthorizeTypeEnum.AUTHORIZE_REQUEST.equals(authType)) {
+                showNotificationCheckBox.setVisibility(View.GONE);
+            }
+            // Notify listener
+            if (onPairingSelectListener != null) {
+                Uri pairingUri = entityUri;
+                onPairingSelectListener.onPersonSelect(pairingUri, pairingPhone);
+            }
+            // Photo
+            photoCache.loadPhoto(getActivity(), photoImageView, contactId, pairingPhone);
         }
+    }
 
-        @Override
-        public void onLoaderReset(Loader<Cursor> loader) {
-            setPairing(null, null, null);
-        }
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        setPairing(null, null, null);
+    }
 
-    };
-
+};
 
 
     // ===========================================================

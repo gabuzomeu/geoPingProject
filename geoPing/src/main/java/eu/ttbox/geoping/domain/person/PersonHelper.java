@@ -6,7 +6,6 @@ import android.widget.TextView;
 
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.domain.model.Person;
-import eu.ttbox.geoping.domain.pairing.PairingDatabase.PairingColumns;
 import eu.ttbox.geoping.domain.person.PersonDatabase.PersonColumns;
 
 public class PersonHelper {
@@ -22,6 +21,9 @@ public class PersonHelper {
     public int contactIdIdx = -1;
 
     public int pairingTimeIdx = -1;
+    // App Version
+    public int appVersionIdx = -1;
+    public int appVersionTimeIdx = -1;
     // Encryption
     public int encryptionPubKeyIdx = -1;
     public int encryptionPrivKeyIdx = -1;
@@ -40,12 +42,15 @@ public class PersonHelper {
         contactIdIdx = cursor.getColumnIndex(PersonColumns.COL_CONTACT_ID);
 
         pairingTimeIdx = cursor.getColumnIndex(PersonColumns.COL_PAIRING_TIME);
+        // App Version
+        appVersionIdx = cursor.getColumnIndex(PersonColumns.COL_APP_VERSION);
+        appVersionTimeIdx = cursor.getColumnIndex(PersonColumns.COL_APP_VERSION);
         // Encryption
         encryptionPubKeyIdx = cursor.getColumnIndex(PersonColumns.COL_ENCRYPTION_PUBKEY);
         encryptionPrivKeyIdx = cursor.getColumnIndex(PersonColumns.COL_ENCRYPTION_PRIVKEY);
         encryptionRemotePubKeyIdx = cursor.getColumnIndex(PersonColumns.COL_ENCRYPTION_REMOTE_PUBKEY);
-        encryptionRemoteTimeIdx = cursor.getColumnIndex(PairingColumns.COL_ENCRYPTION_REMOTE_TIME);
-        encryptionRemoteWayIdx = cursor.getColumnIndex(PairingColumns.COL_ENCRYPTION_REMOTE_WAY);
+        encryptionRemoteTimeIdx = cursor.getColumnIndex(PersonColumns.COL_ENCRYPTION_REMOTE_TIME);
+        encryptionRemoteWayIdx = cursor.getColumnIndex(PersonColumns.COL_ENCRYPTION_REMOTE_WAY);
 
         isNotInit = false;
         return this;
@@ -66,6 +71,10 @@ public class PersonHelper {
         user.setContactId(contactIdIdx > -1 ? cursor.getString(contactIdIdx) : null);
 
         user.setPairingTime(pairingTimeIdx > -1 ? cursor.getLong(pairingTimeIdx) : AppConstants.UNSET_TIME);
+        // App Version
+        user.setAppVersion(appVersionIdx > -1 ? cursor.getInt(appVersionIdx) : -1);
+        user.setAppVersionTime(appVersionTimeIdx > -1 ? cursor.getLong(appVersionTimeIdx) : AppConstants.UNSET_TIME);
+
         // Encryption
         user.encryptionPrivKey = encryptionPrivKeyIdx > -1 ? cursor.getString(encryptionPrivKeyIdx) : null;
         user.encryptionPubKey = encryptionPubKeyIdx > -1 ? cursor.getString(encryptionPubKeyIdx) : null;
@@ -101,7 +110,6 @@ public class PersonHelper {
     }
 
 
-
     public PersonHelper setTextPersonName(TextView view, Cursor cursor) {
         return setTextWithIdx(view, cursor, displayNameIdx);
     }
@@ -118,6 +126,14 @@ public class PersonHelper {
         return cursor.getString(displayNameIdx);
     }
 
+    public int getAppVersion(Cursor cursor) {
+        return cursor.getInt(appVersionIdx);
+    }
+
+    public long getAppVersionTime(Cursor cursor) {
+        return cursor.getLong(appVersionTimeIdx);
+    }
+
     public static ContentValues getContentValues(Person entity) {
         ContentValues initialValues = new ContentValues(PersonColumns.ALL_COLS.length);
         if (entity.id > -1) {
@@ -131,6 +147,9 @@ public class PersonHelper {
         initialValues.put(PersonColumns.COL_COLOR, entity.color);
         initialValues.put(PersonColumns.COL_CONTACT_ID, entity.contactId);
         initialValues.put(PersonColumns.COL_PAIRING_TIME, entity.pairingTime);
+        // App Version
+        initialValues.put(PersonColumns.COL_APP_VERSION, entity.appVersion);
+        initialValues.put(PersonColumns.COL_APP_VERSION_TIME, entity.appVersionTime);
         // Encryption
         initialValues.put(PersonColumns.COL_ENCRYPTION_PRIVKEY, entity.encryptionPrivKey);
         initialValues.put(PersonColumns.COL_ENCRYPTION_PUBKEY, entity.encryptionPubKey);

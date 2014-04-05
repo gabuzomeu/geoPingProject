@@ -15,6 +15,9 @@ public class Pairing {
     public PairingAuthorizeTypeEnum authorizeType;
     public boolean showNotification = false;
     public long pairingTime = AppConstants.UNSET_TIME;
+    // App Version
+    public int appVersion;
+    public long appVersionTime= AppConstants.UNSET_TIME;
 	// Encryption
 	public String encryptionPubKey;
 	public String encryptionPrivKey;
@@ -70,8 +73,26 @@ public class Pairing {
 		this.encryptionRemoteTime =timeInMs;
 		return this;
 	}
-    
-    
+
+
+    public int getAppVersion() {
+        return appVersion;
+    }
+
+    public Pairing setAppVersion(int appVersion) {
+        this.appVersion = appVersion;
+        return this;
+    }
+
+    public long getAppVersionTime() {
+        return appVersionTime;
+    }
+
+    public Pairing setAppVersionTime(long appVersionTime) {
+        this.appVersionTime = appVersionTime;
+        return this;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder().append("Pairing [");

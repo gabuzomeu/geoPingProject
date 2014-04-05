@@ -28,8 +28,12 @@ public class GeoFenceDatabase {
 
 
     public static final String TABLE_GEOFENCE = "geofence";
+
     private static final String CRITERIA_BY_ENTITY_ID = String.format("%s = ?", GeoFenceColumns.COL_ID);
     private static final String CRITERIA_BY_USER_ID = String.format("%s = ?", GeoFenceColumns.COL_REQUEST_ID);
+
+    public static final String ORDER_BY_RADIUS_DESC = String.format("%s DESC",GeoFenceColumns.COL_RADIUS);
+
     private static final HashMap<String, String> mCircleGeofenceColumnMap = buildCircleGeofenceColumnMap();
     private SQLiteDatabase bdd;
     private PairingOpenHelper mDatabaseOpenHelper;

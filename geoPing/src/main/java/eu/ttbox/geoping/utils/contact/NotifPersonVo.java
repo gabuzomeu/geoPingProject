@@ -1,4 +1,4 @@
-package eu.ttbox.geoping.service.core;
+package eu.ttbox.geoping.utils.contact;
 
 
 import android.graphics.Bitmap;

@@ -12,6 +12,7 @@ import eu.ttbox.geoping.GeoPingApplication;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.domain.person.PersonHelper;
 import eu.ttbox.geoping.ui.person.PhotoEditorView.EditorListener;
+import eu.ttbox.geoping.utils.contact.PhotoThumbmailCache;
 
 public class PersonListAdapter extends android.support.v4.widget.ResourceCursorAdapter {
 
