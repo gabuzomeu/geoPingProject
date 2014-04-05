@@ -4,22 +4,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <TextView  android:id="@+id/labelErmergencyPassword"
+    <TextView  android:id="@+id/labelGeofenceEditName"
                android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/geofence_name"
            />
 
-    <EditText android:id="@+id/emergencyPasswordEdit"
+    <EditText android:id="@+id/geofenceEditName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="text"
             android:hint="@string/geofence_name"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:ems="10"
-            android:layout_below="@+id/labelErmergencyPassword"
-            android:layout_alignLeft="@+id/labelErmergencyPassword"/>
+            android:layout_below="@id/labelGeofenceEditName"
+            android:layout_alignLeft="@id/labelGeofenceEditName"/>
 
 
 
@@ -27,7 +27,7 @@
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:textAppearance="?android:attr/textAppearanceMedium"
-               android:layout_below="@+id/emergencyPasswordEdit"
+               android:layout_below="@id/geofenceEditName"
                android:text="@string/geofence_transition"
                android:layout_marginTop="20dp"
             />
@@ -36,14 +36,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_below="@+id/geofence_transition_label"
+            android:layout_below="@id/geofence_transition_label"
             android:text="@string/geofence_transition_enter" />
 
     <CheckBox android:id="@+id/geofence_transition_exit_checkBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_below="@+id/geofence_transition_enter_checkBox"
+            android:layout_below="@id/geofence_transition_enter_checkBox"
             android:text="@string/geofence_transition_exit"/>
 
 
@@ -51,7 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_below="@+id/geofence_transition_exit_checkBox"
+        android:layout_below="@id/geofence_transition_exit_checkBox"
         android:text="@string/geofence_alarm"/>
 
 

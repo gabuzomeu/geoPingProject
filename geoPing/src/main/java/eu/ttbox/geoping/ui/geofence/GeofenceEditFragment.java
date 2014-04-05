@@ -73,7 +73,7 @@ public class GeofenceEditFragment extends Fragment {
         setHasOptionsMenu(true);
 
         // Bindings
-        this.nameEditText = (EditText) v.findViewById(R.id.emergencyPasswordEdit);
+        this.nameEditText = (EditText) v.findViewById(R.id.geofenceEditName);
         this.transitionEnterCheckBox = (CompoundButton) v.findViewById(R.id.geofence_transition_enter_checkBox);
         this.transitionExitCheckBox = (CompoundButton) v.findViewById(R.id.geofence_transition_exit_checkBox);
         //
