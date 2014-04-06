@@ -38,18 +38,18 @@
             android:textColor="@color/call_log_primary_text_color"
             android:textSize="18sp"
             android:singleLine="true"
-            android:layout_alignTop="@+id/smslog_photo_imageView"
-            android:layout_toRightOf="@+id/smslog_photo_imageView"
-            android:layout_toLeftOf="@+id/smslog_photo_imageView_send"
+            android:layout_alignTop="@id/smslog_photo_imageView"
+            android:layout_toRightOf="@id/smslog_photo_imageView"
+            android:layout_toLeftOf="@id/smslog_photo_imageView_send"
             />
 
     <TextView
             android:id="@+id/smslog_list_item_phone"
             style="@style/entity_list_item"
-            android:layout_alignLeft="@+id/smslog_list_item_action"
-            android:layout_below="@+id/smslog_list_item_action"
-            android:layout_toLeftOf="@+id/smslog_photo_imageView_send"
-            android:layout_toRightOf="@+id/smslog_photo_imageView"
+            android:layout_alignLeft="@id/smslog_list_item_action"
+            android:layout_below="@id/smslog_list_item_action"
+            android:layout_toLeftOf="@id/smslog_photo_imageView_send"
+            android:layout_toRightOf="@id/smslog_photo_imageView"
             android:text="+33601020304"
             android:textColor="@color/call_log_secondary_text_color"
             android:textSize="14sp"
@@ -67,8 +67,8 @@
             android:textSize="14sp"
             android:singleLine="true"
             android:ellipsize="marquee"
-            android:layout_alignLeft="@+id/smslog_list_item_phone"
-            android:layout_below="@+id/smslog_list_item_phone"
+            android:layout_alignLeft="@id/smslog_list_item_phone"
+            android:layout_below="@id/smslog_list_item_phone"
             />
 
 
@@ -78,9 +78,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_call_voicemail_holo_dark"
-            android:layout_alignBottom="@+id/smslog_photo_imageView"
-            android:layout_alignLeft="@+id/smslog_list_item_time"
-            android:layout_below="@+id/smslog_list_item_time"
+            android:layout_alignBottom="@id/smslog_photo_imageView"
+            android:layout_alignLeft="@id/smslog_list_item_time"
+            android:layout_below="@id/smslog_list_item_time"
             />
 
     <TextView
@@ -91,10 +91,9 @@
             android:textColor="@color/call_log_secondary_text_color"
             android:text="Il y a 4 jours"
             android:layout_marginLeft="5dp"
-            android:layout_alignBaseline="@+id/smslog_list_item_smsType_imgs"
-            android:layout_toRightOf="@+id/smslog_list_item_smsType_imgs"
-
-            android:layout_below="@+id/smslog_list_item_time"
+            android:layout_alignBaseline="@id/smslog_list_item_smsType_imgs"
+            android:layout_toRightOf="@id/smslog_list_item_smsType_imgs"
+            android:layout_below="@id/smslog_list_item_time"
             />
 
 </RelativeLayout>

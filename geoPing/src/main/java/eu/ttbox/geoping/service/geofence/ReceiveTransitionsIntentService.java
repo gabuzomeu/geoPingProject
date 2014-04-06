@@ -6,10 +6,12 @@ import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.LocalBroadcastManager;
@@ -30,6 +32,7 @@ import java.util.concurrent.TimeoutException;
 import eu.ttbox.geoping.BuildConfig;
 import eu.ttbox.geoping.MainActivity;
 import eu.ttbox.geoping.R;
+import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.core.MessageActionEnumLabelHelper;
 import eu.ttbox.geoping.domain.GeoFenceProvider;
@@ -44,9 +47,10 @@ import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
 import eu.ttbox.geoping.encoder.params.MessageParamField;
 import eu.ttbox.geoping.service.SmsSenderHelper;
-import eu.ttbox.geoping.utils.encoder.MessageEncoderHelper;
 import eu.ttbox.geoping.service.receiver.LocationChangeReceiver;
 import eu.ttbox.geoping.service.slave.eventspy.SpyNotificationHelper;
+import eu.ttbox.geoping.utils.GeoPingCommandHelper;
+import eu.ttbox.geoping.utils.encoder.MessageEncoderHelper;
 import eu.ttbox.geoping.utils.lastlocation.LastLocationFinder;
 import eu.ttbox.geoping.utils.sensor.BatterySensorReplyFutur;
 
@@ -62,6 +66,7 @@ public class ReceiveTransitionsIntentService extends IntentService {
     // Service
     private LocationManager locationManager;
     private LastLocationFinder mLocationClient;
+    private SharedPreferences sharedPreferences;
 
     /**
      * Sets an identifier for this class' background thread
@@ -75,12 +80,18 @@ public class ReceiveTransitionsIntentService extends IntentService {
         super.onCreate();
         // Service
         this.locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         this.mLocationClient = new LastLocationFinder(this);
     }
 
     @Override
     public void onDestroy() {
+        // service
+        this.locationManager = null;
+        this.sharedPreferences = null;
         this.mLocationClient.onStop();
+        this.mLocationClient = null;
+        // Destory
         super.onDestroy();
     }
 
@@ -201,7 +212,7 @@ public class ReceiveTransitionsIntentService extends IntentService {
             // Distance
             // int distanceToCenter = computeDistanceToCenter(   geofenceRequest,    lastLocation );
             // Send Sms
-            sendEventSpySmsMessage(geofenceRequest, transitionType, phones, null,    battery);
+            sendEventSpySmsMessage(geofenceRequest, transitionType, phones, null, battery);
         } else {
             Log.w(TAG, "### No Person assoiated to Geofences : " + geofenceRequestIds);
         }
@@ -338,13 +349,17 @@ public class ReceiveTransitionsIntentService extends IntentService {
     private Location getLastLocation() {
         Location lastLocation = null;
         try {
-            lastLocation = mLocationClient.getLastLocation().get(1, TimeUnit.SECONDS);
+            // Read Timeout config
+            int timeOuInS = 5;
+            timeOuInS = sharedPreferences.getInt(AppConstants.PREFS_REQUEST_TIMEOUT_S, timeOuInS);
+            Log.d(TAG, "### Request LocationClient  LastLocation - with time out of " + timeOuInS  + "s");
+            lastLocation = mLocationClient.getLastLocation().get(timeOuInS, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
-            Log.e(TAG, "Ignore InterruptedException : " + e.getMessage(), e);
+            Log.w(TAG, "Ignore InterruptedException : " + e.getMessage(), e);
         } catch (ExecutionException e) {
-            Log.e(TAG, "Ignore ExecutionException : " + e.getMessage(), e);
+            Log.w(TAG, "Ignore ExecutionException : " + e.getMessage(), e);
         } catch (TimeoutException e) {
-            Log.e(TAG, "Ignore TimeoutException : " + e.getMessage(), e);
+            Log.i(TAG, "Ignore TimeoutException : " + e.getMessage(), e);
         }
 
         //        Log.d(TAG,"Last Location - from LocationManager = " +  LocationUtils.getLastKnownLocation(locationManager));
@@ -354,8 +369,9 @@ public class ReceiveTransitionsIntentService extends IntentService {
         return lastLocation;
     }
 
+
     public void sendEventSpySmsMessage(CircleGeofence geofenceRequest, MessageActionEnum eventType, String[] phones,
-                                       Bundle eventParams,  BatterySensorReplyFutur battery) {
+                                       Bundle eventParams, BatterySensorReplyFutur battery) {
         if (phones == null || phones.length < 1) {
             Log.w(TAG, "Geofence violation detected but nobody to warning");
             return;
@@ -365,12 +381,15 @@ public class ReceiveTransitionsIntentService extends IntentService {
         Bundle extrasBundles = convertAsBundle(geofenceRequest, eventParams);
         // Read Location
         Location location = getLastLocation();
-
+        Integer batteryLevelInPercent = battery.getOrNull(100, TimeUnit.MILLISECONDS);
         if (location != null) {
             // Converter Location
             GeoTrack geotrack = new GeoTrack(null, location);
             // Battery
-            geotrack.batteryLevelInPercent = battery.getOrNull(100, TimeUnit.MILLISECONDS);
+            if (batteryLevelInPercent != null) {
+                geotrack.batteryLevelInPercent = batteryLevelInPercent.intValue();
+                Log.d(TAG, "### Battery Level Sensor : ");
+            }
             Bundle params = GeoTrackHelper.getBundleValues(geotrack);
             // Add All Specific extra values
             if (extrasBundles != null && !extrasBundles.isEmpty()) {
@@ -381,9 +400,13 @@ public class ReceiveTransitionsIntentService extends IntentService {
             // TODO saveInLocalDb
 
         } else {
-            LocationChangeReceiver.requestSingleUpdate(this, locationManager, phones, eventType, extrasBundles);
-//            GeoPingSlaveLocationService.runFindLocationAndSendInService(this, eventType, phones, extrasBundles, null);
-        }
+            // Battery
+            if (batteryLevelInPercent != null) {
+                extrasBundles = MessageEncoderHelper.writeToBundle(extrasBundles, MessageParamEnum.BATTERY, batteryLevelInPercent);
+            }
+            Log.d(TAG, "### Geofence violation has no User Location ==> Request an active Location");
+            GeoPingCommandHelper.sendGeopingLocationCheckin(this, phones, eventType, extrasBundles);
+         }
 
     }
 

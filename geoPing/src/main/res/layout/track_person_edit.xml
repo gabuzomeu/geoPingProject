@@ -18,7 +18,7 @@
             style="@style/entity_edit"
             android:layout_width="wrap_content"
             android:layout_alignParentLeft="true" 
-            android:layout_alignRight="@+id/person_phone"
+            android:layout_alignRight="@id/person_phone"
             android:hint="@string/person_name"
             android:inputType="textPersonName" />
 

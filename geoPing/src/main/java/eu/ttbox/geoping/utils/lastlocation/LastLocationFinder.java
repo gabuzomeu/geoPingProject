@@ -15,7 +15,7 @@ public class LastLocationFinder implements ILastLocationFinder {
     private static final String TAG = "LastLocationFinder";
 
     private Context context;
-    private  ILastLocationFinder lastLocationFinder;
+    private ILastLocationFinder lastLocationFinder;
 
 
     // ===========================================================

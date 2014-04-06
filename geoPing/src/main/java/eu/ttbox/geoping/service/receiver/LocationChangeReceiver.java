@@ -61,6 +61,12 @@ public class LocationChangeReceiver extends BroadcastReceiver {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, pi);
     }
 
+
+    public static void requestSingleUpdate(Context context, String[] phones, MessageActionEnum smsAction, Bundle eventParams) {
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        requestSingleUpdate(context, locationManager, phones, smsAction , eventParams);
+    }
+
     public static void requestSingleUpdate(Context context, LocationManager locationManager, String[] phones, MessageActionEnum smsAction, Bundle eventParams) {
         PendingIntent pi = createPendingIntent(context, phones, smsAction, eventParams);
         Criteria criteria = new Criteria();
@@ -114,6 +120,7 @@ public class LocationChangeReceiver extends BroadcastReceiver {
         if (intent.hasExtra(LocationManager.KEY_LOCATION_CHANGED)) {
             location = (Location) b.get(LocationManager.KEY_LOCATION_CHANGED);
             Log.d(TAG, "### Receive Location : " + location);
+            printExtras(location.getExtras());
         }
         // Provider
         if (intent.hasExtra(LocationManager.KEY_PROVIDER_ENABLED)) {

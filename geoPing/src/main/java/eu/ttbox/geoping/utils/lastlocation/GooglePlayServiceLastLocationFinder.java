@@ -30,7 +30,9 @@ public class GooglePlayServiceLastLocationFinder implements ILastLocationFinder 
 
     public GooglePlayServiceLastLocationFinder(Context context) {
         this.context = context;
-        mLocationClient = new LocationClient(context, this.connectionCallbacks, this.connectionCallbacks);
+        this.mLocationClient = new LocationClient(context, this.connectionCallbacks, this.connectionCallbacks);
+        // Connect the client.
+        this.mLocationClient.connect();
         this.locationReplyFutur = new LocationClientReplyFutur(mLocationClient);
     }
 

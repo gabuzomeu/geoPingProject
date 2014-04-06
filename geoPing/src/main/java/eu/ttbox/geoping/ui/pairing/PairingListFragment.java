@@ -31,8 +31,7 @@ import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.PairingProvider;
 import eu.ttbox.geoping.domain.pairing.PairingDatabase.PairingColumns;
 import eu.ttbox.geoping.domain.pairing.PairingHelper;
-import eu.ttbox.geoping.encoder.model.MessageActionEnum;
-import eu.ttbox.geoping.service.slave.GeoPingSlaveLocationService;
+import eu.ttbox.geoping.utils.GeoPingCommandHelper;
 
 public class PairingListFragment extends Fragment {
 
@@ -178,9 +177,8 @@ public class PairingListFragment extends Fragment {
             case R.id.menu_context_pairing_geoping_send: {
                 Log.d(TAG, "### onContextItemSelected : menu_gcm_message" );
                 String phoneNumber = helper.getDisplayName(cursor);
-                GeoPingSlaveLocationService.runFindLocationAndSendInService(getActivity(), MessageActionEnum.LOC_DECLARATION,
-                        new String[]{phoneNumber}, null, null);
-            }
+                GeoPingCommandHelper.sendGeopingLocationCheckinDeclaration(getActivity(), phoneNumber, null);
+             }
             return true;
 
             case R.id.menu_context_pairing_edit: {
