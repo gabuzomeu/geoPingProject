@@ -24,6 +24,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import java.util.Random;
 
@@ -64,7 +66,9 @@ public class PersonEditFragment extends Fragment implements ColorPickerDialog.On
     private EditText phoneEditText;
     private Button colorPickerButton;
     private Button personPairingButton;
-    private Button contactSelectButton;
+    private ImageButton contactSelectButton;
+
+    private TextView labelUpdateAppVersion;
 
     //Validator
     private Form formValidator;
@@ -119,6 +123,9 @@ public class PersonEditFragment extends Fragment implements ColorPickerDialog.On
         // });
         phoneEditText = (EditText) v.findViewById(R.id.person_phone);
         photoImageView = (PhotoEditorView) v.findViewById(R.id.person_photo_imageView);
+
+        labelUpdateAppVersion =(TextView) v.findViewById(R.id.labelUpdateAppVersion);
+
         colorPickerButton = (Button) v.findViewById(R.id.person_color_picker_button);
         colorPickerButton.setOnClickListener(new View.OnClickListener() {
 
@@ -135,7 +142,7 @@ public class PersonEditFragment extends Fragment implements ColorPickerDialog.On
                 onPairingClick(v);
             }
         });
-        contactSelectButton = (Button) v.findViewById(R.id.select_contact_button);
+        contactSelectButton = (ImageButton) v.findViewById(R.id.select_contact_button);
         contactSelectButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -560,6 +567,16 @@ public class PersonEditFragment extends Fragment implements ColorPickerDialog.On
                 }
                 // Photo
                 photoCache.loadPhoto(getActivity(), photoImageView, contactId, personPhone);
+
+                // Display Update Message
+                int remoteAppVersion = helper.getAppVersion(cursor);
+                if (remoteAppVersion>0) {
+                   int versionCode = GeoPingApplication.getGeoPingApplication(getActivity()).versionCode();
+                    if (versionCode>remoteAppVersion) {
+                        labelUpdateAppVersion.setVisibility(View.VISIBLE);
+                    }
+                }
+                // End
             }
         }
 

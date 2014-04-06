@@ -44,11 +44,18 @@
             android:hint="@string/person_phone"
             android:inputType="phone" />
 
-        <Button
+        <ImageButton
             android:id="@+id/select_contact_button"
-            style="@style/entity_edit"
-            android:layout_below="@id/person_phone"
-            android:text="@string/menu_select_contact" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/person_phone"
+            android:layout_toRightOf="@id/person_phone"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_action_user"
+            android:contentDescription="@string/menu_select_contact"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
 
         <Button
             android:id="@+id/person_color_picker_button"
@@ -62,6 +69,20 @@
             android:layout_below="@id/person_color_picker_button"
             android:text="@string/person_geoping_pairing_action"
             android:visibility="gone" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/labelUpdateAppVersion"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/notify_background_color"
+            android:textAlignment="center"
+            android:textAppearance="?android:attr/textAppearanceLargeInverse"
+            android:text="Update Remote Application Necessary"
+            />
+
+
     </RelativeLayout>
 
 </ScrollView>

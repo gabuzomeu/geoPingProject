@@ -13,6 +13,6 @@
     <color name="call_log_primary_text_color">#FFFFFF</color>
     <color name="call_log_secondary_text_color">#888888</color>
 
-
+    <color name="notify_background_color">#eee8aa</color>
 
 </resources>
