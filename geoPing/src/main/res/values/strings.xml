@@ -198,6 +198,9 @@
     <string name="accuracy_separator">+/-</string> <!-- +/- &#8723; -->
     <string name="altitude">Altitude</string>
 
+    <!-- App Version -->
+    <string name="app_version_update_necessary">Update Remote Application Necessary</string>
+
     <!-- Person model -->
     <string name="person_name">Name</string>
     <string name="person_phone">Phone number</string>

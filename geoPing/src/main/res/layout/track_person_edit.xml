@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:background="@color/notify_background_color"
-            android:text="Update Remote Application Necessary"
+            android:text="@string/app_version_update_necessary"
             android:gravity="center_horizontal"
             android:textAppearance="?android:attr/textAppearanceMediumInverse" />
 

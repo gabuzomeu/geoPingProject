@@ -574,6 +574,8 @@ public class PersonEditFragment extends Fragment implements ColorPickerDialog.On
                    int versionCode = GeoPingApplication.getGeoPingApplication(getActivity()).versionCode();
                     if (versionCode>remoteAppVersion) {
                         labelUpdateAppVersion.setVisibility(View.VISIBLE);
+                    } else {
+                        labelUpdateAppVersion.setVisibility(View.GONE);
                     }
                 }
                 // End
