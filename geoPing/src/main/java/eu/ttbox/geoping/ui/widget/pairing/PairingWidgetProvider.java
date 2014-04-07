@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -19,6 +20,7 @@ import android.widget.RemoteViews;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.core.NotifToasts;
+import eu.ttbox.geoping.core.VersionUtils;
 import eu.ttbox.geoping.domain.PairingProvider;
 import eu.ttbox.geoping.utils.GeoPingCommandHelper;
 
@@ -73,17 +75,22 @@ public class PairingWidgetProvider extends AppWidgetProvider {
             GeoPingCommandHelper.sendGeopingLocationCheckinDeclaration(context, phoneNumber, null);
              // Display Notif
             NotifToasts.showToastSendGeoPingResponse(context, phoneNumber);
-         }else if (AppWidgetManager.ACTION_APPWIDGET_OPTIONS_CHANGED.equals(action)) {
-             // TODO
-             Bundle extras = intent.getExtras();
-             if (extras != null && extras.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID)
-                     && extras.containsKey(AppWidgetManager.EXTRA_APPWIDGET_OPTIONS)) {
-                 int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
-                 Bundle widgetExtras = extras.getBundle(AppWidgetManager.EXTRA_APPWIDGET_OPTIONS);
-              //TODO    this.onAppWidgetOptionsChanged(context, AppWidgetManager.getInstance(context),  appWidgetId, widgetExtras);
-             }
-         } 
+         } else if (AppWidgetManager.ACTION_APPWIDGET_OPTIONS_CHANGED.equals(action)) {
+           if (VersionUtils.isJb16) {
+               geopingPairingAppWidgetOptionChanged(intent.getExtras());
+           }
+         }
         super.onReceive(context, intent);
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private void geopingPairingAppWidgetOptionChanged(Bundle extras) {
+        if (extras != null && extras.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID)
+                && extras.containsKey(AppWidgetManager.EXTRA_APPWIDGET_OPTIONS)) {
+            int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
+            Bundle widgetExtras = extras.getBundle(AppWidgetManager.EXTRA_APPWIDGET_OPTIONS);
+            //TODO    this.onAppWidgetOptionsChanged(context, AppWidgetManager.getInstance(context),  appWidgetId, widgetExtras);
+        }
     }
 
     @Override

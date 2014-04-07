@@ -9,7 +9,7 @@
             android:tag="fragment_geofence_edit_prop_dialog"
             class="eu.ttbox.geoping.ui.geofence.GeofenceEditFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             tools:layout="@layout/geofence_edit"/>
    
 

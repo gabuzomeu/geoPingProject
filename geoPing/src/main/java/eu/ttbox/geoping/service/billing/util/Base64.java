@@ -31,6 +31,8 @@ package eu.ttbox.geoping.service.billing.util;
  * @version 1.3
  */
 
+import eu.ttbox.geoping.BuildConfig;
+
 /**
  * Base64 converter class. This code is not a complete MIME encoder;
  * it simply converts binary data to base64 data and back.
@@ -341,7 +343,8 @@ public class Base64 {
             e += 4;
         }
 
-        assert (e == outBuff.length);
+       // assert (e == outBuff.length);
+       // if (BuildConfig.DEBUG && !(e == outBuff.length)) { throw new AssertionError() };
         return outBuff;
     }
 

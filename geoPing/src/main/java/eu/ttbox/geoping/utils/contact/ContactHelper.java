@@ -1,6 +1,7 @@
 package eu.ttbox.geoping.utils.contact;
 
 
+import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.PhoneLookup;
@@ -59,9 +61,9 @@ public class ContactHelper {
         ContentResolver cr = context.getContentResolver();
         Cursor c = cr.query(contactData, new String[]{ //
                 ContactsContract.Data.CONTACT_ID, //
-                ContactsContract.CommonDataKinds.Identity.DISPLAY_NAME, //
-                ContactsContract.CommonDataKinds.Phone.NUMBER, //
                 ContactsContract.Contacts.LOOKUP_KEY, //
+                Contacts.DISPLAY_NAME,
+                ContactsContract.CommonDataKinds.Phone.NUMBER, //
                 ContactsContract.CommonDataKinds.Phone.TYPE}, selection, selectionArgs, null);
         // read
         ContactPickVo result = null;
@@ -70,9 +72,9 @@ public class ContactHelper {
             if (c != null && c.moveToFirst()) {
                 result = new ContactPickVo();
                 result.contactId = c.getString(0);
-                result.name = c.getString(1);
-                result.phone = c.getString(2);
-                result.lookupKey = c.getString(3);
+                result.lookupKey = c.getString(1);
+                result.name = c.getString(2);
+                result.phone = c.getString(3);
                 result.phoneType = c.getInt(4);
             }
         } finally {
@@ -107,10 +109,28 @@ public class ContactHelper {
         return photo;
     }
 
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    public static Bitmap loadPhotoContactHighDef(ContentResolver cr, long contactId ) {
+        Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactId);
+        Log.d(TAG, "Search Photo for ContactsContract Contact Uri : " + contactUri);
+        InputStream is = ContactsContract.Contacts.openContactPhotoInputStream(cr, contactUri, true );
+        if (is == null) {
+            Log.d(TAG, "No Photo found for ContactsContract Contact Uri : " + contactUri);
+            return null;
+        }
+        Bitmap photo = BitmapFactory.decodeStream(is);
+        try {
+            is.close();
+        } catch (IOException e) {
+            Log.e(TAG, "Could not close Contact Photo Input Stream");
+        }
+        return photo;
+    }
+
     public static Bitmap loadPhotoContact(ContentResolver cr, long contactId) {
         Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactId);
         Log.d(TAG, "Search Photo for ContactsContract Contact Uri : " + contactUri);
-        InputStream is = ContactsContract.Contacts.openContactPhotoInputStream(cr, contactUri);
+        InputStream is = ContactsContract.Contacts.openContactPhotoInputStream(cr, contactUri );
         if (is == null) {
             Log.d(TAG, "No Photo found for ContactsContract Contact Uri : " + contactUri);
             return null;
@@ -125,26 +145,7 @@ public class ContactHelper {
     }
 
 
-    public static InputStream openPhoto(Context context, long contactId) {
-        Log.d(TAG, "Open Photo for Contact Id : " + contactId);
-        Uri contactUri = ContentUris.withAppendedId(Contacts.CONTENT_URI, contactId);
-        Uri photoUri = Uri.withAppendedPath(contactUri, Contacts.Photo.CONTENT_DIRECTORY);
-        Cursor cursor = context.getContentResolver().query(photoUri, new String[]{Contacts.Photo.PHOTO}, null, null, null);
-        if (cursor == null) {
-            return null;
-        }
-        try {
-            if (cursor.moveToFirst()) {
-                byte[] data = cursor.getBlob(0);
-                if (data != null) {
-                    return new ByteArrayInputStream(data);
-                }
-            }
-        } finally {
-            cursor.close();
-        }
-        return null;
-    }
+
 
 
     // ===========================================================
@@ -164,11 +165,12 @@ public class ContactHelper {
         if (isPermissionReadContact(context)) {
             Log.d(TAG, String.format("Search Contact Name for Phone [%s]", phoneNumber));
             Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
-            Cursor cur = context.getContentResolver().query(uri, new String[]{PhoneLookup.DISPLAY_NAME, PhoneLookup._ID, PhoneLookup.LOOKUP_KEY}, null, null, null);
+            final String[] selection = new String[]{ PhoneLookup._ID, PhoneLookup.LOOKUP_KEY, PhoneLookup.DISPLAY_NAME};
+            Cursor cur = context.getContentResolver().query(uri, selection, null, null, null);
             try {
                 if (cur != null && cur.moveToFirst()) {
-                    contactName = cur.getString(cur.getColumnIndex(PhoneLookup.DISPLAY_NAME));
                     contactId = cur.getLong(cur.getColumnIndexOrThrow(PhoneLookup._ID));
+                    contactName = cur.getString(cur.getColumnIndex(PhoneLookup.DISPLAY_NAME));
                 }
             } finally {
                 cur.close();

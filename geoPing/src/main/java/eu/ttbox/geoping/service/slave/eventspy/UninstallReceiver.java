@@ -1,15 +1,19 @@
 package eu.ttbox.geoping.service.slave.eventspy;
 
+import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 
 /*
  * http://alvinalexander.com/java/jwarehouse/android/core/java/com/android/internal/content/PackageMonitor.java.shtml
  * 
  */
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+@Deprecated
 public class UninstallReceiver extends BroadcastReceiver {
 
     private static final String TAG = "UninstallReceiver";
