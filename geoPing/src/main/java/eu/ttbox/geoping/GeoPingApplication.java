@@ -19,6 +19,7 @@ import com.google.android.gms.analytics.Tracker;
 
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.core.VersionUtils;
+import eu.ttbox.geoping.crypto.PRNGFixes;
 import eu.ttbox.geoping.domain.geotrack.GeoTrackDatabase;
 import eu.ttbox.geoping.domain.smslog.SmsLogDatabase;
 import eu.ttbox.geoping.utils.contact.PhotoThumbmailCache;
@@ -60,7 +61,8 @@ public class GeoPingApplication extends Application {
         // Create Application
         super.onCreate();
         APP_INSTANCE = this;
-
+        // Security Path
+        PRNGFixes.apply();
 
         // Perform the initialization that doesn't have to finish immediately.
         // We use an async task here just to avoid creating a new thread.
