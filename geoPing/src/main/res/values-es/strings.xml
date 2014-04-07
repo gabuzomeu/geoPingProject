@@ -139,7 +139,7 @@
     <!-- Geoping Emergency prefs-->
     <string name="prefs_emergency_category">Mode Urgence</string>
     <string name="prefs_emergency_password">Emergency Password</string>
-    <string name="prefs_emergency_desription">The Emergency Mode permit to send GeoPing, without previous association, thank to the password recorded in the Settings</string>
+    <string name="prefs_emergency_description">The Emergency Mode permit to send GeoPing, without previous association, thank to the password recorded in the Settings</string>
 
 
     <!-- Geoping Map prefs-->

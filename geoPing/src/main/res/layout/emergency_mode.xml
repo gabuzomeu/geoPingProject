@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/titleErmergency"
-        android:text="@string/prefs_emergency_desription"
+        android:text="@string/prefs_emergency_description"
         android:paddingTop="10dp"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 

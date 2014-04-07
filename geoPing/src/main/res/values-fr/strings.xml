@@ -148,7 +148,7 @@
     <!-- Geoping Emergency prefs-->
     <string name="prefs_emergency_category">Mode Urgence</string>
     <string name="prefs_emergency_password">Mot de passe Urgence</string>
-    <string name="prefs_emergency_desription">"Le Mode Urgence permet d'envoyer des requêtes GeoPing, sans association préalable, grâce au mots de passe saisie dans les Paramètres"</string>
+    <string name="prefs_emergency_description">"Le Mode Urgence permet d'envoyer des requêtes GeoPing, sans association préalable, grâce au mots de passe saisie dans les Paramètres"</string>
 
     <!-- Geoping Map prefs-->
     <string name="prefs_geoping_map_category">Affichage cartographique</string>

@@ -42,7 +42,7 @@
     <header
         android:fragment="eu.ttbox.geoping.ui.prefs.GeoPingPrefActivity$PrefsFragment"
         android:icon="@android:drawable/ic_dialog_alert"
-        android:title="@string/prefs_emergency_category">
+        android:title="@string/prefs_emergency_category"   >
         <extra
             android:name="pref-resource"
             android:value="emergency_prefs" />
