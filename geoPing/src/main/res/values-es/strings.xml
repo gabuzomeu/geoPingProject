@@ -222,9 +222,9 @@
     <string name="pairing_phone">N° Telefono</string>
     <string name="pairing_show_notification">Mostrar una notificacion</string>
     <string name="pairing_authorize_type">Autorizado</string>
-    <string name="pairing_authorize_type:never">Nunca</string>
-    <string name="pairing_authorize_type:ask">Sobre validacion</string>
-    <string name="pairing_authorize_type:always">Siempre</string>
+    <string name="pairing_authorize_type_never">Nunca</string>
+    <string name="pairing_authorize_type_ask">Sobre validacion</string>
+    <string name="pairing_authorize_type_always">Siempre</string>
     <string name="pairing_notification_shutdown">Allumage/Extinction du téléphone</string>
     <string name="pairing_notification_battery_low">Batterie faible</string>
     <string name="pairing_notification_sim_change">Changement de carte SIM</string>

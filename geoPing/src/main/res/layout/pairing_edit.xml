@@ -31,12 +31,23 @@
             android:maxWidth="80dp" />
 
 
+
+        <ImageButton
+            android:id="@+id/select_contact_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pairing_name"
+            android:layout_toLeftOf="@id/pairing_photo_imageView"
+            android:contentDescription="@string/menu_select_contact"
+            android:src="@drawable/ic_action_user" />
+
         <EditText
             android:id="@+id/pairing_phone"
             style="@style/entity_edit"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_alignLeft="@id/pairing_name"
             android:layout_below="@id/pairing_name"
-            android:layout_toLeftOf="@id/pairing_photo_imageView"
+            android:layout_toLeftOf="@id/select_contact_button"
             android:hint="@string/pairing_phone"
             android:inputType="phone" />
 
@@ -45,6 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/pairing_phone"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="32dp"
             android:ems="10"
             android:text="@string/pairing_authorize_type" />
@@ -54,26 +66,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/pairing_authorize_type"
-            android:layout_marginTop="17dp"
+            android:layout_marginTop="10dp"
             android:text="@string/pairing_authorize_type">
 
             <RadioButton
                 android:id="@+id/pairing_authorize_type_radio_never"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/pairing_authorize_type:never" />
+                android:text="@string/pairing_authorize_type_never" />
 
             <RadioButton
                 android:id="@+id/pairing_authorize_type_radio_ask"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/pairing_authorize_type:ask" />
+                android:text="@string/pairing_authorize_type_ask" />
 
             <RadioButton
                 android:id="@+id/pairing_authorize_type_radio_always"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/pairing_authorize_type:always" />
+                android:text="@string/pairing_authorize_type_always" />
         </RadioGroup>
 
         <CheckBox
@@ -85,13 +97,7 @@
             android:layout_marginTop="21dp"
             android:text="@string/pairing_show_notification" />
 
-        <Button
-            android:id="@+id/select_contact_button"
-            style="@style/entity_edit"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@id/paring_show_notification"
-            android:maxHeight="25dp"
-            android:text="@string/menu_select_contact" />
+
     </RelativeLayout>
 
 </ScrollView>

@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -87,7 +88,7 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
     // Image
     private PhotoEditorView photoImageView;
 
-    private Button selectContactClickButton;
+    private ImageButton selectContactClickButton;
 
     // Listener
     private OnPairingSelectListener onPairingSelectListener;
@@ -144,7 +145,7 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         authorizeTypeNeverRadioButton = (RadioButton) v.findViewById(R.id.pairing_authorize_type_radio_never);
         authorizeTypeAlwaysRadioButton = (RadioButton) v.findViewById(R.id.pairing_authorize_type_radio_always);
 
-        selectContactClickButton = (Button) v.findViewById(R.id.select_contact_button);
+        selectContactClickButton = (ImageButton) v.findViewById(R.id.select_contact_button);
         // Radio Auth Listener
         OnClickListener radioAuthListener = new OnClickListener() {
 

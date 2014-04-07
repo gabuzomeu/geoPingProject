@@ -231,9 +231,9 @@
     <string name="pairing_phone">N° téléphone</string>
     <string name="pairing_show_notification">Afficher une notification</string>
     <string name="pairing_authorize_type">Autorisé</string>
-    <string name="pairing_authorize_type:never">Bloqué</string>
-    <string name="pairing_authorize_type:ask">Sur validation</string>
-    <string name="pairing_authorize_type:always">Toujours</string>
+    <string name="pairing_authorize_type_never">Bloqué</string>
+    <string name="pairing_authorize_type_ask">Sur validation</string>
+    <string name="pairing_authorize_type_always">Toujours</string>
     <string name="pairing_notification_shutdown">Allumage/Extinction du téléphone</string>
     <string name="pairing_notification_battery_low">Batterie faible</string>
     <string name="pairing_notification_sim_change">Changement de carte SIM</string>

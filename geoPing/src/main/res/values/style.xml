@@ -32,16 +32,16 @@
 
     <style name="entity_edit">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">?android:attr/listPreferredItemHeight</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingRight">10dp</item>
-        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
     </style>
 
     <style name="entity_view">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">?android:attr/listPreferredItemHeight</item>
         <item name="android:paddingRight">10dp</item>
-        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
     </style>
 
     <!-- Undo Popup -->

@@ -1,66 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:overScrollMode="ifContentScrolls"
-            android:scrollbars="none">
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:overScrollMode="ifContentScrolls"
+    android:scrollbars="none">
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingLeft="8dp"
-        android:paddingRight="8dp" >
+        android:paddingRight="8dp">
 
-        <EditText
-            android:id="@+id/person_name"
-            style="@style/entity_edit"
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/labelUpdateAppVersion"
             android:layout_width="wrap_content"
-            android:layout_alignParentLeft="true" 
-            android:layout_alignRight="@id/person_phone"
-            android:hint="@string/person_name"
-            android:inputType="textPersonName" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@color/notify_background_color"
+            android:text="Update Remote Application Necessary"
+            android:gravity="center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceMediumInverse" />
 
-      
         <include
             android:id="@+id/person_photo_imageView"
+            layout="@layout/item_photo_editor"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_alignParentRight="true"
+            android:layout_below="@id/labelUpdateAppVersion"
             android:layout_marginBottom="26dp"
-            layout="@layout/item_photo_editor"
-              
             android:maxHeight="80dp"
             android:maxWidth="80dp" />
 
         <EditText
-            android:id="@+id/person_phone"
+            android:id="@+id/person_name"
             style="@style/entity_edit"
-            android:layout_width="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/person_name"
+            android:layout_alignTop="@id/person_photo_imageView"
             android:layout_toLeftOf="@id/person_photo_imageView"
-            android:hint="@string/person_phone"
-            android:inputType="phone" />
+            android:hint="@string/person_name"
+            android:inputType="textPersonName" />
 
         <ImageButton
             android:id="@+id/select_contact_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/person_phone"
-            android:layout_toRightOf="@id/person_phone"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/ic_action_user"
+            android:layout_below="@id/person_name"
+            android:layout_toLeftOf="@id/person_photo_imageView"
             android:contentDescription="@string/menu_select_contact"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:src="@drawable/ic_action_user" />
 
+
+        <EditText
+            android:id="@+id/person_phone"
+            style="@style/entity_edit"
+            android:layout_alignLeft="@id/person_name"
+            android:layout_below="@id/person_name"
+            android:layout_toLeftOf="@id/select_contact_button"
+            android:hint="@string/person_phone"
+            android:inputType="phone" />
 
 
         <Button
             android:id="@+id/person_color_picker_button"
             style="@style/entity_edit"
-            android:layout_below="@id/select_contact_button"
+            android:layout_below="@id/person_phone"
+            android:layout_marginTop="20dp"
             android:text="@string/color_picker" />
 
         <Button
@@ -69,18 +77,6 @@
             android:layout_below="@id/person_color_picker_button"
             android:text="@string/person_geoping_pairing_action"
             android:visibility="gone" />
-
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/labelUpdateAppVersion"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@color/notify_background_color"
-            android:textAlignment="center"
-            android:textAppearance="?android:attr/textAppearanceLargeInverse"
-            android:text="Update Remote Application Necessary"
-            />
 
 
     </RelativeLayout>
