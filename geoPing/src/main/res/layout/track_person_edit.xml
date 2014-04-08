@@ -78,6 +78,34 @@
             android:text="@string/person_geoping_pairing_action"
             android:visibility="gone" />
 
+        <!--<View-->
+            <!--android:id="@+id/info_blue_separator"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="1dip"-->
+            <!--android:layout_marginTop="20dp"-->
+            <!--android:layout_below="@id/person_pairing_button"-->
+            <!--android:background="@color/holo_blue_light"-->
+            <!--/>-->
+        <!--<TextView-->
+            <!--android:id="@+id/appVersionLabelTextview"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/info_blue_separator"-->
+            <!--android:text="App Version"-->
+            <!--android:gravity="center_horizontal"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/appVersionTextview"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignBottom="@+id/appVersionLabelTextview"-->
+            <!--android:layout_toRightOf="@+id/appVersionLabelTextview"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:text=""-->
+            <!--android:gravity="center_horizontal"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium" />-->
+
 
     </RelativeLayout>
 

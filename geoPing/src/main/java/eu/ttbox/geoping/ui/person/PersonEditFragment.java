@@ -70,6 +70,8 @@ public class PersonEditFragment extends Fragment implements ColorPickerDialog.On
 
     private TextView labelUpdateAppVersion;
 
+  //  private TextView appVersionTextView;
+
     //Validator
     private Form formValidator;
     private ExistPersonPhoneValidator existValidator;
@@ -125,6 +127,8 @@ public class PersonEditFragment extends Fragment implements ColorPickerDialog.On
         photoImageView = (PhotoEditorView) v.findViewById(R.id.person_photo_imageView);
 
         labelUpdateAppVersion =(TextView) v.findViewById(R.id.labelUpdateAppVersion);
+       // appVersionTextView = (TextView) v.findViewById(R.id.appVersionLabelTextview);
+
 
         colorPickerButton = (Button) v.findViewById(R.id.person_color_picker_button);
         colorPickerButton.setOnClickListener(new View.OnClickListener() {
@@ -559,7 +563,9 @@ public class PersonEditFragment extends Fragment implements ColorPickerDialog.On
                 contactSelectButton.setVisibility(View.GONE);
                 int color = helper.getPersonColor(cursor);
                 onColorChanged(color);
-                // Affect Value
+
+
+
 
                 // Notify listener
                 if (onPersonSelectListener != null) {
@@ -571,6 +577,8 @@ public class PersonEditFragment extends Fragment implements ColorPickerDialog.On
                 // Display Update Message
                 int remoteAppVersion = helper.getAppVersion(cursor);
                 if (remoteAppVersion>0) {
+                   // appVersionTextView.setText(String.valueOf(remoteAppVersion));
+                    // Check Warning
                    int versionCode = GeoPingApplication.getGeoPingApplication(getActivity()).versionCode();
                     if (versionCode>remoteAppVersion) {
                         labelUpdateAppVersion.setVisibility(View.VISIBLE);

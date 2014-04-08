@@ -166,10 +166,8 @@ public class GeoPingMasterService extends IntentService {
                     case ACTION_GEO_PAIRING_RESPONSE: {
                         String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
                         Bundle params = intent.getBundleExtra(Intents.EXTRA_SMS_PARAMS);
-                        long userId = MessageEncoderHelper.readLong(params, MessageParamEnum.PERSON_ID, -1);
-                        consumeSmsPairingResponse(phone, userId);
+                        consumeSmsPairingResponse(phone, params);
                         // Tracker
-                        // tracker.trackPageView("/action/SMS_PAIRING_RESPONSE");
                         tracker.send(new HitBuilders.EventBuilder() //
                                 .setCategory("MasterService") // Category
                                 .setAction("HandleIntent") // Action
@@ -234,26 +232,16 @@ public class GeoPingMasterService extends IntentService {
     // Search Person
     // ===========================================================
 
-    private void consumeSmsPairingResponse(String phone, long userId) {
+    private void consumeSmsPairingResponse(String phone,  Bundle params) {
+        long userId = MessageEncoderHelper.readLong(params, MessageParamEnum.PERSON_ID, -1);
         if (userId != -1l) {
-            // Search Phone
-            String personPhone = null;
-            Uri uri = Uri.withAppendedPath(PersonProvider.Constants.CONTENT_URI, String.valueOf(userId));
-            String[] cols = new String[]{PersonColumns.COL_PHONE};
-            Cursor cur = getContentResolver().query(uri, cols, null, null, null);
-            try {
-                if (cur != null && cur.moveToFirst()) {
-                    personPhone = cur.getString(1);
-                }
-            } finally {
-                cur.close();
-            }
-            Log.d(TAG, String.format("Paring response for person Id : %s with phone [%s] =?= Sms [%s]", userId, personPhone, phone));
-            // Update
-            if (personPhone == null || !personPhone.equals(phone)) {
-                ContentValues values = new ContentValues(1);
+            Person person = ContactHelper.searchPersonForPhone(this, phone);
+            if (person != null && person.id == userId) {
+                ContentValues values = new ContentValues(2);
                 values.put(PersonColumns.COL_PHONE, phone);
                 values.put(PersonColumns.COL_PAIRING_TIME, System.currentTimeMillis());
+                // Update
+                Uri uri = person.getPersonUri();
                 getContentResolver().update(uri, values, null, null);
             }
         } else {
@@ -396,6 +384,7 @@ public class GeoPingMasterService extends IntentService {
                 if (person.appVersionTime < now) {
                     Uri personUri = person.getPersonUri();
                     if (personUri != null) {
+                        // Update to DB
                         ContentResolver cr = getContentResolver();
                         ContentValues values = new ContentValues();
                         values.put(PersonColumns.COL_APP_VERSION, remoteVersion);

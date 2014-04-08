@@ -43,10 +43,6 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
 
     private static final String TAG = "GeoPingSlaveService";
 
-    //  private static final int SHOW_GEOPING_REQUEST_NOTIFICATION_ID = AppConstants.PER_PERSON_ID_MULTIPLICATOR * R.id.show_notification_new_geoping_request_confirm;
-
-    //  private static final int SHOW_PAIRING_NOTIFICATION_ID = AppConstants.PER_PERSON_ID_MULTIPLICATOR * R.id.show_pairing_request;
-
     private final IBinder binder = new LocalBinder();
     // Constant
 
@@ -58,8 +54,6 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
     boolean displayGeopingRequestNotification = false;
     boolean authorizeNewPairing = true;
 
-    // Set<String> secuAuthorizeNeverPhoneSet;
-    // Set<String> secuAuthorizeAlwaysPhoneSet;
 
     // ===========================================================
     // Constructors
@@ -124,6 +118,10 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
             if (msgAction != null) {
                 String phone = intent.getStringExtra(Intents.EXTRA_SMS_PHONE);
                 Bundle params = intent.getBundleExtra(Intents.EXTRA_SMS_PARAMS);
+                // Manage Emergency Mode
+                if (MessageEncoderHelper.isToBundle(params, MessageParamField.EMERGENCY_PASSWORD)) {
+                    // TODO
+                }
                 // Check Action Pairing
                 if (MessageActionEnum.ACTION_GEO_PAIRING.equals(msgAction)) {
                     // GeoPing Pairing
