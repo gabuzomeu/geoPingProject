@@ -22,6 +22,7 @@ import eu.ttbox.geoping.domain.model.Pairing;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.utils.contact.ContactHelper;
+import eu.ttbox.geoping.utils.contact.NotifPairingVo;
 import eu.ttbox.geoping.utils.contact.NotifPersonVo;
 import eu.ttbox.geoping.service.receiver.LogReadHistoryService;
 
@@ -58,10 +59,10 @@ public class NotificationSlave2Helper {
     // GeoPing Request Notification Builder
     // ===========================================================
 
-    public void showGeopingRequestNotification(Pairing pairing, MessageActionEnum msgAction, Bundle eventParam, boolean authorizeIt) {
+    public NotifPairingVo showGeopingRequestNotification(Pairing pairing, MessageActionEnum msgAction, Bundle eventParam, boolean authorizeIt) {
         String phone = pairing.phone;
         // Contact Name
-        NotifPersonVo person = ContactHelper.getNotifPairingVo(context, pairing);
+        NotifPairingVo person = ContactHelper.getNotifPairingVo(context, pairing);
 
 
         // Create Notifiation
@@ -116,6 +117,8 @@ public class NotificationSlave2Helper {
         }
         // Display Notification
         mNotificationManager.notify(notifId, notification);
+
+        return person;
     }
 
 

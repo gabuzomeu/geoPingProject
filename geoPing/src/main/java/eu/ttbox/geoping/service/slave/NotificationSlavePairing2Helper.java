@@ -23,6 +23,7 @@ import eu.ttbox.geoping.domain.model.Pairing;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.utils.contact.ContactHelper;
+import eu.ttbox.geoping.utils.contact.NotifPairingVo;
 import eu.ttbox.geoping.utils.contact.NotifPersonVo;
 import eu.ttbox.geoping.service.slave.receiver.AuthorizePhoneTypeEnum;
 
@@ -62,7 +63,7 @@ public class NotificationSlavePairing2Helper {
         return actionLabel;
     }
 
-    public void showNotificationNewPingRequestConfirm(Pairing pairing, Intent eventIntent, MessageActionEnum msgAction, GeopingNotifSlaveTypeEnum onlyPairing) {
+    public NotifPairingVo showNotificationNewPingRequestConfirm(Pairing pairing, Intent eventIntent, MessageActionEnum msgAction, GeopingNotifSlaveTypeEnum onlyPairing) {
         // Log.d(TAG,"******************************************************");
         // Log.d(TAG,"*****  showNotificationNewPingRequestConfirm  ****");
         // Log.d(TAG,"******************************************************");
@@ -70,7 +71,7 @@ public class NotificationSlavePairing2Helper {
 
         RemoteViews contentView = new RemoteViews(context.getPackageName(), R.layout.notif_geoping_request_register);
         // Contact Name
-        NotifPersonVo person = ContactHelper.getNotifPairingVo(context, pairing);
+        NotifPairingVo person = ContactHelper.getNotifPairingVo(context, pairing);
 
         // Generate Notification ID per Person
         int notifId = SHOW_GEOPING_REQUEST_NOTIFICATION_ID + phone.hashCode();
@@ -218,6 +219,9 @@ public class NotificationSlavePairing2Helper {
         // notification.flags |= Notification.FLAG_SHOW_LIGHTS;
         // Show
         mNotificationManager.notify(notifId, notification);
+
+
+        return person;
     }
 
 }

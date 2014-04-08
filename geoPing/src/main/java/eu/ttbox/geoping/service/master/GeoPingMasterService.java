@@ -1,6 +1,7 @@
 package eu.ttbox.geoping.service.master;
 
 import android.app.IntentService;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,11 +31,14 @@ import eu.ttbox.geoping.domain.geotrack.GeoTrackHelper;
 import eu.ttbox.geoping.domain.model.GeoTrack;
 import eu.ttbox.geoping.domain.model.Person;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
+import eu.ttbox.geoping.domain.person.PersonDatabase;
 import eu.ttbox.geoping.domain.person.PersonDatabase.PersonColumns;
 import eu.ttbox.geoping.domain.person.PersonHelper;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
 import eu.ttbox.geoping.service.SmsSenderHelper;
+import eu.ttbox.geoping.utils.contact.ContactHelper;
+import eu.ttbox.geoping.utils.contact.NotifPersonVo;
 import eu.ttbox.geoping.utils.encoder.MessageEncoderHelper;
 
 public class GeoPingMasterService extends IntentService {
@@ -224,25 +228,7 @@ public class GeoPingMasterService extends IntentService {
         Intents.printExtras(TAG, extras);
     }
 
-    private Person getPersonByPhone(String phoneNumber) {
-        Person result = null;
-        // Search
-        // Log.d(TAG, String.format("Search Painring for Phone [%s]",
-        // phoneNumber));
 
-        Uri uri = PersonProvider.Constants.getUriPhoneFilter(phoneNumber);
-        Cursor cur = getContentResolver().query(uri, null, null, null, null);
-        try {
-            if (cur != null && cur.moveToFirst()) {
-                PersonHelper helper = new PersonHelper().initWrapper(cur);
-                result = helper.getEntity(cur);
-            }
-        } finally {
-            cur.close();
-        }
-        Log.d(TAG, String.format("Search Person for Phone [%s] : Found %s", phoneNumber, result));
-        return result;
-    }
 
     // ===========================================================
     // Search Person
@@ -289,10 +275,10 @@ public class GeoPingMasterService extends IntentService {
     // ===========================================================
 
     private void sendSmsPairingRequest(String phone, long userId) {
-        Person person = getPersonByPhone(phone);
+        Person person =  ContactHelper.searchPersonForPhone(this, phone);
         if (person == null || TextUtils.isEmpty(person.encryptionPubKey)) {
             ContentValues values = new ContentValues();
-            // Generated encryption Key
+            // TODO  Generated encryption Key
             Uri entityUri = Uri.withAppendedPath(PersonProvider.Constants.CONTENT_URI, String.valueOf(person.id));
             // getContentResolver().update(entityUri, values, null, null);
         }
@@ -384,7 +370,10 @@ public class GeoPingMasterService extends IntentService {
                 Intent intent = Intents.newGeoTrackInserted(uri, values);
                 sendBroadcast(intent);
                 // Display Notification
-                showNotificationGeoPing(actionEnum, uri, values, geoTrack, params);
+                NotifPersonVo personVo =showNotificationGeoPing(actionEnum, uri, values, geoTrack, params);
+                if (personVo!=null) {
+                    checkAppVersion(personVo.person, params);
+                }
             }
             isConsume = true;
         }
@@ -395,11 +384,26 @@ public class GeoPingMasterService extends IntentService {
     // Check App Version
     // ===========================================================
 
-
-
-    private void checkAppVersion( Bundle bundle) {
+    private void checkAppVersion(Person person, Bundle bundle) {
+        if (person==null) {
+            return;
+        }
         if (MessageEncoderHelper.isToBundle(bundle,MessageParamEnum.APP_VERSION)) {
             int remoteVersion = MessageEncoderHelper.readInt(bundle, MessageParamEnum.APP_VERSION, Integer.MIN_VALUE);
+            if (person.appVersion != remoteVersion) {
+                long now = System.currentTimeMillis();
+                // Save app version
+                if (person.appVersionTime < now) {
+                    Uri personUri = person.getPersonUri();
+                    if (personUri != null) {
+                        ContentResolver cr = getContentResolver();
+                        ContentValues values = new ContentValues();
+                        values.put(PersonColumns.COL_APP_VERSION, remoteVersion);
+                        values.put(PersonColumns.COL_APP_VERSION_TIME, now);
+                        int updateCount = cr.update(personUri, values, null, null);
+                    }
+                }
+            }
         }
     }
 
@@ -407,23 +411,7 @@ public class GeoPingMasterService extends IntentService {
     // Consume Localisation
     // ===========================================================
 
-    private Person searchPersonForPhone(String phoneNumber) {
-        Person person = null;
-        Log.d(TAG, String.format("Search Contact Name for Phone : [%s]", phoneNumber));
-        Uri uri = PersonProvider.Constants.getUriPhoneFilter(phoneNumber);
-        Cursor cur = getContentResolver().query(uri, null, null, null, null);
-        try {
-            if (cur != null && cur.moveToFirst()) {
-                PersonHelper helper = new PersonHelper().initWrapper(cur);
-                person = helper.getEntity(cur);
-            } else {
-                Log.w(TAG, "Person not found for phone : [" + phoneNumber + "]");
-            }
-        } finally {
-            cur.close();
-        }
-        return person;
-    }
+
 
 
     // ===========================================================
@@ -431,9 +419,10 @@ public class GeoPingMasterService extends IntentService {
     // ===========================================================
 
 
-    private void showNotificationGeoPing(MessageActionEnum actionEnum, Uri geoTrackData, ContentValues values, GeoTrack geoTrack, Bundle params) {
+    private NotifPersonVo showNotificationGeoPing(MessageActionEnum actionEnum, Uri geoTrackData, ContentValues values, GeoTrack geoTrack, Bundle params) {
         NotificationMasterHelper helper = new NotificationMasterHelper(this);
-        helper.showNotificationGeoPing(actionEnum, geoTrackData, values, geoTrack, params);
+        NotifPersonVo personVo = helper.showNotificationGeoPing(actionEnum, geoTrackData, values, geoTrack, params);
+        return personVo;
     }
 
 

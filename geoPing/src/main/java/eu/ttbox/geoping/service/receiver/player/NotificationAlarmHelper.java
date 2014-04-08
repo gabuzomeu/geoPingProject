@@ -20,6 +20,7 @@ import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
 import eu.ttbox.geoping.utils.contact.ContactHelper;
+import eu.ttbox.geoping.utils.contact.INotifPersonVo;
 import eu.ttbox.geoping.utils.contact.NotifPersonVo;
 
 public class NotificationAlarmHelper {
@@ -79,7 +80,7 @@ public class NotificationAlarmHelper {
 
     public void showNotificationAlarm() {
         // Contact Name
-        NotifPersonVo person = null;
+        INotifPersonVo person = null;
         if (side != null) {
             switch (side) {
                 case SLAVE:
@@ -106,9 +107,9 @@ public class NotificationAlarmHelper {
                 .setSmallIcon(R.drawable.ic_stat_notif_icon) //
                 .setContentIntent(pi);
         if (person != null) {
-            mBuilder.setContentText(person.contactDisplayName); //
-            if (person.photo != null) {
-                mBuilder.setLargeIcon(person.photo);
+            mBuilder.setContentText(person.getContactDisplayName()); //
+            if (person.getPhoto() != null) {
+                mBuilder.setLargeIcon(person.getPhoto());
             } else {
                 Bitmap icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_stat_notif_icon);
                 mBuilder.setLargeIcon(icon);

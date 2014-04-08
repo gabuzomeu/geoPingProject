@@ -90,7 +90,7 @@ public class NotificationMasterHelper {
 
 
     @SuppressLint("NewApi")
-    public void showNotificationGeoPing(MessageActionEnum actionEnum, Uri geoTrackData, ContentValues values
+    public NotifPersonVo showNotificationGeoPing(MessageActionEnum actionEnum, Uri geoTrackData, ContentValues values
             , GeoTrack geoTrack, Bundle params) {
         String phone = values.getAsString(GeoTrackDatabase.GeoTrackColumns.COL_PHONE);
         // Contact Name
@@ -194,6 +194,8 @@ public class NotificationMasterHelper {
             mNotificationManager.notify(notifId, notification);
         }
 
+        // return person
+        return person;
     }
 
 

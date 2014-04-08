@@ -146,8 +146,6 @@ public class ContactHelper {
 
 
 
-
-
     // ===========================================================
     // Android Contact
     // ===========================================================
@@ -216,6 +214,8 @@ public class ContactHelper {
             if (person.displayName != null && person.displayName.length() > 0) {
                 contactDisplayName = person.displayName;
             }
+
+            // Load Photos
             photo = ContactHelper.openPhotoBitmap(context, photoCache, person.contactId, phone);
         } else {
             // Search photo in contact database
@@ -225,21 +225,21 @@ public class ContactHelper {
                 photo = ContactHelper.openPhotoBitmap(context, photoCache, String.valueOf(contactVo.id), phone);
             }
         }
-        return new NotifPersonVo(phone, contactDisplayName, photo);
+        return new NotifPersonVo(person, phone, contactDisplayName, photo);
     }
 
-    public static NotifPersonVo getNotifPairingVo(Context context, Pairing person) {
+    public static NotifPairingVo getNotifPairingVo(Context context, Pairing person) {
         PhotoThumbmailCache photoCache = getPhotoCache(context);
         return getNotifPairingVo(context, photoCache, person);
     }
 
-    public static NotifPersonVo getNotifPairingVo(Context context, String phone) {
+    public static NotifPairingVo getNotifPairingVo(Context context, String phone) {
         PhotoThumbmailCache photoCache = getPhotoCache(context);
         Pairing person = searchPairingForPhone(context, phone);
         return getNotifPairingVo(context, photoCache, person);
     }
 
-    public static NotifPersonVo getNotifPairingVo(Context context, PhotoThumbmailCache photoCache, Pairing person) {
+    public static NotifPairingVo getNotifPairingVo(Context context, PhotoThumbmailCache photoCache, Pairing person) {
         // Contact Name
         String phone = person != null ? person.phone : null;
         String contactDisplayName = phone;
@@ -258,7 +258,7 @@ public class ContactHelper {
                 photo = ContactHelper.openPhotoBitmap(context, photoCache, String.valueOf(contactVo.id), phone);
             }
         }
-        return new NotifPersonVo(phone, contactDisplayName, photo);
+        return new NotifPairingVo(person, phone, contactDisplayName, photo);
     }
 
 
@@ -277,6 +277,7 @@ public class ContactHelper {
         } finally {
             cur.close();
         }
+        Log.d(TAG, String.format("Search Person for Phone [%s] : Found %s", phoneNumber, person));
         return person;
     }
 
