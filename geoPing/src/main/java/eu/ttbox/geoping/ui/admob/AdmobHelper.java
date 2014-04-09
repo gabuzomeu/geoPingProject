@@ -65,7 +65,6 @@ public class AdmobHelper {
                        admob.setVisibility(View.GONE);
                    }
                     switch (errorcode) {
-
                         case AdRequest.ERROR_CODE_INTERNAL_ERROR:
                             Log.d(TAG, "### ########################################################################## ###");
                             Log.d(TAG, "### AdListener onAdFailedToLoad AdView : errorcode = ERROR_CODE_INTERNAL_ERROR ###");

@@ -6,7 +6,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
@@ -30,12 +29,12 @@ import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
 import eu.ttbox.geoping.encoder.params.MessageParamField;
 import eu.ttbox.geoping.service.SmsSenderHelper;
-import eu.ttbox.geoping.utils.contact.ContactHelper;
-import eu.ttbox.geoping.utils.contact.ContactVo;
-import eu.ttbox.geoping.utils.encoder.MessageEncoderHelper;
 import eu.ttbox.geoping.service.receiver.LogReadHistoryService;
 import eu.ttbox.geoping.service.receiver.player.AlarmPlayerService;
 import eu.ttbox.geoping.service.slave.receiver.AuthorizePhoneTypeEnum;
+import eu.ttbox.geoping.utils.contact.ContactHelper;
+import eu.ttbox.geoping.utils.contact.ContactVo;
+import eu.ttbox.geoping.utils.encoder.MessageEncoderHelper;
 
 // http://dhimitraq.wordpress.com/tag/android-intentservice/
 // https://github.com/commonsguy/cwac-wakeful
@@ -132,7 +131,7 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
                 // Check Security
                 Pairing pairing = null;
                 if (phone != null) {
-                    pairing = gePairingByPhone(phone);
+                    pairing = ContactHelper.searchPairingForPhone(this, phone);
                     Log.d(TAG, "### Search Pairing for phone " + phone + " ==> " + pairing);
                     // --- Manage Urgency Mode
                     pairing = manageEmergencyMode(phone, params, pairing);
@@ -277,7 +276,7 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
     // ===========================================================
     // GeoPing Request
     // ===========================================================
-    private void manageGeopingRequest(Pairing pairing,  MessageActionEnum msgAction, Bundle config, Uri logUri) {
+    private void manageGeopingRequest(Pairing pairing, MessageActionEnum msgAction, Bundle config, Uri logUri) {
 
         // Request
         // registerGeoPingRequest(phone, params);
@@ -451,6 +450,12 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
 
     }
 
+
+    // ===========================================================
+    // SMS Sender
+    // ===========================================================
+
+
     private void sendPairingResponse(String phone, long personId, PairingAuthorizeTypeEnum authorizeType) {
         Bundle params = null;
         if (personId != -1l) {
@@ -459,37 +464,11 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
         SmsSenderHelper.sendSmsAndLogIt(this, SmsLogSideEnum.SLAVE, phone, MessageActionEnum.ACTION_GEO_PAIRING_RESPONSE, params);
     }
 
-    // ===========================================================
-    // GeoPing Security
-    // ===========================================================
 
-    private Pairing getOrCreatePairingByPhone(String phoneNumber) {
-        // Search
-        Pairing result = gePairingByPhone(phoneNumber);
-        Log.d(TAG, String.format("Search Painring for Phone [%s] : Found %s", phoneNumber, result));
-        // Create It
-        if (result == null) {
-            result = createPairingByPhone(phoneNumber);
-        }
-        return result;
-    }
 
-    private Pairing gePairingByPhone(String phoneNumber) {
-        Pairing result = null;
-        // Search
-        // Log.d(TAG, String.format("Search Painring for Phone [%s]",  phoneNumber));
-        Uri uri = Uri.withAppendedPath(PairingProvider.Constants.CONTENT_URI_PHONE_FILTER, Uri.encode(phoneNumber));
-        Cursor cur = getContentResolver().query(uri, null, null, null, null);
-        try {
-            if (cur != null && cur.moveToFirst()) {
-                PairingHelper helper = new PairingHelper().initWrapper(cur);
-                result = helper.getEntity(cur);
-            }
-        } finally {
-            cur.close();
-        }
-        return result;
-    }
+    // ===========================================================
+    // Emergency Mode
+    // ===========================================================
 
     private Pairing manageEmergencyMode(String phoneNumber, Bundle params, Pairing pairing) {
         Pairing result = pairing;
@@ -523,6 +502,23 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
     private String createEmergencyLabel(String name) {
         return "Emergency for " + name;
     }
+
+
+    // ===========================================================
+    // GeoPing Security
+    // ===========================================================
+
+    private Pairing getOrCreatePairingByPhone(String phoneNumber) {
+        // Search
+        Pairing result = ContactHelper.searchPairingForPhone(this, phoneNumber);
+        Log.d(TAG, String.format("Search Painring for Phone [%s] : Found %s", phoneNumber, result));
+        // Create It
+        if (result == null) {
+            result = createPairingByPhone(phoneNumber);
+        }
+        return result;
+    }
+
 
     private Pairing createPairingByPhone(String phoneNumber) {
         Pairing result = new Pairing();
