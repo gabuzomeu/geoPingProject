@@ -44,12 +44,7 @@ public class EmergencyModeFragment extends Fragment {
     //Validator
     private Form formValidator;
 
-    private View.OnClickListener selectContactClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            onClickGeoPingButton(v);
-        }
-    };
+
     // ===========================================================
     // Constructor
     // ===========================================================
@@ -67,10 +62,21 @@ public class EmergencyModeFragment extends Fragment {
                 return onSelectContactClick(v);
             }
         });
-        geopingButton = (Button) v.findViewById(R.id.geoping_button_call);
-        geopingButton.setOnClickListener(selectContactClickListener);
         selectContact = (ImageButton) v.findViewById(R.id.select_contact_button);
-        selectContact.setOnClickListener(selectContactClickListener);
+        selectContact.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSelectContactClick(v);
+            }
+        });
+        // Sms Action
+        geopingButton = (Button) v.findViewById(R.id.geoping_button_call);
+        geopingButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickGeoPingButton(v);
+            }
+        });
         Log.d(TAG, "Binding end");
         // Form
         formValidator = createValidator(getActivity());

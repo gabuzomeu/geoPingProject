@@ -484,8 +484,10 @@ public class GeoPingSlaveService extends IntentService implements SharedPreferen
                     result = new Pairing();
                     result.setDisplayName(createEmergencyLabel(phoneNumber));
                     result.setPhone(phoneNumber);
+                    result.setShowNotification(true);
                 } else {
                     result.setDisplayName(createEmergencyLabel(result.displayName));
+                    result.setShowNotification(true);
                 }
                 // Controle Granted
                 result.setAuthorizeType(PairingAuthorizeTypeEnum.AUTHORIZE_ALWAYS);
