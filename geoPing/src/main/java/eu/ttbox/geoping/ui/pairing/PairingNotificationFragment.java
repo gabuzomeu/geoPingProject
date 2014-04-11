@@ -81,20 +81,19 @@ public class PairingNotificationFragment extends Fragment {
 
         // Listeners
         notifViews = new CompoundButton[] { notifShutdown, notifBatteryLow, notifSimChange, notifPhoneCall };
-        OnClickListener notifOnClickListener = new OnClickListener() {
+        CompoundButton.OnCheckedChangeListener notifOnClickListener = new CompoundButton.OnCheckedChangeListener() {
 
             @Override
-            public void onClick(View v) {
-                CompoundButton check = (CompoundButton) v;
-                String dbcol = getDatabaseColomnForView(check);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                String dbcol = getDatabaseColomnForView(buttonView);
                 if (dbcol != null) {
-                    boolean isChecked = check.isChecked();
                     saveNotif(dbcol, isChecked);
                 }
             }
+
         };
         for (CompoundButton view : notifViews) {
-            view.setOnClickListener(notifOnClickListener);
+            view.setOnCheckedChangeListener(notifOnClickListener);
         }
         // Security
         checkPermissionsForButtonVisibility();

@@ -10,14 +10,16 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.pairing.PairingDatabase.PairingColumns;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 
 /**
- * {@link http
- * ://stackoverflow.com/questions/10528464/how-to-monitor-sim-state-change}
+ *  http://stackoverflow.com/questions/10528464/how-to-monitor-sim-state-change
  *
  */
 public class SimChangeReceiver extends BroadcastReceiver {
@@ -97,13 +99,34 @@ public class SimChangeReceiver extends BroadcastReceiver {
 		}
 	}
 
+    private static JSONObject getOperatorInfo(Context context, TelephonyManager telephoneMgr) {
+        JSONObject object = new JSONObject();
+
+        try {
+            object.put("IMEI", telephoneMgr.getDeviceId());
+            object.put("Operator", telephoneMgr.getNetworkOperatorName());
+            object.put("Country", telephoneMgr.getNetworkCountryIso());
+            object.put("SimSerial", telephoneMgr.getSimSerialNumber());
+            object.put("Phone", telephoneMgr.getLine1Number());
+        } catch (JSONException e) {
+            Log.e(TAG, "Error writing JSON : " + e.getMessage(), e);
+        }
+        return object;
+    }
 	private static String getSystemPhoneNumber(Context context) {
 		// Read Phone number
 		TelephonyManager telephoneMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 		String phoneNumber = telephoneMgr.getLine1Number();
 		Log.d(TAG, "EventSpy SIM DeviceId : " + telephoneMgr.getDeviceId()); // Code IMEI
+        // Operator
+        Log.d(TAG, "EventSpy SIM Line Number : " + telephoneMgr.getLine1Number());
+        Log.d(TAG, "EventSpy SIM Network Country ISO : " + telephoneMgr.getNetworkCountryIso());
 		Log.d(TAG, "EventSpy SIM Network Operator Name : " + telephoneMgr.getNetworkOperatorName());
+        Log.d(TAG, "EventSpy SIM Network Operator : " + telephoneMgr.getNetworkOperator());
+        Log.d(TAG, "EventSpy SIM Network Type : " + telephoneMgr.getNetworkType());
 		Log.d(TAG, "EventSpy SIM Serial Number : " + telephoneMgr.getSimSerialNumber());
+        Log.d(TAG, "EventSpy SIM Device Software Version : " + telephoneMgr.getDeviceSoftwareVersion());
+
 		Log.d(TAG, "EventSpy SIM PhoneNumber : " + phoneNumber); // Code IMEI
 		return phoneNumber;
 	}
