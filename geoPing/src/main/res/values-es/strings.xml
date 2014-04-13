@@ -110,18 +110,24 @@
     <!-- Prefs Pairing -->
     <string name="prefs_pairing_config">Who follows me config</string>
     <string name="prefs_pairing_notification">Notification</string>
-    <string name="prefs_pairing_notification_sound">Notification Sound</string>
+
     <!-- Prefs Pairing Security -->
     <string name="prefs_pairing_security">Security pairing</string>
     <string name="prefs_pairing_security_block_request">Bloquear nueva asociacion de GeoPing</string>
     <string name="prefs_pairing_security_block_request_summaryOff">Bloquear nueva asociacion de GeoPing</string>
     <string name="prefs_pairing_security_block_request_summaryOn">Autorizar nueva asociacion de GeoPing</string>
 
+    <!-- Prefs Sound Notification -->
+    <string name="prefs_notification_sound">Notification Sound</string>
+    <string name="prefs_notification_sound_dialog_title">Change Sound</string>
+
+
     <!-- Prefs Geoping -->
     <string name="prefs_geoping_config">Where are you config</string>
     <!-- Prefs Geoping Notification-->
     <string name="prefs_geoping_notification">Notification</string>
-    <string name="prefs_geoping_notification_sound">Notification Sound</string>
+
+
     <!-- Prefs Geoping Request-->
     <string name="prefs_geoping_request">GeoLoc solicitud</string>
     <string name="prefs_show_geoping_notification">Mostrar una notificacion</string>

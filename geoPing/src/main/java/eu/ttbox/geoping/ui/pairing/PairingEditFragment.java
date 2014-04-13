@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Paint;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -15,6 +17,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,7 +26,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -57,6 +59,7 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
     private static final int PAIRING_EDIT_LOADER = R.id.config_id_pairing_edit_loader;
 
     public static final int PICK_CONTACT = 0;
+    public static final int PICK_RINGTONE = 1;
 
     // Service
     private SharedPreferences sharedPreferences;
@@ -79,6 +82,9 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
     private RadioButton authorizeTypeAskRadioButton;
     private RadioButton authorizeTypeNeverRadioButton;
     private RadioButton authorizeTypeAlwaysRadioButton;
+
+    private View selectNotificationSoundView;
+    private TextView selectNotificationSoundSummary;
 
 
     //Validator
@@ -146,6 +152,10 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         authorizeTypeAlwaysRadioButton = (RadioButton) v.findViewById(R.id.pairing_authorize_type_radio_always);
 
         selectContactClickButton = (ImageButton) v.findViewById(R.id.select_contact_button);
+
+        selectNotificationSoundView = v.findViewById(R.id.select_notification_sound);
+        selectNotificationSoundSummary = (TextView)v.findViewById(R.id.select_notification_sound_summary);
+
         // Radio Auth Listener
         OnClickListener radioAuthListener = new OnClickListener() {
 
@@ -177,6 +187,13 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
             public void onClick(View v) {
                 onSelectContactClick(v);
 
+            }
+        });
+
+        selectNotificationSoundView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSelectRingtonePickerClick();
             }
         });
 
@@ -395,7 +412,6 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
     }
 
 
-
     private String checkExistEntityId(ContentResolver cr, String phone) {
         Uri checkExistUri = PairingProvider.Constants.getUriPhoneFilter(phone);
         String[] checkExistProjections = new String[]{PairingColumns.COL_ID};
@@ -514,20 +530,95 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
     }
 
     // ===========================================================
+    // RingTone picker
+    // ===========================================================
+
+    protected void onSelectRingtonePickerClick() {
+        // Launch the ringtone picker
+        Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+        onPrepareRingtonePickerIntent(intent);
+        startActivityForResult(intent, PICK_RINGTONE);
+    }
+
+    /**
+     * Prepares the intent to launch the ringtone picker. This can be modified
+     * to adjust the parameters of the ringtone picker.
+     *
+     * @param ringtonePickerIntent The ringtone picker intent that can be
+     *                             modified by putting extras.
+     */
+    protected void onPrepareRingtonePickerIntent(Intent ringtonePickerIntent) {
+        int mRingtoneType = RingtoneManager.TYPE_NOTIFICATION;
+        boolean mShowDefault = true;
+        boolean mShowSilent = false;
+
+        ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, getPairingRingtone());
+
+        ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, mShowDefault);
+        if (true) {
+            ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, getDefaultRingtone(mRingtoneType));
+        }
+
+        ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, mShowSilent);
+        ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, mRingtoneType);
+        ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.prefs_notification_sound_dialog_title));
+    }
+
+    private Uri getDefaultRingtone(int mRingtoneType) {
+        Uri defUri = RingtoneManager.getDefaultUri(mRingtoneType);
+        String defUriString = defUri != null ? defUri.toString() : null;
+        String prefPairingUriString = sharedPreferences.getString(getString(R.string.pkey_pairing_notif_sound), defUriString);
+        Uri prefPairingUri = null;
+        if (!TextUtils.isEmpty(prefPairingUriString)) {
+            prefPairingUri = Uri.parse(prefPairingUriString);
+        }
+        return prefPairingUri;
+    }
+
+    private Uri getPairingRingtone() {
+        // TODO
+        return null;
+    }
+
+    private void onSaveRingtone(Uri ringtoneUri) {
+        Log.d(TAG, "### onSaveRingtone : " + ringtoneUri);
+        // TODO
+        // Ringtone name
+        Ringtone ringtone = RingtoneManager.getRingtone(getActivity(), ringtoneUri);
+        String name = ringtone.getTitle(getActivity());
+        selectNotificationSoundSummary.setText(name);
+
+    }
+
+    // ===========================================================
     // Activity Result handler
     // ===========================================================
 
     @Override
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
-
+        Log.d(TAG, "### onActivityResult reqCode " + reqCode + " : " + data);
         switch (reqCode) {
-            case (PairingEditFragment.PICK_CONTACT):
+            case (PICK_CONTACT): {
                 if (resultCode == Activity.RESULT_OK) {
                     Uri contactData = data.getData();
                     saveContactData(contactData);
                     // finish();
                 }
+            }
+            break;
+            case (PICK_RINGTONE): {
+                if (resultCode == Activity.RESULT_OK) {
+                    if (data != null) {
+                        Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                        onSaveRingtone(uri);
+                    }
+                }
+            }
+            break;
+
+            default:
+                break;
         }
     }
 
@@ -535,68 +626,68 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
     // LoaderManager
     // ===========================================================
 
-private final LoaderManager.LoaderCallbacks<Cursor> pairingLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
+    private final LoaderManager.LoaderCallbacks<Cursor> pairingLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.d(TAG, "onCreateLoader");
-        String entityId = args.getString(Intents.EXTRA_DATA_URI);
-        Uri entityUri = Uri.parse(entityId);
-        // Loader
-        CursorLoader cursorLoader = new CursorLoader(getActivity(), entityUri, null, null, null, null);
-        return cursorLoader;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        Log.d(TAG, "onLoadFinished with cursor result count : " + cursor.getCount());
-        // Display List
-        if (cursor.moveToFirst()) {
-            // Data
-            PairingHelper helper = new PairingHelper().initWrapper(cursor);
-            // Data
-            contactId = helper.getContactId(cursor);
-            String pairingPhone = helper.getPairingPhone(cursor);
-            // Binding
-            phoneEditText.setText(pairingPhone);
-            helper.setTextPairingName(nameEditText, cursor)//
-                    .setCheckBoxPairingShowNotif(showNotificationCheckBox, cursor);
-            // Pairing
-            PairingAuthorizeTypeEnum authType = helper.getPairingAuthorizeTypeEnum(cursor);
-            switch (authType) {
-                case AUTHORIZE_REQUEST:
-                    authorizeTypeAskRadioButton.setChecked(true);
-                    break;
-                case AUTHORIZE_NEVER:
-                    authorizeTypeNeverRadioButton.setChecked(true);
-                    break;
-                case AUTHORIZE_ALWAYS:
-                    authorizeTypeAlwaysRadioButton.setChecked(true);
-                    break;
-
-                default:
-                    break;
-            }
-            // Notif
-            if (PairingAuthorizeTypeEnum.AUTHORIZE_REQUEST.equals(authType)) {
-                showNotificationCheckBox.setVisibility(View.GONE);
-            }
-            // Notify listener
-            if (onPairingSelectListener != null) {
-                Uri pairingUri = entityUri;
-                onPairingSelectListener.onPersonSelect(pairingUri, pairingPhone);
-            }
-            // Photo
-            photoCache.loadPhoto(getActivity(), photoImageView, contactId, pairingPhone);
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            Log.d(TAG, "onCreateLoader");
+            String entityId = args.getString(Intents.EXTRA_DATA_URI);
+            Uri entityUri = Uri.parse(entityId);
+            // Loader
+            CursorLoader cursorLoader = new CursorLoader(getActivity(), entityUri, null, null, null, null);
+            return cursorLoader;
         }
-    }
 
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        setPairing(null, null, null);
-    }
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+            Log.d(TAG, "onLoadFinished with cursor result count : " + cursor.getCount());
+            // Display List
+            if (cursor.moveToFirst()) {
+                // Data
+                PairingHelper helper = new PairingHelper().initWrapper(cursor);
+                // Data
+                contactId = helper.getContactId(cursor);
+                String pairingPhone = helper.getPairingPhone(cursor);
+                // Binding
+                phoneEditText.setText(pairingPhone);
+                helper.setTextPairingName(nameEditText, cursor)//
+                        .setCheckBoxPairingShowNotif(showNotificationCheckBox, cursor);
+                // Pairing
+                PairingAuthorizeTypeEnum authType = helper.getPairingAuthorizeTypeEnum(cursor);
+                switch (authType) {
+                    case AUTHORIZE_REQUEST:
+                        authorizeTypeAskRadioButton.setChecked(true);
+                        break;
+                    case AUTHORIZE_NEVER:
+                        authorizeTypeNeverRadioButton.setChecked(true);
+                        break;
+                    case AUTHORIZE_ALWAYS:
+                        authorizeTypeAlwaysRadioButton.setChecked(true);
+                        break;
 
-};
+                    default:
+                        break;
+                }
+                // Notif
+                if (PairingAuthorizeTypeEnum.AUTHORIZE_REQUEST.equals(authType)) {
+                    showNotificationCheckBox.setVisibility(View.GONE);
+                }
+                // Notify listener
+                if (onPairingSelectListener != null) {
+                    Uri pairingUri = entityUri;
+                    onPairingSelectListener.onPersonSelect(pairingUri, pairingPhone);
+                }
+                // Photo
+                photoCache.loadPhoto(getActivity(), photoImageView, contactId, pairingPhone);
+            }
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+            setPairing(null, null, null);
+        }
+
+    };
 
 
     // ===========================================================

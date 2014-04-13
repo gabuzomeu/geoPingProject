@@ -9,8 +9,7 @@
              android:id="@+id/pairing_notification_shutdown"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             android:layout_alignParentLeft="true"
-             android:layout_alignParentTop="true"
+             android:layout_marginTop="8dp"
              android:text="@string/pairing_notification_shutdown" />
         
         <Switch
@@ -18,7 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/pairing_notification_shutdown"
-            android:layout_alignParentLeft="true"
+            android:layout_marginTop="8dp"
+
             android:layout_below="@id/pairing_notification_shutdown"
             android:text="@string/pairing_notification_battery_low" />
 
@@ -27,7 +27,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/pairing_notification_battery_low"
-            android:layout_alignParentLeft="true"
+            android:layout_marginTop="8dp"
+
             android:layout_below="@id/pairing_notification_battery_low"
             android:text="@string/pairing_notification_sim_change" />
 
@@ -35,6 +36,7 @@
             android:id="@+id/pairing_notification_phone_call"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:layout_alignLeft="@+id/pairing_notification_sim_change"
             android:layout_below="@id/pairing_notification_sim_change"
             android:text="@string/pairing_notification_phone_call" />

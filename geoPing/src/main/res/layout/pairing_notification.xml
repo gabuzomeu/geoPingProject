@@ -6,7 +6,7 @@
     android:overScrollMode="ifContentScrolls"
     android:scrollbars="none" >
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -16,6 +16,6 @@
         <include layout="@layout/pairing_notification_compound_button" />
         
         
-    </RelativeLayout>
+    </LinearLayout>
 
 </ScrollView>

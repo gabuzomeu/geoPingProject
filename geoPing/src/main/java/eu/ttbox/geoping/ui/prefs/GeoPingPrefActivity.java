@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -16,7 +19,9 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceGroup;
 import android.preference.PreferenceManager;
+import android.preference.RingtonePreference;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,7 +53,7 @@ public class GeoPingPrefActivity extends PreferenceActivity //SlidingPreferenceA
 
     // Dev Listener
     private SharedPreferences developmentPreferences;
-    SharedPreferences.OnSharedPreferenceChangeListener mDevelopmentPreferencesListener;
+    private SharedPreferences.OnSharedPreferenceChangeListener mDevelopmentPreferencesListener;
 
     // ===========================================================
     // Constructor
@@ -88,6 +93,9 @@ public class GeoPingPrefActivity extends PreferenceActivity //SlidingPreferenceA
         initSummaries(this.getPreferenceScreen());
     }
 
+
+
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void setHcDisplayHomeAsUpEnabled() {
         // Add selector
@@ -107,7 +115,7 @@ public class GeoPingPrefActivity extends PreferenceActivity //SlidingPreferenceA
             if (p instanceof PreferenceGroup) {
                 this.initSummaries((PreferenceGroup) p); // recursion
             } else {
-                setSummary(p);
+                setSummary(this, p);
             }
         }
     }
@@ -115,23 +123,31 @@ public class GeoPingPrefActivity extends PreferenceActivity //SlidingPreferenceA
     /**
      * Set the summaries of the given preference
      */
-    private static void setSummary(Preference pref) {
+    private static void setSummary(Context context, Preference pref) {
         // react on type or key
         if (pref instanceof EditTextPreference) {
             EditTextPreference editPref = (EditTextPreference) pref;
             String prefText = editPref.getText();
-           int  editInputType =  editPref.getEditText().getInputType();
+            int editInputType = editPref.getEditText().getInputType();
             if (prefText != null && prefText.length() > 0) {
-                if((editInputType & InputType.TYPE_NUMBER_VARIATION_PASSWORD) > 0) {
-                    pref.setSummary("XXXXX");
+                if ((editInputType & InputType.TYPE_NUMBER_VARIATION_PASSWORD) > 0) {
+                    pref.setSummary("********");
                 } else {
                     pref.setSummary(prefText);
                 }
-
             }
         } else if (pref instanceof ListPreference) {
             ListPreference listPref = (ListPreference) pref;
             pref.setSummary(listPref.getEntry());
+        } else if (pref instanceof RingtonePreference) {
+            RingtonePreference ringPref = (RingtonePreference) pref;
+            String ringtoneString = ringPref.getPreferenceManager().getSharedPreferences().getString(ringPref.getKey(), null);
+            if (!TextUtils.isEmpty(ringtoneString)) {
+                Uri ringtoneUri = Uri.parse(ringtoneString);
+                Ringtone ringtone = RingtoneManager.getRingtone(context, ringtoneUri);
+                String name = ringtone.getTitle(context);
+                ringPref.setSummary(name);
+            }
         }
     }
     // ===========================================================
@@ -178,22 +194,24 @@ public class GeoPingPrefActivity extends PreferenceActivity //SlidingPreferenceA
     public void onResume() {
         super.onResume();
         // Register change listener
+
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         // Resume for Headeers
         if (VersionUtils.isHc11) {
-            onResumeHc11();
+          //  onResumeHc11();
         }
 
     }
+
+
+
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onResumeHc11() {
         mDevelopmentPreferencesListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+         @TargetApi(Build.VERSION_CODES.HONEYCOMB)
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                // Recompute All Sumaries
-                // TODO Recompute Only the changed Values  initSummaries(getPreferenceScreen());
                 // Recompute All Headers
                 invalidateHeaders();
 
@@ -283,7 +301,9 @@ public class GeoPingPrefActivity extends PreferenceActivity //SlidingPreferenceA
     // ===========================================================
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class PrefsFragment extends PreferenceFragment {
+    public static class PrefsFragment extends PreferenceFragment
+          implements   OnSharedPreferenceChangeListener
+    {
         @Override
         public void onCreate(Bundle aSavedState) {
             super.onCreate(aSavedState);
@@ -293,14 +313,33 @@ public class GeoPingPrefActivity extends PreferenceActivity //SlidingPreferenceA
             Log.i(TAG, "Create PrefsFragment for file : " + fragFileIdentifer);
             addPreferencesFromResource(thePrefRes);
             // Init Summary
-            initSummaries(this.getPreferenceScreen());
+            initSummaries(anAct, this.getPreferenceScreen());
         }
 
+        @Override
+        public void onResume() {
+            super.onResume();
+            getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        }
+
+        @Override
+        public void onPause() {
+            getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+            super.onPause();
+        }
+
+        @Override
+        public void onSharedPreferenceChanged(  SharedPreferences sharedPreferences, String key) {
+            Log.d(TAG, "### fragment onSharedPreferenceChanged key : " + key);
+            Preference pref = findPreference(key);
+            setSummary(getActivity(), pref);
+            Log.d(TAG, "### fragment onSharedPreferenceChanged findPreference : " + pref);
+        }
 
         /**
          * Set the summaries of all preferences
          */
-        private void initSummaries(PreferenceGroup pg) {
+        private void initSummaries(Context context, PreferenceGroup pg) {
             if (pg == null) {
                 return;
             }
@@ -308,9 +347,9 @@ public class GeoPingPrefActivity extends PreferenceActivity //SlidingPreferenceA
                 Preference p = pg.getPreference(i);
                 // Init
                 if (p instanceof PreferenceGroup) {
-                    this.initSummaries((PreferenceGroup) p); // recursion
+                    this.initSummaries(context, (PreferenceGroup) p); // recursion
                 } else {
-                    setSummary(p);
+                    setSummary(context, p);
                 }
             }
         }
@@ -346,20 +385,23 @@ public class GeoPingPrefActivity extends PreferenceActivity //SlidingPreferenceA
     // Change Pref Listener
     // ===========================================================
 
+
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         // Ask Backup
         BackupManager.dataChanged(getPackageName());
-        // Update Display
-        // Preference pref = findPreference(key);
-        // setSummary(pref);
+        // Recompute Change Sumaries
+        Log.d(TAG, "### onSharedPreferenceChanged key : " + key);
+         Preference pref = findPreference(key);
+        Log.d(TAG, "### onSharedPreferenceChanged findPreference : " + pref);
+        setSummary(this, pref);
         // Tracker
         // GeoPingApplication.getInstance().tracker().trackPageView("/Pref/" +
         // key);
-        Tracker tracker =   tracker = GeoPingApplication.getGeoPingApplication(this).getTracker();
+        Tracker tracker = tracker = GeoPingApplication.getGeoPingApplication(this).getTracker();
         tracker.send(new HitBuilders.EventBuilder()//
                 .setCategory("ui_pref") // Category
-                .setAction( "changed") // Action
+                .setAction("changed") // Action
                 .setLabel(key) // Label
                 .build());
     }

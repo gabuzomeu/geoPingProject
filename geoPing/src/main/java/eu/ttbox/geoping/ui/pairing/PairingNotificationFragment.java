@@ -1,5 +1,6 @@
 package eu.ttbox.geoping.ui.pairing;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.ContentObserver;
 import android.database.Cursor;
@@ -150,10 +151,15 @@ public class PairingNotificationFragment extends Fragment {
 
         @Override
         protected Integer doInBackground(String... params) {
+            if (params==null && params.length<1) {
+                Log.w(TAG, "Ignore SpyNotifUpdaterAsyncTask for No Column");
+                return 0;
+            }
             String columnName = params[0];
             ContentValues values = new ContentValues();
             values.put(columnName, value);
-            int rowCount = getActivity().getContentResolver().update(entityUri, values, null, null);
+            ContentResolver cr = getActivity().getContentResolver();
+            int rowCount = cr.update(entityUri, values, null, null);
             Log.d(TAG, "EventSpy Update " + entityUri + " : Column " + columnName + " = " + value);
             return Integer.valueOf(rowCount);
         }

@@ -45,7 +45,7 @@
             android:id="@+id/pairing_phone"
             style="@style/entity_edit"
             android:layout_width="wrap_content"
-            android:layout_alignLeft="@id/pairing_name"
+            android:layout_alignStart="@id/pairing_name"
             android:layout_below="@id/pairing_name"
             android:layout_toLeftOf="@id/select_contact_button"
             android:hint="@string/pairing_phone"
@@ -97,6 +97,14 @@
             android:layout_marginTop="21dp"
             android:text="@string/pairing_show_notification" />
 
+
+        <include
+            android:id="@+id/select_notification_sound"
+            android:layout_below="@id/paring_show_notification"
+            android:layout_alignStart="@id/paring_show_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            layout="@layout/comp_select_notification_sound" />
 
     </RelativeLayout>
 

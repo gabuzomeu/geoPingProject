@@ -114,7 +114,6 @@
     <!-- Prefs Pairing -->
     <string name="prefs_pairing_config">Qui me suit configuration</string>
     <string name="prefs_pairing_notification">Notification</string>
-    <string name="prefs_pairing_notification_sound">Son de la Notification</string>
 
     <!-- Prefs Pairing Security -->
     <string name="prefs_pairing_security">Sécurité des associations</string>
@@ -122,11 +121,16 @@
     <string name="prefs_pairing_security_block_request_summaryOff">Bloquer les nouvelles associations</string>
     <string name="prefs_pairing_security_block_request_summaryOn">Autoriser les nouvelles associations</string>
 
+    <!-- Prefs Sound Notification -->
+    <string name="prefs_notification_sound">Son de la Notification</string>
+    <string name="prefs_notification_sound_dialog_title">Changer de Son</string>
+
+
     <!-- Prefs Geoping -->
     <string name="prefs_geoping_config">Ou es tu configuration</string>
     <!-- Prefs Geoping Notification-->
     <string name="prefs_geoping_notification">Notification</string>
-    <string name="prefs_geoping_notification_sound">Son de la Notification</string>
+
     <!-- Prefs Geoping Request-->
     <string name="prefs_geoping_request">Requête de Localisation</string>
 
