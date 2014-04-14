@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Locale;
@@ -50,6 +51,19 @@ public class GeofenceListAdapter extends android.support.v4.widget.ResourceCurso
             holder.addressText.setText(addr);
         }
         helper.setTextName(holder.nameText, cursor);
+        // Icon
+        int transitionType = helper.getTransitionType(cursor);
+        boolean isEnter = helper.isTransitionTypeEnter(transitionType);
+        boolean isExit = helper.isTransitionTypeExit(transitionType);
+        int iconresId = R.drawable.ic_action_geofence;
+        if (isEnter && isExit) {
+            // TODO Find a icon
+        } else if (isEnter) {
+// TODO Find a icon
+        } else if (isExit) {
+// TODO Find a icon
+        }
+        holder.icon.setImageResource(iconresId);
     }
 
     @Override
@@ -57,6 +71,7 @@ public class GeofenceListAdapter extends android.support.v4.widget.ResourceCurso
         View view = super.newView(context, cursor, parent);
         // Then populate the ViewHolder
         ViewHolder holder = new ViewHolder();
+        holder.icon = (ImageView) view.findViewById(R.id.geofence_list_item_icon);
         holder.nameText = (TextView) view.findViewById(R.id.geofence_list_item_name);
         holder.addressText = (TextView) view.findViewById(R.id.geofence_list_item_address);
         // and store it inside the layout.
@@ -66,6 +81,7 @@ public class GeofenceListAdapter extends android.support.v4.widget.ResourceCurso
     }
 
     static class ViewHolder {
+        ImageView icon;
         TextView nameText;
         TextView addressText;
     }

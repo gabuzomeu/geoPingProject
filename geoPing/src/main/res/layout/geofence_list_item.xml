@@ -3,15 +3,22 @@
     style="@style/entity_list_item_container"
     android:layout_width="fill_parent"
     android:orientation="horizontal"
-    android:padding="10dip" >
+    android:padding="10dip">
 
+    <ImageView
+        android:id="@+id/geofence_list_item_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:src="@drawable/ic_action_geofence" />
 
     <TextView
         android:id="@+id/geofence_list_item_name"
         style="@style/entity_list_item"
-        android:layout_marginLeft="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/geofence_list_item_icon"
         android:text="Person Name" />
 
     <TextView
@@ -19,10 +26,10 @@
         style="@style/entity_list_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/call_log_secondary_text_color"
         android:layout_alignLeft="@id/geofence_list_item_name"
         android:layout_below="@id/geofence_list_item_name"
-        android:text="3 Address, zipcode city " />
+        android:text="3 Address, zipcode city "
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/call_log_secondary_text_color" />
 
 </RelativeLayout>

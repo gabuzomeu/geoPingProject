@@ -231,6 +231,17 @@ public class GeoFenceHelper {
         return cursor.getString(addressIdx);
     }
 
+    public int getTransitionType(Cursor cursor) {
+        return cursor.getInt(transitionIdx);
+    }
+
+    public boolean isTransitionTypeEnter(int transitionType) {
+        return (transitionType & Geofence.GEOFENCE_TRANSITION_ENTER) != 0;
+    }
+    public boolean isTransitionTypeExit(int transitionType) {
+        return (transitionType & Geofence.GEOFENCE_TRANSITION_EXIT) != 0;
+    }
+
     public GeoFenceHelper setTextAddress(TextView view, Cursor cursor) {
         return setTextWithIdx(view, cursor, addressIdx);
     }
