@@ -62,6 +62,8 @@ public class GeofenceListAdapter extends android.support.v4.widget.ResourceCurso
            // TODO Find a icon
         } else if (isExit) {
            // TODO Find a icon
+        } else {
+            // TODO Not active
         }
         holder.icon.setImageResource(iconresId);
     }
