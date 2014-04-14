@@ -15,7 +15,6 @@ import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
@@ -51,21 +50,21 @@ public class PairingNotificationFragment extends Fragment {
     private String getDatabaseColomnForView(CompoundButton v) {
         String result = null;
         switch (v.getId()) {
-        case R.id.pairing_notification_shutdown:
-            result = PairingColumns.COL_NOTIF_SHUTDOWN;
-            break;
-        case R.id.pairing_notification_battery_low:
-            result = PairingColumns.COL_NOTIF_BATTERY_LOW;
-            break;
-        case R.id.pairing_notification_sim_change:
-            result = PairingColumns.COL_NOTIF_SIM_CHANGE;
-            break;
-        case R.id.pairing_notification_phone_call:
-            result = PairingColumns.COL_NOTIF_PHONE_CALL;
-            break;
-        default:
-            Log.w(TAG, "No DB Column mapping for View : " + v);
-            break;
+            case R.id.pairing_notification_shutdown:
+                result = PairingColumns.COL_NOTIF_SHUTDOWN;
+                break;
+            case R.id.pairing_notification_battery_low:
+                result = PairingColumns.COL_NOTIF_BATTERY_LOW;
+                break;
+            case R.id.pairing_notification_sim_change:
+                result = PairingColumns.COL_NOTIF_SIM_CHANGE;
+                break;
+            case R.id.pairing_notification_phone_call:
+                result = PairingColumns.COL_NOTIF_PHONE_CALL;
+                break;
+            default:
+                Log.w(TAG, "No DB Column mapping for View : " + v);
+                break;
         }
         return result;
     }
@@ -81,13 +80,14 @@ public class PairingNotificationFragment extends Fragment {
         notifPhoneCall = (CompoundButton) v.findViewById(R.id.pairing_notification_phone_call);
 
         // Listeners
-        notifViews = new CompoundButton[] { notifShutdown, notifBatteryLow, notifSimChange, notifPhoneCall };
+        notifViews = new CompoundButton[]{notifShutdown, notifBatteryLow, notifSimChange, notifPhoneCall};
         CompoundButton.OnCheckedChangeListener notifOnClickListener = new CompoundButton.OnCheckedChangeListener() {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 String dbcol = getDatabaseColomnForView(buttonView);
                 if (dbcol != null) {
+                    Log.d(TAG, "### OnCheckedChangeListener : " + isChecked + " for column " + dbcol + " on view " + buttonView);
                     saveNotif(dbcol, isChecked);
                 }
             }
@@ -106,6 +106,12 @@ public class PairingNotificationFragment extends Fragment {
 
     @Override
     public void onDestroy() {
+        if (notifViews != null && notifViews.length > 0) {
+            // Unregister the listenr on Switch
+            for (CompoundButton view : notifViews) {
+                view.setOnCheckedChangeListener(null);
+            }
+        }
         super.onDestroy();
     }
 
@@ -151,7 +157,7 @@ public class PairingNotificationFragment extends Fragment {
 
         @Override
         protected Integer doInBackground(String... params) {
-            if (params==null && params.length<1) {
+            if (params == null && params.length < 1) {
                 Log.w(TAG, "Ignore SpyNotifUpdaterAsyncTask for No Column");
                 return 0;
             }

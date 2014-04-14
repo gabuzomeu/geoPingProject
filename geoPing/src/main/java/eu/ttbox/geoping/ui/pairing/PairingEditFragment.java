@@ -154,7 +154,7 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         selectContactClickButton = (ImageButton) v.findViewById(R.id.select_contact_button);
 
         selectNotificationSoundView = v.findViewById(R.id.select_notification_sound);
-        selectNotificationSoundSummary = (TextView)v.findViewById(R.id.select_notification_sound_summary);
+        selectNotificationSoundSummary = (TextView) v.findViewById(R.id.select_notification_sound_summary);
 
         // Radio Auth Listener
         OnClickListener radioAuthListener = new OnClickListener() {
@@ -189,7 +189,6 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
 
             }
         });
-
         selectNotificationSoundView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -535,33 +534,32 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
 
     protected void onSelectRingtonePickerClick() {
         // Launch the ringtone picker
-        Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-        onPrepareRingtonePickerIntent(intent);
+        Intent intent = onPrepareRingtonePickerIntent();
         startActivityForResult(intent, PICK_RINGTONE);
     }
 
     /**
      * Prepares the intent to launch the ringtone picker. This can be modified
      * to adjust the parameters of the ringtone picker.
-     *
-     * @param ringtonePickerIntent The ringtone picker intent that can be
-     *                             modified by putting extras.
      */
-    protected void onPrepareRingtonePickerIntent(Intent ringtonePickerIntent) {
+    protected Intent onPrepareRingtonePickerIntent() {
+        Intent ringtonePickerIntent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
         int mRingtoneType = RingtoneManager.TYPE_NOTIFICATION;
         boolean mShowDefault = true;
         boolean mShowSilent = false;
 
         ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, getPairingRingtone());
-
         ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, mShowDefault);
-        if (true) {
-            ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, getDefaultRingtone(mRingtoneType));
-        }
+        if (mShowDefault) {
+            Uri defaultUri = getDefaultRingtone(mRingtoneType);
+            ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, defaultUri);
+            //ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,  RingtoneManager.getDefaultUri(mRingtoneType));
 
+        }
         ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, mShowSilent);
         ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, mRingtoneType);
         ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.prefs_notification_sound_dialog_title));
+        return ringtonePickerIntent;
     }
 
     private Uri getDefaultRingtone(int mRingtoneType) {
@@ -572,21 +570,25 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         if (!TextUtils.isEmpty(prefPairingUriString)) {
             prefPairingUri = Uri.parse(prefPairingUriString);
         }
+        Log.d(TAG, "### getDefaultRingtone : " + prefPairingUri);
+        // prefPairingUri = null; //RingtoneManager.getDefaultUri(mRingtoneType);
         return prefPairingUri;
     }
 
     private Uri getPairingRingtone() {
         // TODO
+        // return getDefaultRingtone( RingtoneManager.TYPE_NOTIFICATION);
         return null;
     }
 
     private void onSaveRingtone(Uri ringtoneUri) {
         Log.d(TAG, "### onSaveRingtone : " + ringtoneUri);
-        // TODO
-        // Ringtone name
+        // Display Ringtone name
         Ringtone ringtone = RingtoneManager.getRingtone(getActivity(), ringtoneUri);
         String name = ringtone.getTitle(getActivity());
         selectNotificationSoundSummary.setText(name);
+        // TODO Save In DB
+
 
     }
 
@@ -609,6 +611,8 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
             break;
             case (PICK_RINGTONE): {
                 if (resultCode == Activity.RESULT_OK) {
+                    Log.d(TAG, "### onActivityResult extras : " + data.getExtras());
+                    Intents.printExtras(TAG, data.getExtras());
                     if (data != null) {
                         Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
                         onSaveRingtone(uri);
