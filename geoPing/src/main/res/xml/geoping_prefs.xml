@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:title="@string/prefs_geoping_config">
+    android:title="@string/menu_person">
 
     <!-- <PreferenceCategory android:title="@string/prefs_sms_category" > -->
 
@@ -8,28 +8,15 @@
     <!-- </PreferenceCategory> -->
     <PreferenceCategory android:title="@string/prefs_geoping_request">
         <eu.ttbox.geoping.ui.prefs.comp.IntEditTextPreference
-                android:defaultValue="30"
-                android:key="requestTimeoutInS"
-                android:numeric="integer"
-                android:title="@string/prefs_geoping_request_timeout_ms" />
+            android:defaultValue="30"
+            android:key="requestTimeoutInS"
+            android:numeric="integer"
+            android:title="@string/prefs_geoping_request_timeout_ms" />
         <eu.ttbox.geoping.ui.prefs.comp.IntEditTextPreference
-                android:defaultValue="60"
-                android:key="requestAccuracyExpectedInM"
-                android:numeric="integer"
-                android:title="@string/prefs_geoping_request_accuracy_expected_m" />
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/prefs_geoping_notification" >
-        <RingtonePreference
-            android:defaultValue="content://settings/system/notification_sound"
-            android:showDefault="true"
-            android:title="@string/prefs_notification_sound"
-            android:key="@string/pkey_geoping_notif_sound"
-            android:ringtoneType="notification"
-            android:dialogTitle="@string/prefs_notification_sound_dialog_title"
-            android:widgetLayout="@layout/prefs_widget_more"
-            />
-
+            android:defaultValue="60"
+            android:key="requestAccuracyExpectedInM"
+            android:numeric="integer"
+            android:title="@string/prefs_geoping_request_accuracy_expected_m" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="localSave"
@@ -37,7 +24,19 @@
             android:summaryOn="@string/prefs_geoping_localSave_summaryOn"
             android:title="@string/prefs_geoping_localSave" />
     </PreferenceCategory>
-     
-    
+
+    <PreferenceCategory android:title="@string/prefs_notification_category">
+        <RingtonePreference
+            android:defaultValue="content://settings/system/notification_sound"
+            android:dialogTitle="@string/prefs_notification_sound_dialog_title"
+            android:key="@string/pkey_geoping_notif_sound"
+            android:ringtoneType="notification"
+            android:showDefault="true"
+            android:title="@string/prefs_notification_sound"
+            android:widgetLayout="@layout/prefs_widget_more" />
+
+
+    </PreferenceCategory>
+
 
 </PreferenceScreen>

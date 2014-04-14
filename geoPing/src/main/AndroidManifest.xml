@@ -134,7 +134,7 @@
         </activity>
 
         <!-- Pref -->
-        <activity android:exported="false" android:name=".ui.prefs.GeoPingPrefActivity"/>
+        <activity android:exported="false" android:name=".ui.prefs.GeoPingPrefActivity" android:label="@string/menu_settings"/>
 
         <!-- Emergency Mode -->
         <activity android:exported="false" android:name=".ui.emergency.EmergencyModeActivity"/>

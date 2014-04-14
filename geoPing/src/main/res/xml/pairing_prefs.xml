@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:title="@string/prefs_pairing_config">
+    android:title="@string/menu_pairing">
 
-    <PreferenceCategory android:title="@string/prefs_pairing_notification">
+    <PreferenceCategory android:title="@string/prefs_notification_category">
         <RingtonePreference
             android:defaultValue="content://settings/system/notification_sound"
             android:dialogTitle="@string/prefs_notification_sound_dialog_title"

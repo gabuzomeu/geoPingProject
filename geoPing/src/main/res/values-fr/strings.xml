@@ -111,10 +111,6 @@
     <!-- Prefs -->
     <string name="prefs_sms_category">Monitoring Sms</string>
 
-    <!-- Prefs Pairing -->
-    <string name="prefs_pairing_config">Qui me suit configuration</string>
-    <string name="prefs_pairing_notification">Notification</string>
-
     <!-- Prefs Pairing Security -->
     <string name="prefs_pairing_security">Sécurité des associations</string>
     <string name="prefs_pairing_security_block_request">Association</string>
@@ -122,14 +118,10 @@
     <string name="prefs_pairing_security_block_request_summaryOn">Autoriser les nouvelles associations</string>
 
     <!-- Prefs Sound Notification -->
+    <string name="prefs_notification_category">Notification</string>
     <string name="prefs_notification_sound">Son de la Notification</string>
     <string name="prefs_notification_sound_dialog_title">Changer de Son</string>
 
-
-    <!-- Prefs Geoping -->
-    <string name="prefs_geoping_config">Ou es tu configuration</string>
-    <!-- Prefs Geoping Notification-->
-    <string name="prefs_geoping_notification">Notification</string>
 
     <!-- Prefs Geoping Request-->
     <string name="prefs_geoping_request">Requête de Localisation</string>
@@ -137,8 +129,8 @@
     <string name="prefs_show_geoping_notification">Afficher une notification</string>
     <string name="prefs_show_geoping_notification_summary">Pour les nouvelles associations</string>
 
-    <string name="prefs_geoping_request_timeout_ms">Request Time Out in s</string>
-    <string name="prefs_geoping_request_accuracy_expected_m">Request expected accuracy in m</string>
+    <string name="prefs_geoping_request_timeout_ms">Temps pour Géoloc en s</string>
+    <string name="prefs_geoping_request_accuracy_expected_m">Précision de Géoloc en m</string>
 
     <string name="prefs_geoping_localSave">Sauvegarder en local</string>
     <string name="prefs_geoping_localSave_summaryOn">Historisation en base locale</string>
