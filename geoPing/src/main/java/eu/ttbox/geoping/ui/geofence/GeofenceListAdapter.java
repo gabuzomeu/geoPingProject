@@ -57,14 +57,15 @@ public class GeofenceListAdapter extends android.support.v4.widget.ResourceCurso
         boolean isExit = helper.isTransitionTypeExit(transitionType);
         int iconresId = R.drawable.ic_action_geofence;
         if (isEnter && isExit) {
-            // TODO Find a icon
+            iconresId = R.drawable.ic_geofence_enter_exit;
         } else if (isEnter) {
-           // TODO Find a icon
+            iconresId = R.drawable.ic_geofence_enter;
         } else if (isExit) {
-           // TODO Find a icon
+            iconresId = R.drawable.ic_geofence_exit;
         } else {
-            // TODO Not active
+            iconresId = R.drawable.ic_geofence_none;
         }
+       // holder.icon.setBackgroundColor(0x0000FF00 );
         holder.icon.setImageResource(iconresId);
     }
 
