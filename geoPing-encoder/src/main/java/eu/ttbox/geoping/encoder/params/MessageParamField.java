@@ -32,7 +32,7 @@ public class MessageParamField implements IParamEncoder {
 
     public static final MessageParamField EMERGENCY_PASSWORD= type("EMERGENCY_PASSWORD", ParamTypeEncoding.LONG);
 
-    public static final MessageParamField ALARM = type("ALARM", ParamTypeEncoding.INT);
+   // public static final MessageParamField ALARM = type("ALARM", ParamTypeEncoding.INT);
 
     // ===========================================================
     // Constructor

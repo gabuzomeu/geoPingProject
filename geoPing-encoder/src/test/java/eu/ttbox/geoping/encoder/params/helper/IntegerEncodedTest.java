@@ -4,8 +4,6 @@ package eu.ttbox.geoping.encoder.params.helper;
 import org.junit.Assert;
 import org.junit.Test;
 
-import eu.ttbox.geoping.encoder.params.helper.IntegerEncoded;
-
 public class IntegerEncodedTest {
 
 

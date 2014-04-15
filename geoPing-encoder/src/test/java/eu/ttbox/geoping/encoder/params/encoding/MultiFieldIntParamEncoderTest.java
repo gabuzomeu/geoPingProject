@@ -1,7 +1,6 @@
 package eu.ttbox.geoping.encoder.params.encoding;
 
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import eu.ttbox.geoping.encoder.adapter.MapEncoderAdpater;

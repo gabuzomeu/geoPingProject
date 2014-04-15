@@ -2,15 +2,11 @@ package eu.ttbox.geoping.encoder;
 
 
 import org.junit.Assert;
-
 import org.junit.Test;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
-import eu.ttbox.geoping.encoder.adapter.DecoderAdapter;
-import eu.ttbox.geoping.encoder.adapter.EncoderAdapter;
 import eu.ttbox.geoping.encoder.adapter.MapEncoderAdpater;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.params.AssertHelper;

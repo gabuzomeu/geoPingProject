@@ -40,7 +40,7 @@ public enum MessageParamEnum implements IParamEncoder {
             MessageParamField.GEOFENCE_EXPIRATION_DATE  //
     ), //
     // Alarm
-    ALARM('h', MessageParamField.ALARM),
+    //ALARM('h', MessageParamField.ALARM),
     // Emergency Mode
     EMERGENCY_PASSWORD('k', MessageParamField.EMERGENCY_PASSWORD),
     // Spy Event
