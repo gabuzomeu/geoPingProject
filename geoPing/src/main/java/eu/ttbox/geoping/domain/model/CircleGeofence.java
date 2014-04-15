@@ -273,6 +273,9 @@ public class CircleGeofence {
         if (radiusInMeters<1) {
             return false;
         }
+        if (transitionType==0) {
+            return false;
+        }
         return true;
     }
 

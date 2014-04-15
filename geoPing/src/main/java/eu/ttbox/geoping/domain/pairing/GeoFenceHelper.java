@@ -95,11 +95,15 @@ public class GeoFenceHelper {
     }
 
     public static Geofence getEntityGeoFenceFromContentValue(ContentValues initialValues) {
+        int transitionType =initialValues.getAsInteger(GeoFenceColumns.COL_TRANSITION );
+        if (transitionType==0) {
+            // Transition type not valid
+            return null;
+        }
         String requestId = initialValues.getAsString(GeoFenceColumns.COL_REQUEST_ID);
         double latitude = initialValues.getAsInteger(GeoFenceColumns.COL_LATITUDE_E6) / AppConstants.E6;
         double longitude = initialValues.getAsInteger(GeoFenceColumns.COL_LONGITUDE_E6) / AppConstants.E6;
         int radiusInMeters =initialValues.getAsInteger(GeoFenceColumns.COL_RADIUS);
-        int transitionType =initialValues.getAsInteger(GeoFenceColumns.COL_TRANSITION );
 
 
        long expirationDate  =initialValues.getAsLong(GeoFenceColumns.COL_EXPIRATION_DATE);
