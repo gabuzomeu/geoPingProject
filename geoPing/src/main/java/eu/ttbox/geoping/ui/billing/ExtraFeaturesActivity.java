@@ -2,6 +2,7 @@ package eu.ttbox.geoping.ui.billing;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import eu.ttbox.geoping.service.billing.util.Purchase;
 import eu.ttbox.geoping.service.billing.util.SkuDetails;
 import eu.ttbox.geoping.ui.GeoPingSlidingMenuFragmentActivity;
 import eu.ttbox.geoping.ui.billing.action.BillingActionFinder;
+import eu.ttbox.geoping.utils.GooglePlayServicesAvailableHelper;
 
 public class ExtraFeaturesActivity extends GeoPingSlidingMenuFragmentActivity {
 
@@ -192,7 +194,17 @@ public class ExtraFeaturesActivity extends GeoPingSlidingMenuFragmentActivity {
         return adapter;
 
     }
+    // ===========================================================
+    // LifeCycle
+    // ===========================================================
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (GooglePlayServicesAvailableHelper.isGooglePlayServicesAvailable(this)) {
+            Log.i(TAG, "GooglePlayServices Available");
+        }
+    }
 
     // ===========================================================
     // Intent
@@ -279,6 +291,14 @@ public class ExtraFeaturesActivity extends GeoPingSlidingMenuFragmentActivity {
                     finish();
                 }
                 return;
+            }
+            case  GooglePlayServicesAvailableHelper.REQUEST_CODE_RECOVER_PLAY_SERVICES: {
+                if (resultCode != Activity.RESULT_OK) {
+                    Log.e(TAG, "Google Play Service Not Available");
+                    finish();
+                }
+                return;
+
             }
             default: {
                 // Pass on the activity result to the helper for handling

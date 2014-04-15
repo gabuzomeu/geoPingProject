@@ -9,7 +9,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 
 public class GooglePlayServicesAvailableHelper {
 
-    public static final int REQUEST_CODE_RECOVER_PLAY_SERVICES = 1002;
+    public static final int REQUEST_CODE_RECOVER_PLAY_SERVICES = 10024632;
 
     public static boolean isGooglePlayServicesAvailable(Activity activity) {
         return isGooglePlayServicesAvailable(activity, true);
