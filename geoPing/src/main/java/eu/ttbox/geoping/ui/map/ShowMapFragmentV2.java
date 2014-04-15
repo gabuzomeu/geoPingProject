@@ -1,6 +1,7 @@
 package eu.ttbox.geoping.ui.map;
 
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,13 +25,13 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.util.GeoPoint;
 
 import java.lang.ref.WeakReference;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -51,6 +52,7 @@ import eu.ttbox.geoping.ui.map.timeline.RangeTimelineValue;
 import eu.ttbox.geoping.ui.map.timeline.RangeTimelineView;
 import eu.ttbox.geoping.ui.map.track.GeoTrackOverlay;
 import eu.ttbox.geoping.ui.map.track.dialog.SelectGeoTrackDialog;
+import eu.ttbox.geoping.utils.GooglePlayServicesAvailableHelper;
 import eu.ttbox.osm.ui.map.OsmMapFragment;
 
 public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -90,7 +92,7 @@ public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferenc
 
     private Handler handler = new MyInnerHandler(this);
 
-    static class MyInnerHandler extends Handler{
+    static class MyInnerHandler extends Handler {
         WeakReference<ShowMapFragmentV2> mFrag;
 
         MyInnerHandler(ShowMapFragmentV2 aFragment) {
@@ -215,7 +217,7 @@ public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferenc
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         super.onDestroy();
     }
- 
+
 
     @Override
     public void onResume() {
@@ -594,9 +596,12 @@ public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferenc
     }
 
 
+
+
     // ===========================================================
     // Geofence Overlay
     // ===========================================================
+
 
     public boolean isGeofenceOverlays() {
         return (geofenceListOverlay != null && mapView.getOverlays().contains(geofenceListOverlay));
@@ -605,10 +610,12 @@ public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferenc
     public GeofenceEditOverlay showGeofenceOverlays() {
         Log.d(TAG, "show Geofence Overlay");
         if (geofenceListOverlay == null) {
-            LoaderManager loaderManager = getActivity().getSupportLoaderManager();
-            this.geofenceListOverlay = new GeofenceEditOverlay(getActivity(), mapView, loaderManager, handler);
-            mapView.getOverlays().add(geofenceListOverlay);
-            mapView.postInvalidate();
+                // Open Overlay
+                LoaderManager loaderManager = getActivity().getSupportLoaderManager();
+                this.geofenceListOverlay = new GeofenceEditOverlay(getActivity(), mapView, loaderManager, handler);
+                mapView.getOverlays().add(geofenceListOverlay);
+                mapView.postInvalidate();
+
         } else if (!mapView.getOverlays().contains(geofenceListOverlay)) {
             mapView.getOverlays().add(geofenceListOverlay);
             mapView.postInvalidate();
@@ -697,7 +704,6 @@ public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferenc
             }
         }
     }
-
 
 
     // ===========================================================

@@ -24,6 +24,7 @@ import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.domain.model.CircleGeofence;
 import eu.ttbox.geoping.ui.map.ShowMapFragmentV2;
 import eu.ttbox.geoping.ui.map.geofence.GeofenceEditOverlay;
+import eu.ttbox.geoping.utils.GooglePlayServicesAvailableHelper;
 
 public class GeofenceEditMapFragment extends ShowMapFragmentV2 {
 
@@ -31,7 +32,7 @@ public class GeofenceEditMapFragment extends ShowMapFragmentV2 {
 
     private CircleGeofence editGeofence;
 
-    public static final int REQUEST_CODE_RECOVER_PLAY_SERVICES = 1001;
+
 
     // ===========================================================
     // Constructors
@@ -113,7 +114,9 @@ public class GeofenceEditMapFragment extends ShowMapFragmentV2 {
             mapController.setCenter(editGeofence.getCenterAsGeoPoint());
             // Do Edit
             GeofenceEditOverlay mapOverlay = super.showGeofenceOverlays();
-            mapOverlay.doEditCircleGeofenceWithoutMenu(editGeofence);
+            if (mapOverlay!=null) {
+                mapOverlay.doEditCircleGeofenceWithoutMenu(editGeofence);
+            }
         }
     }
 
@@ -127,9 +130,6 @@ public class GeofenceEditMapFragment extends ShowMapFragmentV2 {
     @Override
     public void onResume() {
         super.onResume();
-        if (checkPlayServices()) {
-            // Then we're good to go!
-        }
     }
 
     // ===========================================================
@@ -151,40 +151,6 @@ public class GeofenceEditMapFragment extends ShowMapFragmentV2 {
     // ===========================================================
     // Play Service Check
     // ===========================================================
-
-    private boolean checkPlayServices() {
-        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity());
-        if (status != ConnectionResult.SUCCESS) {
-            if (GooglePlayServicesUtil.isUserRecoverableError(status)) {
-                showErrorDialog(status);
-            } else {
-                Toast.makeText(getActivity(), "This device is not supported.",
-                        Toast.LENGTH_LONG).show();
-                getActivity().finish();
-            }
-            return false;
-        }
-        return true;
-    }
-
-    void showErrorDialog(int code) {
-        GooglePlayServicesUtil.getErrorDialog(code, getActivity(),
-                REQUEST_CODE_RECOVER_PLAY_SERVICES).show();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_CODE_RECOVER_PLAY_SERVICES:
-                if (resultCode == Activity.RESULT_CANCELED) {
-                    Toast.makeText(getActivity(), "Google Play Services must be installed.",
-                            Toast.LENGTH_SHORT).show();
-                    getActivity().finish();
-                }
-                return;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
 
 
     // ===========================================================

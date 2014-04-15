@@ -98,13 +98,13 @@
             android:text="@string/pairing_show_notification" />
 
 
-        <include
-            android:id="@+id/select_notification_sound"
-            android:layout_below="@id/paring_show_notification"
-            android:layout_alignStart="@id/paring_show_notification"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            layout="@layout/comp_select_notification_sound" />
+        <!--<include-->
+            <!--android:id="@+id/select_notification_sound"-->
+            <!--android:layout_below="@id/paring_show_notification"-->
+            <!--android:layout_alignStart="@id/paring_show_notification"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--layout="@layout/comp_select_notification_sound" />-->
 
     </RelativeLayout>
 

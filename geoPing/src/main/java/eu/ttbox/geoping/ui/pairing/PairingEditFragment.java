@@ -83,7 +83,7 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
     private RadioButton authorizeTypeNeverRadioButton;
     private RadioButton authorizeTypeAlwaysRadioButton;
 
-    private View selectNotificationSoundView;
+ //   private View selectNotificationSoundView;
     private TextView selectNotificationSoundSummary;
 
 
@@ -153,7 +153,7 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
 
         selectContactClickButton = (ImageButton) v.findViewById(R.id.select_contact_button);
 
-        selectNotificationSoundView = v.findViewById(R.id.select_notification_sound);
+   //     selectNotificationSoundView = v.findViewById(R.id.select_notification_sound);
         selectNotificationSoundSummary = (TextView) v.findViewById(R.id.select_notification_sound_summary);
 
         // Radio Auth Listener
@@ -189,12 +189,12 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
 
             }
         });
-        selectNotificationSoundView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onSelectRingtonePickerClick();
-            }
-        });
+//        selectNotificationSoundView.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onSelectRingtonePickerClick();
+//            }
+//        });
 
         // Form
         formValidator = createValidator(getActivity());

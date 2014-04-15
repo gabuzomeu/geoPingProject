@@ -1,5 +1,6 @@
 package eu.ttbox.geoping.ui.geofence;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.model.CircleGeofence;
 import eu.ttbox.geoping.domain.pairing.GeoFenceDatabase;
 import eu.ttbox.geoping.ui.smslog.SmsLogListFragment;
+import eu.ttbox.geoping.utils.GooglePlayServicesAvailableHelper;
 
 public class GeofenceEditActivity extends ActionBarActivity {
 
@@ -122,8 +124,32 @@ public class GeofenceEditActivity extends ActionBarActivity {
     }
 
 
-
     // ===========================================================
+    // LifeCycle
+    // ===========================================================
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (GooglePlayServicesAvailableHelper.isGooglePlayServicesAvailable(this)) {
+            Log.i(TAG, "GooglePlayServices Available");
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GooglePlayServicesAvailableHelper.REQUEST_CODE_RECOVER_PLAY_SERVICES) {
+            if (resultCode == Activity.RESULT_OK) {
+                Log.e(TAG, "Google Play Service Available");
+            } else {
+                Log.e(TAG, "Google Play Service Not Available");
+                finish();
+            }
+        }
+    }
+
+// ===========================================================
     // Menu
     // ===========================================================
 

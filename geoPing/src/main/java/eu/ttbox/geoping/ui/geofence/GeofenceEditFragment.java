@@ -1,9 +1,11 @@
 package eu.ttbox.geoping.ui.geofence;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -20,6 +22,8 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.Geofence;
 
 import eu.ttbox.geoping.R;
@@ -33,6 +37,7 @@ import eu.ttbox.geoping.ui.core.validator.validate.ValidateTextView;
 import eu.ttbox.geoping.ui.core.validator.validator.NotEmptyValidator;
 import eu.ttbox.geoping.ui.core.validator.validator.TextCharacterLimitedValidator;
 import eu.ttbox.geoping.ui.core.validator.validator.TextSizeValidator;
+import eu.ttbox.geoping.utils.GooglePlayServicesAvailableHelper;
 
 public class GeofenceEditFragment extends Fragment {
 
@@ -60,7 +65,7 @@ public class GeofenceEditFragment extends Fragment {
     // Constructors
     // ===========================================================
 
-    public static GeofenceEditFragment newInstance(CircleGeofence fence){
+    public static GeofenceEditFragment newInstance(CircleGeofence fence) {
         GeofenceEditFragment fragment = new GeofenceEditFragment();
         fragment.loadEntity(fence);
         return fragment;
@@ -92,20 +97,29 @@ public class GeofenceEditFragment extends Fragment {
     }
 
 
-
     private void bindingView(CircleGeofence geofence) {
         //Binding
-        if (!TextUtils.isEmpty(geofence.name)  ) {
-         this.nameEditText.setText(geofence.name);
+        if (!TextUtils.isEmpty(geofence.name)) {
+            this.nameEditText.setText(geofence.name);
         }
         // Transition Type
         Log.d(TAG, "CircleGeofence transition : " + geofence.transitionType);
-        boolean isEnter = ( geofence.transitionType & Geofence.GEOFENCE_TRANSITION_ENTER) != 0;
-        boolean isExit = ( geofence.transitionType & Geofence.GEOFENCE_TRANSITION_EXIT) != 0;
+        boolean isEnter = (geofence.transitionType & Geofence.GEOFENCE_TRANSITION_ENTER) != 0;
+        boolean isExit = (geofence.transitionType & Geofence.GEOFENCE_TRANSITION_EXIT) != 0;
         transitionEnterCheckBox.setChecked(isEnter);
         transitionExitCheckBox.setChecked(isExit);
 
     }
+
+    // ===========================================================
+    // LifeCycle
+    // ===========================================================
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
 
     // ===========================================================
     // Validator
@@ -117,7 +131,7 @@ public class GeofenceEditFragment extends Fragment {
         ValidateTextView nameTextField = new ValidateTextView(nameEditText)//
                 .addValidator(new NotEmptyValidator())
                 .addValidator(new TextSizeValidator(null, 10))
-                .addValidator(new TextCharacterLimitedValidator(new char[]{'(', ')', ',', ';' } ));
+                .addValidator(new TextCharacterLimitedValidator(new char[]{'(', ')', ',', ';'}));
 
         formValidator.addValidates(nameTextField);
 
@@ -157,7 +171,7 @@ public class GeofenceEditFragment extends Fragment {
     public interface OnGeofenceSelectListener {
 
         public final int GEOFENCE_EDIT = 0;
-        public final int GEOFENCE_MAP = 1 ;
+        public final int GEOFENCE_MAP = 1;
 
         void onGeofenceSelect(Uri id, CircleGeofence fence);
 
@@ -228,7 +242,6 @@ public class GeofenceEditFragment extends Fragment {
     }
 
 
-
     // ===========================================================
     // Action
     // ===========================================================
@@ -255,7 +268,7 @@ public class GeofenceEditFragment extends Fragment {
 
         // Do Save
         Uri uri = doSaveGeofence();
-        if (uri!=null) {
+        if (uri != null) {
             getActivity().setResult(Activity.RESULT_OK);
             getActivity().finish();
         }
@@ -279,7 +292,7 @@ public class GeofenceEditFragment extends Fragment {
     private int readViewTransitionType() {
         // Transition
         boolean isEnter = transitionEnterCheckBox.isChecked();
-        boolean isExit =transitionExitCheckBox.isChecked();
+        boolean isExit = transitionExitCheckBox.isChecked();
         int transitionType = isEnter ? Geofence.GEOFENCE_TRANSITION_ENTER : 0;
         transitionType = isExit ? transitionType | Geofence.GEOFENCE_TRANSITION_EXIT : transitionType;
         return transitionType;
@@ -290,7 +303,7 @@ public class GeofenceEditFragment extends Fragment {
 
         // Validate
         if (!formValidator.validate()) {
-            if (onGeofenceSelectListener!=null) {
+            if (onGeofenceSelectListener != null) {
                 onGeofenceSelectListener.onGeofenceRequestFocus(OnGeofenceSelectListener.GEOFENCE_EDIT);
             }
             return null;
@@ -298,11 +311,11 @@ public class GeofenceEditFragment extends Fragment {
 
         // Binding Values
         String name = BindingHelper.getEditTextAsValueTrimToNull(nameEditText);
-         // Transition
+        // Transition
         int transitionType = readViewTransitionType();
 
 
-         // Prepare db insert
+        // Prepare db insert
         ContentValues values = GeoFenceHelper.getContentValues(fence);
         values.put(GeoFenceDatabase.GeoFenceColumns.COL_NAME, name);
         values.put(GeoFenceDatabase.GeoFenceColumns.COL_TRANSITION, transitionType);
@@ -313,20 +326,21 @@ public class GeofenceEditFragment extends Fragment {
         if (entityUri == null) {
             uri = cr.insert(GeoFenceProvider.Constants.CONTENT_URI, values);
             this.entityUri = uri;
-            String entityId = entityUri ==null ? null : entityUri.getLastPathSegment();
+            String entityId = entityUri == null ? null : entityUri.getLastPathSegment();
             getActivity().setResult(Activity.RESULT_OK);
         } else {
             uri = entityUri;
-            int count =cr.update(uri, values, null, null);
+            int count = cr.update(uri, values, null, null);
             if (count != 1) {
                 Log.e(TAG, String.format("Error, %s entities was updates for Expected One", count));
             }
         }
-         if (onGeofenceSelectListener != null && entityUri!=null) {
+        if (onGeofenceSelectListener != null && entityUri != null) {
             onGeofenceSelectListener.onGeofenceSelect(uri, fence);
         }
         return entityUri;
     }
+
 
     // ===========================================================
     // Other

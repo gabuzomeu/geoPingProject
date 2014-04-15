@@ -22,7 +22,7 @@ public class GeofencePropDialogFragment extends AlertDialog {
 
     private GeofenceEditFragment editFragment;
 
-    private OnEditGeofenceistener onEditGeofenceistener;
+    private OnEditGeofenceistener onEditGeofenceListener;
     // ===========================================================
     // Interfaces
     // ===========================================================
@@ -39,15 +39,15 @@ public class GeofencePropDialogFragment extends AlertDialog {
     public void onSaveButton() {
         CircleGeofence fence =  editFragment.doSaveToCircleGeofence();
         if (fence !=null) {
-            onEditGeofenceistener.onResult(Activity.RESULT_OK);
+            onEditGeofenceListener.onResult(Activity.RESULT_OK);
             dismiss();
         }
     }
 
-    public GeofencePropDialogFragment(FragmentActivity context, OnEditGeofenceistener onEditGeofenceistener) {
+    public GeofencePropDialogFragment(FragmentActivity context, OnEditGeofenceistener onEditGeofenceListener) {
         super(context);
         this.context = context;
-        this.onEditGeofenceistener = onEditGeofenceistener;
+        this.onEditGeofenceListener = onEditGeofenceListener;
 
         setTitle(R.string.menu_geofence);
         setIcon(R.drawable.ic_action_geofence);
