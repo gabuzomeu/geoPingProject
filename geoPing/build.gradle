@@ -12,7 +12,7 @@ buildscript {
 apply plugin: 'android'
 
 // Jackson
-List jackson = ['com.fasterxml.jackson.core:jackson-core:2.3.2@jar', 'com.fasterxml.jackson.core:jackson-databind:2.3.2@jar']
+List jackson = ['com.fasterxml.jackson.core:jackson-core:2.3.3@jar', 'com.fasterxml.jackson.core:jackson-databind:2.3.3@jar']
 
 
 dependencies {
@@ -79,6 +79,7 @@ android {
         debug {
             //signingConfig signingConfigs.debug
             debuggable true
+            runProguard false
         }
 
         release {
@@ -93,3 +94,4 @@ android {
     }
 
 }
+
