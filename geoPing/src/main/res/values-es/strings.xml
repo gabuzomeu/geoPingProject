@@ -14,11 +14,11 @@
     <string name="menu_cancel">Cancelar</string> 
     
     <!-- Billing -->
-    <string name="send">Send</string>
-    <string name="clear">Clear</string>
+    <string name="send">Enviar</string>
+    <string name="clear">Borrar</string>
 
     <!-- Share -->
-    <string name="menu_share_app">Share GeoPing</string>
+    <string name="menu_share_app">Repartir GeoPing</string>
     <string name="share_app_subject">Te aconseja la aplicación GeoPing</string>
   
     <string name="app_comment_title">Evaluar y hacer comentarios</string>
@@ -54,22 +54,22 @@
     <string name="sms_action_geoping_request">GeoPing solicitud</string>
     <string name="sms_action_geoping_response">GeoPing respuesta</string>
     <string name="sms_action_geoping_declaration">GeoPing declaración</string>
-    <string name="sms_action_geofence_transition_unknown">Geo Fence Offense</string>
+    <string name="sms_action_geofence_transition_unknown">Infraccion de la Geo barrera</string>
     <string name="sms_action_geofence_transition_enter">Entered Geo Fence</string>
     <string name="sms_action_geofence_transition_exit">Exited Geo Fence</string>
-    <string name="sms_action_geofence_transition_enter_with_name">Entered : %s</string>
-    <string name="sms_action_geofence_transition_exit_with_name">Exited : %s</string>
+    <string name="sms_action_geofence_transition_enter_with_name">Entrada : %s</string>
+    <string name="sms_action_geofence_transition_exit_with_name">Salida : %s</string>
 
     <string name="sms_action_pairing_request">Solicitud de asociacion</string>
     <string name="sms_action_pairing_response">Respuesta de asociacion</string>
-    <string name="sms_action_spyevt_shutdown">Event Shutdown</string>
-    <string name="sms_action_spyevt_boot">Event Boot</string>
-    <string name="sms_action_spyevt_low_battery">Event Low Battery</string>
-    <string name="sms_action_spyevt_phone_call">Event Phone Call</string>
-    <string name="sms_action_spyevt_sim_change">Event Sim Change</string>
+    <string name="sms_action_spyevt_shutdown">Movil apagado</string>
+    <string name="sms_action_spyevt_boot">Movil lanzado</string>
+    <string name="sms_action_spyevt_low_battery">Bateria baja</string>
+    <string name="sms_action_spyevt_phone_call">Llamade</string>
+    <string name="sms_action_spyevt_sim_change">Cambio Sim</string>
 
-    <string name="sms_action_command_openApp">Open Application</string>
-    <string name="sms_action_command_ring">Ring</string>
+    <string name="sms_action_command_openApp">Lanzar aplicacion</string>
+    <string name="sms_action_command_ring">Sonar</string>
 
 
     <!-- Menu -->
@@ -78,22 +78,22 @@
     <string name="menu_geoping">GeoPing</string>
 
     <string name="menu_settings">Opciones</string>
-    <string name="menu_emergency_mode">Emergency Mode</string>
+    <string name="menu_emergency_mode">Modo emergencia</string>
     <string name="menu_map">Mapa</string>
     <string name="menu_quit">Quitar</string>
-    <string name="menu_person">Where are you?</string>
-    <string name="menu_person_remote_control">Remote control</string>
-    <string name="menu_person_remote_control_summary">"On the remote phone"</string>
+    <string name="menu_person">Donde estas ?</string>
+    <string name="menu_person_remote_control">Control remoto</string>
+    <string name="menu_person_remote_control_summary">"Sobre el movil a distancia"</string>
 
-    <string name="menu_pairing">Who follows me!</string>
-    <string name="menu_geofence">GeoFence</string>
+    <string name="menu_pairing">Quien estas siguiendo mi !</string>
+    <string name="menu_geofence">Geobarrera</string>
     <string name="menu_smslog">Log Sms</string>
-    <string name="menu_extra_feature">Extra Features</string>
+    <string name="menu_extra_feature">Extra funcionnes</string>
 
 
-    <string name="menu_map_geofences_show">Geofences</string>
-    <string name="menu_map_geofences_hide">Hide Geofences</string>
-    <string name="menu_map_geofence_add">Add Geofence</string>
+    <string name="menu_map_geofences_show">GeoBarreras</string>
+    <string name="menu_map_geofences_hide">Esconder GeoBarreras</string>
+    <string name="menu_map_geofence_add">Anadir GeoBarrera</string>
     
     <string name="menu_pairing_notification">Notificacion</string>
     <string name="person_geoping_pairing_action">Asociacion</string>
@@ -109,15 +109,15 @@
 
 
     <!-- Prefs Pairing Security -->
-    <string name="prefs_pairing_security">Security pairing</string>
+    <string name="prefs_pairing_security">Securidad asociacion</string>
     <string name="prefs_pairing_security_block_request">Bloquear nueva asociacion de GeoPing</string>
     <string name="prefs_pairing_security_block_request_summaryOff">Bloquear nueva asociacion de GeoPing</string>
     <string name="prefs_pairing_security_block_request_summaryOn">Autorizar nueva asociacion de GeoPing</string>
 
     <!-- Prefs Sound Notification -->
-    <string name="prefs_notification_category">Notification</string>
-    <string name="prefs_notification_sound">Notification Sound</string>
-    <string name="prefs_notification_sound_dialog_title">Change Sound</string>
+    <string name="prefs_notification_category">Notificacion</string>
+    <string name="prefs_notification_sound">Notificacion del volumen</string>
+    <string name="prefs_notification_sound_dialog_title">Cambia el volumen</string>
 
 
     <!-- Prefs Geoping Request-->
@@ -135,9 +135,9 @@
 
 
     <!-- Geoping Emergency prefs-->
-    <string name="prefs_emergency_category">Mode Urgence</string>
-    <string name="prefs_emergency_password">Emergency Password</string>
-    <string name="prefs_emergency_description">The Emergency Mode permit to send GeoPing, without previous association, thank to the password recorded in the Settings</string>
+    <string name="prefs_emergency_category">Modo Emergencia</string>
+    <string name="prefs_emergency_password">Contrasena Emergencia</string>
+    <string name="prefs_emergency_description">El modo Emergencia permite enviar GeoPing, sin anterior asociacion, gracias a la contrasena registrado dentro parametros de instalacion</string>
 
 
     <!-- Geoping Map prefs-->

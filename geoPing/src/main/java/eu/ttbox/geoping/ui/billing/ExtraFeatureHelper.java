@@ -8,6 +8,7 @@ import android.util.Log;
 
 import eu.ttbox.geoping.LaucherMainActivity;
 import eu.ttbox.geoping.service.geofence.ReceiveTransitionsIntentService;
+import eu.ttbox.geoping.service.geofence.receiver.GeofenceBootRegisterReceiver;
 import eu.ttbox.geoping.service.receiver.network.ReSentSmsMessageReceiver;
 import eu.ttbox.geoping.ui.widget.PersonWidgetProvider;
 import eu.ttbox.geoping.ui.widget.pairing.PairingWidgetProvider;
@@ -16,10 +17,29 @@ public class ExtraFeatureHelper {
 
     private static final String TAG = "ExtraFeatureHelper";
 
+    // ===========================================================
+    // Geofence accessors
+    // ===========================================================
+
+    public static ComponentName[] getComponentNameGeofenceReceiver(Context context ) {
+        ComponentName componentName = new ComponentName(context, ReceiveTransitionsIntentService.class);
+        ComponentName componentNameBoot = new ComponentName(context, GeofenceBootRegisterReceiver.class);
+        return new ComponentName[] {componentName, componentNameBoot};
+    }
+
+    public static boolean enabledSettingGeofenceReceiver(Context context, Boolean wantedState) {
+        ComponentName[] componentNames = getComponentNameGeofenceReceiver(context);
+        boolean  result = true;
+        for (ComponentName componentName : componentNames) {
+            result = result & enabledComponentEnabledSetting(context, componentName, wantedState);
+        }
+        return result;
+    }
+
 
 
     // ===========================================================
-    // Extra Feature accessors
+    // ReSend Sms accessors
     // ===========================================================
 
     public static ComponentName getComponentNameReSentSmsMessageReceiver(Context context ) {

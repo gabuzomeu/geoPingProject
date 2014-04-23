@@ -64,11 +64,11 @@
     <string name="sms_action_pairing_request">Demande d\'association</string>
     <string name="sms_action_pairing_response">Réponse à l\'association</string>
  
-    <string name="sms_action_spyevt_shutdown">Event Shutdown</string>
-    <string name="sms_action_spyevt_boot">Event Boot</string>
-    <string name="sms_action_spyevt_low_battery">Event Low Battery</string>
-    <string name="sms_action_spyevt_phone_call">Event Phone Call</string>
-    <string name="sms_action_spyevt_sim_change">Event Sim Change</string>
+    <string name="sms_action_spyevt_shutdown">Appareil éteint</string>
+    <string name="sms_action_spyevt_boot">"Démarrage de l'appareil"</string>
+    <string name="sms_action_spyevt_low_battery">Batterie faible</string>
+    <string name="sms_action_spyevt_phone_call">Appel</string>
+    <string name="sms_action_spyevt_sim_change">Changement de la carte Sim</string>
 
 
     <string name="sms_action_command_openApp">"Ouvrir GeoPing"</string>
@@ -84,10 +84,10 @@
 
     <string name="menu_map">Carte</string>
     <string name="menu_quit">Quitter</string>
-    <string name="menu_person">Ou es tu?</string>
+    <string name="menu_person">Où es tu?</string>
     <string name="menu_person_remote_control">Télécommande</string>
     <string name="menu_person_remote_control_summary">"Sur le télephone distant"</string>
-    <string name="menu_pairing">Qui me suit!</string>
+    <string name="menu_pairing">Qui me suit ?</string>
     <string name="menu_geofence">Zone de confiance</string>
 
     <string name="menu_smslog">Log Sms</string>
@@ -144,7 +144,7 @@
     <!-- Geoping Emergency prefs-->
     <string name="prefs_emergency_category">Mode Urgence</string>
     <string name="prefs_emergency_password">Mot de passe Urgence</string>
-    <string name="prefs_emergency_description">"Le Mode Urgence permet d'envoyer des requêtes GeoPing, sans association préalable, grâce au mots de passe saisie dans les Paramètres"</string>
+    <string name="prefs_emergency_description">"Le Mode Urgence permet d'envoyer des requêtes GeoPing, sans association préalable, grâce aux mots de passe saisie dans les paramètres"</string>
 
     <!-- Geoping Map prefs-->
     <string name="prefs_geoping_map_category">Affichage cartographique</string>
@@ -173,23 +173,23 @@
     <!-- Prefs LockApp -->
     <string name="prefs_lockapp">"Verrouillage de l'application"</string>
     <string name="prefs_lockapp_lockpattern_create">"Verrouillage par motif"</string>
-    <string name="prefs_lockapp_lockpattern_max_retry">"Nb Maximum d'essais"</string>
-    <string name="prefs_lockapp_lockpattern_min_wired_dots">"Nb Minimum de point du motif"</string>
+    <string name="prefs_lockapp_lockpattern_max_retry">"Nb maximum d'essais"</string>
+    <string name="prefs_lockapp_lockpattern_min_wired_dots">"Nb minimum de point du motif"</string>
 
     <string name="prefs_launcher_icon">Icône de Lancement</string>
-    <string name="prefs_launcher_icon_summary_on">Ouverture par Icône</string>
+    <string name="prefs_launcher_icon_summary_on">Ouverture par icône</string>
     <string name="prefs_launcher_icon_summary_off">Ouverture par SMS uniquement</string>
-    <string name="prefs_launcher_icon_error_missing_pairing_command_authorize">Une personne doit être autorisé à accepté des commandes SMS</string>
+    <string name="prefs_launcher_icon_error_missing_pairing_command_authorize">Une personne doit être autorisée à accepter des commandes SMS</string>
 
     <!-- Prefs LockApp Widget -->
-    <string name="prefs_widget_category">Widget Feature</string>
+    <string name="prefs_widget_category">Widget</string>
     <string name="prefs_widget_person_list">Person Widget Icon</string>
-    <string name="prefs_widget_person_list_summary_on">Person Widget Icon is show</string>
-    <string name="prefs_widget_person_list_summary_off">Person Widget Icon is hide</string>
+    <string name="prefs_widget_person_list_summary_on">Où est tu ?</string>
+    <string name="prefs_widget_person_list_summary_off">Qui mes suit ?</string>
 
     <string name="prefs_widget_pairing_list">Pairing Widget Icon</string>
-    <string name="prefs_widget_pairing_list_summary_on">Pairing Widget Icon is show</string>
-    <string name="prefs_widget_pairing_list_summary_off">Pairing Widget Icon is hide</string>
+    <string name="prefs_widget_pairing_list_summary_on">Où est tu ?</string>
+    <string name="prefs_widget_pairing_list_summary_off">Qui mes suit ?</string>
 
 
     <string name="kg_too_many_failed_attempts_countdown_seconds">"Réessayez dans <xliff:g id="seconds">%d secondes.</xliff:g>"</string>
@@ -218,7 +218,7 @@
     <string name="altitude">Altitude</string>
 
     <!-- App Version -->
-    <string name="app_version_update_necessary">Update Remote Application Necessary</string>
+    <string name="app_version_update_necessary">"Mise à jour de l'application nécessaire"</string>
 
     <!-- Person model -->
     <string name="person_name">Nom</string>
@@ -236,12 +236,12 @@
     <string name="pairing_notification_shutdown">Allumage/Extinction du téléphone</string>
     <string name="pairing_notification_battery_low">Batterie faible</string>
     <string name="pairing_notification_sim_change">Changement de carte SIM</string>
-    <string name="pairing_notification_phone_call">Appel Téléphonique Emis</string>
-    <string name="pairing_notification_phone_receive">Appel Téléphonique Recut</string>
+    <string name="pairing_notification_phone_call">Appel téléphonique émis</string>
+    <string name="pairing_notification_phone_receive">Appel téléphonique Recut</string>
 
     <!-- Geofence model -->
     <string name="geofence_name">Nom de la Géo Barrière</string>
-    <string name="geofence_transition">Type de Transition </string>
+    <string name="geofence_transition">Type de transition </string>
     <string name="geofence_transition_enter">Sortie de la Géo Barrière</string>
     <string name="geofence_transition_exit">Entrée dans la Géo Barrière</string>
     <string name="geofence_alarm">Alarme</string>
