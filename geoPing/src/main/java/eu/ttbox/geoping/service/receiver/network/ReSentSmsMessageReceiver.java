@@ -2,6 +2,7 @@ package eu.ttbox.geoping.service.receiver.network;
 
 
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -31,7 +32,7 @@ public class ReSentSmsMessageReceiver extends BroadcastReceiver {
         public static final String  EXTRA_SPN = "spn";
 
         public static final String ACTION_SIGNAL_STRENGTH_CHANGED = "android.intent.action.SIG_STR";
-
+        public static final String EXTRA_SIGNAL_STRENGTH = "GsmSignalStrength";
     }
 
     @Override
@@ -42,6 +43,7 @@ public class ReSentSmsMessageReceiver extends BroadcastReceiver {
         Log.d(TAG, "### Phone State Change To :  " + action);
         printExtras(intent.getExtras());
         Log.d(TAG, "### ----------------------------------------- ### \\n");
+
         if (ConnectivityManager.CONNECTIVITY_ACTION.equals( action)) {
             boolean noConnectivity = intent.getBooleanExtra(  ConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
             if (!noConnectivity) {
@@ -57,17 +59,23 @@ public class ReSentSmsMessageReceiver extends BroadcastReceiver {
             CharSequence  mTelephonyPlmn = getTelephonyPlmnFrom(intent);
             CharSequence  mTelephonySpn = getTelephonySpnFrom(intent);
             Log.d(TAG, "### onReceive Type : SPN_STRINGS_UPDATED_ACTION " );
-            printExtras(intent.getExtras());
+          //  printExtras(intent.getExtras());
             Log.d(TAG, "### onReceive Type : SPN_STRINGS_UPDATED_ACTION (END)" );
         } else if ( TelephonyIntents.ACTION_SIGNAL_STRENGTH_CHANGED.equals(action)) {
            // int mSignalStrength = SignalStrength.newFromBundle(intent.getExtras());
             Log.d(TAG, "### onReceive Type : ACTION_SIGNAL_STRENGTH_CHANGED " );
-            printExtras(intent.getExtras());
+            // GsmSignalStrength = 10
+            // isGsm = true
+            int signal = intent.getIntExtra(TelephonyIntents.EXTRA_SIGNAL_STRENGTH, -1);
+            if (signal>0) {
+                Log.d(TAG, "### GsmSignalStrength > 0 : " + signal + " ==> Resent SMS" );
+            }
+            //printExtras(intent.getExtras());
             Log.d(TAG, "### onReceive Type : ACTION_SIGNAL_STRENGTH_CHANGED (END)" );
         } else if (TelephonyManager.ACTION_PHONE_STATE_CHANGED.equals(action)) {
             // Log.d(TAG, "onReceiveIntent: ACTION_PHONE_STATE_CHANGED, state="   + intent.getStringExtra(Phone.STATE_KEY));
             Log.d(TAG, "### onReceive Type : ACTION_PHONE_STATE_CHANGED " );
-            printExtras(intent.getExtras());
+           // printExtras(intent.getExtras());
             Log.d(TAG, "### onReceive Type : ACTION_PHONE_STATE_CHANGED (END)" );
         }
     }
@@ -105,5 +113,12 @@ public class ReSentSmsMessageReceiver extends BroadcastReceiver {
 
     private void printExtras(Bundle extras) {
         Intents.printExtras(TAG, extras);
+    }
+
+
+    private void resendSms(Context context) {
+        // TODO
+        ContentResolver cr = context.getContentResolver();
+        
     }
 }

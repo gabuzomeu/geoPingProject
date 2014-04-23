@@ -192,7 +192,7 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 
         <!-- Location Receiver -->
-        <receiver android:name=".service.receiver.LocationChangeReceiver" android:exported="true">
+        <receiver android:enabled="false"  android:name=".service.receiver.LocationChangeReceiver" android:exported="true">
             <!--<intent-filter>-->
                 <!--<action android:name="android.location.LocationManager.KEY_LOCATION_CHANGED" />-->
             <!--</intent-filter>-->
@@ -310,16 +310,16 @@
             </intent-filter>    
         </receiver> 
  
-        <!-- Resend Sms Listener --> 
-        <receiver android:enabled="true" android:name=".service.receiver.network.ReSentSmsMessageReceiver">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+        <!-- TODO Resend Sms Listener -->
+        <receiver android:enabled="false" android:name=".service.receiver.network.ReSentSmsMessageReceiver">
+            <intent-filter  >
+                <action android:name="android.intent.action.SIG_STR" />
             </intent-filter>
             <!--<intent-filter>-->
-                <!--<action android:name="android.provider.Telephony.SPN_STRINGS_UPDATED"/>-->
+                <!--<action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>-->
             <!--</intent-filter>-->
-            <!--<intent-filter  >-->
-                <!--<action android:name="android.intent.action.SIG_STR" />-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.provider.Telephony.SPN_STRINGS_UPDATED"/>-->
             <!--</intent-filter>-->
             <!--<intent-filter android:priority="100">-->
                 <!--<action android:name="android.provider.Telephony.SMS_SENT"/>-->

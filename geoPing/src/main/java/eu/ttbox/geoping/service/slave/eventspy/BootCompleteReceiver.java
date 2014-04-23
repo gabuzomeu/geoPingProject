@@ -32,7 +32,7 @@ public class BootCompleteReceiver extends BroadcastReceiver {
             Log.d(TAG, "### ############################### ### ");
             // Search Phones
             String[] phones= SpyNotificationHelper.searchListPhonesForNotif(context, PairingColumns.COL_NOTIF_SHUTDOWN);
-            if (phones != null) {
+            if (phones != null && phones.length>0) {
                 Bundle params = new Bundle();
                 Bundle config = new Bundle();
                 // Send Sms
