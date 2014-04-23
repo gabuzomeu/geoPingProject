@@ -11,8 +11,9 @@ import android.view.MenuItem;
 
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
+import eu.ttbox.geoping.ui.GeoPingActionBarActivity;
 
-public class SmsLogViewActivity extends ActionBarActivity {
+public class SmsLogViewActivity extends GeoPingActionBarActivity {
 
     private static final String TAG = "SmsLogViewActivity";
 

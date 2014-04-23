@@ -17,9 +17,10 @@ import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.PersonProvider;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
 import eu.ttbox.geoping.domain.person.PersonDatabase.PersonColumns;
+import eu.ttbox.geoping.ui.GeoPingActionBarActivity;
 import eu.ttbox.geoping.ui.smslog.SmsLogListFragment;
 
-public class PersonEditActivity extends ActionBarActivity {
+public class PersonEditActivity extends GeoPingActionBarActivity {
 
     private static final String TAG = "PersonEditActivity";
 

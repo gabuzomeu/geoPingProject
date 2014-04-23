@@ -62,6 +62,7 @@ public class AdmobHelper {
 
                 public void onAdFailedToLoad(int errorcode) {
                    if (admob!=null) {
+                       Log.d(TAG, "### AdListener onAdFailedToLoad ==> HIDE adsContainer : " + admob);
                        admob.setVisibility(View.GONE);
                    }
                     switch (errorcode) {

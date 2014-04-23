@@ -14,6 +14,7 @@ import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivityBase;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivityHelper;
 
 import eu.ttbox.geoping.R;
+import eu.ttbox.geoping.ui.admob.AdmobHelper;
 import eu.ttbox.geoping.ui.slidingmenu.SlidingMenuHelper;
 
 public class GeoPingSlidingMenuFragmentActivity extends ActionBarActivity implements SlidingActivityBase {
@@ -25,15 +26,15 @@ public class GeoPingSlidingMenuFragmentActivity extends ActionBarActivity implem
     // ===========================================================
     // Tracking Event
     // ===========================================================
-//
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        adView = AdmobHelper.bindAdMobView(this);
-//        // Tracker
-//        Tracker tracker = GeoPingApplication.getGeoPingApplication(this).getTracker();
-//        EasyTracker.getInstance(this).activityStart(this);
-//    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        adView = AdmobHelper.bindAdMobView(this);
+        // Tracker
+    //    Tracker tracker = GeoPingApplication.getGeoPingApplication(this).getTracker();
+     //   EasyTracker.getInstance(this).activityStart(this);
+    }
 //
 //    @Override
 //    public void onStop() {
@@ -53,13 +54,11 @@ public class GeoPingSlidingMenuFragmentActivity extends ActionBarActivity implem
 
     @Override
     protected void onResume() {
-
+        super.onResume();
         if (adView != null) {
-
             adView.resume();
             Log.d(TAG, "### onResume adView resume");
         }
-        super.onResume();
     }
 
     @Override

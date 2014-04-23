@@ -10,8 +10,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 
 import eu.ttbox.geoping.R;
+import eu.ttbox.geoping.ui.GeoPingActionBarActivity;
 
-public class StartingWizardActivity extends ActionBarActivity {
+public class StartingWizardActivity extends GeoPingActionBarActivity {
 
     private static final String TAG = "StartingWizardActivity";
 

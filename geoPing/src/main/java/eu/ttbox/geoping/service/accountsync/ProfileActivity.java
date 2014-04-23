@@ -4,9 +4,10 @@ import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 
+import eu.ttbox.geoping.ui.GeoPingActionBarActivity;
 
 
-public class ProfileActivity   extends ActionBarActivity {
+public class ProfileActivity   extends GeoPingActionBarActivity {
     private static final String TAG = "ProfileActivity" ;
 
 

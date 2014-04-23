@@ -17,10 +17,11 @@ import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.model.CircleGeofence;
 import eu.ttbox.geoping.domain.pairing.GeoFenceDatabase;
+import eu.ttbox.geoping.ui.GeoPingActionBarActivity;
 import eu.ttbox.geoping.ui.smslog.SmsLogListFragment;
 import eu.ttbox.geoping.utils.GooglePlayServicesAvailableHelper;
 
-public class GeofenceEditActivity extends ActionBarActivity {
+public class GeofenceEditActivity extends GeoPingActionBarActivity {
 
     private static final String TAG = "GeofenceEditActivity";
 

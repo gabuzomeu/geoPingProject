@@ -7,6 +7,7 @@ import android.view.MenuItem;
 
 import eu.ttbox.geoping.R;
 
+@Deprecated
 public class AbstractSmsTrackerActivity extends FragmentActivity {
 
     public boolean onCreateOptionsMenu(Menu menu) {
