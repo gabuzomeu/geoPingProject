@@ -10,6 +10,7 @@ import android.util.Log;
 
 import eu.ttbox.geoping.GeoPingApplication;
 import eu.ttbox.geoping.domain.core.vo.DbSelection;
+import eu.ttbox.geoping.domain.model.SmsLogTypeEnum;
 import eu.ttbox.geoping.domain.smslog.SmsLogDatabase;
 import eu.ttbox.geoping.domain.smslog.SmsLogDatabase.SmsLogColumns;
 
@@ -36,6 +37,13 @@ public class SmsLogProvider extends ContentProvider {
             return Uri.withAppendedPath(CONTENT_URI_PHONE_FILTER, Uri.encode(phoneNumber));
         }
 
+        // Send Status  : SmsLogTypeEnum
+        public static final Uri CONTENT_URI_TYPE_STATUS = Uri.withAppendedPath(CONTENT_URI, "type_status");
+
+        public static final Uri getContentUriTypeStatus(SmsLogTypeEnum typeStatus) {
+            return Uri.withAppendedPath(CONTENT_URI_TYPE_STATUS, String.valueOf( typeStatus.getCode()));
+        }
+
         // Geofence Request
         public static final Uri CONTENT_URI_REQUEST_ID = Uri.withAppendedPath(CONTENT_URI, "requestId");
 
@@ -52,6 +60,7 @@ public class SmsLogProvider extends ContentProvider {
     private static final int SMSLOG_ID = 1;
     private static final int PHONE_FILTER = 2;
     private static final int REQUEST_ID_FILTER = 3;
+    private static final int TYPE_STATUS_FILTER = 4;
 
     private static final UriMatcher sURIMatcher = buildUriMatcher();
 
@@ -64,6 +73,8 @@ public class SmsLogProvider extends ContentProvider {
         // to get definitions...
         matcher.addURI(Constants.AUTHORITY, "smslog", SMSLOGS);
         matcher.addURI(Constants.AUTHORITY, "smslog/#", SMSLOG_ID);
+
+        matcher.addURI(Constants.AUTHORITY, "smslog/type_status/*", TYPE_STATUS_FILTER);
 
         matcher.addURI(Constants.AUTHORITY, "smslog/phone_lookup/*", PHONE_FILTER);
         matcher.addURI(Constants.AUTHORITY, "smslog/requestId/*", REQUEST_ID_FILTER);
@@ -105,6 +116,10 @@ public class SmsLogProvider extends ContentProvider {
                 String requestId = uri.getLastPathSegment();
                 String[] args = new String[]{requestId};
                 return search(projection, SmsLogColumns.SELECT_BY_REQUEST_ID, args, sortOrder);
+            }
+            case TYPE_STATUS_FILTER: {
+                String codeString = uri.getLastPathSegment();
+                return smslogDatabase.searchForType(codeString, projection, selection, selectionArgs, sortOrder);
             }
             default:
                 throw new IllegalArgumentException("Unknown Uri: " + uri);

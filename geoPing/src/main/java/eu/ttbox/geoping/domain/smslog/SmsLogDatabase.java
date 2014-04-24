@@ -19,19 +19,19 @@ import eu.ttbox.geoping.domain.core.vo.DbSelection;
 
 
 public class SmsLogDatabase {
- 
+
     private static final String TAG = "SmsLogDatabase";
 
     public static final String TABLE_SMSLOG = "personFTS";
 
-    public static final String SMSLOG_SORT_DEFAULT = String.format("%s DESC", SmsLogColumns.COL_TIME );
+    public static final String SMSLOG_SORT_DEFAULT = String.format("%s DESC", SmsLogColumns.COL_TIME);
 
-	
+
     public static class SmsLogColumns {
 
         public static final String COL_ID = BaseColumns._ID;
         public static final String COL_ACTION = "ACTION";
-        public static final String COL_PHONE = "PHONE"; 
+        public static final String COL_PHONE = "PHONE";
         public static final String COL_PHONE_MIN_MATCH = "PHONE_MIN_MATCH";
         public static final String COL_MESSAGE = "MSG";
         public static final String COL_MESSAGE_PARAMS = "MSG_PARAMS";
@@ -55,24 +55,27 @@ public class SmsLogDatabase {
         public static final String COL_TO_READ = "TO_READ";
 
         // All Cols
-        public static final String[] ALL_COLS = new String[] { //
-            COL_ID, COL_TIME, COL_ACTION, COL_PHONE, COL_PHONE_MIN_MATCH,  COL_SMSLOG_TYPE,  COL_MESSAGE , COL_MESSAGE_PARAMS  //
-            ,COL_SMS_SIDE,COL_PARENT_ID //
-            , COL_MSG_COUNT, COL_MSG_ACK_SEND_MSG_COUNT, COL_MSG_ACK_DELIVERY_MSG_COUNT //Acknowledge count
-            , COL_MSG_ACK_SEND_TIME_MS, COL_MSG_ACK_DELIVERY_TIME_MS //Acknowledge Time
-            , COL_MSG_ACK_SEND_RESULT_MSG, COL_MSG_ACK_DELIVERY_RESULT_MSG //Acknowledge result Msg
-            , COL_TO_READ, COL_REQUEST_ID // Notif, Geofence
+        public static final String[] ALL_COLS = new String[]{ //
+                COL_ID, COL_TIME, COL_ACTION, COL_PHONE, COL_PHONE_MIN_MATCH, COL_SMSLOG_TYPE, COL_MESSAGE, COL_MESSAGE_PARAMS  //
+                , COL_SMS_SIDE, COL_PARENT_ID //
+                , COL_MSG_COUNT, COL_MSG_ACK_SEND_MSG_COUNT, COL_MSG_ACK_DELIVERY_MSG_COUNT //Acknowledge count
+                , COL_MSG_ACK_SEND_TIME_MS, COL_MSG_ACK_DELIVERY_TIME_MS //Acknowledge Time
+                , COL_MSG_ACK_SEND_RESULT_MSG, COL_MSG_ACK_DELIVERY_RESULT_MSG //Acknowledge result Msg
+                , COL_TO_READ, COL_REQUEST_ID // Notif, Geofence
         };
         // Where Clause
         public static final String SELECT_BY_ENTITY_ID = String.format("%s = ?", COL_ID);
-        public static final String SELECT_BY_REQUEST_ID = String.format("%s = ?", COL_REQUEST_ID );
+        public static final String SELECT_BY_REQUEST_ID = String.format("%s = ?", COL_REQUEST_ID);
 
-        public static final String SELECT_BY_TO_READ =  String.format("%s = 1", COL_TO_READ);
-        public static final String SELECT_BY_TOREAD_SIDE =  String.format("%s = 1 and %s = ?", COL_TO_READ, COL_SMS_SIDE );
+        public static final String SELECT_BY_TO_READ = String.format("%s = 1", COL_TO_READ);
+        public static final String SELECT_BY_TOREAD_SIDE = String.format("%s = 1 and %s = ?", COL_TO_READ, COL_SMS_SIDE);
+
+        public static final String SELECT_BY_SMSLOG_TYPE = String.format("%s = ?", COL_SMSLOG_TYPE);
 
         // Order
-        public static final String ORDER_BY_TIME_DESC =  String.format("%s DESC", COL_TIME );
-        public static final String ORDER_BY_GEOFENCE_VIOLATION =  String.format("%s ASC,%s DESC", COL_REQUEST_ID, COL_TIME );
+        public static final String ORDER_BY_TIME_DESC = String.format("%s DESC", COL_TIME);
+        public static final String ORDER_BY_TIME_ASC = String.format("%s ASC", COL_TIME);
+        public static final String ORDER_BY_GEOFENCE_VIOLATION = String.format("%s ASC,%s DESC", COL_REQUEST_ID, COL_TIME);
 
     }
 
@@ -88,9 +91,9 @@ public class SmsLogDatabase {
         // Add Identity Column
         //map.put(PersonColumns.COL_ID, "rowid AS " + BaseColumns._ID);
         for (String col : SmsLogColumns.ALL_COLS) {
-          //  if (!col.equals(SmsLogColumns.COL_ID)) {
-                map.put(col, col);
-           // }
+            //  if (!col.equals(SmsLogColumns.COL_ID)) {
+            map.put(col, col);
+            // }
         }
         // Add Suggest Aliases
         map.put(SearchManager.SUGGEST_COLUMN_TEXT_1, String.format("%s AS %s", SmsLogColumns.COL_ACTION, SearchManager.SUGGEST_COLUMN_TEXT_1));
@@ -103,23 +106,21 @@ public class SmsLogDatabase {
 
     public Cursor getEntityById(String rowId, String[] columns) {
         String selection = "rowid = ?";
-        String[] selectionArgs = new String[] { rowId };
+        String[] selectionArgs = new String[]{rowId};
         return queryEntities(columns, selection, selectionArgs, null);
     }
 
     /**
      * Returns a Cursor over all words that match the given query
-     * @param projection
-     *            The columns to include, if null then all are included
-     * @param query
-     *            The string to search for
-     * 
+     *
+     * @param projection The columns to include, if null then all are included
+     * @param query      The string to search for
      * @return Cursor over all words that match, or null if none found.
      */
     public Cursor getEntityMatches(String[] projection, String query, String order) {
         String selection = SmsLogColumns.COL_ACTION + " = ?";
         String queryString = new StringBuilder(query).append("*").toString();
-        String[] selectionArgs = new String[] { queryString };
+        String[] selectionArgs = new String[]{queryString};
         return queryEntities(projection, selection, selectionArgs, order);
     }
 
@@ -130,7 +131,15 @@ public class SmsLogDatabase {
         Cursor cursor = builder.query(mDatabaseOpenHelper.getReadableDatabase(), projection, selection, selectionArgs, null, null, order);
         return cursor;
     }
-    
+
+    public Cursor searchForType(String codeType, String[] _projection, String pSelection, String[] pSelectionArgs, String sortOrder) {
+        String[] projection = _projection == null ? SmsLogColumns.ALL_COLS : _projection;
+        // Normalise For search
+        String selection = SmsLogColumns.SELECT_BY_SMSLOG_TYPE;
+        String[] selectionArgs = new String[]{codeType};
+        DbSelection mergeSelection = DbSelection.mergeCriteria(selection, selectionArgs, pSelection, pSelectionArgs);
+        return queryEntities(projection, mergeSelection.selection, mergeSelection.selectionArgs, sortOrder);
+    }
 
     public Cursor searchForPhoneNumber(String number, String[] _projection, String pSelection, String[] pSelectionArgs, String sortOrder) {
         String[] projection = _projection == null ? SmsLogColumns.ALL_COLS : _projection;
@@ -139,7 +148,7 @@ public class SmsLogDatabase {
         return queryEntities(projection, mergeSelection.selection, mergeSelection.selectionArgs, sortOrder);
     }
 
-    public  DbSelection mergePhoneNumberWithCriteria(String number, String pSelection, String[] pSelectionArgs) {
+    public DbSelection mergePhoneNumberWithCriteria(String number, String pSelection, String[] pSelectionArgs) {
         // Normalise For search
         String normalizedNumber = PhoneNumberUtils.normalizeNumber(number);
         String minMatch = PhoneNumberUtils.toCallerIDMinMatch(normalizedNumber);
@@ -148,26 +157,26 @@ public class SmsLogDatabase {
         String[] selectionArgs = null;
         if (TextUtils.isEmpty(pSelection)) {
             selection = String.format("%s = ?", SmsLogColumns.COL_PHONE_MIN_MATCH);
-            selectionArgs = new String[] { minMatch };
+            selectionArgs = new String[]{minMatch};
             Log.d(TAG, "selection : " + selection);
             Log.d(TAG, "selectionArgs :  " + Arrays.toString(selectionArgs));
         } else {
             selection = String.format("%s = ? and (%s)", SmsLogColumns.COL_PHONE_MIN_MATCH, pSelection);
-            int pSelectionArgSize = pSelectionArgs!=null ? pSelectionArgs.length : 0;
+            int pSelectionArgSize = pSelectionArgs != null ? pSelectionArgs.length : 0;
             selectionArgs = new String[pSelectionArgSize + 1];
-            if (pSelectionArgSize>0) {
+            if (pSelectionArgSize > 0) {
                 System.arraycopy(pSelectionArgs, 0, selectionArgs, 1, pSelectionArgSize);
             }
             selectionArgs[0] = minMatch;
             Log.d(TAG, "selection : " + selection);
-            Log.d(TAG, "selectionArgs :  " +   Arrays.toString(selectionArgs));
+            Log.d(TAG, "selectionArgs :  " + Arrays.toString(selectionArgs));
         }
         return new DbSelection(selection, selectionArgs);
     }
 
     private void fillNormalizedNumber(ContentValues values) {
         // No NUMBER? Also ignore NORMALIZED_NUMBER
-        if (!values.containsKey(SmsLogColumns.COL_PHONE)) { 
+        if (!values.containsKey(SmsLogColumns.COL_PHONE)) {
             values.remove(SmsLogColumns.COL_PHONE_MIN_MATCH);
             return;
         }
@@ -182,14 +191,14 @@ public class SmsLogDatabase {
         if (!TextUtils.isEmpty(number)) {
             String normalizedNumber = PhoneNumberUtils.normalizeNumber(number);
             if (!TextUtils.isEmpty(normalizedNumber)) {
-                String minMatch = PhoneNumberUtils.toCallerIDMinMatch(normalizedNumber); 
+                String minMatch = PhoneNumberUtils.toCallerIDMinMatch(normalizedNumber);
                 values.put(SmsLogColumns.COL_PHONE_MIN_MATCH, minMatch);
             }
         }
 
     }
 
-    
+
     public long insertEntity(ContentValues values) throws SQLException {
         long result = -1;
         SQLiteDatabase db = mDatabaseOpenHelper.getWritableDatabase();
@@ -204,16 +213,16 @@ public class SmsLogDatabase {
                 db.endTransaction();
             }
         } finally {
-           // db.close();
+            // db.close();
         }
         return result;
     }
-    
+
 //    private void manageContentValues(ContentValues values) {
 //        String action = values.getAsString(SmsLogColumns.COL_ACTION);
 //        if (action!=null && action)
 //    }
-    
+
 
     public int deleteEntity(String selection, String[] selectionArgs) {
         int result = -1;
@@ -227,7 +236,7 @@ public class SmsLogDatabase {
                 db.endTransaction();
             }
         } finally {
-         //   db.close();
+            //   db.close();
         }
         return result;
     }
@@ -245,7 +254,7 @@ public class SmsLogDatabase {
                 db.endTransaction();
             }
         } finally {
-         //   db.close();
+            //   db.close();
         }
         return result;
     }

@@ -5,14 +5,24 @@ import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
+import android.text.format.DateUtils;
 import android.util.Log;
 
+import java.util.Date;
+
 import eu.ttbox.geoping.core.Intents;
+import eu.ttbox.geoping.domain.SmsLogProvider;
+import eu.ttbox.geoping.domain.model.SmsLogTypeEnum;
+import eu.ttbox.geoping.domain.smslog.SmsLogDatabase;
+import eu.ttbox.geoping.domain.smslog.SmsLogHelper;
+import eu.ttbox.geoping.service.SmsSenderHelper;
 
 /**
  * platform_frameworks_base : com.android.internal.policy.impl.keyguard.KeyguardUpdateMonitor
@@ -41,43 +51,45 @@ public class ReSentSmsMessageReceiver extends BroadcastReceiver {
 
         Log.d(TAG, "### ----------------------------------------- ###");
         Log.d(TAG, "### Phone State Change To :  " + action);
-        printExtras(intent.getExtras());
+     //   printExtras(intent.getExtras());
         Log.d(TAG, "### ----------------------------------------- ### \\n");
 
-        if (ConnectivityManager.CONNECTIVITY_ACTION.equals( action)) {
-            boolean noConnectivity = intent.getBooleanExtra(  ConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
-            if (!noConnectivity) {
-                Bundle extras = intent.getExtras();
-                NetworkInfo info = (NetworkInfo)extras.get(ConnectivityManager.EXTRA_NETWORK_INFO);
-                Log.d(TAG, "### NetworkInfo State :  " +  info.getState() +  " (connected "+ info.isConnected()+")");
-                if (ConnectivityManager.TYPE_MOBILE == info.getType()) {
-                    Log.d(TAG, "### NetworkInfo Type : TYPE_MOBILE " );
-
-                }
-            }
-        } else if ( TelephonyIntents.SPN_STRINGS_UPDATED_ACTION.equals(action)) {
-            CharSequence  mTelephonyPlmn = getTelephonyPlmnFrom(intent);
-            CharSequence  mTelephonySpn = getTelephonySpnFrom(intent);
-            Log.d(TAG, "### onReceive Type : SPN_STRINGS_UPDATED_ACTION " );
-          //  printExtras(intent.getExtras());
-            Log.d(TAG, "### onReceive Type : SPN_STRINGS_UPDATED_ACTION (END)" );
-        } else if ( TelephonyIntents.ACTION_SIGNAL_STRENGTH_CHANGED.equals(action)) {
-           // int mSignalStrength = SignalStrength.newFromBundle(intent.getExtras());
+        if ( TelephonyIntents.ACTION_SIGNAL_STRENGTH_CHANGED.equals(action)) {
+            // int mSignalStrength = SignalStrength.newFromBundle(intent.getExtras());
             Log.d(TAG, "### onReceive Type : ACTION_SIGNAL_STRENGTH_CHANGED " );
             // GsmSignalStrength = 10
             // isGsm = true
             int signal = intent.getIntExtra(TelephonyIntents.EXTRA_SIGNAL_STRENGTH, -1);
             if (signal>0) {
                 Log.d(TAG, "### GsmSignalStrength > 0 : " + signal + " ==> Resent SMS" );
+                resendSms(context);
             }
             //printExtras(intent.getExtras());
             Log.d(TAG, "### onReceive Type : ACTION_SIGNAL_STRENGTH_CHANGED (END)" );
-        } else if (TelephonyManager.ACTION_PHONE_STATE_CHANGED.equals(action)) {
-            // Log.d(TAG, "onReceiveIntent: ACTION_PHONE_STATE_CHANGED, state="   + intent.getStringExtra(Phone.STATE_KEY));
-            Log.d(TAG, "### onReceive Type : ACTION_PHONE_STATE_CHANGED " );
-           // printExtras(intent.getExtras());
-            Log.d(TAG, "### onReceive Type : ACTION_PHONE_STATE_CHANGED (END)" );
         }
+//        else if (ConnectivityManager.CONNECTIVITY_ACTION.equals( action)) {
+//            boolean noConnectivity = intent.getBooleanExtra(  ConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
+//            if (!noConnectivity) {
+//                Bundle extras = intent.getExtras();
+//                NetworkInfo info = (NetworkInfo)extras.get(ConnectivityManager.EXTRA_NETWORK_INFO);
+//                Log.d(TAG, "### NetworkInfo State :  " +  info.getState() +  " (connected "+ info.isConnected()+")");
+//                if (ConnectivityManager.TYPE_MOBILE == info.getType()) {
+//                    Log.d(TAG, "### NetworkInfo Type : TYPE_MOBILE " );
+//
+//                }
+//            }
+//        } else if ( TelephonyIntents.SPN_STRINGS_UPDATED_ACTION.equals(action)) {
+//            CharSequence  mTelephonyPlmn = getTelephonyPlmnFrom(intent);
+//            CharSequence  mTelephonySpn = getTelephonySpnFrom(intent);
+//            Log.d(TAG, "### onReceive Type : SPN_STRINGS_UPDATED_ACTION " );
+//          //  printExtras(intent.getExtras());
+//            Log.d(TAG, "### onReceive Type : SPN_STRINGS_UPDATED_ACTION (END)" );
+//        } else  if (TelephonyManager.ACTION_PHONE_STATE_CHANGED.equals(action)) {
+//            // Log.d(TAG, "onReceiveIntent: ACTION_PHONE_STATE_CHANGED, state="   + intent.getStringExtra(Phone.STATE_KEY));
+//            Log.d(TAG, "### onReceive Type : ACTION_PHONE_STATE_CHANGED " );
+//           // printExtras(intent.getExtras());
+//            Log.d(TAG, "### onReceive Type : ACTION_PHONE_STATE_CHANGED (END)" );
+//        }
     }
 
     /**
@@ -117,8 +129,33 @@ public class ReSentSmsMessageReceiver extends BroadcastReceiver {
 
 
     private void resendSms(Context context) {
-        // TODO
+        //
         ContentResolver cr = context.getContentResolver();
-        
+        Uri uri = SmsLogProvider.Constants.getContentUriTypeStatus(SmsLogTypeEnum.SEND_ERROR);
+        String[] projection = null;
+        String selection = null; // String.format("%s >= ?", SmsLogDatabase.SmsLogColumns.COL_TIME);
+        String[] selectionArgs = null; //new String[] { String.valueOf( new Date(2014-1900,1,01).getTime())};
+        String sortOrder = SmsLogDatabase.SmsLogColumns.ORDER_BY_TIME_ASC;
+         Cursor cursor =  cr.query(uri,projection,selection, selectionArgs, sortOrder);
+        try {
+            int cursorSize = cursor.getCount();
+            if (cursorSize > 0) {
+                Log.d(TAG, "### Need Resent SMS : " + cursorSize + " SMS Messages" );
+                SmsLogHelper helper = new SmsLogHelper().initWrapper(cursor);
+                while (cursor.moveToNext()) {
+                    String smsMessage = helper.getMessage(cursor);
+                   long smsLogTime=  helper.getSmsLogTime(cursor);
+                    Log.d(TAG, "Resend SMS Message : " + smsMessage + " // " +  DateUtils.formatDateRange(context, smsLogTime, smsLogTime,
+                            DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE |
+                                    DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_SHOW_YEAR
+                    ));
+                   // TODO SmsSenderHelper.sendSmsAndLogIt()
+                }
+            }
+        } finally {
+            cursor.close();
+        }
     }
+
+
 }
