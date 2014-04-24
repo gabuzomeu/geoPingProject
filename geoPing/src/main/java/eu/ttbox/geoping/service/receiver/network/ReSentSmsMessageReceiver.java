@@ -135,7 +135,7 @@ public class ReSentSmsMessageReceiver extends BroadcastReceiver {
         String[] selectionArgs = null; //new String[] { String.valueOf( new Date(2014-1900,1,01).getTime())};
         int resendCount =  SmsSenderHelper.reSendSmsMessage(context, searchUri, selection, selectionArgs);
         Log.d(TAG, "### Resend done for : " + resendCount + " SMS Messages" );
-
+       //TODO ExtraFeatureHelper.enabledSettingReSentSmsMessageReceiver(context, Boolean.FALSE);
     }
 
 

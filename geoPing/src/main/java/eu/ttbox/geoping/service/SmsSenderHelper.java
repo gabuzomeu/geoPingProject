@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsManager;
-import android.text.format.DateUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ import eu.ttbox.geoping.domain.smslog.SmsLogHelper;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
 import eu.ttbox.geoping.encoder.params.MessageParamField;
-import eu.ttbox.geoping.service.receiver.MessageAcknowledgeReceiver;
+import eu.ttbox.geoping.service.receiver.network.MessageAcknowledgeReceiver;
 import eu.ttbox.geoping.utils.encoder.MessageEncoderHelper;
 import eu.ttbox.geoping.utils.encoder.adpater.BundleEncoderAdapter;
 

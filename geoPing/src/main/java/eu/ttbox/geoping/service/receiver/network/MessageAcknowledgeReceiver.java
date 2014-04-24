@@ -1,4 +1,4 @@
-package eu.ttbox.geoping.service.receiver;
+package eu.ttbox.geoping.service.receiver.network;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -17,6 +17,7 @@ import java.util.Locale;
 
 import eu.ttbox.geoping.domain.model.SmsLogTypeEnum;
 import eu.ttbox.geoping.domain.smslog.SmsLogDatabase.SmsLogColumns;
+import eu.ttbox.geoping.ui.billing.ExtraFeatureHelper;
 
 public class MessageAcknowledgeReceiver extends BroadcastReceiver {
 
@@ -118,6 +119,7 @@ public class MessageAcknowledgeReceiver extends BroadcastReceiver {
         ContentValues values = new ContentValues();
         // Test Result Code
         int resultCode = getResultCode(); // TODO Really not in the intent ?
+        boolean isError = false;
         switch (resultCode) {
             case Activity.RESULT_OK: {
                 int msgCount = msgCountPartId[0];
@@ -133,16 +135,20 @@ public class MessageAcknowledgeReceiver extends BroadcastReceiver {
             }
             break;
             case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-                message = "Error.";
+                message = "Error : Generic Failure";
+                isError = true;
                 break;
             case SmsManager.RESULT_ERROR_NO_SERVICE:
-                message = "Error: No service.";
+                message = "Error: No service";
+                isError = true;
                 break;
             case SmsManager.RESULT_ERROR_NULL_PDU:
-                message = "Error: Null PDU.";
+                message = "Error: Null PDU";
+                isError = true;
                 break;
             case SmsManager.RESULT_ERROR_RADIO_OFF:
-                message = "Error: Radio off.";
+                message = "Error: Radio off";
+                isError = true;
                 break;
         }
         if (error) {
@@ -160,6 +166,11 @@ public class MessageAcknowledgeReceiver extends BroadcastReceiver {
         // Save Update
         ContentResolver cr = context.getContentResolver();
         cr.update(logUri, values, null, null);
+        if (isError) {
+           //TODO ExtraFeatureHelper.enabledSettingReSentSmsMessageReceiver(context, Boolean.TRUE);
+        }
     }
+
+
 
 }

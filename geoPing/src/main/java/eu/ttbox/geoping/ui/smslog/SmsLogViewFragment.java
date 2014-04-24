@@ -68,16 +68,6 @@ public class SmsLogViewFragment extends Fragment {
     private Handler handler = new Handler();
     private PersonNameFinderHelper cacheNameFinder;
 
-    // ===========================================================
-    // Listener
-    // ===========================================================
-    private View.OnClickListener resendSmsMesageClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            resendMessage();
-        }
-    };
-
 
     // ===========================================================
     // Constructors
@@ -270,7 +260,12 @@ public class SmsLogViewFragment extends Fragment {
                 smsLogTime = helper.getSendDeliveryAckTimeInMs(cursor);
                 break;
             case SEND_ERROR:
-                headerSubIcon.setOnClickListener(resendSmsMesageClickListener);
+                headerSubIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        resendMessage();
+                    }
+                });
                 break;
         }
         // Time

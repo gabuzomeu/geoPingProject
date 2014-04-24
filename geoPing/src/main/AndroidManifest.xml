@@ -204,7 +204,7 @@
         </receiver>
 
          <!-- SMS Acknowledge Receiver -->
-        <receiver android:name="eu.ttbox.geoping.service.receiver.MessageAcknowledgeReceiver" android:exported="false">
+        <receiver android:name=".service.receiver.network.MessageAcknowledgeReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="eu.ttbox.geoping.ACTION_SEND_ACK"/>  
                 <data android:mimeType="vnd.android.cursor.item/ttbox.geoping.smsLog"/>
