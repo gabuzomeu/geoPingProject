@@ -29,5 +29,14 @@
             android:title="@string/prefs_show_geoping_notification" />
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/prefs_sms_resend">
+        <eu.ttbox.geoping.ui.prefs.sms.SmsMessageReSendCheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/pkey_sms_resend"
+            android:title="@string/prefs_sms_resend_on_error"
+            android:summary="@string/prefs_sms_resend_on_error_summary"/>
+
+    </PreferenceCategory>
+
 
 </PreferenceScreen>

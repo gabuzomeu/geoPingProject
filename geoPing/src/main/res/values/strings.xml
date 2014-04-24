@@ -105,6 +105,10 @@
     <string name="prefs_pairing_security_block_request_summaryOff">Block new GeoPing pairing</string>
     <string name="prefs_pairing_security_block_request_summaryOn">Authorize new GeoPing pairing</string>
 
+    <!-- Prefs Re Send Sms -->
+    <string name="prefs_sms_resend">Sms Message acknowledge</string>
+    <string name="prefs_sms_resend_on_error">Re Send Sms</string>
+    <string name="prefs_sms_resend_on_error_summary">On error the Sms will be send again</string>
 
     <!-- Prefs Sound Notification -->
     <string name="prefs_notification_category">Notification</string>
@@ -158,14 +162,13 @@
     <string name="prefs_launcher_icon_summary_off">Launcher Icon is hide</string>
     <string name="prefs_launcher_icon_error_missing_pairing_command_authorize">A person should be authorize to accept SMS command</string>
 
+    <!-- Prefs LockApp Widget -->
     <string name="prefs_widget_category">Widget Feature</string>
-    <string name="prefs_widget_person_list">Person Widget Icon</string>
-    <string name="prefs_widget_person_list_summary_on">Person Widget Icon is show</string>
-    <string name="prefs_widget_person_list_summary_off">Person Widget Icon is hide</string>
+    <string name="prefs_widget_summary_on">The Widget is visible</string>
+    <string name="prefs_widget_summary_off">The Widget is hide</string>
 
+    <string name="prefs_widget_person_list">Person Widget Icon</string>
     <string name="prefs_widget_pairing_list">Pairing Widget Icon</string>
-    <string name="prefs_widget_pairing_list_summary_on">Pairing Widget Icon is show</string>
-    <string name="prefs_widget_pairing_list_summary_off">Pairing Widget Icon is hide</string>
 
 
     <string name="kg_too_many_failed_attempts_countdown_seconds">Try again in <xliff:g id="seconds">%d</xliff:g> seconds.</string>

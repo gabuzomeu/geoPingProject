@@ -118,6 +118,13 @@
     <string name="prefs_pairing_security_block_request_summaryOff">Bloquer les nouvelles associations</string>
     <string name="prefs_pairing_security_block_request_summaryOn">Autoriser les nouvelles associations</string>
 
+
+    <!-- Prefs Re Send Sms -->
+    <string name="prefs_sms_resend">Sms Message acknowledge</string>
+    <string name="prefs_sms_resend_on_error">Re Send Sms</string>
+    <string name="prefs_sms_resend_on_error_summary">On error the Sms will be send again</string>
+
+
     <!-- Prefs Sound Notification -->
     <string name="prefs_notification_category">Notification</string>
     <string name="prefs_notification_sound">Son de la Notification</string>
@@ -184,13 +191,11 @@
 
     <!-- Prefs LockApp Widget -->
     <string name="prefs_widget_category">Widget</string>
-    <string name="prefs_widget_person_list">Person Widget Icon</string>
-    <string name="prefs_widget_person_list_summary_on">Où est tu ?</string>
-    <string name="prefs_widget_person_list_summary_off">Qui mes suit ?</string>
+    <string name="prefs_widget_summary_on">Le Widget est visible</string>
+    <string name="prefs_widget_summary_off">Le Widget est caché</string>
 
-    <string name="prefs_widget_pairing_list">Pairing Widget Icon</string>
-    <string name="prefs_widget_pairing_list_summary_on">Où est tu ?</string>
-    <string name="prefs_widget_pairing_list_summary_off">Qui mes suit ?</string>
+    <string name="prefs_widget_person_list">Où est tu Widget</string>
+    <string name="prefs_widget_pairing_list">Qui me suit Widget</string>
 
 
     <string name="kg_too_many_failed_attempts_countdown_seconds">"Réessayez dans <xliff:g id="seconds">%d secondes.</xliff:g>"</string>

@@ -23,6 +23,7 @@ import eu.ttbox.geoping.domain.model.SmsLogTypeEnum;
 import eu.ttbox.geoping.domain.smslog.SmsLogDatabase;
 import eu.ttbox.geoping.domain.smslog.SmsLogHelper;
 import eu.ttbox.geoping.service.SmsSenderHelper;
+import eu.ttbox.geoping.ui.billing.ExtraFeatureHelper;
 
 /**
  * platform_frameworks_base : com.android.internal.policy.impl.keyguard.KeyguardUpdateMonitor
@@ -129,13 +130,16 @@ public class ReSentSmsMessageReceiver extends BroadcastReceiver {
 
 
     private void resendSms(Context context) {
+        // Do the Resend
         Uri searchUri = SmsLogProvider.Constants.getContentUriTypeStatus(SmsLogTypeEnum.SEND_ERROR);
         String[] projection = null;
         String selection = null; // String.format("%s >= ?", SmsLogDatabase.SmsLogColumns.COL_TIME);
         String[] selectionArgs = null; //new String[] { String.valueOf( new Date(2014-1900,1,01).getTime())};
         int resendCount =  SmsSenderHelper.reSendSmsMessage(context, searchUri, selection, selectionArgs);
         Log.d(TAG, "### Resend done for : " + resendCount + " SMS Messages" );
-       //TODO ExtraFeatureHelper.enabledSettingReSentSmsMessageReceiver(context, Boolean.FALSE);
+        // Disable Services
+        ExtraFeatureHelper.enabledSettingReSentSmsMessageReceiver(context, Boolean.FALSE);
+        Log.d(TAG, "### ACTION_SMS_SENT ERROR ==>  Disable ReSend Service");
     }
 
 

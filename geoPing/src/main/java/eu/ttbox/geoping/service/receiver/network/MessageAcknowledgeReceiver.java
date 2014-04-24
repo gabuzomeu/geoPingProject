@@ -6,8 +6,10 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.text.TextUtils;
@@ -15,6 +17,7 @@ import android.util.Log;
 
 import java.util.Locale;
 
+import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.domain.model.SmsLogTypeEnum;
 import eu.ttbox.geoping.domain.smslog.SmsLogDatabase.SmsLogColumns;
 import eu.ttbox.geoping.ui.billing.ExtraFeatureHelper;
@@ -167,10 +170,14 @@ public class MessageAcknowledgeReceiver extends BroadcastReceiver {
         ContentResolver cr = context.getContentResolver();
         cr.update(logUri, values, null, null);
         if (isError) {
-           //TODO ExtraFeatureHelper.enabledSettingReSentSmsMessageReceiver(context, Boolean.TRUE);
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            boolean isResendService = prefs.getBoolean(context.getString(R.string.pkey_sms_resend), true);
+            if (isResendService) {
+                ExtraFeatureHelper.enabledSettingReSentSmsMessageReceiver(context, Boolean.TRUE);
+                Log.d(TAG, "### ACTION_SMS_SENT ERROR ==>  Enable ReSend Service");
+            }
         }
     }
-
 
 
 }
