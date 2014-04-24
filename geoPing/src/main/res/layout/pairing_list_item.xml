@@ -46,7 +46,7 @@
         android:layout_marginLeft="5dp"
         android:layout_toLeftOf="@id/pairing_list_item_geoping_button"
         android:layout_toRightOf="@id/pairing_list_item_authType"
-        android:text="Person Name" />
+        android:text="@string/sample_person_name" />
 
     <TextView
         android:id="@+id/pairing_list_item_phone"
@@ -55,6 +55,6 @@
         android:textColor="@color/call_log_secondary_text_color"
         android:layout_alignLeft="@id/pairing_list_item_name"
         android:layout_below="@id/pairing_list_item_name"
-        android:text="+33011256883" />
+        android:text="@string/sample_phone" />
 
 </RelativeLayout>

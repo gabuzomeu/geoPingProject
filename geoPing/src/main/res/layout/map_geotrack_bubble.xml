@@ -18,14 +18,14 @@
         style="@style/map_geotrack_dialog_text"
         android:layout_below="@id/map_geotrack_bubbleView_name"
         android:layout_centerHorizontal="true"
-        android:text="Time" />
+        android:text="@string/sample_date" />
 
     <TextView
             android:id="@+id/map_geotrack_bubbleView_eventType"
             style="@style/map_geotrack_dialog_text"
             android:layout_below="@id/map_geotrack_bubbleView_time"
             android:layout_centerHorizontal="true"
-            android:text="Action" />
+            android:text="@string/sample_action" />
 
 
     <TextView
@@ -113,7 +113,7 @@
          style="@style/map_geotrack_dialog_text"
         android:layout_below="@id/map_geotrack_bubbleView_battery"
         android:layout_centerHorizontal="true"
-        android:text="address" />
+        android:text="@string/sample_address" />
 
     <ImageView
         android:id="@+id/map_geotrack_bubbleView_streetview_image"

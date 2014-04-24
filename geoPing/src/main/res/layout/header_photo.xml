@@ -62,7 +62,7 @@
             android:textColor="@color/call_log_primary_text_color"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:singleLine="true"
-            android:text="Name"
+            android:text="@string/sample_person_name"
             />
 
     <FrameLayout
@@ -99,7 +99,7 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/call_log_primary_text_color"
-                        android:text="Phone"/>
+                        android:text="@string/sample_phone"/>
 
                 <TextView
                         android:id="@+id/header_photo_subelt_action"
@@ -107,7 +107,7 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@color/call_log_primary_text_color"
-                        android:text="Action"
+                        android:text="@string/sample_action"
                         />
             </LinearLayout>
 

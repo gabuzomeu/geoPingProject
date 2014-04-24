@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" >
+
+    <string name="sample_phone">+33601020304</string>
+    <string name="sample_date">DD-MM-YYYY 12:55:12</string>
+    <string name="sample_time_ago">Il y a xx jours</string>
+    <string name="sample_action">sample action</string>
+    <string name="sample_person_name">Sample Person Name</string>
+    <string name="sample_address">3 Address, zipcode city</string>
+
+</resources>

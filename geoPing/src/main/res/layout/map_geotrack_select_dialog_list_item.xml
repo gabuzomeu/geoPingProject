@@ -17,7 +17,7 @@
         android:id="@+id/person_list_item_name"
         style="@style/entity_list_item"
         android:layout_toRightOf="@id/person_list_item_status_selected"
-        android:text="Person name" />
+        android:text="@string/sample_person_name" />
 
     <TextView
         android:id="@+id/person_list_item_phone"
@@ -26,7 +26,7 @@
         android:textColor="@color/call_log_secondary_text_color"
         android:layout_alignLeft="@id/person_list_item_name"
         android:layout_below="@id/person_list_item_name"
-        android:text="Phone number" />
+        android:text="@string/sample_phone" />
 
 <!--     <Button -->
 <!--         android:id="@+id/person_list_item_geoping_button" -->
@@ -48,8 +48,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             layout="@layout/item_photo_editor"
-            android:minWidth="60dip" 
-            android:text="@string/geoping"  />
+            android:minWidth="60dip"    />
 
     <View
         android:id="@+id/header_photo_subelt_divider"

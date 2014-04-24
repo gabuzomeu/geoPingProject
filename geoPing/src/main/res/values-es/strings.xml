@@ -13,7 +13,6 @@
     <string name="menu_delete">Quitar</string>
     <string name="menu_cancel">Cancelar</string> 
     
-    <!-- Billing -->
     <string name="send">Enviar</string>
     <string name="clear">Borrar</string>
 
@@ -62,8 +61,8 @@
 
     <string name="sms_action_pairing_request">Solicitud de asociacion</string>
     <string name="sms_action_pairing_response">Respuesta de asociacion</string>
-    <string name="sms_action_spyevt_shutdown">Movil apagado</string>
-    <string name="sms_action_spyevt_boot">Movil lanzado</string>
+    <string name="sms_action_spyevt_shutdown">"Móvil apagado"</string>
+    <string name="sms_action_spyevt_boot">"Móvil lanzado"</string>
     <string name="sms_action_spyevt_low_battery">Bateria baja</string>
     <string name="sms_action_spyevt_phone_call">Llamade</string>
     <string name="sms_action_spyevt_sim_change">Cambio Sim</string>
@@ -83,7 +82,7 @@
     <string name="menu_quit">Quitar</string>
     <string name="menu_person">Donde estas ?</string>
     <string name="menu_person_remote_control">Control remoto</string>
-    <string name="menu_person_remote_control_summary">"Sobre el movil a distancia"</string>
+    <string name="menu_person_remote_control_summary">"Sobre el móvil a distancia"</string>
 
     <string name="menu_pairing">Quien estas siguiendo mi !</string>
     <string name="menu_geofence">Geobarrera</string>

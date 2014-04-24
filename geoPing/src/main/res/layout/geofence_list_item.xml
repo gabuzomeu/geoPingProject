@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:scaleType="fitCenter"
+            android:contentDescription="@string/geofence_transition"
             android:src="@drawable/ic_action_geofence" />
 
     </FrameLayout>
@@ -31,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/geofence_list_item_icon_container"
-        android:text="Person Name" />
+        android:text="@string/sample_person_name" />
 
     <TextView
         android:id="@+id/geofence_list_item_address"
@@ -40,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/geofence_list_item_name"
         android:layout_below="@id/geofence_list_item_name"
-        android:text="3 Address, zipcode city "
+        android:text="@string/sample_address"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/call_log_secondary_text_color" />
 
