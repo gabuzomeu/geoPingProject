@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import eu.ttbox.geoping.GeoPingApplication;
 import eu.ttbox.geoping.R;
@@ -33,10 +34,11 @@ import eu.ttbox.geoping.domain.smslog.SmsLogHelper;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
 import eu.ttbox.geoping.encoder.params.ParamEncoderHelper;
-import eu.ttbox.geoping.utils.encoder.MessageParamEnumLabelHelper;
-import eu.ttbox.geoping.utils.encoder.adpater.BundleEncoderAdapter;
+import eu.ttbox.geoping.service.SmsSenderHelper;
 import eu.ttbox.geoping.ui.person.PhotoHeaderBinderHelper;
 import eu.ttbox.geoping.utils.contact.PhotoThumbmailCache;
+import eu.ttbox.geoping.utils.encoder.MessageParamEnumLabelHelper;
+import eu.ttbox.geoping.utils.encoder.adpater.BundleEncoderAdapter;
 
 
 public class SmsLogViewFragment extends Fragment {
@@ -67,6 +69,17 @@ public class SmsLogViewFragment extends Fragment {
     private PersonNameFinderHelper cacheNameFinder;
 
     // ===========================================================
+    // Listener
+    // ===========================================================
+    private View.OnClickListener resendSmsMesageClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            resendMessage();
+        }
+    };
+
+
+    // ===========================================================
     // Constructors
     // ===========================================================
     private ContentObserver observer = new ContentObserver(handler) {
@@ -92,7 +105,7 @@ public class SmsLogViewFragment extends Fragment {
         photoHeader = new PhotoHeaderBinderHelper(v);
 
         this.messageTextView = (TextView) v.findViewById(R.id.smslog_message);
-        this.messageDetailTextView =(TextView) v.findViewById(R.id.smslog_message_detail);
+        this.messageDetailTextView = (TextView) v.findViewById(R.id.smslog_message_detail);
         this.paramListView = (LinearLayout) v.findViewById(R.id.smslog_message_param_list);
 
         this.smsTypeImageView = (ImageView) v.findViewById(R.id.smslog_list_item_smsType_imgs);
@@ -109,10 +122,21 @@ public class SmsLogViewFragment extends Fragment {
         // Header Bindings
         headerMainIcon = (ImageView) v.findViewById(R.id.header_photo_main_action);
         headerSubIcon = (ImageView) v.findViewById(R.id.header_photo_subelt_icon);
-
         return v;
     }
 
+
+    // ===========================================================
+    // Resend Sms Message
+    // ===========================================================
+
+    public void resendMessage() {
+        headerSubIcon.setOnClickListener(null);
+        if (entityUri!=null) {
+            SmsSenderHelper.reSendSmsMessage(getActivity(), entityUri, null, null);
+        }
+        Toast.makeText(getActivity(), "Resend", Toast.LENGTH_SHORT).show();
+    }
 
     // ===========================================================
     // Menu
@@ -140,7 +164,7 @@ public class SmsLogViewFragment extends Fragment {
     // ===========================================================
 
     @Override
-    public void onCreateOptionsMenu(Menu  menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
     }
@@ -245,11 +269,15 @@ public class SmsLogViewFragment extends Fragment {
             case SEND_DELIVERY_ACK:
                 smsLogTime = helper.getSendDeliveryAckTimeInMs(cursor);
                 break;
+            case SEND_ERROR:
+                headerSubIcon.setOnClickListener(resendSmsMesageClickListener);
+                break;
         }
         // Time
         String smsTypeTime = DateUtils.formatDateRange(mContext, smsLogTime, smsLogTime,
                 DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE |
-                        DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_SHOW_YEAR);
+                        DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_SHOW_YEAR
+        );
         smsTypeTimeTextView.setText(smsTypeTime);
 
         // Params
@@ -278,20 +306,20 @@ public class SmsLogViewFragment extends Fragment {
     private void bindMessageParams(Bundle bundle) {
         Log.d(TAG, "Read Json Params : " + bundle);
         if (bundle != null && bundle.size() > 0) {
-             // Clean of previous Parent
+            // Clean of previous Parent
             paramListView.removeAllViewsInLayout();
             // Insert Param In View
             LayoutInflater layoutInflater = LayoutInflater.from(mContext);
             for (String key : bundle.keySet()) {
-                MessageParamEnum param =  MessageParamEnum.getByDbFieldName(key);
-               // MessageParamField.
+                MessageParamEnum param = MessageParamEnum.getByDbFieldName(key);
+                // MessageParamField.
                 Log.d(TAG, "Read Json Params : " + key + " = " + bundle.get(key));
                 if (param == null) {
                     // No ref of this param
                     String val = String.valueOf(bundle.get(key));
-                   // Not necessary to display because it should be in the multifield
+                    // Not necessary to display because it should be in the multifield
                     Log.d(TAG, "Ignore display key " + key + " = " + val);
-                 //   addParamTextLabel(layoutInflater, key, val);
+                    //   addParamTextLabel(layoutInflater, key, val);
                 } else {
                     String label = MessageParamEnumLabelHelper.getString(getActivity(), param, bundle);
                     if (label != null) {
@@ -319,7 +347,6 @@ public class SmsLogViewFragment extends Fragment {
         paramListView.addView(convertView);
 
     }
-
 
 
     // ===========================================================

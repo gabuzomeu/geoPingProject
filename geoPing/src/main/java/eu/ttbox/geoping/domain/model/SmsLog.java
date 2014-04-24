@@ -1,8 +1,11 @@
 package eu.ttbox.geoping.domain.model;
 
+import android.net.Uri;
+
 import java.util.Date;
 
 import eu.ttbox.geoping.core.AppConstants;
+import eu.ttbox.geoping.domain.SmsLogProvider;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 
 public class SmsLog {
@@ -23,6 +26,14 @@ public class SmsLog {
         this.id = id;
 		return this;
 	}
+
+    public Uri getEntityUri() {
+        Uri uri = null;
+        if (this.id != AppConstants.UNSET_ID) {
+            uri = SmsLogProvider.Constants.getContentUri(String.valueOf(this.id));
+        }
+        return uri;
+    }
 
 	public long getTime() {
 		return time;

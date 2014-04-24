@@ -129,32 +129,13 @@ public class ReSentSmsMessageReceiver extends BroadcastReceiver {
 
 
     private void resendSms(Context context) {
-        //
-        ContentResolver cr = context.getContentResolver();
-        Uri uri = SmsLogProvider.Constants.getContentUriTypeStatus(SmsLogTypeEnum.SEND_ERROR);
+        Uri searchUri = SmsLogProvider.Constants.getContentUriTypeStatus(SmsLogTypeEnum.SEND_ERROR);
         String[] projection = null;
         String selection = null; // String.format("%s >= ?", SmsLogDatabase.SmsLogColumns.COL_TIME);
         String[] selectionArgs = null; //new String[] { String.valueOf( new Date(2014-1900,1,01).getTime())};
-        String sortOrder = SmsLogDatabase.SmsLogColumns.ORDER_BY_TIME_ASC;
-         Cursor cursor =  cr.query(uri,projection,selection, selectionArgs, sortOrder);
-        try {
-            int cursorSize = cursor.getCount();
-            if (cursorSize > 0) {
-                Log.d(TAG, "### Need Resent SMS : " + cursorSize + " SMS Messages" );
-                SmsLogHelper helper = new SmsLogHelper().initWrapper(cursor);
-                while (cursor.moveToNext()) {
-                    String smsMessage = helper.getMessage(cursor);
-                   long smsLogTime=  helper.getSmsLogTime(cursor);
-                    Log.d(TAG, "Resend SMS Message : " + smsMessage + " // " +  DateUtils.formatDateRange(context, smsLogTime, smsLogTime,
-                            DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE |
-                                    DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_SHOW_YEAR
-                    ));
-                   // TODO SmsSenderHelper.sendSmsAndLogIt()
-                }
-            }
-        } finally {
-            cursor.close();
-        }
+        int resendCount =  SmsSenderHelper.reSendSmsMessage(context, searchUri, selection, selectionArgs);
+        Log.d(TAG, "### Resend done for : " + resendCount + " SMS Messages" );
+
     }
 
 

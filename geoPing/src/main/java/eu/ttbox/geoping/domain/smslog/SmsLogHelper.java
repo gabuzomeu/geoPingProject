@@ -2,10 +2,12 @@ package eu.ttbox.geoping.domain.smslog;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import eu.ttbox.geoping.domain.SmsLogProvider;
 import eu.ttbox.geoping.domain.model.SmsLog;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
 import eu.ttbox.geoping.domain.model.SmsLogTypeEnum;
@@ -159,6 +161,12 @@ public class SmsLogHelper {
 
     public long getSmsLogId(Cursor cursor) {
         return cursor.getLong(idIdx);
+    }
+
+    public Uri getSmsLogUri(Cursor cursor) {
+        long entityId =  cursor.getLong(idIdx);
+        Uri uri = SmsLogProvider.Constants.getContentUri(String.valueOf(entityId));
+        return uri;
     }
 
     public String getSmsLogPhone(Cursor cursor) {
