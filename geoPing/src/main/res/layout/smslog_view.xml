@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/call_log_secondary_text_color"
-            android:text="Il y a 4 jours"
+            android:text="@string/sample_time_ago"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="@dimen/call_log_inner_margin"
             android:layout_alignBaseline="@id/smslog_list_item_smsType_imgs"
