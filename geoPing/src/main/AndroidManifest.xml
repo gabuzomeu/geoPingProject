@@ -175,9 +175,7 @@
 
         <activity android:exported="false" android:label="@string/menu_extra_feature" android:launchMode="singleTask" android:name=".ui.billing.ExtraFeaturesActivity">
         </activity>
-        <activity android:label="@string/menu_extra_feature" android:name=".ui.billing.PayFeaturesActivity">
-        </activity>
-<!--        <service android:name=".service.billing.BillingService"/> -->
+        <!--        <service android:name=".service.billing.BillingService"/> -->
 
 <!--         <receiver android:name=".service.billing.BillingReceiver"> -->
 <!--             <intent-filter> -->
