@@ -1,14 +1,12 @@
 package eu.ttbox.geoping.utils.lastlocation.retryfutur;
 
 
-import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 
 import java.util.concurrent.ArrayBlockingQueue;

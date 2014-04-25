@@ -15,6 +15,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.StringTokenizer;
+
 import eu.ttbox.geoping.GeoPingApplication;
 import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.domain.SmsLogProvider;

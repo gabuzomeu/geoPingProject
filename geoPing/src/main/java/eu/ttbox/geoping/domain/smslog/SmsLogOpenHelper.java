@@ -14,6 +14,7 @@ import eu.ttbox.geoping.domain.smslog.SmsLogDatabase.SmsLogColumns;
  * <li>Db version 9  : Geoping 0.2.0 (??) : Add COL_TO_READ & COL_REQUEST_ID</li>
  * <li>Db version 10 : Geoping 0.2.2 (??)</li>
  * <li>Db version 11 : Geoping 0.2.3 (??) : Rename COL_TO_READ to COL_TO_READ and ad INDEX</li>
+ * <li>Db version 12 : Geoping 0.3.2 (??) : Add COL_MSG_ACK_RESEND_TIME_MS to COL_MSG_ACK_RESEND_MSG_COUNT</li>
  * </ul>
  *  
  *

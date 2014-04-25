@@ -21,7 +21,6 @@ import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
 import eu.ttbox.geoping.utils.contact.ContactHelper;
 import eu.ttbox.geoping.utils.contact.INotifPersonVo;
-import eu.ttbox.geoping.utils.contact.NotifPersonVo;
 
 public class NotificationAlarmHelper {
 

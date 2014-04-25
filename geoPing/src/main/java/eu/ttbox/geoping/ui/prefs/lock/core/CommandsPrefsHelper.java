@@ -10,7 +10,6 @@ import android.preference.Preference;
 import android.util.Log;
 
 import eu.ttbox.geoping.R;
-import eu.ttbox.geoping.ui.billing.ExtraFeatureHelper;
 import group.pals.android.lib.ui.lockpattern.LockPatternActivity;
 import group.pals.android.lib.ui.lockpattern.prefs.DisplayPrefs;
 import group.pals.android.lib.ui.lockpattern.prefs.Prefs;

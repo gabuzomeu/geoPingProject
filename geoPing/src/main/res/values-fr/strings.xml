@@ -219,9 +219,17 @@
     <string name="battery_percent">Batterie %s%%</string>
     <string name="accuracy_precision_in_meter">+/- %sm</string>
 
+
+    <!-- Map Timeline  -->
+    <string name="begin">Début</string>
+    <string name="end">Fin</string>
+
     <!-- Map My Location Dialog -->
     <string name="accuracy_separator">+/-</string> <!-- +/- &#8723; -->
     <string name="altitude">Altitude</string>
+
+
+
 
     <!-- App Version -->
     <string name="app_version_update_necessary">"Mise à jour de l'application nécessaire"</string>

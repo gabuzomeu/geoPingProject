@@ -196,6 +196,10 @@
     <string name="battery_percent">Battery %s%%</string>
     <string name="accuracy_precision_in_meter">+/- %sm</string>
 
+    <!-- Map Timeline  -->
+    <string name="begin">Begin</string>
+    <string name="end">End</string>
+
     <!-- Map My Location Dialog -->
     <string name="accuracy_separator">+/-</string> <!-- +/- &#8723; -->
     <string name="altitude">Altitude</string>

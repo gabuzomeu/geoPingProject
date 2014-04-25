@@ -32,11 +32,11 @@ import eu.ttbox.geoping.domain.model.GeoTrack;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
+import eu.ttbox.geoping.service.receiver.LogReadHistoryService;
 import eu.ttbox.geoping.utils.contact.ContactHelper;
 import eu.ttbox.geoping.utils.contact.NotifPersonVo;
 import eu.ttbox.geoping.utils.encoder.MessageEncoderHelper;
 import eu.ttbox.geoping.utils.encoder.MessageParamEnumLabelHelper;
-import eu.ttbox.geoping.service.receiver.LogReadHistoryService;
 
 public class NotificationMasterHelper {
 

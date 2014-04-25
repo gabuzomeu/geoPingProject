@@ -2,7 +2,6 @@ package eu.ttbox.geoping.utils.lastlocation;
 
 
 import android.location.Location;
-import android.location.LocationListener;
 
 import java.util.concurrent.Future;
 

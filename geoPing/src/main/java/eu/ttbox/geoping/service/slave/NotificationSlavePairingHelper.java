@@ -20,10 +20,9 @@ import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.core.VersionUtils;
 import eu.ttbox.geoping.domain.model.Pairing;
 import eu.ttbox.geoping.domain.model.SmsLogSideEnum;
+import eu.ttbox.geoping.service.slave.receiver.AuthorizePhoneTypeEnum;
 import eu.ttbox.geoping.utils.contact.ContactHelper;
 import eu.ttbox.geoping.utils.contact.NotifPairingVo;
-import eu.ttbox.geoping.utils.contact.NotifPersonVo;
-import eu.ttbox.geoping.service.slave.receiver.AuthorizePhoneTypeEnum;
 
 @Deprecated
 public class NotificationSlavePairingHelper {

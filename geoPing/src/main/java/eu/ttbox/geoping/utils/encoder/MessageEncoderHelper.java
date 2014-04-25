@@ -14,9 +14,9 @@ import eu.ttbox.geoping.encoder.crypto.TextEncryptor;
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
 import eu.ttbox.geoping.encoder.model.MessageParamEnum;
 import eu.ttbox.geoping.encoder.params.MessageParamField;
-import eu.ttbox.geoping.utils.encoder.adpater.BundleEncoderAdapter;
 import eu.ttbox.geoping.service.master.GeoPingMasterService;
 import eu.ttbox.geoping.service.slave.GeoPingSlaveService;
+import eu.ttbox.geoping.utils.encoder.adpater.BundleEncoderAdapter;
 
 public class MessageEncoderHelper {
 

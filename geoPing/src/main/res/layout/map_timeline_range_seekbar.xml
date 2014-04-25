@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:background="@android:color/white"
-        android:text="Begin" />
+        android:text="@string/begin" />
 
     <TextView
         android:id="@+id/rangeTimeline_endTextView"
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:background="@android:color/white" 
-        android:text="End" />
+        android:text="@string/end" />
 
     <LinearLayout
         android:id="@+id/rangeTimeline_seekBarViewContainer"

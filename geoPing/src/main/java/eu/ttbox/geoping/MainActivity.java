@@ -20,7 +20,6 @@ import eu.ttbox.geoping.core.VersionUtils;
 import eu.ttbox.geoping.ui.GeoPingSlidingMenuFragmentActivity;
 import eu.ttbox.geoping.ui.MenuOptionsItemSelectionHelper;
 import eu.ttbox.geoping.ui.core.animation.ViewPagerAnimatedFactory;
-import eu.ttbox.geoping.ui.core.animation.transformer.ViewPagerZoomOutPageTransformer;
 import eu.ttbox.geoping.ui.pairing.PairingListFragment;
 import eu.ttbox.geoping.ui.person.PersonListFragment;
 import eu.ttbox.geoping.ui.smslog.SmsLogListFragment;

@@ -1,7 +1,6 @@
 package eu.ttbox.geoping.ui.map;
 
 
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,9 +23,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.util.GeoPoint;
@@ -52,7 +48,6 @@ import eu.ttbox.geoping.ui.map.timeline.RangeTimelineValue;
 import eu.ttbox.geoping.ui.map.timeline.RangeTimelineView;
 import eu.ttbox.geoping.ui.map.track.GeoTrackOverlay;
 import eu.ttbox.geoping.ui.map.track.dialog.SelectGeoTrackDialog;
-import eu.ttbox.geoping.utils.GooglePlayServicesAvailableHelper;
 import eu.ttbox.osm.ui.map.OsmMapFragment;
 
 public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferences.OnSharedPreferenceChangeListener {

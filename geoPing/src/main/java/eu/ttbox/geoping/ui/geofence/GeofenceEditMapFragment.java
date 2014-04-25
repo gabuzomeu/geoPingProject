@@ -1,7 +1,6 @@
 package eu.ttbox.geoping.ui.geofence;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,10 +11,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.BoundingBoxE6;
@@ -24,7 +19,6 @@ import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.domain.model.CircleGeofence;
 import eu.ttbox.geoping.ui.map.ShowMapFragmentV2;
 import eu.ttbox.geoping.ui.map.geofence.GeofenceEditOverlay;
-import eu.ttbox.geoping.utils.GooglePlayServicesAvailableHelper;
 
 public class GeofenceEditMapFragment extends ShowMapFragmentV2 {
 

@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.ui.GeoPingSlidingMenuFragmentActivity;
-import eu.ttbox.geoping.ui.geofence.GeofenceListFragment;
 
 
 public class EmergencyModeActivity extends GeoPingSlidingMenuFragmentActivity {

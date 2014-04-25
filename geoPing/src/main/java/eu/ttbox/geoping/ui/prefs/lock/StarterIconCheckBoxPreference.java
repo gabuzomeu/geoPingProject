@@ -12,12 +12,10 @@ import android.widget.Toast;
 
 import java.util.Locale;
 
-
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.domain.PairingProvider;
 import eu.ttbox.geoping.domain.model.PairingAuthorizeTypeEnum;
 import eu.ttbox.geoping.domain.pairing.PairingDatabase;
-
 import eu.ttbox.geoping.ui.billing.ExtraFeatureHelper;
 import eu.ttbox.geoping.ui.pairing.PairingListActivity;
 import eu.ttbox.geoping.ui.prefs.comp.componentname.AbstractComponentNameCheckBoxPreference;

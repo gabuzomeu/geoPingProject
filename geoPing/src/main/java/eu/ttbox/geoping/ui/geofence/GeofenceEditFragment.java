@@ -1,11 +1,9 @@
 package eu.ttbox.geoping.ui.geofence;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -22,8 +20,6 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.Geofence;
 
 import eu.ttbox.geoping.R;
@@ -37,7 +33,6 @@ import eu.ttbox.geoping.ui.core.validator.validate.ValidateTextView;
 import eu.ttbox.geoping.ui.core.validator.validator.NotEmptyValidator;
 import eu.ttbox.geoping.ui.core.validator.validator.TextCharacterLimitedValidator;
 import eu.ttbox.geoping.ui.core.validator.validator.TextSizeValidator;
-import eu.ttbox.geoping.utils.GooglePlayServicesAvailableHelper;
 
 public class GeofenceEditFragment extends Fragment {
 

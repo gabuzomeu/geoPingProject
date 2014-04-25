@@ -1,7 +1,6 @@
 package eu.ttbox.geoping.service.accountsync;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 
 import eu.ttbox.geoping.ui.GeoPingActionBarActivity;

@@ -4,7 +4,6 @@ package eu.ttbox.geoping.utils.contact;
 import android.graphics.Bitmap;
 
 import eu.ttbox.geoping.domain.model.Pairing;
-import eu.ttbox.geoping.domain.model.Person;
 
 public class NotifPairingVo implements INotifPersonVo {
 

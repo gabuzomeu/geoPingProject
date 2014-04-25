@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 
 import eu.ttbox.geoping.encoder.model.MessageActionEnum;
-import eu.ttbox.geoping.service.receiver.LocationChangeReceiver;
 import eu.ttbox.geoping.service.slave.GeoPingSlaveLocationService;
 
 public class GeoPingCommandHelper {

@@ -1,6 +1,5 @@
 package eu.ttbox.geoping.utils.lastlocation.retryfutur;
 
-import android.content.BroadcastReceiver;
 import android.location.Location;
 
 import java.util.concurrent.ExecutionException;

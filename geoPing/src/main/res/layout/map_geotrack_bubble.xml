@@ -121,7 +121,7 @@
         android:layout_height="40dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:contentDescription="StreetView"
+        android:contentDescription="@string/app_google_streetview"
         style="@style/map_geotrack_dialog_text"
         android:paddingLeft="5dp"
         android:src="@android:drawable/ic_menu_view" />
@@ -133,7 +133,7 @@
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true" 
-        android:contentDescription="Navigation"
+        android:contentDescription="@string/app_google_navigation"
         android:paddingRight="5dp"
         android:src="@android:drawable/ic_menu_directions" />
 

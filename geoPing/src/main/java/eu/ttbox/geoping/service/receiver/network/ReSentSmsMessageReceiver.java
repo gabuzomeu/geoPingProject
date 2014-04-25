@@ -2,26 +2,15 @@ package eu.ttbox.geoping.service.receiver.network;
 
 
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.telephony.SignalStrength;
-import android.telephony.TelephonyManager;
-import android.text.format.DateUtils;
 import android.util.Log;
-
-import java.util.Date;
 
 import eu.ttbox.geoping.core.Intents;
 import eu.ttbox.geoping.domain.SmsLogProvider;
 import eu.ttbox.geoping.domain.model.SmsLogTypeEnum;
-import eu.ttbox.geoping.domain.smslog.SmsLogDatabase;
-import eu.ttbox.geoping.domain.smslog.SmsLogHelper;
 import eu.ttbox.geoping.service.SmsSenderHelper;
 import eu.ttbox.geoping.ui.billing.ExtraFeatureHelper;
 

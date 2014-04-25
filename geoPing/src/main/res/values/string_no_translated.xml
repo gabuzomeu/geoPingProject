@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" >
+
+    <string name="app_google_streetview">Google StreetView</string>
+    <string name="app_google_navigation">Google Navigation</string>
+
+
+    <!-- En dev -->
+    <string name="child_profil">Profil Enfant</string>
+
+
+</resources>
