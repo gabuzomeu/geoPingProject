@@ -49,7 +49,7 @@ public class SmsLogDatabase {
         public static final String COL_MSG_ACK_DELIVERY_TIME_MS = "MSG_ACK_DELIVERY_TIME_MS";
         public static final String COL_MSG_ACK_DELIVERY_RESULT_MSG = "MSG_ACK_DELIVERY_RESULT_MSG";
 
-        public static final String COL_MSG_ACK_RESEND_TIME_MS= "MSG_ACK_RESEND_TIME_MS";
+        public static final String COL_MSG_ACK_RESEND_TRY_TIME_MS = "MSG_ACK_RESEND_TRY_TIME_MS";
         public static final String COL_MSG_ACK_RESEND_MSG_COUNT = "MSG_ACK_RESEND_MSG_COUNT ";
 
 
@@ -65,7 +65,7 @@ public class SmsLogDatabase {
                 , COL_MSG_COUNT, COL_MSG_ACK_SEND_MSG_COUNT, COL_MSG_ACK_DELIVERY_MSG_COUNT //Acknowledge count
                 , COL_MSG_ACK_SEND_TIME_MS, COL_MSG_ACK_DELIVERY_TIME_MS //Acknowledge Time
                 , COL_MSG_ACK_SEND_RESULT_MSG, COL_MSG_ACK_DELIVERY_RESULT_MSG //Acknowledge result Msg
-                , COL_MSG_ACK_RESEND_TIME_MS, COL_MSG_ACK_RESEND_MSG_COUNT // Acknowledge Resend
+                , COL_MSG_ACK_RESEND_TRY_TIME_MS, COL_MSG_ACK_RESEND_MSG_COUNT // Acknowledge Resend
                 , COL_TO_READ, COL_REQUEST_ID // Notif, Geofence
         };
         // Where Clause

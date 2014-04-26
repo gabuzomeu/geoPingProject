@@ -27,7 +27,7 @@ public class IntentAbout {
             webView.loadUrl(intent.getData().getPath());
         } else if (ACTION_VIEW_RELEASE_NOTES.equals(intent.getAction())) {
             webView.loadData(readTextFromResource(activity, R.raw.release_notes), "text/html", "utf-8");
-            activity.setTitle(R.string.prefs_relasenotes);
+            activity.setTitle(R.string.prefs_release_notes);
         } else if (ACTION_VIEW_ABOUT.equals(intent.getAction())) {
             webView.loadData(readTextFromResource(activity, R.raw.credits), "text/html", "utf-8");
             activity.setTitle(R.string.prefs_about);

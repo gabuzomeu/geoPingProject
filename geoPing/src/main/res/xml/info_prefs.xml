@@ -25,7 +25,7 @@
             android:summary="@string/prefs_count_laught_summary"
             android:title="@string/prefs_count_laught" />
 
-        <Preference android:title="@string/prefs_relasenotes" >
+        <Preference android:title="@string/prefs_release_notes" >
             <intent
                 android:action="eu.ttbox.geoping.ui.about.ACTION_VIEW_RELEASE_NOTES"
                 android:targetClass="eu.ttbox.geoping.ui.about.AboutActivity"

@@ -136,6 +136,9 @@
         <!-- Pref -->
         <activity android:exported="false" android:name=".ui.prefs.GeoPingPrefActivity" android:label="@string/menu_settings"/>
 
+        <!-- Service Monitor -->
+        <activity android:exported="false" android:name=".ui.admin.ServiceMonitorActivity"  />
+
         <!-- Emergency Mode -->
         <activity android:exported="false" android:name=".ui.emergency.EmergencyModeActivity"/>
 

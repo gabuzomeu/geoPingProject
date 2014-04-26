@@ -16,6 +16,7 @@
 
     <string name="send">Envoyer</string>
     <string name="clear">Effacer</string>
+    <string name="refresh">Rafraichir</string>
 
     <!-- Billing -->
 
@@ -158,19 +159,24 @@
     <string name="prefs_geoping_map_category">Affichage cartographique</string>
 
     <string name="prefs_geoPoint_geocoding_auto">Geocoding automatique</string>
-    
+
+
+    <!-- prefs Dev -->
     <string name="prefs_developement">Développement</string>
     <string name="prefs_sms_delete_onMessage">Suppression des SMS</string>
     <string name="prefs_sms_delete_onMessage_summaryOn">Invisibilité des SMS GeoPing</string>
     <string name="prefs_sms_delete_onMessage_summaryOff">Sauvegarde des SMS Geoping</string>
-     
-        
+
+    <string name="prefs_monitor">Monitor</string>
+    <string name="prefs_service_monitor">Service Monitor</string>
+
+    <!-- Prefs Info -->
     <string name="prefs_info">Information</string>
     <string name="prefs_version">Version</string>
     <string name="prefs_help">Aide</string>
     <string name="prefs_licence">Licence</string>
     <string name="prefs_about">Crédit</string>
-    <string name="prefs_relasenotes">Quoi de neuf ?</string> 
+    <string name="prefs_release_notes">Quoi de neuf ?</string>
     <string name="prefs_count_laught">Nombre de lancement</string>
     <string name="prefs_count_laught_summary">Compteur d\'utilisation de l\'application</string>
     

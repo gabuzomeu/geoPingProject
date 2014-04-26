@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/entity_list_item_container"
+    android:layout_width="fill_parent"
+    android:orientation="horizontal"
+    android:padding="10dip">
+
+
+    <ImageView
+        android:id="@+id/service_monitor_list_item_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:contentDescription="@string/geofence_transition"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_action_geofence" />
+ 
+
+    <TextView
+        android:id="@+id/service_monitor_list_item_name"
+        style="@style/entity_list_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/service_monitor_list_item_icon"
+        android:text="@string/sample_service_monitor_name" />
+
+    <TextView
+        android:id="@+id/service_monitor_list_item_description"
+        style="@style/entity_list_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/service_monitor_list_item_name"
+        android:layout_below="@id/service_monitor_list_item_name"
+        android:text="@string/sample_service_monitor_description"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/call_log_secondary_text_color" />
+
+</RelativeLayout>

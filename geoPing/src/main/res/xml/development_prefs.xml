@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:title="@string/prefs_developement" >
+    android:title="@string/prefs_developement">
 
     <CheckBoxPreference
         android:defaultValue="true"
@@ -15,12 +15,12 @@
         android:title="@string/prefs_add_blocked" />
 
     <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="inAppPay"
-            android:title="In App Pay" />
+        android:defaultValue="false"
+        android:key="inAppPay"
+        android:title="In App Pay" />
 
 
-    <PreferenceCategory android:title="@string/prefs_spynotif_title" >
+    <PreferenceCategory android:title="@string/prefs_spynotif_title">
         <eu.ttbox.geoping.ui.prefs.comp.IntEditTextPreference
             android:defaultValue="5000"
             android:key="spyEventShutdownSleepInMs"
@@ -33,6 +33,13 @@
             android:title="@string/prefs_spynotif_changed_phonenumber" />
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/prefs_monitor">
+        <Preference android:title="@string/prefs_service_monitor">
+            <intent
+                android:targetClass="eu.ttbox.geoping.ui.admin.ServiceMonitorActivity"
+                android:targetPackage="eu.ttbox.geoping" />
+        </Preference>
+    </PreferenceCategory>
 
 
 </PreferenceScreen>

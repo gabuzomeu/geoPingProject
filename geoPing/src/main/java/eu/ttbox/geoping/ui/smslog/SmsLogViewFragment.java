@@ -117,6 +117,15 @@ public class SmsLogViewFragment extends Fragment {
 
 
     // ===========================================================
+    // Display Screen
+    // ===========================================================
+
+    private void dispayReSendCount(int count) {
+        // TODO
+    }
+
+
+    // ===========================================================
     // Resend Sms Message
     // ===========================================================
 
@@ -254,10 +263,10 @@ public class SmsLogViewFragment extends Fragment {
         long smsLogTime = helper.getSmsLogTime(cursor);
         switch (smLogType) {
             case SEND_ACK:
-                smsLogTime = helper.getSendAckTimeInMs(cursor);
+                smsLogTime = helper.getAckSendTimeInMs(cursor);
                 break;
             case SEND_DELIVERY_ACK:
-                smsLogTime = helper.getSendDeliveryAckTimeInMs(cursor);
+                smsLogTime = helper.getAckDeliveryTimeInMs(cursor);
                 break;
             case SEND_ERROR:
                 headerSubIcon.setOnClickListener(new View.OnClickListener() {
@@ -274,6 +283,9 @@ public class SmsLogViewFragment extends Fragment {
                         DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_SHOW_YEAR
         );
         smsTypeTimeTextView.setText(smsTypeTime);
+        // Acknowledge
+        int resendCount = helper.getAckReSendMsgCount(cursor);
+        dispayReSendCount(resendCount);
 
         // Params
         Bundle msgParams = helper.getMessageParamsAsBundle(cursor);
@@ -286,6 +298,8 @@ public class SmsLogViewFragment extends Fragment {
         // Photo
         photoCache.loadPhoto(getActivity(), photoHeader.photoImageView, null, phone);
     }
+
+
 
     private void bindMessageParams(String msgParams) {
         if (msgParams != null && msgParams.length() > 0) {

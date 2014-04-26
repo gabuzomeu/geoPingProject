@@ -13,6 +13,7 @@
 
     <string name="send">Send</string>
     <string name="clear">Clear</string>
+    <string name="refresh">Refresh</string>
 
     <!-- Share -->
     <string name="menu_share_app">Share GeoPing</string>
@@ -138,16 +139,23 @@
     <string name="prefs_geoping_map_category">Map Display</string>
 
     <string name="prefs_geoPoint_geocoding_auto">Automatic Geocoding</string>
+
+    <!-- prefs Dev -->
     <string name="prefs_developement">Development</string>
     <string name="prefs_sms_delete_onMessage">Deleting SMS</string>
     <string name="prefs_sms_delete_onMessage_summaryOn">SMS GeoPing are invisible</string>
     <string name="prefs_sms_delete_onMessage_summaryOff">SMS GeoPing are saved</string>
+
+    <string name="prefs_monitor">Monitor</string>
+    <string name="prefs_service_monitor">Service Monitor</string>
+
+    <!-- Prefs Info -->
     <string name="prefs_info">Information</string>
     <string name="prefs_version">Version</string>
     <string name="prefs_help">Help</string>
     <string name="prefs_licence">Licence</string>
     <string name="prefs_about">Credit</string>
-    <string name="prefs_relasenotes">What \'\s up ?</string>
+    <string name="prefs_release_notes">What \'\s up ?</string>
     <string name="prefs_count_laught">Counter of launching</string>
     <string name="prefs_count_laught_summary">Number of launching the application</string>
 

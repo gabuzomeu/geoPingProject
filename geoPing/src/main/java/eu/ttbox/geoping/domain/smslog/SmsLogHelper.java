@@ -31,8 +31,14 @@ public class SmsLogHelper {
     public int smsLogTypeIdx = -1;
     public int smsLogSideIdx = -1;
     public int requestIdIdx = -1;
-    public int sendAckTimeInMsIdx = -1;
-    public int sendDeliveryAckTimeInMsIdx = -1;
+
+    // Acknowledge
+    public int ackSendTimeInMsIdx = -1;
+    public int ackDeliveryTimeInMsIdx = -1;
+
+    public int ackReSendTimeInMsIdx = -1;
+    public int ackReSendMsgCountIdx = -1;
+
 
     public static ContentValues getContentValues(SmsLog vo) {
         ContentValues initialValues = new ContentValues();
@@ -121,9 +127,12 @@ public class SmsLogHelper {
         messageParamIdx = cursor.getColumnIndex(SmsLogColumns.COL_MESSAGE_PARAMS);
         smsLogSideIdx = cursor.getColumnIndex(SmsLogColumns.COL_SMS_SIDE);
         requestIdIdx = cursor.getColumnIndex(SmsLogColumns.COL_REQUEST_ID);
-
-        sendAckTimeInMsIdx = cursor.getColumnIndex(SmsLogColumns.COL_MSG_ACK_SEND_TIME_MS);
-        sendDeliveryAckTimeInMsIdx = cursor.getColumnIndex(SmsLogColumns.COL_MSG_ACK_DELIVERY_TIME_MS);
+        // Acknowledge
+        ackSendTimeInMsIdx = cursor.getColumnIndex(SmsLogColumns.COL_MSG_ACK_SEND_TIME_MS);
+        ackDeliveryTimeInMsIdx = cursor.getColumnIndex(SmsLogColumns.COL_MSG_ACK_DELIVERY_TIME_MS);
+        // Acknowledge Resend
+        ackReSendTimeInMsIdx = cursor.getColumnIndex(SmsLogColumns.COL_MSG_ACK_RESEND_TRY_TIME_MS);
+        ackReSendMsgCountIdx = cursor.getColumnIndex(SmsLogColumns.COL_MSG_ACK_RESEND_MSG_COUNT);
 
         isNotInit = false;
         return this;
@@ -192,6 +201,26 @@ public class SmsLogHelper {
     }
 
     // ===========================================================
+    // Acknowledge Field Setter
+    // ===========================================================
+
+    public long getAckSendTimeInMs(Cursor cursor) {
+        return cursor.getLong(ackSendTimeInMsIdx);
+    }
+
+    public long getAckDeliveryTimeInMs(Cursor cursor) {
+        return cursor.getLong(ackDeliveryTimeInMsIdx);
+    }
+
+    public long getAckReSendTimeInMs(Cursor cursor) {
+        return cursor.getLong(ackReSendTimeInMsIdx);
+    }
+
+    public int getAckReSendMsgCount(Cursor cursor) {
+        return cursor.getInt(ackReSendMsgCountIdx);
+    }
+
+    // ===========================================================
     // Field Setter
     // ===========================================================
 
@@ -200,13 +229,6 @@ public class SmsLogHelper {
         return SmsLogSideEnum.getByDbCode(key);
     }
 
-    public long getSendAckTimeInMs(Cursor cursor) {
-        return cursor.getLong(sendAckTimeInMsIdx);
-    }
-
-    public long getSendDeliveryAckTimeInMs(Cursor cursor) {
-        return cursor.getLong(sendDeliveryAckTimeInMsIdx);
-    }
 
     public String getMessage(Cursor cursor) {
         return cursor.getString(messageIdx);

@@ -115,7 +115,7 @@ public class SmsSenderHelper {
         final int msgSplitCount = 1;
         // Acknowledge
         PendingIntent sendIntent = createPendingIntentAck(context, logUri, MessageAcknowledgeReceiver.ACTION_SEND_ACK, 1, msgSplitCount);
-        PendingIntent deliveryIntent =  createPendingIntentAck(context, logUri, MessageAcknowledgeReceiver.ACTION_DELIVERY_ACK, 1, msgSplitCount);
+        PendingIntent deliveryIntent = createPendingIntentAck(context, logUri, MessageAcknowledgeReceiver.ACTION_DELIVERY_ACK, 1, msgSplitCount);
         // Send Message
         smsManager.sendTextMessage(phone, null, encrypedMsg, sendIntent, deliveryIntent);
     }
@@ -128,7 +128,7 @@ public class SmsSenderHelper {
         ArrayList<PendingIntent> deliveryIntents = new ArrayList<PendingIntent>(msgSplitCount);
         for (int msgId = 1; msgId <= msgSplitCount; msgId++) {
             // Acknowledge
-            PendingIntent sendIntent =  createPendingIntentAck(context, logUri, MessageAcknowledgeReceiver.ACTION_SEND_ACK, msgId, msgSplitCount);
+            PendingIntent sendIntent = createPendingIntentAck(context, logUri, MessageAcknowledgeReceiver.ACTION_SEND_ACK, msgId, msgSplitCount);
             PendingIntent deliveryIntent = createPendingIntentAck(context, logUri, MessageAcknowledgeReceiver.ACTION_DELIVERY_ACK, msgId, msgSplitCount);
             sentIntents.add(sendIntent);
             deliveryIntents.add(deliveryIntent);
@@ -154,12 +154,15 @@ public class SmsSenderHelper {
     public static int reSendSmsMessage(Context context, Uri searchLogUri, String selection, String[] selectionArgs) {
         int result = 0;
         ContentResolver cr = context.getContentResolver();
-        String[] projection = new String[] {
-                SmsLogColumns.COL_ID,
-                SmsLogColumns.COL_PHONE,
-                SmsLogColumns.COL_MESSAGE  };
+        String[] projection = new String[]{
+                SmsLogColumns.COL_ID
+                , SmsLogColumns.COL_PHONE
+                , SmsLogColumns.COL_MESSAGE
+                , SmsLogColumns.COL_MSG_ACK_RESEND_MSG_COUNT
+               // , SmsLogColumns.COL_MSG_ACK_RESEND_TRY_TIME_MS
+        };
         String sortOrder = SmsLogDatabase.SmsLogColumns.ORDER_BY_TIME_ASC;
-        Cursor cursor=  cr.query(searchLogUri, projection, selection, selectionArgs, sortOrder);
+        Cursor cursor = cr.query(searchLogUri, projection, selection, selectionArgs, sortOrder);
         try {
             int cursorSize = cursor.getCount();
             if (cursorSize > 0) {
@@ -169,8 +172,9 @@ public class SmsSenderHelper {
                     String smsMessage = helper.getMessage(cursor);
                     String phone = helper.getSmsLogPhone(cursor);
                     Uri logUri = helper.getSmsLogUri(cursor);
-                    Log.d(TAG, "Resend SMS Message : " + smsMessage  );
-                    reSendSmsMessage(context, logUri, phone, smsMessage);
+                    int resendCount = helper.getAckReSendMsgCount(cursor);
+                    Log.d(TAG, "Resend SMS Message : " + smsMessage);
+                    reSendSmsMessage(context, logUri, phone, smsMessage, resendCount);
                     result++;
                 }
             }
@@ -180,7 +184,7 @@ public class SmsSenderHelper {
         return result;
     }
 
-    private static void reSendSmsMessage(Context context, Uri logUri, String phone, String encrypedMsg ) {
+    private static void reSendSmsMessage(Context context, Uri logUri, String phone, String encrypedMsg,  int resendCount ) {
         if (encrypedMsg != null && encrypedMsg.length() > 0) {
             SmsManager smsManager = SmsManager.getDefault();
             ContentResolver cr = context.getContentResolver();
@@ -188,12 +192,16 @@ public class SmsSenderHelper {
             ContentValues values = new ContentValues();
             values.put(SmsLogColumns.COL_SMSLOG_TYPE, SmsLogTypeEnum.SEND_REQ.getCode());
             // Reset Status
+            long now = System.currentTimeMillis();
             values.put(SmsLogColumns.COL_MSG_ACK_DELIVERY_TIME_MS, 0L);
             values.put(SmsLogColumns.COL_MSG_ACK_DELIVERY_MSG_COUNT, 0);
             values.put(SmsLogColumns.COL_MSG_ACK_DELIVERY_RESULT_MSG, "");
             values.put(SmsLogColumns.COL_MSG_ACK_SEND_TIME_MS, 0L);
             values.put(SmsLogColumns.COL_MSG_ACK_SEND_MSG_COUNT, 0);
             values.put(SmsLogColumns.COL_MSG_ACK_SEND_RESULT_MSG, "");
+            // Resend
+            values.put(SmsLogColumns.COL_MSG_ACK_RESEND_TRY_TIME_MS, now);
+            values.put(SmsLogColumns.COL_MSG_ACK_RESEND_MSG_COUNT, resendCount+1);
             // Do Update Status
             int updateCount = cr.update(logUri, values, null, null);
             // Compute Messages

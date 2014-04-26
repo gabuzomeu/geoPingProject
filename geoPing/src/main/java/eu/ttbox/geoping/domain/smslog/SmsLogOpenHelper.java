@@ -14,7 +14,7 @@ import eu.ttbox.geoping.domain.smslog.SmsLogDatabase.SmsLogColumns;
  * <li>Db version 9  : Geoping 0.2.0 (??) : Add COL_TO_READ & COL_REQUEST_ID</li>
  * <li>Db version 10 : Geoping 0.2.2 (??)</li>
  * <li>Db version 11 : Geoping 0.2.3 (??) : Rename COL_TO_READ to COL_TO_READ and ad INDEX</li>
- * <li>Db version 12 : Geoping 0.3.2 (??) : Add COL_MSG_ACK_RESEND_TIME_MS to COL_MSG_ACK_RESEND_MSG_COUNT</li>
+ * <li>Db version 12 : Geoping 0.3.2 (??) : Add COL_MSG_ACK_RESEND_TRY_TIME_MS to COL_MSG_ACK_RESEND_MSG_COUNT</li>
  * </ul>
  *  
  *
@@ -24,7 +24,7 @@ public class SmsLogOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = "SmsLogOpenHelper";
 
     public static final String DATABASE_NAME = "smsLog.db";
-    public static final int DATABASE_VERSION = 11;
+    public static final int DATABASE_VERSION = 12;
 
     // ===========================================================
     // Table
@@ -55,6 +55,9 @@ public class SmsLogOpenHelper extends SQLiteOpenHelper {
             + ", " + SmsLogColumns.COL_MSG_ACK_DELIVERY_TIME_MS + " INTEGER"//
             + ", " + SmsLogColumns.COL_MSG_ACK_SEND_RESULT_MSG + " TEXT"//
             + ", " + SmsLogColumns.COL_MSG_ACK_DELIVERY_RESULT_MSG + " TEXT"//
+            // Acknowledge Resend
+            + ", " + SmsLogColumns.COL_MSG_ACK_RESEND_TRY_TIME_MS + " INTEGER"//
+            + ", " + SmsLogColumns.COL_MSG_ACK_RESEND_MSG_COUNT + " INTEGER"//
             // Notif
             + ", " + SmsLogColumns.COL_TO_READ + " INTEGER"//
             // Geofence
