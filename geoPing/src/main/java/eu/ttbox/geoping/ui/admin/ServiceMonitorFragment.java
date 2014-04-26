@@ -37,6 +37,7 @@ public class ServiceMonitorFragment extends Fragment {
         // init
         ArrayList<ComponentName> serviceMonitor =  getComponentNameList(getActivity());
         adapter = new ServiceMonitorListAdapter( getActivity(),serviceMonitor);
+        serviceMonitorListView.setAdapter(adapter);
         // Init Listener
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
