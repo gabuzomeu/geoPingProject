@@ -13,6 +13,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import eu.ttbox.geoping.R;
+import eu.ttbox.geoping.domain.pairing.SpyServiceComponentName;
 import eu.ttbox.geoping.ui.billing.ExtraFeatureHelper;
 
 public class ServiceMonitorFragment extends Fragment {
@@ -55,8 +56,7 @@ public class ServiceMonitorFragment extends Fragment {
     // ===========================================================
 
     private void refreshServiceSattus() {
-        //TODO
-       // adapter.
+        adapter.notifyDataSetChanged();
     }
 
 
@@ -70,11 +70,20 @@ public class ServiceMonitorFragment extends Fragment {
         // Resend
         list.add(ExtraFeatureHelper.getComponentNameReSentSmsMessageReceiver(context));
         // Geofence
-        for (ComponentName comp :   ExtraFeatureHelper.getComponentNameGeofenceReceiver(context)) {
-            list.add(comp);
-        }
+        addAll(list,   ExtraFeatureHelper.getComponentNameGeofenceReceiver(context));
+        // Spy
+        addAll(list,   SpyServiceComponentName.getComponentSpyBootShutdownReceiver(context));
+        addAll(list,   SpyServiceComponentName.getComponentSpyLowBatteryReceiver(context));
+        addAll(list,   SpyServiceComponentName.getComponentSimChangeReceiver(context));
+        addAll(list,   SpyServiceComponentName.getComponentPhoneCallReceiver(context));
         return  list;
     }
 
+
+    private void addAll(ArrayList<ComponentName> list, ComponentName[] comps) {
+        for (ComponentName comp :  comps) {
+            list.add(comp);
+        }
+    }
 
 }

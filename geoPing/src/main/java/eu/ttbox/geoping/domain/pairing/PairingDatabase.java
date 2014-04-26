@@ -17,10 +17,6 @@ import java.util.HashMap;
 
 import eu.ttbox.geoping.core.PhoneNumberUtils;
 import eu.ttbox.geoping.domain.EncryptionColumns;
-import eu.ttbox.geoping.service.slave.eventspy.BootCompleteReceiver;
-import eu.ttbox.geoping.service.slave.eventspy.LowBatteryReceiver;
-import eu.ttbox.geoping.service.slave.eventspy.PhoneCallReceiver;
-import eu.ttbox.geoping.service.slave.eventspy.ShutdownReceiver;
 import eu.ttbox.geoping.service.slave.eventspy.SimChangeReceiver;
 
 public class PairingDatabase {
@@ -280,13 +276,13 @@ public class PairingDatabase {
     private ComponentName[] getSpyNotificationServiceClassForColumnName(Context context, String notifColumnName) {
         ComponentName[] serviceClass = null;
         if (PairingColumns.COL_NOTIF_SHUTDOWN.equals(notifColumnName)) {
-            serviceClass = new ComponentName[]{new ComponentName(context, ShutdownReceiver.class), new ComponentName(context, BootCompleteReceiver.class)};
+            serviceClass = SpyServiceComponentName.getComponentSpyBootShutdownReceiver(context);
         } else if (PairingColumns.COL_NOTIF_BATTERY_LOW.equals(notifColumnName)) {
-            serviceClass = new ComponentName[]{new ComponentName(context, LowBatteryReceiver.class)};
+            serviceClass = SpyServiceComponentName.getComponentSpyLowBatteryReceiver(context);
         } else if (PairingColumns.COL_NOTIF_SIM_CHANGE.equals(notifColumnName)) {
-            serviceClass = new ComponentName[]{new ComponentName(context, SimChangeReceiver.class)};
+            serviceClass = SpyServiceComponentName.getComponentSimChangeReceiver(context);
         } else if (PairingColumns.COL_NOTIF_PHONE_CALL.equals(notifColumnName)) {
-            serviceClass = new ComponentName[]{new ComponentName(context, PhoneCallReceiver.class)};
+            serviceClass = SpyServiceComponentName.getComponentPhoneCallReceiver(context);
         }
 
         return serviceClass;
