@@ -38,6 +38,11 @@ public class HoloColorPickerDialog extends DialogFragment implements OnColorChan
     // Constructors
     // ===========================================================
 
+    public HoloColorPickerDialog() {
+        super();
+    }
+
+
     // @Override
     // public View onCreateView(LayoutInflater inflater, ViewGroup container,
     // Bundle savedInstanceState) {

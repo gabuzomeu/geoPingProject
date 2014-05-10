@@ -13,7 +13,11 @@ import eu.ttbox.geoping.R;
 public class SecurityParentFragment extends Fragment {
 
 
-    TextView textView;
+    private TextView textView;
+
+    public SecurityParentFragment() {
+        super();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater,

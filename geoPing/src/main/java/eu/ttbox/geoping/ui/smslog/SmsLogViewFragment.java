@@ -75,10 +75,6 @@ public class SmsLogViewFragment extends Fragment {
     private Handler handler = new Handler();
     private PersonNameFinderHelper cacheNameFinder;
 
-
-    // ===========================================================
-    // Constructors
-    // ===========================================================
     private ContentObserver observer = new ContentObserver(handler) {
         @Override
         public void onChange(boolean selfChange) {
@@ -86,6 +82,15 @@ public class SmsLogViewFragment extends Fragment {
             super.onChange(selfChange);
         }
     };
+
+    // ===========================================================
+    // Constructors
+    // ===========================================================
+
+
+    public SmsLogViewFragment() {
+        super();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

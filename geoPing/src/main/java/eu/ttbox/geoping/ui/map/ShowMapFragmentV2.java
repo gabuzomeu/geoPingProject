@@ -111,6 +111,11 @@ public class ShowMapFragmentV2 extends OsmMapFragment implements SharedPreferenc
     // Constructors
     // ===========================================================
 
+
+    public ShowMapFragmentV2() {
+        super();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "### ### ### ### ### onCreateView call ### ### ### ### ###");

@@ -54,8 +54,13 @@ public class GeofenceListFragment extends Fragment {
     // ===========================================================
     // Constructor
     // ===========================================================
-	
-	@Override
+
+
+    public GeofenceListFragment() {
+        super();
+    }
+
+    @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.d(TAG, "onCreateView");
 		View v = inflater.inflate(R.layout.geofence_list, container, false);

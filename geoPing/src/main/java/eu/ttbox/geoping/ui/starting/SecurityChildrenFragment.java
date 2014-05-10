@@ -43,6 +43,10 @@ public class SecurityChildrenFragment extends Fragment {
     // ===========================================================
 
 
+    public SecurityChildrenFragment() {
+        super();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {

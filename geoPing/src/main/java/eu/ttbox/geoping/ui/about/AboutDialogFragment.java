@@ -23,6 +23,11 @@ public class AboutDialogFragment extends DialogFragment {
     // Constructors
     // ===========================================================
 
+
+    public AboutDialogFragment() {
+        super();
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Custum View

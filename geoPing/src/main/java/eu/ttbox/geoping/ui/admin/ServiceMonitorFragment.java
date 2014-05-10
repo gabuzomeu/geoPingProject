@@ -29,6 +29,11 @@ public class ServiceMonitorFragment extends Fragment {
     // Constructor
     // ===========================================================
 
+
+    public ServiceMonitorFragment() {
+        super();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.service_monitor, container, false);

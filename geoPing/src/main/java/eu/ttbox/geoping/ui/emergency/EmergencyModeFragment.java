@@ -49,6 +49,10 @@ public class EmergencyModeFragment extends Fragment {
     // Constructor
     // ===========================================================
 
+    public EmergencyModeFragment() {
+        super();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");

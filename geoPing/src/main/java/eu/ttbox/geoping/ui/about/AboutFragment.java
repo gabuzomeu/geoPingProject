@@ -25,6 +25,10 @@ public class AboutFragment extends Fragment {
     // Constructor
     // ===========================================================
 
+    public AboutFragment() {
+        super();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) { 
         Log.d(TAG, "onCreateView");

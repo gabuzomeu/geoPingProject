@@ -61,6 +61,12 @@ public class PersonRemoteControlFragment extends Fragment {
     // ===========================================================
     // Constructors
     // ===========================================================
+
+
+    public PersonRemoteControlFragment() {
+        super();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.track_person_remote_control, container, false);

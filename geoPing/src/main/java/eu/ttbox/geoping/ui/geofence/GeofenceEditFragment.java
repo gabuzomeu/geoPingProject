@@ -60,10 +60,15 @@ public class GeofenceEditFragment extends Fragment {
     // Constructors
     // ===========================================================
 
+
     public static GeofenceEditFragment newInstance(CircleGeofence fence) {
         GeofenceEditFragment fragment = new GeofenceEditFragment();
         fragment.loadEntity(fence);
         return fragment;
+    }
+
+    public GeofenceEditFragment() {
+        super();
     }
 
     @Override

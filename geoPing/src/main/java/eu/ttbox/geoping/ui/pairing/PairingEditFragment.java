@@ -121,6 +121,11 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
     // Constructors
     // ===========================================================
 
+
+    public PairingEditFragment() {
+        super();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "****************** onCreateView");

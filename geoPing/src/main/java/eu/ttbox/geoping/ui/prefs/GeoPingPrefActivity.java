@@ -304,6 +304,11 @@ public class GeoPingPrefActivity extends PreferenceActivity //SlidingPreferenceA
     public static class PrefsFragment extends PreferenceFragment
           implements   OnSharedPreferenceChangeListener
     {
+
+        public PrefsFragment() {
+            super();
+        }
+
         @Override
         public void onCreate(Bundle aSavedState) {
             super.onCreate(aSavedState);
@@ -365,6 +370,10 @@ public class GeoPingPrefActivity extends PreferenceActivity //SlidingPreferenceA
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class PrefsLockPatternFragment extends PreferenceFragment
             implements PreferenceHolder {
+
+        public PrefsLockPatternFragment() {
+            super();
+        }
 
         @Override
         public void onCreate(Bundle savedInstanceState) {

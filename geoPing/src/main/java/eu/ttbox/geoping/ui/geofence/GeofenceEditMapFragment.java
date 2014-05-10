@@ -31,6 +31,12 @@ public class GeofenceEditMapFragment extends ShowMapFragmentV2 {
     // ===========================================================
     // Constructors
     // ===========================================================
+
+
+    public GeofenceEditMapFragment() {
+        super();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);

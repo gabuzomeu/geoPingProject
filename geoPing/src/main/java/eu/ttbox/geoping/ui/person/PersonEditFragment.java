@@ -104,6 +104,11 @@ public class PersonEditFragment extends Fragment implements ColorPickerDialog.On
     // Constructors
     // ===========================================================
 
+
+    public PersonEditFragment() {
+        super();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.track_person_edit, container, false);

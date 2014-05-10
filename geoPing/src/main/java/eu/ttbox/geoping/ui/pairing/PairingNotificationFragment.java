@@ -47,6 +47,11 @@ public class PairingNotificationFragment extends Fragment {
     // Constructors
     // ===========================================================
 
+
+    public PairingNotificationFragment() {
+        super();
+    }
+
     private String getDatabaseColomnForView(CompoundButton v) {
         String result = null;
         switch (v.getId()) {

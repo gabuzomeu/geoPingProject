@@ -73,8 +73,13 @@ public class PairingListFragment extends Fragment {
     // ===========================================================
     // Constructor
     // ===========================================================
-	
-	@Override
+
+
+    public PairingListFragment() {
+        super();
+    }
+
+    @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.d(TAG, "onCreateView");
 		View v = inflater.inflate(R.layout.pairing_list, container, false);
