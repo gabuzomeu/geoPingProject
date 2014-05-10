@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="validator_empty">Mandatory</string>
-    <string name="validator_not_number">Not an number</string>
-    <string name="validator_email">The e-mail address is not in a valid format.</string>
-    <string name="validator_url">The URL entered is incorrect.</string>
-    <string name="validator_confirm">The confirm field is not valid.</string>
-    <string name="validator_alnum">The value has not only alnum characters</string>
-    <string name="validator_hex">The value has not only hexadecimal digit characters</string>
-    <string name="validator_regexp">The value does not match against pattern.</string>
+    <string name="validator_empty">Obligatorio</string>
+    <string name="validator_not_number">No es un numero</string>
+    <string name="validator_email">El e-mail direccion no esta un valido formato.</string>
+    <string name="validator_url">El URL entrada esta incorrecto.</string>
+    <string name="validator_confirm">El confirmado campo no esta valido.</string>
+    <string name="validator_alnum">El valor no tiene solo alnum caracteres</string>
+    <string name="validator_hex">El valor no tiene solo hexadecimal digit caracteres</string>
+    <string name="validator_regexp">El valor no corresponde contra el patron.</string>
 
-    <string name="validator_exiting_record">Existing record</string>
-    <string name="validator_textSize_min_max">The Size between %1$d and %2$d characters</string>
-    <string name="validator_textSize_min">More than %1$d characters</string>
-    <string name="validator_textSize_max">Less than %1$d characters</string>
+    <string name="validator_exiting_record">Registro existiendo</string>
+    <string name="validator_textSize_min_max">El tamano entre %1$d and %2$d caracteres</string>
+    <string name="validator_textSize_min">Mas que %1$d caracteres</string>
+    <string name="validator_textSize_max">Menos que %1$d caracteres</string>
 
-    <string name="validator_textForbidden_notAllowChar">The character %1$s is not allow</string>
+    <string name="validator_textForbidden_notAllowChar">El caracter %1$s no esta permitido</string>
 
 </resources>

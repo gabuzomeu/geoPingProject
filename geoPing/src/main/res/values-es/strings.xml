@@ -8,14 +8,14 @@
     <string name="geoping">GeoPing</string>
     <string name="menu_select_contact">Contactos</string>
     <string name="menu_save">Ahorrar</string>
-    <string name="menu_edit">Edit</string>
+    <string name="menu_edit">Editar</string>
 
     <string name="menu_delete">Quitar</string>
     <string name="menu_cancel">Cancelar</string> 
     
     <string name="send">Enviar</string>
     <string name="clear">Borrar</string>
-    <string name="refresh">Refresh</string>
+    <string name="refresh">Actualizar</string>
 
     <!-- Share -->
     <string name="menu_share_app">Repartir GeoPing</string>
@@ -55,8 +55,8 @@
     <string name="sms_action_geoping_response">GeoPing respuesta</string>
     <string name="sms_action_geoping_declaration">GeoPing declaración</string>
     <string name="sms_action_geofence_transition_unknown">Infraccion de la Geo barrera</string>
-    <string name="sms_action_geofence_transition_enter">Entered Geo Fence</string>
-    <string name="sms_action_geofence_transition_exit">Exited Geo Fence</string>
+    <string name="sms_action_geofence_transition_enter">Entrada de la Geo barrera</string>
+    <string name="sms_action_geofence_transition_exit">Salida de la Geo barrera</string>
     <string name="sms_action_geofence_transition_enter_with_name">Entrada : %s</string>
     <string name="sms_action_geofence_transition_exit_with_name">Salida : %s</string>
 
@@ -91,9 +91,9 @@
     <string name="menu_extra_feature">Extra funcionnes</string>
 
 
-    <string name="menu_map_geofences_show">GeoBarreras</string>
-    <string name="menu_map_geofences_hide">Esconder GeoBarreras</string>
-    <string name="menu_map_geofence_add">Anadir GeoBarrera</string>
+    <string name="menu_map_geofences_show">Geo barreras</string>
+    <string name="menu_map_geofences_hide">Esconder Geo barreras</string>
+    <string name="menu_map_geofence_add">Anadir Geo barreras</string>
     
     <string name="menu_pairing_notification">Notificacion</string>
     <string name="person_geoping_pairing_action">Asociacion</string>
@@ -115,9 +115,9 @@
     <string name="prefs_pairing_security_block_request_summaryOn">Autorizar nueva asociacion de GeoPing</string>
 
     <!-- Prefs Re Send Sms -->
-    <string name="prefs_sms_resend">Sms Message acknowledge</string>
-    <string name="prefs_sms_resend_on_error">Re Send Sms</string>
-    <string name="prefs_sms_resend_on_error_summary">On error the Sms will be send again</string>
+    <string name="prefs_sms_resend">Mensaje sms recepcion</string>
+    <string name="prefs_sms_resend_on_error">Envia de nuevo el mensaje</string>
+    <string name="prefs_sms_resend_on_error_summary">Hay un error el mensaje sera enviado otra vez</string>
 
 
     <!-- Prefs Sound Notification -->
@@ -130,8 +130,8 @@
     <string name="prefs_geoping_request">GeoLoc solicitud</string>
     <string name="prefs_show_geoping_notification">Mostrar una notificacion</string>
     <string name="prefs_show_geoping_notification_summary">Para las nuevas asociaciones</string>
-    <string name="prefs_geoping_request_timeout_ms">Request Time Out in s</string>
-    <string name="prefs_geoping_request_accuracy_expected_m">Request expected accuracy in m</string>
+    <string name="prefs_geoping_request_timeout_ms">Solicitud ha pasado en s</string>
+    <string name="prefs_geoping_request_accuracy_expected_m">Soicitud espera exactamente en m</string>
     <string name="prefs_geoping_localSave">Ahorrar en local</string>
     <string name="prefs_geoping_localSave_summaryOn">Archivado en local</string>
     <string name="prefs_geoping_localSave_summaryOff">Inhabilitado</string>
@@ -147,7 +147,7 @@
 
 
     <!-- Geoping Map prefs-->
-    <string name="prefs_geoping_map_category">Map display</string>
+    <string name="prefs_geoping_map_category">Visualizacion de Mapa</string>
 
     <string name="prefs_geoPoint_geocoding_auto">Geocoding automatico</string>
 
@@ -158,7 +158,7 @@
     <string name="prefs_sms_delete_onMessage_summaryOff">SMS Geoping están registrados</string>
 
     <string name="prefs_monitor">Monitor</string>
-    <string name="prefs_service_monitor">Service Monitor</string>
+    <string name="prefs_service_monitor">Servicio Monitor</string>
 
     <!-- Prefs Info -->
     <string name="prefs_info">Informacion</string>
@@ -171,23 +171,23 @@
     <string name="prefs_count_laught_summary">Numero de utilizacion de la aplicacion</string>
 
     <!-- Prefs LockApp -->
-    <string name="prefs_lockapp">Lock Application</string>
-    <string name="prefs_lockapp_lockpattern_create">Lock By Pattern</string>
-    <string name="prefs_lockapp_lockpattern_max_retry">Maximum retry</string>
-    <string name="prefs_lockapp_lockpattern_min_wired_dots">Minimum wired dots</string>
+    <string name="prefs_lockapp">Cierre Aplicacion</string>
+    <string name="prefs_lockapp_lockpattern_create">Cierre por patron</string>
+    <string name="prefs_lockapp_lockpattern_max_retry">Maximo prueba de nuevo</string>
+    <string name="prefs_lockapp_lockpattern_min_wired_dots">Minimo puntos informados</string>
 
-    <string name="prefs_launcher_icon">Launcher Icon</string>
-    <string name="prefs_launcher_icon_summary_on">Launcher Icon is show</string>
-    <string name="prefs_launcher_icon_summary_off">Launcher Icon is hide</string>
-    <string name="prefs_launcher_icon_error_missing_pairing_command_authorize">A person sould be authorize to accept SMS command</string>
+    <string name="prefs_launcher_icon">Launzamiento Icono</string>
+    <string name="prefs_launcher_icon_summary_on">Launzamiento Icono esta mostrado</string>
+    <string name="prefs_launcher_icon_summary_off">Launzamiento Icono esta ocultado</string>
+    <string name="prefs_launcher_icon_error_missing_pairing_command_authorize">Una persona debe esta autorizado para aceptar SMS orden</string>
 
     <!-- Prefs LockApp Widget -->
-    <string name="prefs_widget_category">Widget Feature</string>
-    <string name="prefs_widget_summary_on">Le Widget est visible</string>
-    <string name="prefs_widget_summary_off">Le Widget est caché</string>
+    <string name="prefs_widget_category">Widget Foncionalidades</string>
+    <string name="prefs_widget_summary_on">El Widget esta visible</string>
+    <string name="prefs_widget_summary_off">El Widget esta ocultado</string>
 
-    <string name="prefs_widget_person_list">Person Widget Icon</string>
-    <string name="prefs_widget_pairing_list">Pairing Widget Icon</string>
+    <string name="prefs_widget_person_list">Persona Widget Icono</string>
+    <string name="prefs_widget_pairing_list">Asociacion Widget Icono</string>
 
     <string name="kg_too_many_failed_attempts_countdown_seconds">"Inténtalo de nuevo en <xliff:g id="seconds">%d</xliff:g> segundos."</string>
     <string name="kg_too_many_failed_attempts_countdown_minutes">"Inténtalo de nuevo en <xliff:g id="minutes">%1$d min %2$d s.</xliff:g>"</string>
@@ -197,14 +197,14 @@
     <string name="show_dev_countdown">"Solo te quedan <xliff:g id="STEP_COUNT">%1$d</xliff:g> pasos para ser un desarrollador."</string>
     <string name="show_dev_on">"¡Ahora están activadas las opciones de desarrollo!"</string>
     <string name="show_dev_already">"No es necesario, están activadas las opciones de desarrollo."</string>
-    <string name="prefs_spynotif_title">Spy Notification</string>
-    <string name="prefs_spynotif_shutdown_sleep_in_ms">Shutdown Sleep In Ms</string>
-    <string name="prefs_spynotif_changed_phonenumber">SIM Phone Number</string>
-    <string name="prefs_add_blocked">Add Blocked</string>
+    <string name="prefs_spynotif_title">Espia Notificacion</string>
+    <string name="prefs_spynotif_shutdown_sleep_in_ms">Cierre el movil In Ms</string>
+    <string name="prefs_spynotif_changed_phonenumber">SIM movil numero</string>
+    <string name="prefs_add_blocked">Adicion obstruido</string>
 
        <!-- Prefs Infos Legale -->
-    <string name="legal_information">Legal information</string>
-    <string name="prefs_license_activity_title">Open source licenses</string>
+    <string name="legal_information">Legal informacion</string>
+    <string name="prefs_license_activity_title">Open source licencias</string>
     
     
     <!-- Dialog -->
@@ -216,8 +216,8 @@
     <string name="accuracy_precision_in_meter">+/- %sm</string>
 
     <!-- Map Timeline  -->
-    <string name="begin">Begin</string>
-    <string name="end">End</string>
+    <string name="begin">Empezar</string>
+    <string name="end">Acabar</string>
 
 
     <!-- Map My Location Dialog -->
@@ -225,7 +225,7 @@
     <string name="altitude">Altitud</string>
 
     <!-- App Version -->
-    <string name="app_version_update_necessary">Update Remote Application Necessary</string>
+    <string name="app_version_update_necessary">Actualizacion a distancia de la Aplicacion Necesario</string>
 
     <!-- Person model -->
     <string name="person_name">Nombre</string>
@@ -240,27 +240,27 @@
     <string name="pairing_authorize_type_never">Nunca</string>
     <string name="pairing_authorize_type_ask">Sobre validacion</string>
     <string name="pairing_authorize_type_always">Siempre</string>
-    <string name="pairing_notification_shutdown">Allumage/Extinction du téléphone</string>
-    <string name="pairing_notification_battery_low">Batterie faible</string>
-    <string name="pairing_notification_sim_change">Changement de carte SIM</string>
-    <string name="pairing_notification_phone_call">Appel Téléphonique Emis</string>
-    <string name="pairing_notification_phone_receive">Appel Téléphonique Recut</string>
+    <string name="pairing_notification_shutdown">Ignicion/Extincion del movil</string>
+    <string name="pairing_notification_battery_low">Bateria baja</string>
+    <string name="pairing_notification_sim_change">Cambio de la tarjeta SIM</string>
+    <string name="pairing_notification_phone_call">Llamada telefonico pasado</string>
+    <string name="pairing_notification_phone_receive">Llamda telefonico recibido</string>
 
     <!-- Geofence model -->
-    <string name="geofence_name">Geofence Name</string>
-    <string name="geofence_transition">Transition Type</string>
-    <string name="geofence_transition_enter">Entered Geo Fence</string>
-    <string name="geofence_transition_exit">Exited Geo Fence</string>
-    <string name="geofence_alarm">Alarm</string>
+    <string name="geofence_name">Geobarrera Nombre</string>
+    <string name="geofence_transition">Tipo transicion</string>
+    <string name="geofence_transition_enter">Entrada Geobarrera</string>
+    <string name="geofence_transition_exit">Salida Geobarrera</string>
+    <string name="geofence_alarm">Alarma</string>
 
-    <string name="edit_geofence">Edit a GeoFence</string>
-    <string name="add_geofence">Add a GeoFence</string>
-    <string name="geofence_help">"Create a GeoFence to get alerts when family members come and go."</string>
+    <string name="edit_geofence">Editar una Geobarrera</string>
+    <string name="add_geofence">Anadir una Geobarrera</string>
+    <string name="geofence_help">"Crear una Geobarrera para tener alertas cuando miembros de la familia llega y sale."</string>
 
 
     <!-- SmsLog Model -->
 	<string name="smslog_delete_all">Quitado todo</string>
-    <string name="smslog_message_size">"Message of %1$d characters"</string>
+    <string name="smslog_message_size">"Mensaje de %1$d personas"</string>
 
     <!-- Help -->
    <string name="person_help">Lista de las personas para quienes usted puede pedir un GeoPing.\n  \n
