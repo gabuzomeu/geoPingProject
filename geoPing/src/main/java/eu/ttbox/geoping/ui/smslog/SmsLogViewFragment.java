@@ -53,9 +53,16 @@ public class SmsLogViewFragment extends Fragment {
     private TextView smsTypeTimeTextView;
     private LinearLayout paramListView;
 
+
     // Binding Header
     private ImageView headerMainIcon;
     private ImageView headerSubIcon;
+
+    // Binding Resend
+    private View errorContainer;
+    private ImageView errorIconTwo;
+    private ImageView errorIconThree;
+    private TextView errorText;
 
     // Cache
     private PhotoThumbmailCache photoCache;
@@ -112,6 +119,13 @@ public class SmsLogViewFragment extends Fragment {
         // Header Bindings
         headerMainIcon = (ImageView) v.findViewById(R.id.header_photo_main_action);
         headerSubIcon = (ImageView) v.findViewById(R.id.header_photo_subelt_icon);
+
+        // Binding Resend
+        errorContainer = v.findViewById(R.id.smslog_list_error_container);
+        errorIconTwo = (ImageView) v.findViewById(R.id.smslog_list_error_img_two);
+        errorIconThree = (ImageView) v.findViewById(R.id.smslog_list_error_img_three);
+        errorText = (TextView) v.findViewById(R.id.smslog_list_error_text);
+
         return v;
     }
 
@@ -121,7 +135,17 @@ public class SmsLogViewFragment extends Fragment {
     // ===========================================================
 
     private void dispayReSendCount(int count) {
-        // TODO
+        int errorVisibility = count > 0 ? View.VISIBLE : View.GONE;
+        int iconTwo = count > 1 && count < 3 ? View.VISIBLE : View.GONE;
+        int iconThree = count == 3 ? View.VISIBLE : View.GONE;
+        int textVisibility = count > 3 ? View.VISIBLE : View.GONE;
+        // Manage Text
+        errorText.setText(count + "x");
+        // Visibility
+        errorContainer.setVisibility(errorVisibility);
+        errorIconTwo.setVisibility(iconTwo);
+        errorIconThree.setVisibility(iconThree);
+        errorText.setVisibility(textVisibility);
     }
 
 
@@ -131,7 +155,7 @@ public class SmsLogViewFragment extends Fragment {
 
     public void resendMessage() {
         headerSubIcon.setOnClickListener(null);
-        if (entityUri!=null) {
+        if (entityUri != null) {
             SmsSenderHelper.reSendSmsMessage(getActivity(), entityUri, null, null);
         }
         Toast.makeText(getActivity(), "Resend", Toast.LENGTH_SHORT).show();
@@ -298,7 +322,6 @@ public class SmsLogViewFragment extends Fragment {
         // Photo
         photoCache.loadPhoto(getActivity(), photoHeader.photoImageView, null, phone);
     }
-
 
 
     private void bindMessageParams(String msgParams) {

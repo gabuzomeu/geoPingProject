@@ -311,7 +311,7 @@
             </intent-filter>    
         </receiver> 
  
-        <!-- TODO Resend Sms Listener -->
+        <!-- Resend Sms Listener -->
         <receiver android:enabled="false" android:name=".service.receiver.network.ReSentSmsMessageReceiver">
             <intent-filter  >
                 <action android:name="android.intent.action.SIG_STR" />
