@@ -117,7 +117,7 @@
     <!-- Prefs Re Send Sms -->
     <string name="prefs_sms_resend">Mensaje sms recepcion</string>
     <string name="prefs_sms_resend_on_error">Envia de nuevo el mensaje</string>
-    <string name="prefs_sms_resend_on_error_summary">Hay un error el mensaje sera enviado otra vez</string>
+    <string name="prefs_sms_resend_on_error_summary">Hay un error el mensaje será enviado otra vez</string>
 
 
     <!-- Prefs Sound Notification -->
@@ -173,8 +173,8 @@
     <!-- Prefs LockApp -->
     <string name="prefs_lockapp">Cierre Aplicacion</string>
     <string name="prefs_lockapp_lockpattern_create">Cierre por patron</string>
-    <string name="prefs_lockapp_lockpattern_max_retry">Maximo prueba de nuevo</string>
-    <string name="prefs_lockapp_lockpattern_min_wired_dots">Minimo puntos informados</string>
+    <string name="prefs_lockapp_lockpattern_max_retry">Máximo prueba de nuevo</string>
+    <string name="prefs_lockapp_lockpattern_min_wired_dots">Mínimo puntos informados</string>
 
     <string name="prefs_launcher_icon">Launzamiento Icono</string>
     <string name="prefs_launcher_icon_summary_on">Launzamiento Icono esta mostrado</string>
@@ -197,9 +197,9 @@
     <string name="show_dev_countdown">"Solo te quedan <xliff:g id="STEP_COUNT">%1$d</xliff:g> pasos para ser un desarrollador."</string>
     <string name="show_dev_on">"¡Ahora están activadas las opciones de desarrollo!"</string>
     <string name="show_dev_already">"No es necesario, están activadas las opciones de desarrollo."</string>
-    <string name="prefs_spynotif_title">Espia Notificacion</string>
-    <string name="prefs_spynotif_shutdown_sleep_in_ms">Cierre el movil In Ms</string>
-    <string name="prefs_spynotif_changed_phonenumber">SIM movil numero</string>
+    <string name="prefs_spynotif_title">Espía Notificacion</string>
+    <string name="prefs_spynotif_shutdown_sleep_in_ms">Cierre el móvil In Ms</string>
+    <string name="prefs_spynotif_changed_phonenumber">SIM móvil numero</string>
     <string name="prefs_add_blocked">Adicion obstruido</string>
 
        <!-- Prefs Infos Legale -->
@@ -240,7 +240,7 @@
     <string name="pairing_authorize_type_never">Nunca</string>
     <string name="pairing_authorize_type_ask">Sobre validacion</string>
     <string name="pairing_authorize_type_always">Siempre</string>
-    <string name="pairing_notification_shutdown">Ignicion/Extincion del movil</string>
+    <string name="pairing_notification_shutdown">Ignicion/Extincion del móvil</string>
     <string name="pairing_notification_battery_low">Bateria baja</string>
     <string name="pairing_notification_sim_change">Cambio de la tarjeta SIM</string>
     <string name="pairing_notification_phone_call">Llamada telefonico pasado</string>

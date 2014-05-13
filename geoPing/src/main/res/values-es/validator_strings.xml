@@ -14,6 +14,6 @@
     <string name="validator_textSize_min">Mas que %1$d caracteres</string>
     <string name="validator_textSize_max">Menos que %1$d caracteres</string>
 
-    <string name="validator_textForbidden_notAllowChar">El caracter %1$s no esta permitido</string>
+    <string name="validator_textForbidden_notAllowChar">El carácter %1$s no esta permitido</string>
 
 </resources>
