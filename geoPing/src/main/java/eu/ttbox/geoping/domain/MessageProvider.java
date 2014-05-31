@@ -12,6 +12,7 @@ import android.util.Log;
 
 import java.util.Locale;
 
+import eu.ttbox.geoping.GeoPingApplication;
 import eu.ttbox.geoping.domain.message.MessageDatabase;
 import eu.ttbox.geoping.domain.message.MessageDatabase.MessageColumns;
 
@@ -70,7 +71,7 @@ public class MessageProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        messageDatabase = new MessageDatabase(getContext());
+        messageDatabase = GeoPingApplication.getGeoPingApplication(getContext()).getMessageDatabase();
         return true;
     }
 

@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
+import eu.ttbox.geoping.GeoPingApplication;
 import eu.ttbox.geoping.domain.pairing.GeoFenceDatabase;
 import eu.ttbox.geoping.domain.pairing.GeoFenceDatabase.GeoFenceColumns;
 
@@ -60,7 +61,7 @@ public class GeoFenceProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        geofenceDatabase = new GeoFenceDatabase(getContext());
+        geofenceDatabase =   GeoPingApplication.getGeoPingApplication(getContext()).getGeoFenceDatabase();
         return true;
     }
 

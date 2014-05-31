@@ -13,6 +13,7 @@ import android.util.Log;
 
 import java.util.Locale;
 
+import eu.ttbox.geoping.GeoPingApplication;
 import eu.ttbox.geoping.domain.person.PersonDatabase;
 import eu.ttbox.geoping.domain.person.PersonDatabase.PersonColumns;
 
@@ -92,7 +93,7 @@ public class PersonProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        personDatabase = new PersonDatabase(getContext());
+        personDatabase =  GeoPingApplication.getGeoPingApplication(getContext()).getPersonDatabase();
         return true;
     }
 

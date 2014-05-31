@@ -20,6 +20,10 @@ import eu.ttbox.geoping.core.AppConstants;
 import eu.ttbox.geoping.core.VersionUtils;
 import eu.ttbox.geoping.crypto.PRNGFixes;
 import eu.ttbox.geoping.domain.geotrack.GeoTrackDatabase;
+import eu.ttbox.geoping.domain.message.MessageDatabase;
+import eu.ttbox.geoping.domain.pairing.GeoFenceDatabase;
+import eu.ttbox.geoping.domain.pairing.PairingDatabase;
+import eu.ttbox.geoping.domain.person.PersonDatabase;
 import eu.ttbox.geoping.domain.smslog.SmsLogDatabase;
 import eu.ttbox.geoping.utils.contact.PhotoThumbmailCache;
 
@@ -256,12 +260,46 @@ public class GeoPingApplication extends Application {
         }
         return smsLogDatabase;
     }
+    PersonDatabase personDatabase;
+    PairingDatabase pairingDatabase;
+
+    public PersonDatabase getPersonDatabase() {
+        if (personDatabase == null) {
+            personDatabase = new PersonDatabase(this);
+        }
+        return personDatabase;
+    }
+
+    public PairingDatabase getPairingDatabase() {
+        if (pairingDatabase == null) {
+            pairingDatabase = new PairingDatabase(this);
+        }
+        return pairingDatabase;
+    }
 
     public GeoTrackDatabase getGeoTrackDatabase() {
         if (geoTrackDatabase == null) {
             geoTrackDatabase = new GeoTrackDatabase(this);
         }
         return geoTrackDatabase;
+    }
+
+    MessageDatabase messageDatabase;
+
+    public MessageDatabase getMessageDatabase() {
+        if (messageDatabase == null) {
+            messageDatabase = new MessageDatabase(this);
+        }
+        return messageDatabase;
+    }
+
+    GeoFenceDatabase geoFenceDatabase;
+
+    public GeoFenceDatabase getGeoFenceDatabase() {
+        if (geoFenceDatabase == null) {
+            geoFenceDatabase = new GeoFenceDatabase(this);
+        }
+        return geoFenceDatabase;
     }
 
    /* public SecureDatabase getSecureDatabase() {

@@ -13,6 +13,7 @@ import android.util.Log;
 
 import java.util.Locale;
 
+import eu.ttbox.geoping.GeoPingApplication;
 import eu.ttbox.geoping.domain.pairing.PairingDatabase;
 import eu.ttbox.geoping.domain.pairing.PairingDatabase.PairingColumns;
 
@@ -83,7 +84,7 @@ public class PairingProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        pairingDatabase = new PairingDatabase(getContext());
+        pairingDatabase = GeoPingApplication.getGeoPingApplication(getContext()).getPairingDatabase();
         return true;
     }
 
