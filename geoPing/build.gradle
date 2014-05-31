@@ -58,7 +58,7 @@ android {
         packageName "eu.ttbox.geoping"
 //        versionCode 63
 //        versionName "0.4.0"
-        minSdkVersion 10
+        minSdkVersion 9
         targetSdkVersion 19
     }
 
