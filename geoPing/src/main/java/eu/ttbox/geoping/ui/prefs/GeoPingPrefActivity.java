@@ -150,6 +150,16 @@ public class GeoPingPrefActivity extends PreferenceActivity //SlidingPreferenceA
             }
         }
     }
+
+
+    @Override
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    protected boolean isValidFragment (String fragmentName) {
+        //if([YOUR_FRAGMENT_NAME_HERE].class.getName().equals(fragmentName)) return true;
+        Log.d(TAG, "isValidFragment : " + fragmentName);
+        return true;
+    }
+
     // ===========================================================
     // onActivityResult
     // ===========================================================
@@ -319,6 +329,13 @@ public class GeoPingPrefActivity extends PreferenceActivity //SlidingPreferenceA
             addPreferencesFromResource(thePrefRes);
             // Init Summary
             initSummaries(anAct, this.getPreferenceScreen());
+
+        }
+
+
+        @Override
+        public void onSaveInstanceState(Bundle outState) {
+            super.onSaveInstanceState(outState);
         }
 
         @Override
