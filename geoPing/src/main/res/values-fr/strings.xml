@@ -277,7 +277,7 @@
 
     <!-- Help -->
 <!--     <string name="person_help">Liste des personnes auquelles vous pouvez demander un GeoPing.\n\nLa fonction d\'appariement permet de demander à l\'application Geoping distante quels seront vos droits de demande de GeoPing</string> -->
-    <string name="person_help">"Liste des personnes à GeoPinger
+    <string name="person_help">"Liste des personnes à GeoPinger  \n
         <b> 1- </b> Ajoutez une personne en saisissant son numéro de téléphone (ou en le sélectionnant dans la liste de contacts) \n
         <b> 2- </b> Installez l\'application GeoPing sur le deuxième téléphone (pour lequel vous souhaitez obtenir sa localisation) \n
         <b> 3- </b> Envoyez une demande d\'association pour autoriser seulement votre numéro de téléphone \n
