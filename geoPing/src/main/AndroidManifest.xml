@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="63"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="64"
     android:installLocation="auto"
-    android:versionName="0.4.0" package="eu.ttbox.geoping">
+    android:versionName="0.4.1" package="eu.ttbox.geoping">
 
     
     <!--<uses-sdk android:minSdkVersion="10" android:targetSdkVersion="19"/>-->

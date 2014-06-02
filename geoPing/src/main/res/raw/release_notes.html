@@ -1,151 +1,176 @@
 <html>
 <head>
-<meta name="viewport" content="width=device-width, user-scalable=no" />
-<style type="text/css">
-p {
-	font-family: helvetica, arial, sans-serif;
-	font-size: 14px;
-	color: white;
-	text-align: center;
-}
+    <meta name="viewport" content="width=device-width, user-scalable=no"/>
+    <style type="text/css">
+        p {
+        font-family: helvetica, arial, sans-serif;
+        font-size: 14px;
+        color: white;
+        text-align: center;
+        }
 
-a {
-	color: white;
-}
+        a {
+        color: white;
+        }
 
-body {
-	background: black;
-	color: white;
-}
-</style>
+        body {
+        background: black;
+        color: white;
+        }
+    </style>
 </head>
 <body>
-    <p>
-    <h1>Version 0.4.0 :</h1>
-    <ul>
-        <li>New : Login by pattern.</li>
-        <li>New : Furtif Mode.</li>
-        <li>New : Mini Map</li>
-        <li>New : Choose the application install place (Thank to Christophe)</li>
-        <li>Bug : GeoFence Edit on Android 2.3.x/li>
-        <li>Bug : Show request GeoPing Notification on Android 2.3.x/li>
-        <li>Bug : Person Remote Control disappear after screen rotation.</li>
-    </ul>
-    </p>
+<p>
 
-    <p>
-    <h1>Version 0.3.2 :</h1>
-    <ul>
-        <li>Update : The geofencing support hardware-based GPS geofencing on devices that have supporting hardware, such as the Nexus 4.</li>
-        <li>Update : Preference summary on Hcs</li>
-        <li>Bug : GeoPing Location should be less than One Minute for interupt Search</li>
-    </ul>
-    </p>
+<h1>Version 0.4.1 :</h1>
+<ul>
+    <li>New : New geo location algorithm.</li>
+</ul>
+</p>
 
-    <p>
-    <h1>Version 0.3.1 :</h1>
-    <ul>
-        <li>New : Add Pairing Lock Button in List</li>
-        <li>Update : Add security on Ring phone feature</li>
-        <li>Bug : In Gingerbread suppress buggy SmsLog tabs from Main Screen</li>
-        <li>Bug : When update db model, manage error in not existing table</li>
-    </ul>
-    </p>
+<p>
 
-    <p>
-    <h1>Version 0.3.0 :</h1>
-    <ul>
-        <li>New : Counter On GeoPing Notification</li>
-        <li>New : Manage Geomagnetic declination on compass display</li>
-        <li>Update : Update Slinding Menu 1.3.1</li>
-        <li>Update : Suppress ActionBar Sherlock</li>
-        <li>Bug : Map Invalidation optimisation, to use less cpu</li>
-        <li>Bug : Geofence In/out label inverted</li>
-    </ul>
-    </p>
+<h1>Version 0.4.0 :</h1>
+<ul>
+    <li>New : Login by pattern.</li>
+    <li>New : Furtif Mode, permit to destroy the application icon. No other way to start application except by remote control panel that send a SMS to open application.</li>
+    <li>New : Mini Map</li>
+    <li>New : Choose the application install place (Thank to Christophe)</li>
+    <li>New : RingTone notification preferences </li>
+    <li>Bug : GeoFence Geo localisation precision : In some devices, sometime, the sensors history send dummy values./li>
+    <li>Bug : GeoFence Edit on Android 2.3.x/li>
+    <li>Bug : Show request GeoPing Notification on Android 2.3.x/li>
+    <li>Bug : Person Remote Control disappear after screen rotation.</li>
+</ul>
+</p>
 
-    <p>
-    <h1>Version 0.2.2 :</h1>
-    <ul>
-        <li>Bug : Crash in 2.3.x (thank to Than)</li>
-        <li>Bug : Map Flash</li>
-        <li>Update : Long SMS sender for futur features</li>
-        <li>Update : Backup for Preferences</li><li>Update : Long SMS sender for futur features</li>
-    </ul>
-    </p>
+<p>
 
-    <p>
-	<h1>Version 0.2.0 :</h1>
-	<ul>
-        <li>New : Geo Fence notification</li>
-		<li>New : Multi Windows for PIP features</li>
-        <li>New : Validation Form</li>
-        <li>New : GeoPing request precision with remote parameters</li>
-	</ul>
-    </p>
-    
-	<p>
-	<h1>Version 0.1.8 :</h1>
-	<ul> 
-		<li>Bug Fix : Error on closing Map</li>
-	</ul>
-    </p>
-    
-	<p>
-	<h1>Version 0.1.7 :</h1>
-	<ul> 
-		<li>New : Navigation mode by Sliding Menu</li>
-		<li>Update : Persist hide My Location status on Map</li>
-		<li>Bug : On display Person without photo</li>
-		<li>Bug : On SMS GeoPing reception during Boot Time</li>
-	</ul>
-    </p>
-    
-	<p>
-	<h1>Version 0.1.6 :</h1>
-	<ul> 
-		<li>New : Save Acknowledge on Log for SMS Send</li>
-		<li>New : Event Type for the Source of GeoPing</li>
-		<li>New : New Color Picker</li>
-		<li>New : Event Notification on :
-			<ul>
-				<li>Shutdown</li>
-				<li>Boot</li>
-				<li>Low Battery</li> 
-			</ul>
-		</li>
-		<li>New : Share Apps Action</li>
-		<li>New : Rate and Comment Action</li>
-		<li>New : Button for direct Map open on the selected person</li>
-		<li>Upgrade : Review the Preferences settings</li>
-		<li>Upgrade : Log filtering on screen (Pairing on Person)</li>
-		<li>Bug : Label on Log Display</li>
-	</ul>
-	</p>
-	
-	<p>
-	<h1>Version 0.1.5 :</h1>
-	<ul>
-		<li>Display photos contact</li>
-		<li>Fix for partial Wake-up to force correct GeoPing</li>
-		<li>Map Timeline for GeoPing filtering</li>
-	</ul>
-	</p>
-	<p>
-	<h1>Version 0.1.4 :</h1>
-	<ul>
-		<li>Fix and test on Android 2.3.6</li>
-		<li>Add ActionBar on Android 2.3.x</li>
-		<li>Add Battery Level on Each GeoPing</li>
-	</ul>
-	</p>
-	<p>
-	<h1>Version 0.1.3 :</h1>
-	<ul>
-		<li>Bug on Notification onAndroid 2.3</li>
-		<li>Bug on empty phone number</li>
-		<li>Traduction english and spanish</li>
-	</ul>
-	</p>
+<h1>Version 0.3.2 :</h1>
+<ul>
+    <li>Update : The geofencing support hardware-based GPS geofencing on devices that have
+        supporting hardware, such as the Nexus 4.
+    </li>
+    <li>Update : Preference summary on Hcs</li>
+    <li>Bug : GeoPing Location should be less than One Minute for interupt Search</li>
+</ul>
+</p>
+
+<p>
+
+<h1>Version 0.3.1 :</h1>
+<ul>
+    <li>New : Add Pairing Lock Button in List</li>
+    <li>Update : Add security on Ring phone feature</li>
+    <li>Bug : In Gingerbread suppress buggy SmsLog tabs from Main Screen</li>
+    <li>Bug : When update db model, manage error in not existing table</li>
+</ul>
+</p>
+
+<p>
+
+<h1>Version 0.3.0 :</h1>
+<ul>
+    <li>New : Counter On GeoPing Notification</li>
+    <li>New : Manage Geomagnetic declination on compass display</li>
+    <li>Update : Update Slinding Menu 1.3.1</li>
+    <li>Update : Suppress ActionBar Sherlock</li>
+    <li>Bug : Map Invalidation optimisation, to use less cpu</li>
+    <li>Bug : Geofence In/out label inverted</li>
+</ul>
+</p>
+
+<p>
+
+<h1>Version 0.2.2 :</h1>
+<ul>
+    <li>Bug : Crash in 2.3.x (thank to Thanh)</li>
+    <li>Bug : Map Flash</li>
+    <li>Update : Long SMS sender for futur features</li>
+    <li>Update : Backup for Preferences</li>
+    <li>Update : Long SMS sender for futur features</li>
+</ul>
+</p>
+
+<p>
+
+<h1>Version 0.2.0 :</h1>
+<ul>
+    <li>New : Geo Fence notification</li>
+    <li>New : Multi Windows for PIP features</li>
+    <li>New : Validation Form</li>
+    <li>New : GeoPing request precision with remote parameters</li>
+</ul>
+</p>
+
+<p>
+
+<h1>Version 0.1.8 :</h1>
+<ul>
+    <li>Bug Fix : Error on closing Map</li>
+</ul>
+</p>
+
+<p>
+
+<h1>Version 0.1.7 :</h1>
+<ul>
+    <li>New : Navigation mode by Sliding Menu</li>
+    <li>Update : Persist hide My Location status on Map</li>
+    <li>Bug : On display Person without photo</li>
+    <li>Bug : On SMS GeoPing reception during Boot Time</li>
+</ul>
+</p>
+
+<p>
+
+<h1>Version 0.1.6 :</h1>
+<ul>
+    <li>New : Save Acknowledge on Log for SMS Send</li>
+    <li>New : Event Type for the Source of GeoPing</li>
+    <li>New : New Color Picker</li>
+    <li>New : Event Notification on :
+        <ul>
+            <li>Shutdown</li>
+            <li>Boot</li>
+            <li>Low Battery</li>
+        </ul>
+    </li>
+    <li>New : Share Apps Action</li>
+    <li>New : Rate and Comment Action</li>
+    <li>New : Button for direct Map open on the selected person</li>
+    <li>Upgrade : Review the Preferences settings</li>
+    <li>Upgrade : Log filtering on screen (Pairing on Person)</li>
+    <li>Bug : Label on Log Display</li>
+</ul>
+</p>
+
+<p>
+
+<h1>Version 0.1.5 :</h1>
+<ul>
+    <li>Display photos contact</li>
+    <li>Fix for partial Wake-up to force correct GeoPing</li>
+    <li>Map Timeline for GeoPing filtering</li>
+</ul>
+</p>
+<p>
+
+<h1>Version 0.1.4 :</h1>
+<ul>
+    <li>Fix and test on Android 2.3.6</li>
+    <li>Add ActionBar on Android 2.3.x</li>
+    <li>Add Battery Level on Each GeoPing</li>
+</ul>
+</p>
+<p>
+
+<h1>Version 0.1.3 :</h1>
+<ul>
+    <li>Bug on Notification onAndroid 2.3</li>
+    <li>Bug on empty phone number</li>
+    <li>Traduction english and spanish</li>
+</ul>
+</p>
 </body>
 </html>
