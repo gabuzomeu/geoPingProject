@@ -116,6 +116,8 @@ public class SmsLogHelper {
     // Data Accessor
     // ===========================================================
 
+
+
     public SmsLogHelper initWrapper(Cursor cursor) {
         idIdx = cursor.getColumnIndex(SmsLogColumns.COL_ID);
         timeIdx = cursor.getColumnIndex(SmsLogColumns.COL_TIME);

@@ -23,6 +23,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Arrays;
+
 import eu.ttbox.geoping.GeoPingApplication;
 import eu.ttbox.geoping.R;
 import eu.ttbox.geoping.core.Intents;
@@ -253,6 +255,7 @@ public class SmsLogViewFragment extends Fragment {
         String selection = null;
         String[] selectionArgs = null;
         Cursor cursor = cr.query(entityUri, SmsLogDatabase.SmsLogColumns.ALL_COLS, selection, selectionArgs, null);
+        Log.d(TAG, "loadEntity : " + Arrays.toString(SmsLogDatabase.SmsLogColumns.ALL_COLS));
         try {
             if (cursor.moveToFirst()) {
                 loadEntity(cursor);
@@ -313,6 +316,7 @@ public class SmsLogViewFragment extends Fragment {
         );
         smsTypeTimeTextView.setText(smsTypeTime);
         // Acknowledge
+        Log.d(TAG, "getAckReSendMsgCount Idx : " + helper.ackReSendMsgCountIdx );
         int resendCount = helper.getAckReSendMsgCount(cursor);
         dispayReSendCount(resendCount);
 

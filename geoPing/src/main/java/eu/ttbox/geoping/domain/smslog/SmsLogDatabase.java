@@ -50,7 +50,7 @@ public class SmsLogDatabase {
         public static final String COL_MSG_ACK_DELIVERY_RESULT_MSG = "MSG_ACK_DELIVERY_RESULT_MSG";
 
         public static final String COL_MSG_ACK_RESEND_TRY_TIME_MS = "MSG_ACK_RESEND_TRY_TIME_MS";
-        public static final String COL_MSG_ACK_RESEND_MSG_COUNT = "MSG_ACK_RESEND_MSG_COUNT ";
+        public static final String COL_MSG_ACK_RESEND_MSG_COUNT = "MSG_ACK_RESEND_MSG_COUNT";
 
 
         // Geofence
