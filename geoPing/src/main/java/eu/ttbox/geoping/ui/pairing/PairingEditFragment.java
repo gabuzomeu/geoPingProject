@@ -66,7 +66,7 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
 
     // Config
     private static final boolean DEFAULT_PREFS_SHOW_GEOPING_NOTIFICATION = false;
-    private static final boolean DEFAULT_PREFS_GEOFENCE_NOTIFICATION = true;
+    private static final boolean DEFAULT_PREFS_GEOFENCE_NOTIFICATION = false;
 
     private boolean showNotifDefault = DEFAULT_PREFS_SHOW_GEOPING_NOTIFICATION;
     private boolean geofenceNotifDefault = DEFAULT_PREFS_GEOFENCE_NOTIFICATION;
@@ -690,7 +690,7 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
                 // Binding
                 phoneEditText.setText(pairingPhone);
                 helper.setTextPairingName(nameEditText, cursor)//
-                        .setCheckBoxPairingGeofenceNotif(showNotificationCheckBox, cursor)
+                        .setCheckBoxPairingGeofenceNotif(geofenceNotificationCheckBox, cursor)
                         .setCheckBoxPairingShowNotif(showNotificationCheckBox, cursor);
                 // Pairing
                 PairingAuthorizeTypeEnum authType = helper.getPairingAuthorizeTypeEnum(cursor);
