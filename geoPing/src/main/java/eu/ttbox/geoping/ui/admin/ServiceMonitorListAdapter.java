@@ -74,7 +74,16 @@ public class ServiceMonitorListAdapter extends ArrayAdapter<ComponentName> {
         holder.nameText.setText(name);
         try {
             ServiceInfo serviceInfo = pm.getServiceInfo(item, PackageManager.GET_META_DATA);
-            holder.descriptionText.setText(serviceInfo.toString());
+            String serviceName;
+            if (serviceInfo!=null) {
+                  serviceName = serviceInfo.toString();
+                  if (serviceName.startsWith("eu.ttbox.geoping.")) {
+                      serviceName = serviceName.replace("eu.ttbox.geoping.", ".");
+                  }
+            } else {
+                serviceName = "? ? ?";
+            }
+            holder.descriptionText.setText(serviceName);
         } catch (PackageManager.NameNotFoundException e) {
             holder.descriptionText.setText("Error : " + e.getMessage());
         }

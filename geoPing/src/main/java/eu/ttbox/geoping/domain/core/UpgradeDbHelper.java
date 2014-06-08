@@ -75,6 +75,23 @@ public class UpgradeDbHelper {
         return  allRows;
     }
 
+    public static int updateTableWithValue(SQLiteDatabase db, String oldTable, ContentValues values, String whereClause, String[] selectionArg) {
+        int result = -1;
+        //SQLiteDatabase db = mDatabaseOpenHelper.getWritableDatabase();
+        try {
+            db.beginTransaction();
+            try {
+                result = db.update(oldTable, values, whereClause, selectionArg);
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
+        } finally {
+            db.close();
+        }
+        return result;
+
+    }
     public static ArrayList<ContentValues> copyTable(SQLiteDatabase db, String oldTable, String[] stringColums, String[] intColums, String[] longColums) {
         ArrayList<ContentValues> allRows = null;
         Cursor cursor = null;

@@ -66,7 +66,10 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
 
     // Config
     private static final boolean DEFAULT_PREFS_SHOW_GEOPING_NOTIFICATION = false;
+    private static final boolean DEFAULT_PREFS_GEOFENCE_NOTIFICATION = true;
+
     private boolean showNotifDefault = DEFAULT_PREFS_SHOW_GEOPING_NOTIFICATION;
+    private boolean geofenceNotifDefault = DEFAULT_PREFS_GEOFENCE_NOTIFICATION;
 
     // Paint
     Paint mPaint = new Paint();
@@ -75,6 +78,7 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
     private EditText nameEditText;
     private EditText phoneEditText;
     private CheckBox showNotificationCheckBox;
+    private CheckBox geofenceNotificationCheckBox;
     private TextView authorizeTypeTextView;
 
     private RadioGroup authorizeTypeRadioGroup;
@@ -149,6 +153,7 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         nameEditText = (EditText) v.findViewById(R.id.pairing_name);
         phoneEditText = (EditText) v.findViewById(R.id.pairing_phone);
         showNotificationCheckBox = (CheckBox) v.findViewById(R.id.paring_show_notification);
+        geofenceNotificationCheckBox = (CheckBox) v.findViewById(R.id.paring_geofence_notification);
         authorizeTypeTextView = (TextView) v.findViewById(R.id.pairing_authorize_type);
 
         authorizeTypeRadioGroup = (RadioGroup) v.findViewById(R.id.pairing_authorize_type_radioGroup);
@@ -174,7 +179,7 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         authorizeTypeNeverRadioButton.setOnClickListener(radioAuthListener);
         authorizeTypeAlwaysRadioButton.setOnClickListener(radioAuthListener);
 
-        // default value
+        // Show Notification
         showNotificationCheckBox.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -185,7 +190,19 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         });
         showNotificationCheckBox.setChecked(showNotifDefault);
 
+        // Geofence
         // default value
+        geofenceNotificationCheckBox.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                onGeofenceNotificationClick(v);
+
+            }
+        });
+        geofenceNotificationCheckBox.setChecked(geofenceNotifDefault);
+
+        // Select contact
         selectContactClickButton.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -391,6 +408,16 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         }
     }
 
+    public void onGeofenceNotificationClick(View v) {
+        if (entityUri != null) {
+            boolean isCheck = geofenceNotificationCheckBox.isChecked();
+            ContentValues values = new ContentValues();
+            values.put(PairingColumns.COL_SHOW_NOTIF, isCheck);
+            int count = getActivity().getContentResolver().update(entityUri, values, null, null);
+        }
+    }
+
+
     // ===========================================================
     // Listener
     // ===========================================================
@@ -503,9 +530,12 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         Uri uri;
         ContentResolver cr = getActivity().getContentResolver();
         if (entityUri == null) {
-            // Add value for checked
+            // Show Notification checked
             boolean isCheck = showNotificationCheckBox.isChecked();
             values.put(PairingColumns.COL_SHOW_NOTIF, isCheck);
+            // Geofence
+            boolean isGeofenceNotif = geofenceNotificationCheckBox.isChecked();
+            values.put(PairingColumns.COL_GEOFENCE_NOTIF, isGeofenceNotif);
             // Do Insert
             uri = cr.insert(PairingProvider.Constants.CONTENT_URI, values);
             this.entityUri = uri;
@@ -660,6 +690,7 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
                 // Binding
                 phoneEditText.setText(pairingPhone);
                 helper.setTextPairingName(nameEditText, cursor)//
+                        .setCheckBoxPairingGeofenceNotif(showNotificationCheckBox, cursor)
                         .setCheckBoxPairingShowNotif(showNotificationCheckBox, cursor);
                 // Pairing
                 PairingAuthorizeTypeEnum authType = helper.getPairingAuthorizeTypeEnum(cursor);

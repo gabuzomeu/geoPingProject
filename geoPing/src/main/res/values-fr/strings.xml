@@ -249,6 +249,7 @@
     <string name="pairing_name">Nom</string>
     <string name="pairing_phone">N° téléphone</string>
     <string name="pairing_show_notification">Afficher une notification</string>
+    <string name="pairing_geofence_notification">Géo barrière notification</string>
     <string name="pairing_authorize_type">Autorisé</string>
     <string name="pairing_authorize_type_never">Bloqué</string>
     <string name="pairing_authorize_type_ask">Sur validation</string>

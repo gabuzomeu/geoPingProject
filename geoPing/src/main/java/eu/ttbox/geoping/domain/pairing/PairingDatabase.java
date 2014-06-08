@@ -38,6 +38,7 @@ public class PairingDatabase {
         public static final String COL_PHONE_MIN_MATCH = "PHONE_MIN_MATCH";
         public static final String COL_AUTHORIZE_TYPE = "AUTHORIZE_TYPE";
         public static final String COL_SHOW_NOTIF = "SHOW_NOTIF";
+        public static final String COL_GEOFENCE_NOTIF = "GEOFENCE_NOTIF";
         public static final String COL_PAIRING_TIME = "COL_PAIRING_TIME";
         // App Version
         public static final String COL_APP_VERSION = "COL_APP_VERSION";
@@ -64,7 +65,8 @@ public class PairingDatabase {
                 COL_ID, COL_NAME, COL_PHONE, COL_CONTACT_ID//
                 , COL_EMAIL, COL_PERSON_UUID //
                 , COL_PHONE_NORMALIZED, COL_PHONE_MIN_MATCH //
-                , COL_AUTHORIZE_TYPE, COL_SHOW_NOTIF, COL_PAIRING_TIME //
+                , COL_AUTHORIZE_TYPE, COL_SHOW_NOTIF, COL_GEOFENCE_NOTIF //
+                , COL_PAIRING_TIME //
                 , COL_APP_VERSION, COL_APP_VERSION_TIME //
                 , COL_NOTIF_SHUTDOWN, COL_NOTIF_BATTERY_LOW, COL_NOTIF_SIM_CHANGE, COL_NOTIF_PHONE_CALL //
                 , COL_ENCRYPTION_PUBKEY, COL_ENCRYPTION_PRIVKEY, COL_ENCRYPTION_REMOTE_PUBKEY //
@@ -72,6 +74,7 @@ public class PairingDatabase {
         // Where Clause
         public static final String SELECT_BY_ENTITY_ID = String.format("%s = ?", COL_ID);
         public static final String SELECT_BY_PHONE_NUMBER = String.format("%s = ?", COL_PHONE);
+        public static final String SELECT_BY_GEOFENCE_NOTIF = String.format("%s = ?", COL_GEOFENCE_NOTIF);
     }
 
     private final PairingOpenHelper mDatabaseOpenHelper;

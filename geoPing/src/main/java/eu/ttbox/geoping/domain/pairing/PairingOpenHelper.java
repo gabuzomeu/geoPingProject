@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import eu.ttbox.geoping.domain.core.UpgradeDbHelper;
+import eu.ttbox.geoping.domain.model.PairingAuthorizeTypeEnum;
 import eu.ttbox.geoping.domain.pairing.GeoFenceDatabase.GeoFenceColumns;
 import eu.ttbox.geoping.domain.pairing.PairingDatabase.PairingColumns;
 import eu.ttbox.geoping.domain.person.PersonDatabase.PersonColumns;
@@ -23,6 +24,7 @@ import eu.ttbox.geoping.domain.person.PersonDatabase.PersonColumns;
  * <li>Db version 8 : Geoping 0.2.2 (??)</li>
  * <li>Db version 9 : Geoping 0.3.0 (??) : Ajout de contact Id</li>
  * <li>Db version 11 : Geoping 0.4.0 (62+) : Ajout de app version </li>
+ * <li>Db version 12 : Geoping 0.4.2 (64+) : Ajout de COL_GEOFENCE_NOTIF </li>
  * </ul>
  */
 public class PairingOpenHelper extends SQLiteOpenHelper {
@@ -30,7 +32,7 @@ public class PairingOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = "PairingOpenHelper";
 
     public static final String DATABASE_NAME = "pairing.db";
-    public static final int DATABASE_VERSION = 11;
+    public static final int DATABASE_VERSION = 12;
 
     // ===========================================================
     // Table
@@ -48,6 +50,7 @@ public class PairingOpenHelper extends SQLiteOpenHelper {
             + ", " + PairingColumns.COL_CONTACT_ID + " TEXT" //
             + ", " + PairingColumns.COL_AUTHORIZE_TYPE + " INTEGER"//
             + ", " + PairingColumns.COL_SHOW_NOTIF + " INTEGER"//
+            + ", " + PairingColumns.COL_GEOFENCE_NOTIF + " INTEGER"//
             + ", " + PairingColumns.COL_PAIRING_TIME + " INTEGER"//
             + ", " + PairingColumns.COL_NOTIF_SHUTDOWN + " INTEGER"//
             + ", " + PairingColumns.COL_NOTIF_BATTERY_LOW + " INTEGER"//
@@ -178,6 +181,16 @@ public class PairingOpenHelper extends SQLiteOpenHelper {
         if (oldPairingRows != null && !oldPairingRows.isEmpty()) {
             List<String> validColumns = Arrays.asList(PairingColumns.ALL_COLS);
             UpgradeDbHelper.insertOldRowInNewTable(db, oldPairingRows, PairingDatabase.TABLE_PAIRING_FTS, validColumns);
+            if (oldVersion <= 11) {
+                if (validColumns.contains( PairingColumns.COL_GEOFENCE_NOTIF)) {
+                    ContentValues contentValues = new ContentValues(1);
+                    contentValues.put(PairingColumns.COL_GEOFENCE_NOTIF, Boolean.TRUE);
+                    // select
+                    String selection = String.format("%s = 1", PairingDatabase.PairingColumns.COL_AUTHORIZE_TYPE);
+                    String[] selectionArgs = new String[]{String.valueOf(PairingAuthorizeTypeEnum.AUTHORIZE_ALWAYS.getCode())};
+                    UpgradeDbHelper.updateTableWithValue(db, PairingDatabase.TABLE_PAIRING_FTS, contentValues,selection, selectionArgs);
+                }
+            }
         }
         if (oldGeofenceRows != null && !oldGeofenceRows.isEmpty()) {
             List<String> validColumns = Arrays.asList(GeoFenceColumns.ALL_COLS);

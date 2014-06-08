@@ -236,6 +236,7 @@
     <string name="pairing_name">Nombre</string>
     <string name="pairing_phone">N° Telefono</string>
     <string name="pairing_show_notification">Mostrar una notificacion</string>
+    <string name="pairing_geofence_notification">Geofence notification</string>
     <string name="pairing_authorize_type">Autorizado</string>
     <string name="pairing_authorize_type_never">Nunca</string>
     <string name="pairing_authorize_type_ask">Sobre validacion</string>

@@ -27,6 +27,8 @@ public class PairingHelper {
     public int phoneNormalizedIdx = -1;
     public int authorizeTypeIdx = -1;
     public int showNotificationIdx = -1;
+    public int geofenceNotificationIdx = -1;
+
     public int pairingTimeIdx = -1;
     // App Version
     public int appVersionIdx = -1;
@@ -64,6 +66,8 @@ public class PairingHelper {
         phoneNormalizedIdx = cursor.getColumnIndex(PairingColumns.COL_PHONE_NORMALIZED);
         authorizeTypeIdx = cursor.getColumnIndex(PairingColumns.COL_AUTHORIZE_TYPE);
         showNotificationIdx = cursor.getColumnIndex(PairingColumns.COL_SHOW_NOTIF);
+        geofenceNotificationIdx = cursor.getColumnIndex(PairingColumns.COL_GEOFENCE_NOTIF);
+
         pairingTimeIdx = cursor.getColumnIndex(PairingColumns.COL_PAIRING_TIME);
         // Notification
         notifShutdown = cursor.getColumnIndex(PairingColumns.COL_NOTIF_SHUTDOWN);
@@ -178,6 +182,12 @@ public class PairingHelper {
 
     public PairingHelper setCheckBoxPairingShowNotif(CheckBox view, Cursor cursor) {
         boolean showNotif = cursor.getInt(showNotificationIdx) == 1;
+        view.setChecked(showNotif);
+        return this;
+    }
+
+    public PairingHelper setCheckBoxPairingGeofenceNotif(CheckBox view, Cursor cursor) {
+        boolean showNotif = cursor.getInt(geofenceNotificationIdx) == 1;
         view.setChecked(showNotif);
         return this;
     }

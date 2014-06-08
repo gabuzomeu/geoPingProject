@@ -29,9 +29,9 @@ public class SpyNotificationHelper {
         // TODO Use geofences and transitionType to Calculate
         // Query
         String[] projection = new String[]{PairingDatabase.PairingColumns.COL_PHONE};
-        String selection = String.format("%s = 1", PairingDatabase.PairingColumns.COL_AUTHORIZE_TYPE);
-        String[] selectionArgs = new String[]{String.valueOf(PairingAuthorizeTypeEnum.AUTHORIZE_ALWAYS.getCode())};
-        Cursor cursor = context.getContentResolver().query(PairingProvider.Constants.CONTENT_URI, projection, selection, null, null);
+        String selection = PairingColumns.SELECT_BY_GEOFENCE_NOTIF;
+        String[] selectionArgs = new String[]{"1"};
+        Cursor cursor = context.getContentResolver().query(PairingProvider.Constants.CONTENT_URI, projection,selection, selectionArgs, null);
         // Convert As String
         String[] phones = convertCursorAsStringArrayWithCloseCursor(cursor, 0);
         return phones;
