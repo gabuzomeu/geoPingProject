@@ -180,13 +180,13 @@ public class PairingHelper {
         return this;
     }
 
-    public PairingHelper setCheckBoxPairingShowNotif(CheckBox view, Cursor cursor) {
+    public PairingHelper setCheckBoxPairingShowNotif(CompoundButton view, Cursor cursor) {
         boolean showNotif = cursor.getInt(showNotificationIdx) == 1;
         view.setChecked(showNotif);
         return this;
     }
 
-    public PairingHelper setCheckBoxPairingGeofenceNotif(CheckBox view, Cursor cursor) {
+    public PairingHelper setCheckBoxPairingGeofenceNotif(CompoundButton view, Cursor cursor) {
         boolean showNotif = cursor.getInt(geofenceNotificationIdx) == 1;
         view.setChecked(showNotif);
         return this;

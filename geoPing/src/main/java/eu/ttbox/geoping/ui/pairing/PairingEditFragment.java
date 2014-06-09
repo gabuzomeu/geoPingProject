@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
@@ -77,8 +78,6 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
     // Bindings
     private EditText nameEditText;
     private EditText phoneEditText;
-    private CheckBox showNotificationCheckBox;
-    private CheckBox geofenceNotificationCheckBox;
     private TextView authorizeTypeTextView;
 
     private RadioGroup authorizeTypeRadioGroup;
@@ -90,6 +89,10 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
  //   private View selectNotificationSoundView;
     private TextView selectNotificationSoundSummary;
 
+    // Compbound
+    CompoundButton[] notifViews;
+    private CompoundButton showNotificationCheckBox;
+    private CompoundButton geofenceNotificationCheckBox;
 
     //Validator
     private Form formValidator;
@@ -179,27 +182,38 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         authorizeTypeNeverRadioButton.setOnClickListener(radioAuthListener);
         authorizeTypeAlwaysRadioButton.setOnClickListener(radioAuthListener);
 
-        // Show Notification
-        showNotificationCheckBox.setOnClickListener(new OnClickListener() {
+
+        // Compbound
+          notifViews = new CompoundButton[]{showNotificationCheckBox, geofenceNotificationCheckBox};
+
+        CompoundButton.OnCheckedChangeListener notifOnClickListener = new CompoundButton.OnCheckedChangeListener() {
 
             @Override
-            public void onClick(View v) {
-                onShowNotificationClick(v);
-
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                int buttonId = buttonView.getId();
+                switch (buttonId) {
+                    case R.id.paring_show_notification: {
+                        onShowNotificationClick(buttonView);
+                    }
+                    break;
+                    case R.id.paring_geofence_notification: {
+                        onGeofenceNotificationClick(buttonView);
+                    }
+                    default: {
+                        Log.w(TAG, "Not Manage CompoundButton Id : " + buttonId);
+                        throw  new RuntimeException( "Not Manage CompoundButton Id : " + buttonId)  ;
+                    }
+                }
             }
-        });
+
+        };
+        for (CompoundButton compoundButton : notifViews) {
+            compoundButton.setOnCheckedChangeListener(notifOnClickListener);
+        }
+        // Show Notification
         showNotificationCheckBox.setChecked(showNotifDefault);
 
         // Geofence
-        // default value
-        geofenceNotificationCheckBox.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                onGeofenceNotificationClick(v);
-
-            }
-        });
         geofenceNotificationCheckBox.setChecked(geofenceNotifDefault);
 
         // Select contact
@@ -230,6 +244,20 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         Log.d(TAG, "onActivityCreated");
         // Load Data
         loadEntity(getArguments());
+    }
+
+
+    @Override
+    public void onDestroy() {
+        if (notifViews != null && notifViews.length > 0) {
+            // Unregister the listenr on Switch
+            for (CompoundButton view : notifViews) {
+                view.setOnCheckedChangeListener(null);
+            }
+        }
+        // Prefs
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+        super.onDestroy();
     }
 
 
@@ -289,11 +317,7 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
     // Life Cycle
     // ===========================================================
 
-    @Override
-    public void onDestroy() {
-        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
-        super.onDestroy();
-    }
+
 
     // ===========================================================
     // Preferences
