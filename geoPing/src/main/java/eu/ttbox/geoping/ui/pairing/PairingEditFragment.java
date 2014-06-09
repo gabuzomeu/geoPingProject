@@ -194,11 +194,11 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
                 int buttonId = buttonView.getId();
                 switch (buttonId) {
                     case R.id.paring_show_notification: {
-                        onShowNotificationClick(buttonView);
+                        onShowNotificationClick(PairingColumns.COL_SHOW_NOTIF, isChecked);
                     }
                     break;
                     case R.id.paring_geofence_notification: {
-                        onGeofenceNotificationClick(buttonView);
+                        onShowNotificationClick(PairingColumns.COL_GEOFENCE_NOTIF, isChecked);
                     }
                     break;
                     default: {
@@ -425,24 +425,13 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         getActivity().startService(intent);
     }
 
-    public void onShowNotificationClick(View v) {
+    public void onShowNotificationClick(String dbCol,  boolean isChecked) {
         if (entityUri != null) {
-            boolean isCheck = showNotificationCheckBox.isChecked();
             ContentValues values = new ContentValues();
-            values.put(PairingColumns.COL_SHOW_NOTIF, isCheck);
+            values.put(dbCol, isChecked);
             int count = getActivity().getContentResolver().update(entityUri, values, null, null);
         }
     }
-
-    public void onGeofenceNotificationClick(View v) {
-        if (entityUri != null) {
-            boolean isCheck = geofenceNotificationCheckBox.isChecked();
-            ContentValues values = new ContentValues();
-            values.put(PairingColumns.COL_GEOFENCE_NOTIF, isCheck);
-            int count = getActivity().getContentResolver().update(entityUri, values, null, null);
-        }
-    }
-
 
     // ===========================================================
     // Listener
