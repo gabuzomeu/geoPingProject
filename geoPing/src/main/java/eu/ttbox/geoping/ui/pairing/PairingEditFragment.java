@@ -155,9 +155,10 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         photoImageView = (PhotoEditorView) v.findViewById(R.id.pairing_photo_imageView);
         nameEditText = (EditText) v.findViewById(R.id.pairing_name);
         phoneEditText = (EditText) v.findViewById(R.id.pairing_phone);
+        authorizeTypeTextView = (TextView) v.findViewById(R.id.pairing_authorize_type);
+
         showNotificationCheckBox = (CheckBox) v.findViewById(R.id.paring_show_notification);
         geofenceNotificationCheckBox = (CheckBox) v.findViewById(R.id.paring_geofence_notification);
-        authorizeTypeTextView = (TextView) v.findViewById(R.id.pairing_authorize_type);
 
         authorizeTypeRadioGroup = (RadioGroup) v.findViewById(R.id.pairing_authorize_type_radioGroup);
         authorizeTypeAskRadioButton = (RadioButton) v.findViewById(R.id.pairing_authorize_type_radio_ask);
@@ -199,6 +200,7 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
                     case R.id.paring_geofence_notification: {
                         onGeofenceNotificationClick(buttonView);
                     }
+                    break;
                     default: {
                         Log.w(TAG, "Not Manage CompoundButton Id : " + buttonId);
                         throw  new RuntimeException( "Not Manage CompoundButton Id : " + buttonId)  ;
