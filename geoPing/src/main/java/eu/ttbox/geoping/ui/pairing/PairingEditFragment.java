@@ -412,7 +412,7 @@ public class PairingEditFragment extends Fragment implements SharedPreferences.O
         if (entityUri != null) {
             boolean isCheck = geofenceNotificationCheckBox.isChecked();
             ContentValues values = new ContentValues();
-            values.put(PairingColumns.COL_SHOW_NOTIF, isCheck);
+            values.put(PairingColumns.COL_GEOFENCE_NOTIF, isCheck);
             int count = getActivity().getContentResolver().update(entityUri, values, null, null);
         }
     }

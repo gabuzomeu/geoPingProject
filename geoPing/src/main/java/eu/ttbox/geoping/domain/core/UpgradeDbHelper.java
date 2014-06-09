@@ -52,52 +52,50 @@ public class UpgradeDbHelper {
         return colIdx;
     }
 
-    public static ArrayList<ContentValues> copyTable(SQLiteDatabase db, String oldTable ) {
+    public static ArrayList<ContentValues> copyTable(SQLiteDatabase db, String oldTable) {
         ArrayList<ContentValues> allRows = null;
         Cursor cursor = null;
         try {
             cursor = db.query(oldTable, null, null, null, null, null, null);
             allRows = new ArrayList<ContentValues>(cursor.getCount());
-             while (cursor.moveToNext()) {
-                ContentValues values = readCursorToContentValues(cursor );
-                 if (values!=null) {
-                     allRows.add(values);
-                     Log.d(TAG, "Upgrading database " + oldTable + " : memory copy of row values : " + values);
-                 }
+            while (cursor.moveToNext()) {
+                ContentValues values = readCursorToContentValues(cursor);
+                if (values != null) {
+                    allRows.add(values);
+                    Log.d(TAG, "Upgrading database " + oldTable + " : memory copy of row values : " + values);
+                }
             }
         } catch (SQLiteException e) {
             Log.e(TAG, "error in copyTable " + oldTable + " : " + e.getMessage(), e);
         } finally {
-            if (cursor!=null) {
+            if (cursor != null) {
                 cursor.close();
             }
         }
-        return  allRows;
+        return allRows;
     }
 
     public static int updateTableWithValue(SQLiteDatabase db, String oldTable, ContentValues values, String whereClause, String[] selectionArg) {
         int result = -1;
-        //SQLiteDatabase db = mDatabaseOpenHelper.getWritableDatabase();
+
+        db.beginTransaction();
         try {
-            db.beginTransaction();
-            try {
-                result = db.update(oldTable, values, whereClause, selectionArg);
-                db.setTransactionSuccessful();
-            } finally {
-                db.endTransaction();
-            }
+            result = db.update(oldTable, values, whereClause, selectionArg);
+            db.setTransactionSuccessful();
         } finally {
-            db.close();
+            db.endTransaction();
         }
+
         return result;
 
     }
+
     public static ArrayList<ContentValues> copyTable(SQLiteDatabase db, String oldTable, String[] stringColums, String[] intColums, String[] longColums) {
         ArrayList<ContentValues> allRows = null;
         Cursor cursor = null;
         try {
             // Init Columns Arrays
-          //  int columnSize = stringColums.length + intColums.length + longColums.length;
+            //  int columnSize = stringColums.length + intColums.length + longColums.length;
             String[] columns = null;//concatAllCols(columnSize, stringColums, intColums, longColums);
             // Do copy Table
             cursor = db.query(oldTable, columns, null, null, null, null, null);
@@ -124,9 +122,9 @@ public class UpgradeDbHelper {
         return allRows;
     }
 
-    public static ContentValues readCursorToContentValues(Cursor cursor ) {
+    public static ContentValues readCursorToContentValues(Cursor cursor) {
         ContentValues values = new ContentValues();
-        String[]  colNames = cursor.getColumnNames();
+        String[] colNames = cursor.getColumnNames();
         for (String colName : colNames) {
             if (VersionUtils.isHc11) {
                 readCursorColumnToContentValuesForHoneyComb(cursor, values, colName);
@@ -137,39 +135,39 @@ public class UpgradeDbHelper {
         return values;
     }
 
-    private static void readCursorColumnToContentValuesBeforeHoneyComb(  Cursor cursor, ContentValues values , String colName) {
-        int colIdx =  cursor.getColumnIndex(colName);
+    private static void readCursorColumnToContentValuesBeforeHoneyComb(Cursor cursor, ContentValues values, String colName) {
+        int colIdx = cursor.getColumnIndex(colName);
         String value = cursor.getString(colIdx);
         values.put(colName, value);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private static void readCursorColumnToContentValuesForHoneyComb(  Cursor cursor, ContentValues values , String colName) {
-        int colIdx =  cursor.getColumnIndex(colName);
+    private static void readCursorColumnToContentValuesForHoneyComb(Cursor cursor, ContentValues values, String colName) {
+        int colIdx = cursor.getColumnIndex(colName);
         switch (cursor.getType(colIdx)) {
-            case  Cursor.FIELD_TYPE_STRING : {
+            case Cursor.FIELD_TYPE_STRING: {
                 String value = cursor.getString(colIdx);
                 values.put(colName, value);
             }
             break;
-            case  Cursor.FIELD_TYPE_NULL: {
+            case Cursor.FIELD_TYPE_NULL: {
                 Float value = cursor.getFloat(colIdx);
-                values.putNull(colName );
+                values.putNull(colName);
             }
             break;
-            case  Cursor.FIELD_TYPE_INTEGER: {
+            case Cursor.FIELD_TYPE_INTEGER: {
                 Integer value = cursor.getInt(colIdx);
                 values.put(colName, value);
             }
             break;
-            case  Cursor.FIELD_TYPE_FLOAT: {
+            case Cursor.FIELD_TYPE_FLOAT: {
                 Float value = cursor.getFloat(colIdx);
                 values.put(colName, value);
             }
             break;
-             default:
+            default:
                 Log.w(TAG, "Not manage type for column Nanme : " + colName);
-             break;
+                break;
         }
     }
 
@@ -208,7 +206,7 @@ public class UpgradeDbHelper {
                 bytes = ((String) colValue).getBytes();
             } else if (colValue instanceof Integer) {
                 Integer val = ((Integer) colValue);
-                bytes = new byte[] { val.byteValue() };
+                bytes = new byte[]{val.byteValue()};
             } else if (colValue instanceof Long) {
                 Long val = ((Long) colValue);
 

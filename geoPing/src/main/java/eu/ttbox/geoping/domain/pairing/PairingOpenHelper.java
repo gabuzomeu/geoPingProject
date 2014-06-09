@@ -186,8 +186,8 @@ public class PairingOpenHelper extends SQLiteOpenHelper {
                     ContentValues contentValues = new ContentValues(1);
                     contentValues.put(PairingColumns.COL_GEOFENCE_NOTIF, Boolean.TRUE);
                     // select
-                    String selection = String.format("%s = 1", PairingDatabase.PairingColumns.COL_AUTHORIZE_TYPE);
-                    String[] selectionArgs = new String[]{String.valueOf(PairingAuthorizeTypeEnum.AUTHORIZE_ALWAYS.getCode())};
+                    String selection = String.format("%s = ?", PairingDatabase.PairingColumns.COL_AUTHORIZE_TYPE);
+                    String[] selectionArgs = new String[]{ String.valueOf(PairingAuthorizeTypeEnum.AUTHORIZE_ALWAYS.getCode() )};
                     UpgradeDbHelper.updateTableWithValue(db, PairingDatabase.TABLE_PAIRING_FTS, contentValues,selection, selectionArgs);
                 }
             }
