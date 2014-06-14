@@ -174,28 +174,43 @@ public class PairingOpenHelper extends SQLiteOpenHelper {
         // ----------------------
         onLocalDrop(db);
         onCreate(db);
-        Log.i(TAG, "Upgrading database : Create TABLE  : " + PairingDatabase.TABLE_PAIRING_FTS);
+        Log.w(TAG, "Upgrading database : Create TABLE  : " + PairingDatabase.TABLE_PAIRING_FTS);
 
         // Insert data in new table
         // ----------------------
         if (oldPairingRows != null && !oldPairingRows.isEmpty()) {
+            Log.w(TAG, "Upgrading database : Insert Lines in TABLE  : " + PairingDatabase.TABLE_PAIRING_FTS);
             List<String> validColumns = Arrays.asList(PairingColumns.ALL_COLS);
             UpgradeDbHelper.insertOldRowInNewTable(db, oldPairingRows, PairingDatabase.TABLE_PAIRING_FTS, validColumns);
+            // Migrate Datas
+            updateTableForGeofenceNotifDefaultValues(db,   oldVersion,   newVersion, validColumns);
+        }
+        if (oldGeofenceRows != null && !oldGeofenceRows.isEmpty()) {
+            Log.w(TAG, "Upgrading database : Insert Lines in TABLE  : " + GeoFenceDatabase.TABLE_GEOFENCE);
+            List<String> validColumns = Arrays.asList(GeoFenceColumns.ALL_COLS);
+            UpgradeDbHelper.insertOldRowInNewTable(db, oldGeofenceRows, GeoFenceDatabase.TABLE_GEOFENCE, validColumns);
+        }
+        Log.w(TAG, "Upgrading database : End");
+    }
+
+
+    private void updateTableForGeofenceNotifDefaultValues(SQLiteDatabase db, int oldVersion, int newVersion,   List<String> validColumns) {
+        try {
             if (oldVersion <= 11) {
-                if (validColumns.contains( PairingColumns.COL_GEOFENCE_NOTIF)) {
+                if (validColumns.contains(PairingColumns.COL_GEOFENCE_NOTIF)) {
+                    Log.w(TAG, "Upgrading database : Update Default Values for COL_GEOFENCE_NOTIF : Begin");
                     ContentValues contentValues = new ContentValues(1);
                     contentValues.put(PairingColumns.COL_GEOFENCE_NOTIF, Boolean.TRUE);
                     // select
                     String selection = String.format("%s = ?", PairingDatabase.PairingColumns.COL_AUTHORIZE_TYPE);
-                    String[] selectionArgs = new String[]{ String.valueOf(PairingAuthorizeTypeEnum.AUTHORIZE_ALWAYS.getCode() )};
-                    UpgradeDbHelper.updateTableWithValue(db, PairingDatabase.TABLE_PAIRING_FTS, contentValues,selection, selectionArgs);
+                    String[] selectionArgs = new String[]{String.valueOf(PairingAuthorizeTypeEnum.AUTHORIZE_ALWAYS.getCode())};
+                    int count = UpgradeDbHelper.updateTableWithValue(db, PairingDatabase.TABLE_PAIRING_FTS, contentValues, selection, selectionArgs);
+                    Log.w(TAG, "Upgrading database : Update Default Values for COL_GEOFENCE_NOTIF : " + count + " lines");
                 }
             }
-        }
-        if (oldGeofenceRows != null && !oldGeofenceRows.isEmpty()) {
-            List<String> validColumns = Arrays.asList(GeoFenceColumns.ALL_COLS);
-            UpgradeDbHelper.insertOldRowInNewTable(db, oldGeofenceRows, GeoFenceDatabase.TABLE_GEOFENCE, validColumns);
+        } catch (Exception e) {
+            Log.e(TAG, "Upgrading Error in updateTableForGeofenceNotifDefaultValues : " + e.getMessage(), e);
+
         }
     }
-
 }
