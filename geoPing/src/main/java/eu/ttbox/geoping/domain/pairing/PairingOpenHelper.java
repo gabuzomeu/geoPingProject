@@ -21,10 +21,10 @@ import eu.ttbox.geoping.domain.person.PersonDatabase.PersonColumns;
  * <li>Db version 5 : Geoping 0.1.5 (37)</li>
  * <li>Db version 6 : Geoping 0.1.6 (39)</li>
  * <li>Db version 7 : Geoping 0.2.0 (52)</li>
- * <li>Db version 8 : Geoping 0.2.2 (??)</li>
- * <li>Db version 9 : Geoping 0.3.0 (??) : Ajout de contact Id</li>
- * <li>Db version 11 : Geoping 0.4.0 (62+) : Ajout de app version </li>
- * <li>Db version 12 : Geoping 0.4.2 (64+) : Ajout de COL_GEOFENCE_NOTIF </li>
+ * <li>Db version 8 : Geoping 0.2.2 (57)</li>
+ * <li>Db version 9 : Geoping 0.3.0 (59) : Ajout de contact Id</li>
+ * <li>Db version 11 : Geoping 0.4.0 (62) : Ajout de app version </li>
+ * <li>Db version 12 : Geoping 0.4.2 (65) : Ajout de COL_GEOFENCE_NOTIF </li>
  * </ul>
  */
 public class PairingOpenHelper extends SQLiteOpenHelper {
